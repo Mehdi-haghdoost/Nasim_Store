@@ -11,10 +11,10 @@ function Header() {
     const handleItemCheck = (index) => {
         setactiveSubMenu({
             ...activeSubMenu,
-            [index] : !activeSubMenu[index]
+            [index]: !activeSubMenu[index]
         });
     };
-    
+
 
     return (
         <header className={styles.header}>
@@ -70,7 +70,7 @@ function Header() {
                                                     <span
                                                         onClick={() => handleItemCheck(0)}
                                                         className={styles.hamburger_showSubMenu}>
-                                                        <i className={`bi bi-chevron-${activeSubMenu[0] ?'down' : 'left'}`}></i>
+                                                        <i className={`bi bi-chevron-${activeSubMenu[0] ? 'down' : 'left'}`}></i>
                                                     </span>
                                                 </div>
                                                 <ul className={`navbar-nav ${activeSubMenu[0] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide}`}>
@@ -86,13 +86,13 @@ function Header() {
                                                             </span>
                                                         </div>
                                                         <ul className={`navbar-nav ${activeSubMenu[1] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
-                                                            {/* <li className="nav-item"><a href="" className="nav-link">سامسونگ</a>
-                                                        </li>
-                                                        <li className="nav-item"><a href="" className="nav-link">هوآوی</a></li>
-                                                        <li className="nav-item"><a href="" className="nav-link">شیائومی</a>
-                                                        </li>
-                                                        <li className="nav-item"><a href="" className="nav-link">الجی</a></li>
-                                                        <li className="nav-item"><a href="" className="nav-link">سونی</a></li> */}
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">سامسونگ</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">هوآوی</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">شیائومی</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">الجی</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">سونی</Link></li>
                                                         </ul>
                                                     </li>
                                                     <li className={`nav-item ${styles.hamburger_navbar_item_submenu} `}>
@@ -107,31 +107,121 @@ function Header() {
                                                             </span>
                                                         </div>
                                                         <ul className={`navbar-nav ${activeSubMenu[2] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
-                                                            {/* <li class="nav-item"><a href="" class="nav-link">لمسی</a></li>
-                                                        <li class="nav-item"><a href="" class="nav-link">دکمه ای</a>
-                                                        </li>
-                                                        <li class="nav-item"><a href="" class="nav-link">نظامی</a></li> */}
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">لمسی</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">دکمه ای</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">نظامی</Link></li>
                                                         </ul>
                                                     </li>
                                                 </ul>
                                             </li>
                                             <li className={`nav-item ${styles.hamburger_navbar_item} `}>
-                                                <Link href="/" className='nav-link'>
-                                                    تبلت
-                                                </Link>
-                                                <span className={styles.hamburger_showSubMenu}>
-                                                    <i className="bi bi-chevron-left"></i>
-                                                </span>
-                                                <ul></ul>
+                                            <div className={styles.hamburger_navbar_item_wrapper}>
+                                                    <Link href="/" className='nav-link'>
+                                                        تبلت
+                                                    </Link>
+                                                    <span
+                                                        onClick={() => handleItemCheck(3)}
+                                                        className={styles.hamburger_showSubMenu}>
+                                                        <i className={`bi bi-chevron-${activeSubMenu[3] ? 'down' : 'left'}`}></i>
+                                                    </span>
+                                                </div>
+                                                <ul className={`navbar-nav ${activeSubMenu[3] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide}`}>
+                                                    <li className={`nav-item ${styles.hamburger_navbar_item_submenu} `}>
+                                                        <div className={styles.hamburger_navbar_item_wrapper}>
+
+                                                            <Link className="nav-link" href="/">کشور</Link>
+                                                            <span
+                                                                onClick={() => handleItemCheck(4)}
+                                                                className={styles.hamburger_showSubMenu}
+                                                            >
+                                                                <i className={activeSubMenu[4] ? 'bi bi-chevron-down' : 'bi bi-chevron-left'}></i>
+                                                            </span>
+                                                        </div>
+                                                        <ul className={`navbar-nav ${activeSubMenu[4] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">ژاپن</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">آمریکا</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">کره جنوبی</Link>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li className={`nav-item ${styles.hamburger_navbar_item_submenu} `}>
+                                                        <div className={styles.hamburger_navbar_item_wrapper}>
+
+                                                            <Link className="nav-link" href="/">بر اساس دسته بندی</Link>
+                                                            <span
+                                                                onClick={() => handleItemCheck(5)}
+                                                                className={styles.hamburger_showSubMenu}
+                                                            >
+                                                                <i className={activeSubMenu[5] ? 'bi bi-chevron-down' : 'bi bi-chevron-left'}></i>
+                                                            </span>
+                                                        </div>
+                                                        <ul className={`navbar-nav ${activeSubMenu[5] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">لمسی</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">دانض آموزی</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">مخصوص بازی</Link></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
                                             </li>
                                             <li className={`nav-item ${styles.hamburger_navbar_item} `}>
-                                                <Link href="/" className='nav-link'>
-                                                    لپتاپ
-                                                </Link>
-                                                <span className={styles.hamburger_showSubMenu}>
-                                                    <i className="bi bi-chevron-left"></i>
-                                                </span>
-                                                <ul></ul>
+                                            <div className={styles.hamburger_navbar_item_wrapper}>
+                                                    <Link href="/" className='nav-link'>
+                                                        لپتاپ
+                                                    </Link>
+                                                    <span
+                                                        onClick={() => handleItemCheck(6)}
+                                                        className={styles.hamburger_showSubMenu}>
+                                                        <i className={`bi bi-chevron-${activeSubMenu[6] ? 'down' : 'left'}`}></i>
+                                                    </span>
+                                                </div>
+                                                <ul className={`navbar-nav ${activeSubMenu[6] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide}`}>
+                                                    <li className={`nav-item ${styles.hamburger_navbar_item_submenu} `}>
+                                                        <div className={styles.hamburger_navbar_item_wrapper}>
+
+                                                            <Link className="nav-link" href="/">برند</Link>
+                                                            <span
+                                                                onClick={() => handleItemCheck(7)}
+                                                                className={styles.hamburger_showSubMenu}
+                                                            >
+                                                                <i className={activeSubMenu[7] ? 'bi bi-chevron-down' : 'bi bi-chevron-left'}></i>
+                                                            </span>
+                                                        </div>
+                                                        <ul className={`navbar-nav ${activeSubMenu[7] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">ایسر</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">اپل</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">لنوو</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">ایسوس</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">سونی</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" className="nav-link">مایکروسافت</Link>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li className={`nav-item ${styles.hamburger_navbar_item_submenu} `}>
+                                                        <div className={styles.hamburger_navbar_item_wrapper}>
+
+                                                            <Link className="nav-link" href="/">بر اساس دسته بندی</Link>
+                                                            <span
+                                                                onClick={() => handleItemCheck(5)}
+                                                                className={styles.hamburger_showSubMenu}
+                                                            >
+                                                                <i className={activeSubMenu[5] ? 'bi bi-chevron-down' : 'bi bi-chevron-left'}></i>
+                                                            </span>
+                                                        </div>
+                                                        <ul className={`navbar-nav ${activeSubMenu[5] ? styles.hamburger_navbar_submenu_show : styles.hamburger_navbar_submenu_hide} `}>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">لمسی</Link></li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">دانض آموزی</Link>
+                                                            </li>
+                                                            <li className={`nav-item ${styles.hamburger_navbar_item}`}><Link href="/" class="nav-link">مخصوص بازی</Link></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
                                             </li>
                                             <li className={`nav-item ${styles.hamburger_navbar_item} `}>
                                                 <Link href="/" className='nav-link'>
