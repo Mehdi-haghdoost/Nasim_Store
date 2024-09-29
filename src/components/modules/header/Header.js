@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import styles from './Header.module.css'
 
@@ -429,10 +429,10 @@ function Header() {
                                                     <i className="bi bi-list">                                                    </i>
                                                     دسته بندی کالاها
                                                 </a>
-                                                {/* <ul className="main-menu mega-container">
-                                                    <li className="main-menu-sub-active-li"><a href=""><i className="bi bi-phone"></i>
-                                                        موبایل</a>
-                                                        <ul className="main-menu-sub back-menu"
+                                                <ul className={`${styles.main_menu} mega-container`}>
+                                                    <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-phone"></i>
+                                                        <span>موبایل</span></a>
+                                                        {/* <ul className="main-menu-sub back-menu"
                                                         >
                                                             <li><a className="title my-flex-baseline" href="">برند های مختلف گوشی</a>
                                                             </li>
@@ -462,10 +462,10 @@ function Header() {
                                                             <li><a href="">گوشی دانش آموزی</a></li>
                                                             <li><a href="">گوشی لاکچری</a></li>
                                                             <li><a href="">گوشی پرچمدار</a></li>
-                                                        </ul>
+                                                        </ul> */}
                                                     </li>
-                                                    <li><a href=""><i className="bi bi-tablet"></i> تبلت</a>
-                                                        <ul className="main-menu-sub back-menu"
+                                                    <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-tablet"></i> <span>تبلت</span></a>
+                                                        {/* <ul className="main-menu-sub back-menu"
                                                         >
                                                             <li><a className="title my-flex-baseline" href="">برند های مختلف تبلت</a>
                                                             </li>
@@ -495,10 +495,10 @@ function Header() {
                                                             <li><a href="">تبلت دانش آموزی</a></li>
                                                             <li><a href="">تبلت لاکچری</a></li>
                                                             <li><a href="">تبلت پرچمدار</a></li>
-                                                        </ul>
+                                                        </ul> */}
                                                     </li>
-                                                    <li><a href=""><i className="bi bi-shield"></i>آنتی ویروس</a>
-                                                        <ul className="main-menu-sub back-menu"
+                                                    <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-shield"></i><span>آنتی ویروس</span></a>
+                                                        {/* <ul className="main-menu-sub back-menu"
                                                         >
                                                             <li><a className="title my-flex-baseline" href="">براساس برند</a></li>
                                                             <li><a href="">نود 32</a></li>
@@ -518,10 +518,10 @@ function Header() {
                                                             <li><a href="">360 سکوریتی</a></li>
                                                             <li><a href="">بیت دیفیندر</a></li>
                                                             <li><a href="">ایمن</a></li>
-                                                        </ul>
+                                                        </ul> */}
                                                     </li>
-                                                    <li><a href=""><i className="bi bi-laptop"></i>لبتاپ</a>
-                                                        <ul className="main-menu-sub back-menu"
+                                                    <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-laptop"></i><span>لپتاپ</span></a>
+                                                        {/* <ul className="main-menu-sub back-menu"
                                                         >
                                                             <li><a className="title my-flex-baseline" href="">برند های مختلف لبتاپ</a>
                                                             </li>
@@ -552,10 +552,10 @@ function Header() {
                                                             <li><a href="">لبتاپ دانش آموزی</a></li>
                                                             <li><a href="">لبتاپ لاکچری</a></li>
                                                             <li><a href="">لبتاپ پرچمدار</a></li>
-                                                        </ul>
+                                                        </ul> */}
                                                     </li>
-                                                    <li><a href=""><i className="bi bi-tag"></i>پر فروش ترین ها</a>
-                                                        <ul className="main-menu-sub back-menu"
+                                                    <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-tag"></i><span>پر فروش ترین ها</span></a>
+                                                        {/* <ul className="main-menu-sub back-menu"
                                                         >
                                                             <li><a className="title my-flex-baseline" href="">زیر منو شماره 1 </a></li>
                                                             <li><a href="">زیر منو شماره 1</a></li>
@@ -581,9 +581,9 @@ function Header() {
                                                             <li><a href="">زیر منو شماره 1</a></li>
                                                             <li><a href="">زیر منو شماره 1</a></li>
                                                             <li><a href="">زیر منو شماره 1</a></li>
-                                                        </ul>
+                                                        </ul> */}
                                                     </li>
-                                                </ul> */}
+                                                </ul>
                                             </li>
                                             <li className="nav-item"><a href="" className="nav-link border-animate fromCenter">
                                                 <i className="bi bi-tablet"></i>
