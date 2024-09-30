@@ -392,8 +392,14 @@
 }
 
 .main_menu {
-    background: #fff;
     display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.main_menu_active {
+    background: #fff;
+    display: block;
     box-shadow: var(--shadow-md);
     height: auto;
     min-width: 200px;
@@ -402,18 +408,10 @@
     top: 50px;
     left: 20px;
     right: 20px;
-    opacity: 0;
-    visibility: hidden;
     padding: 0;
     transition: 0.4s all ease-in-out;
     border-radius: 0;
     list-style-type: none;
-}
-
-.main_menu_active {
-    display: flex;
-    left: 0;
-    right: 0;
 }
 
 .main_menu_sub {
@@ -445,4 +443,65 @@
 .main_menu_sub:hover i {
     color: var(--main-color-one);
     font-weight: bolder;
+}
+
+.main_menu_sub_title {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.main_menu_sub_title::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--main-color-one);
+}
+
+.main_menu_sub li {
+    max-width: 150px;
+    margin-top: 4px;
+    padding: 5px 0;
+    margin-left: 4rem;
+}
+
+.main_menu_sub_list_active {
+    display: flex;
+    background: #fff url(/images/labtop.png) no-repeat;
+    background-position: bottom left !important;
+    background-size: 300px !important;
+    min-height: 400px;
+    max-height: 400px;
+    overflow-y: scroll;
+    min-width: 200px;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    right: 200px;
+    /* opacity: 0;
+    visibility: hidden; */
+    padding: 10px;
+    transition: 0.4s all ease-in-out;
+    border-radius: 10px;
+    list-style-type: none;
+
+
+}
+
+.main_menu_sub_list {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.main_menu_sub_list_item a {
+    font-size: 13px !important;
+    color: #929292 !important;
 }
