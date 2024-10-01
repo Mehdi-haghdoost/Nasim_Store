@@ -19,8 +19,12 @@ function Header() {
 
     const handleHoverCheck = (index) => {
         setIsHovered({
-
             [index]: !isHovered[index]
+        })
+    }
+    const handleSubHoveredCheck = (index) => {
+        setIsSubHovered({
+            [index]: !isSubHovered[index]
         })
     }
 
@@ -437,17 +441,14 @@ function Header() {
                                             <li className="nav-item main-menu-head">
                                                 <a href=""
                                                     onMouseEnter={() => handleHoverCheck(1)}
-                                                    // onMouseLeave={() => handleHoverCheck(0)}
-
                                                     className={`${styles.mega_menu_category_button} nav-link btn `}>
                                                     <i className="bi bi-list">                                                    </i>
                                                     دسته بندی کالاها
                                                 </a>
                                                 {
                                                     isHovered && (
-                                                        <ul
-                                                            onMouseEnter={() => handleHoverCheck(true)}
-                                                            onMouseLeave={() => handleHoverCheck(false)}
+                                                        <ul                                                            onMouseEnter={() => setIsSubHovered(true)}
+                                                            onMouseLeave={() => setIsSubHovered(false)}
                                                             className={`${isHovered[1] ? styles.main_menu_active : styles.main_menu} mega-container`}>
                                                             <li
                                                                 onMouseEnter={() => setIsSubHovered(true)}
@@ -504,7 +505,7 @@ function Header() {
                                                                 onMouseLeave={() => setIsSubHovered(false)}
                                                                 className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-tablet"></i> <span>تبلت</span></a>
                                                                 {isSubHovered && (
-                                                                    <ul className={isSubHovered ? styles.main_menu_sub_list_active : styles.styles.main_menu_sub_list}
+                                                                    <ul className={isSubHovered ? styles.main_menu_sub_list_active : styles.main_menu_sub_list}
                                                                     >
                                                                         <div>
                                                                             <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">برند های مختلف تبلت</a>
@@ -637,53 +638,63 @@ function Header() {
 
                                             </li>
                                             <li
-                                                onMouseEnter={() => handleHoverCheck(2)}
+                                                onMouseEnter={() => handleSubHoveredCheck(2)}
                                                 className="nav-item">
                                                 <a
-                                                    type='button'
+
                                                     href="" className="nav-link border-animate fromCenter">
                                                     <i className="bi bi-tablet"></i>
                                                     <span>منو</span>
                                                 </a>
                                                 {
-                                                    isHovered && (
+                                                    isSubHovered && (
                                                         <ul
-                                                            className={`${isHovered[2] ? styles.main_menu_active : styles.main_menu} mega-container`}
+                                                            onMouseEnter={() => setIsSubHovered(true)}
+                                                            onMouseLeave={() => setIsSubHovered(false)}
+                                                            className={`${isSubHovered[2] ? styles.main_menu_sub_list_second_active : styles.main_menu_sub_list} mega-container`}
                                                         >
-                                                            <li><a href="" className="title">بـرند</a></li>
-                                                            <li><a href="">سامـسونگ</a></li>
-                                                            <li><a href="">اپـل</a></li>
-                                                            <li><a href="">شیـائومی</a></li>
-                                                            <li><a href="">ال جی</a></li>
-                                                            <li><a href="">وان پـلاس</a></li>
-                                                            <li><a href="">جی ال ایـکس</a></li>
-                                                            <li><a href="">هـو آوی</a></li>
-                                                            <li><a href="">بلک بـری</a></li>
-                                                            <li><a href="">توشـیبا</a></li>
-                                                            <li><a href="">دایـناکورد</a></li>
-                                                            <li><a href="" className="title">براساس رده بندی </a>
-                                                            </li>
-                                                            <li><a href="">دکـمه ای</a></li>
-                                                            <li><a href="">لـمسـی</a></li>
-                                                            <li><a href="">نـظـامی</a></li>
-                                                            <li><a href="">ضـد آب</a></li>
-                                                            <li><a href="">مسـافرتی</a></li>
-                                                            <li><a href="">خـارنی</a></li>
-                                                            <li><a href="" className="title">براساس کشور </a></li>
-                                                            <li><a href="">ایران</a></li>
-                                                            <li><a href="">ژاپن</a></li>
-                                                            <li><a href="">فرانسه</a></li>
-                                                            <li><a href="">کره جنوبی</a></li>
-                                                            <li><a href="">آمریکا</a></li>
-                                                            <li><a href="">سوئد</a></li>
-                                                            <li><a href="">تایوان</a></li>
-                                                            <li><a href="" className="title">براساس رنگ</a></li>
-                                                            <li><a href="">قرمز</a></li>
-                                                            <li><a href="">قهوه ای</a></li>
-                                                            <li><a href="">سبز</a></li>
-                                                            <li><a href="">بنفش</a></li>
-                                                            <li><a href="">نارنجی</a></li>
-                                                            <li><a href="">نیلی</a></li>
+                                                            <div>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>بـرند</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">سامـسونگ</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">اپـل</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">شیـائومی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">ال جی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">وان پـلاس</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">جی ال ایـکس</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">هـو آوی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">بلک بـری</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">توشـیبا</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">دایـناکورد</a></li>
+                                                            </div>
+                                                            <div>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس رده بندی </a>
+                                                                </li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">دکـمه ای</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">لـمسـی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">نـظـامی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">ضـد آب</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">مسـافرتی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">خـارنی</a></li>
+                                                            </div>
+                                                            <div>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس کشور </a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">ایران</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">ژاپن</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">فرانسه</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">کره جنوبی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">آمریکا</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">سوئد</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">تایوان</a></li>
+                                                            </div>
+                                                            <div>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس رنگ</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">قرمز</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">قهوه ای</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">سبز</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">بنفش</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">نارنجی</a></li>
+                                                                <li className={styles.main_menu_sub_list_item}><a href="">نیلی</a></li>
+                                                            </div>
                                                         </ul>
                                                     )
 
