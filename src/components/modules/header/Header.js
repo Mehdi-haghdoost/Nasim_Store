@@ -7,8 +7,9 @@ function Header() {
 
     const [activeHamburger, setActiveHamburger] = useState(false)
     const [activeSubMenu, setactiveSubMenu] = useState({})
-    const [isHovered, setIsHovered] = useState(false);
-    const [isSubHovered, setIsSubHovered] = useState(false);
+    const [showSubmenu1, setShowSubmenu1] = useState(false);
+    const [showSubmenu2, setShowSubmenu2] = useState(false);
+    const [showSubmenu3, setShowSubmenu3] = useState(false);
 
     const handleItemCheck = (index) => {
         setactiveSubMenu({
@@ -17,16 +18,16 @@ function Header() {
         });
     };
 
-    const handleHoverCheck = (index) => {
-        setIsHovered({
-            [index]: !isHovered[index]
-        })
-    }
-    const handleSubHoveredCheck = (index) => {
-        setIsSubHovered({
-            [index]: !isSubHovered[index]
-        })
-    }
+    // const handleHoverCheck = (index) => {
+    //     setIsHovered({
+    //         [index]: !isHovered[index]
+    //     })
+    // }
+    // const handleSubHoveredCheck = (index) => {
+    //     setIsSubHovered({
+    //         [index]: !isSubHovered[index]
+    //     })
+    // }
 
 
 
@@ -435,319 +436,149 @@ function Header() {
                         <div>
                             <div className={styles.header_mega_menu}>
                                 <div className="col-lg-9">
-                                    <div className="top-menu-menu">
-                                        <ul className={styles.mega_menu_navbar}>
-                                            {/* <li className="position-relative m-0"></li> */}
-                                            <li className="nav-item main-menu-head">
-                                                <a href=""
-                                                    onMouseEnter={() => handleHoverCheck(1)}
-                                                    className={`${styles.mega_menu_category_button} nav-link btn `}>
-                                                    <i className="bi bi-list">                                                    </i>
-                                                    دسته بندی کالاها
-                                                </a>
-                                                {
-                                                    isHovered && (
-                                                        <ul                                                            onMouseEnter={() => setIsSubHovered(true)}
-                                                            onMouseLeave={() => setIsSubHovered(false)}
-                                                            className={`${isHovered[1] ? styles.main_menu_active : styles.main_menu} mega-container`}>
-                                                            <li
-                                                                onMouseEnter={() => setIsSubHovered(true)}
-                                                                onMouseLeave={() => setIsSubHovered(false)}
-                                                                className={`${styles.main_menu_sub}`}>
-                                                                <a href="">
-                                                                    <i className="bi bi-phone"></i>
-                                                                    <span>موبایل</span>
-                                                                </a>
-                                                                {isSubHovered && (
-                                                                    <ul className={isSubHovered ? styles.main_menu_sub_list_active : styles.styles.main_menu_sub_list}
-                                                                    >
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">برند های مختلف گوشی</a>
-                                                                            </li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی اپل</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی سامسونگ</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی شیائومی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی بلک بری</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی ایرانی</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">گوشی بر اساس قیمت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 2 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 5 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 10 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 12 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 15 میلیون</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">گوشی براساس حافظه
-                                                                                داخلی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 16 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 32 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 64 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 128 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 256 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 512 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی تا 1 ترابایت</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">گوشی براساس کاربری</a>
-                                                                            </li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی اقتصادی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی دانش آموزی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی لاکچری</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گوشی پرچمدار</a></li>
-                                                                        </div>
-                                                                    </ul>
-                                                                )}
-                                                            </li>
-                                                            <li
-                                                                onMouseEnter={() => setIsSubHovered(true)}
-                                                                onMouseLeave={() => setIsSubHovered(false)}
-                                                                className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-tablet"></i> <span>تبلت</span></a>
-                                                                {isSubHovered && (
-                                                                    <ul className={isSubHovered ? styles.main_menu_sub_list_active : styles.main_menu_sub_list}
-                                                                    >
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">برند های مختلف تبلت</a>
-                                                                            </li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت اپل</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت سامسونگ</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت شیائومی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت بلک بری</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت ایرانی</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">تبلت بر اساس قیمت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 2 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 5 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 10 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 12 میلیون</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 15 میلیون</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">تبلت براساس حافظه
-                                                                                داخلی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 16 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 32 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 64 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 128 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 256 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 512 گیگابایت</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت تا 1 ترابایت</a></li>
-                                                                        </div>
-                                                                        <div>
-                                                                            <li className={styles.main_menu_sub_list_item}><a className={styles.main_menu_sub_title} href="">تبلت براساس کاربری</a>
-                                                                            </li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">گتبلتوشی اقتصادی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت دانش آموزی</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت لاکچری</a></li>
-                                                                            <li className={styles.main_menu_sub_list_item}><a href="">تبلت پرچمدار</a></li>
-                                                                        </div>
-                                                                    </ul>
-                                                                )}
-                                                            </li>
-                                                            <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-shield"></i><span>آنتی ویروس</span></a>
-                                                                {/* <ul className="main-menu-sub back-menu"
-                                                        >
-                                                            <li><a className={styles.main_menu_sub_title} href="">براساس برند</a></li>
-                                                            <li><a href="">نود 32</a></li>
-                                                            <li><a href="">کسپر اسکای</a></li>
-                                                            <li><a href="">360 سکوریتی</a></li>
-                                                            <li><a href="">بیت دیفیندر</a></li>
-                                                            <li><a href="">ایمن</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">براساس ویندوز</a></li>
-                                                            <li><a href="">ویندوز 7</a></li>
-                                                            <li><a href="">ویندوز 8</a></li>
-                                                            <li><a href="">ویندوز 8.1</a></li>
-                                                            <li><a href="">ویندوز 10</a></li>
-                                                            <li><a href="">ویندوز 11</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">براساس برند</a></li>
-                                                            <li><a href="">نود 32</a></li>
-                                                            <li><a href="">کسپر اسکای</a></li>
-                                                            <li><a href="">360 سکوریتی</a></li>
-                                                            <li><a href="">بیت دیفیندر</a></li>
-                                                            <li><a href="">ایمن</a></li>
-                                                        </ul> */}
-                                                            </li>
-                                                            <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-laptop"></i><span>لپتاپ</span></a>
-                                                                {/* <ul className="main-menu-sub back-menu"
-                                                        >
-                                                            <li><a className="title my-flex-baseline" href="">برند های مختلف لبتاپ</a>
-                                                            </li>
-                                                            <li><a href="">لبتاپ اپل</a></li>
-                                                            <li><a href="">لبتاپ سامسونگ</a></li>
-                                                            <li><a href="">لبتاپ شیائومی</a></li>
-                                                            <li><a href="">لبتاپ بلک بری</a></li>
-                                                            <li><a href="">لبتاپ ایرانی</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">لبتاپ بر اساس قیمت</a>
-                                                            </li>
-                                                            <li><a href="">لبتاپ تا 2 میلیون</a></li>
-                                                            <li><a href="">لبتاپ تا 5 میلیون</a></li>
-                                                            <li><a href="">لبتاپ تا 10 میلیون</a></li>
-                                                            <li><a href="">لبتاپ تا 12 میلیون</a></li>
-                                                            <li><a href="">لبتاپ تا 15 میلیون</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">لبتاپ براساس حافظه
-                                                                داخلی</a></li>
-                                                            <li><a href="">لبتاپ تا 16 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 32 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 64 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 128 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 256 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 512 گیگابایت</a></li>
-                                                            <li><a href="">لبتاپ تا 1 ترابایت</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">لبتاپ براساس کاربری</a>
-                                                            </li>
-                                                            <li><a href="">لبتاپ اقتصادی</a></li>
-                                                            <li><a href="">لبتاپ دانش آموزی</a></li>
-                                                            <li><a href="">لبتاپ لاکچری</a></li>
-                                                            <li><a href="">لبتاپ پرچمدار</a></li>
-                                                        </ul> */}
-                                                            </li>
-                                                            <li className={`${styles.main_menu_sub}`}><a href=""><i className="bi bi-tag"></i><span>پر فروش ترین ها</span></a>
-                                                                {/* <ul className="main-menu-sub back-menu"
-                                                        >
-                                                            <li><a className="title my-flex-baseline" href="">زیر منو شماره 1 </a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">زیر منو شماره 1 </a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">زیر منو شماره 1 </a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a className="title my-flex-baseline" href="">زیر منو شماره 1 </a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                            <li><a href="">زیر منو شماره 1</a></li>
-                                                        </ul> */}
-                                                            </li>
-                                                        </ul>
-                                                    )
-                                                }
+                                    <nav className="navbar navbar-expand-lg navbar-light">
+                                        <div className="container-fluid">
+                                            <ul className={`navbar-nav ${styles.mega_menu_navbar}`}>
+                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu1(true)} onMouseLeave={() => setShowSubmenu1(false)}>
+                                                    <a className={`${styles.mega_menu_category_button} nav-link btn `} href="">
 
-                                            </li>
-                                            <li
-                                                onMouseEnter={() => handleSubHoveredCheck(2)}
-                                                className="nav-item">
-                                                <a
+                                                        <i className="bi bi-list"></i>
+                                                        دسته بندی کالاها</a>
+                                                    <ul className={`dropdown-menu ${showSubmenu1 ? styles.main_menu_active : styles.main_menu}`} style={{ position: 'absolute' }}>
+                                                        <li className={`${styles.main_menu_sub}`}>
+                                                            <a className="dropdown-item" href="#">
+                                                                <i className="bi bi-phone"></i>
+                                                                <span>موبایل</span>
+                                                            </a>
+                                                        </li>
+                                                        <li className={`${styles.main_menu_sub}`}>
+                                                            <a className="dropdown-item" href="#">
+                                                                <i className="bi bi-tablet"></i>
+                                                                <span>
+                                                                    تبلت
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li className={`${styles.main_menu_sub}`}>
+                                                            <a className="dropdown-item" href="#">
+                                                                <i className="bi bi-shield"></i>
+                                                                <span>
+                                                                    آنتی ویروس
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li className={`${styles.main_menu_sub}`}>
+                                                            <a className="dropdown-item" href="#">
+                                                                <i className="bi bi-laptop"></i>
+                                                                <span>
+                                                                    لپتاپ
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li className={`${styles.main_menu_sub}`}>
+                                                            <a className="dropdown-item" href="#">
+                                                                <i className="bi bi-tag"></i>
+                                                                <span>
+                                                                    پرفروش ترین ها
+                                                                </span>
+                                                            </a>
+                                                        </li>
 
-                                                    href="" className="nav-link border-animate fromCenter">
-                                                    <i className="bi bi-tablet"></i>
-                                                    <span>منو</span>
-                                                </a>
-                                                {
-                                                    isSubHovered && (
-                                                        <ul
-                                                            onMouseEnter={() => setIsSubHovered(true)}
-                                                            onMouseLeave={() => setIsSubHovered(false)}
-                                                            className={`${isSubHovered[2] ? styles.main_menu_sub_list_second_active : styles.main_menu_sub_list} mega-container`}
-                                                        >
-                                                            <div>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>بـرند</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">سامـسونگ</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">اپـل</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">شیـائومی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">ال جی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">وان پـلاس</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">جی ال ایـکس</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">هـو آوی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">بلک بـری</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">توشـیبا</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">دایـناکورد</a></li>
-                                                            </div>
-                                                            <div>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس رده بندی </a>
-                                                                </li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">دکـمه ای</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">لـمسـی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">نـظـامی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">ضـد آب</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">مسـافرتی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">خـارنی</a></li>
-                                                            </div>
-                                                            <div>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس کشور </a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">ایران</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">ژاپن</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">فرانسه</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">کره جنوبی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">آمریکا</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">سوئد</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">تایوان</a></li>
-                                                            </div>
-                                                            <div>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس رنگ</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">قرمز</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">قهوه ای</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">سبز</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">بنفش</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">نارنجی</a></li>
-                                                                <li className={styles.main_menu_sub_list_item}><a href="">نیلی</a></li>
-                                                            </div>
-                                                        </ul>
-                                                    )
-
-                                                }
-                                            </li>
-                                            <li
-                                                onMouseEnter={() => handleHoverCheck(3)}
-
-                                                className="nav-item">
-                                                <a href="" className="nav-link border-animate fromCenter">
-
-                                                    <i
-                                                        className="bi bi-menu-app">
-                                                    </i>
-                                                    <span>منو ساده</span>
-                                                </a>
-                                                {
-                                                    isHovered && (
-                                                        <ul
-                                                            className={`${isHovered[3] ? styles.main_menu_active : styles.main_menu} mega-container`}
-                                                        >
-                                                            <li><a href="">منو شماره 1</a></li>
-                                                            <li><a href="">منو شماره 2</a></li>
-                                                            <li className="position-relative"><a href="">منو شماره 3 <i
-                                                                className="bi bi-chevron-left"></i></a>
-                                                                <ul className="level-two">
-                                                                    <li><a href="">زیر منو شماره 1</a></li>
-                                                                    <li><a href="">2 زیر منو شماره </a></li>
-                                                                    <li><a href="">3 زیر منو شماره </a></li>
-                                                                </ul>
+                                                    </ul>
+                                                </li>
+                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu2(true)} onMouseLeave={() => setShowSubmenu2(false)}>
+                                                    <a className={`nav-link ${styles.mega_menu_nav_link}`} href="#">
+                                                        <i className="bi bi-tablet"></i>
+                                                        <span>منو</span>
+                                                    </a>
+                                                    <ul className={` ${showSubmenu2 ? styles.main_menu_sub_list_second_active : styles.main_menu_sub_list}`} style={{ position: 'absolute' }}>
+                                                        <div>
+                                                            <li className={styles.main_menu_sub_list_item}><a href="" className={`${styles.main_menu_sub_title} dropdown-item`}>بـرند</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">سامـسونگ</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">اپـل</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">شیـائومی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">ال جی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">وان پـلاس</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">جی ال ایـکس</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">هـو آوی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">بلک بـری</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">توشـیبا</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">دایـناکورد</a></li>
+                                                        </div>
+                                                        <div>
+                                                            <li className={styles.main_menu_sub_list_item}><a href="" className={styles.main_menu_sub_title}>براساس رده بندی </a>
                                                             </li>
-                                                            <li><a href="">منو شماره 4</a></li>
-                                                            <li><a href="">منو شماره 5</a></li>
-                                                            <li><a href="">منو شماره 6</a></li>
-                                                        </ul>
-                                                    )
-                                                }
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="" className="nav-link border-animate fromCenter">
-                                                    <i
-                                                        className="bi bi-tag">
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">دکـمه ای</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">لـمسـی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">نـظـامی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">ضـد آب</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">مسـافرتی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">خـارنی</a></li>
+                                                        </div>
+                                                        <div>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="" className={styles.main_menu_sub_title}>براساس کشور </a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">ایران</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">ژاپن</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">فرانسه</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">کره جنوبی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">آمریکا</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">سوئد</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">تایوان</a></li>
+                                                        </div>
+                                                        <div>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="" className={styles.main_menu_sub_title}>براساس رنگ</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">قرمز</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">قهوه ای</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">سبز</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">بنفش</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">نارنجی</a></li>
+                                                            <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">نیلی</a></li>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu3(true)} onMouseLeave={() => setShowSubmenu3(false)}>
+                                                    <a className={`nav-link ${styles.mega_menu_nav_link}`} href="#">
+                                                        <i className="bi bi-menu-app"></i>
+                                                        <span>منو ساده</span>
+                                                    </a>
+                                                    <ul
+                                                        className={`${showSubmenu3 ? styles.main_menu_sub_list_third_active : styles.main_menu_sub_list} mega-container`}
+                                                    >
+                                                        <li><a href="">منو شماره 1</a></li>
+                                                        <li><a href="">منو شماره 2</a></li>
 
-                                                    </i>
-                                                    تخفیف ها و پیشنهاد ها</a>
-                                            </li>
-                                            <li className="nav-item"><a href="" className="nav-link border-animate fromCenter">سوالی
-                                                دارید</a>
-                                            </li>
-                                            <li className="nav-item"><a href="" className="nav-link border-animate fromCenter">در نسیم استور
-                                                بفروشید</a></li>
-                                        </ul>
-                                    </div>
+                                                        <li className="position-relative"><a href="">منو شماره 3 <i
+                                                            className="bi bi-chevron-left"></i></a>
+                                                            <ul className="level-two">
+                                                                <li><a href="">زیر منو شماره 1</a></li>
+                                                                <li><a href="">2 زیر منو شماره </a></li>
+                                                                <li><a href="">3 زیر منو شماره </a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><a href="">منو شماره 4</a></li>
+                                                        <li><a href="">منو شماره 5</a></li>
+                                                        <li><a href="">منو شماره 6</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a href="" className="nav-link border-animate fromCenter">
+                                                        <i
+                                                            className="bi bi-tag">
+
+                                                        </i>
+                                                        تخفیف ها و پیشنهاد ها</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a href="" className="nav-link border-animate fromCenter">سوالی
+                                                        دارید</a>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a href="" className="nav-link border-animate fromCenter">در نسیم استور
+                                                        بفروشید</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
                                 </div>
                                 <div className="col-lg-3">
                                     <div className="d-flex align-items-center justify-content-end">

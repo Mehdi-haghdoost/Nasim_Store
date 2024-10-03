@@ -354,6 +354,7 @@
 .mega_menu_navbar {
     display: flex;
     align-items: center;
+    flex-direction: row;
     /* justify-content: space-evenly; */
     list-style: none;
     flex-wrap: wrap;
@@ -398,14 +399,14 @@
 }
 
 .main_menu_active {
-    background: #fff;
     display: block;
+    background: #fff;
     box-shadow: var(--shadow-md);
     height: auto;
     min-width: 200px;
     min-height: 400px;
-    position: absolute;
-    top: 50px;
+    position: absolute !important;
+    /* top: 50px; */
     left: 20px;
     right: 20px;
     padding: 0;
@@ -432,6 +433,10 @@
     display: flex;
     padding: 0 10px;
     align-items: center;
+}
+
+.main_menu_sub a>i {
+    margin-left: 5px !important;
 }
 
 .main_menu_sub:hover a {
@@ -476,7 +481,7 @@
 .main_menu_sub_list_second_active {
     display: flex;
     background: #fff url(/images/labtop.png) no-repeat;
-    background-position: bottom left !important;
+    background-position: left left !important;
     background-size: 300px !important;
     min-height: 400px;
     max-height: 400px;
@@ -484,24 +489,23 @@
     min-width: 200px;
     background: #fff;
     position: absolute;
-    top: 0;
     right: 200px;
-    /* opacity: 0;
-    visibility: hidden; */
     padding: 10px;
     transition: 0.4s all ease-in-out;
     border-radius: 10px;
     list-style-type: none;
-
-
+    box-shadow: rgb(0 0 0 / 10%) 0 8px 10px 0 !important;
+    padding-top: 2rem;
+    padding-right: 2rem;
 }
 
 .main_menu_sub_list_second_active {
     width: 100% !important;
-    right: 0 !important;
-    top: 60px !important;
+    right: -11px !important;
     background: #fff url('/images/mega-img-1.jpg') no-repeat !important;
+    background-position: left !important;
     background-size: 400px !important;
+    min-width: 1345px;
 }
 
 .main_menu_sub_list {
@@ -513,11 +517,103 @@
 .main_menu_sub_list_second_active div {
     margin-left: 5rem;
 }
-.main_menu_sub_list_second_active div:last-child{
+
+.main_menu_sub_list_second_active div:last-child {
     margin-left: 0;
 }
 
 .main_menu_sub_list_item a {
     font-size: 13px !important;
     color: #929292 !important;
+    padding: 5px 0;
+}
+
+.mega_menu_nav_link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    position: relative;
+}
+
+.mega_menu_nav_link span {
+    margin-right: 5px;
+}
+
+.main_menu_sub_list_third_active {
+    align-items: unset;
+    background-color: #fff;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    height: auto;
+    min-width: 200px;
+    position: absolute;
+    top: 85%;
+    left: auto;
+    right: auto;
+    padding: 0;
+    transition: 0.4s all ease-in-out;
+    border-radius: 10px;
+    list-style-type: none;
+    padding-top: 1rem;
+}
+
+.main_menu_sub_list_third_active li {
+    width: 100%;
+    margin: 0;
+    padding: 15px 0;
+    border-radius: 10px;
+}
+
+.main_menu_sub_list_third_active li:hover {
+    background: var(--main-color-two);
+}
+
+.main_menu_sub_list_third_active li:hover a {
+    color: #fff;
+    transform: translateX(-5px);
+    transition: all 0.3s ease-in;
+}
+
+.main_menu_sub_list_third_active li a {
+    display: block;
+    padding: 0 10px;
+    text-decoration: none;
+    color: var(--color-site);
+    font-size: var(--font-size) !important;
+}
+
+.main_menu_sub_list_third_active li ul {
+    display: none;
+}
+
+.main_menu_sub_list_third_active li:nth-child(3) {
+    position: relative;
+}
+
+.main_menu_sub_list_third_active li:nth-child(3) ul li a {
+    color: #000;
+    
+}
+
+.main_menu_sub_list_third_active li:nth-child(3) ul li:hover a{
+    color: #fff;
+    transform: translateX(-10px);
+    transition: all 0.3s ease-in;
+}
+
+.main_menu_sub_list_third_active li:hover ul {
+    display: block;
+    right: 14.4rem;
+    top: 0;
+    color: #333 !important;
+    list-style: none;
+    background-color: #fff;
+    height: auto;
+    min-width: 200px;
+    position: absolute;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    padding: 0;
+    transition: 0.4s all ease-in-out;
+    border-radius: 10px;
+    list-style-type: none;
 }
