@@ -539,29 +539,124 @@ function Header() {
                                                                 </div>
                                                             </ul>
                                                         </li>
-                                                        <li className={`${styles.main_menu_sub}`}>
-                                                            <a className="dropdown-item" href="#">
+                                                        <li className={`${styles.main_menu_sub} nav-item dropdown`}>
+                                                            <a className="dropdown-item" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false"
+                                                            >
                                                                 <i className="bi bi-shield"></i>
                                                                 <span>
                                                                     آنتی ویروس
                                                                 </span>
                                                             </a>
+                                                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown3">
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس برند</a>
+                                                                    </li>
+                                                                    <li><a href="">نود 32</a></li>
+                                                                    <li><a href="">کسپر اسکای </a></li>
+                                                                    <li><a href="">سکوریتی 360 </a></li>
+                                                                    <li><a href=""> بیت دیفندر</a></li>
+                                                                    <li><a href="">ایمن</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس ویندوز</a></li>
+                                                                    <li><a href="">ویندوز 7</a></li>
+                                                                    <li><a href="">ویندوز 8</a></li>
+                                                                    <li><a href="">ویندوز 8.1</a></li>
+                                                                    <li><a href="">ویندوز 10</a></li>
+                                                                    <li><a href="">ویندوز 11</a></li>
+                                                                </div>
+                                                            </ul>
                                                         </li>
-                                                        <li className={`${styles.main_menu_sub}`}>
-                                                            <a className="dropdown-item" href="#">
+                                                        <li className={`${styles.main_menu_sub} nav-item dropdown`}>
+                                                            <a className="dropdown-item" href="#" id="navbarDropdown4" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                                 <i className="bi bi-laptop"></i>
                                                                 <span>
                                                                     لپتاپ
                                                                 </span>
                                                             </a>
+                                                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown4">
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس برند</a>
+                                                                    </li>
+                                                                    <li><a href="">لپتاپ اپل</a></li>
+                                                                    <li><a href="">لپتاپ سامسونگ </a></li>
+                                                                    <li><a href=""> لپتاپ شیائومی </a></li>
+                                                                    <li><a href=""> لپتاپ بلک بری</a></li>
+                                                                    <li><a href="">لپتاپ ایرانی</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس قیمت</a></li>
+                                                                    <li><a href="">لپتاپ تا 2 میلیون</a></li>
+                                                                    <li><a href="">لپتاپ تا 5 میلیون</a></li>
+                                                                    <li><a href="">لپتاپ تا 10 میلیون</a></li>
+                                                                    <li><a href="">لپتاپ تا 12 میلیون</a></li>
+                                                                    <li><a href="">لپتاپ تا 15 میلیون</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس حافظه داخلی</a></li>
+                                                                    <li><a href="">لبتاپ تا 16 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 32 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 64 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 128 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 256 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 512 گیگابایت</a></li>
+                                                                    <li><a href="">لبتاپ تا 1 ترابایت</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس کاربری</a></li>
+                                                                    <li><a href="">لبتاپ اقتصادی</a></li>
+                                                                    <li><a href="">لبتاپ دانش آموزی</a></li>
+                                                                    <li><a href="">لبتاپ لاکچری</a></li>
+                                                                    <li><a href="">لبتاپ پرچمدار</a></li>
+                                                                </div>
+
+                                                            </ul>
                                                         </li>
-                                                        <li className={`${styles.main_menu_sub}`}>
-                                                            <a className="dropdown-item" href="#">
+                                                        <li className={`${styles.main_menu_sub} nav-item dropdown`}>
+                                                            <a className="dropdown-item" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                                 <i className="bi bi-tag"></i>
                                                                 <span>
                                                                     پرفروش ترین ها
                                                                 </span>
                                                             </a>
+                                                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس برند</a>
+                                                                    </li>
+                                                                    <li><a href="">نود 32</a></li>
+                                                                    <li><a href="">کسپر اسکای </a></li>
+                                                                    <li><a href="">سکوریتی 360 </a></li>
+                                                                    <li><a href=""> بیت دیفندر</a></li>
+                                                                    <li><a href="">ایمن</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">زیر منو شماره 1 </a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">زیر منو شماره 1 </a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                </div>
+                                                                <div>
+                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">زیر منو شماره 1 </a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                    <li><a href="">زیر منو شماره 1</a></li>
+                                                                </div>
+                                                            </ul>
                                                         </li>
 
                                                     </ul>
