@@ -624,15 +624,6 @@ function Header() {
                                                             </a>
                                                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown5">
                                                                 <div>
-                                                                    <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">بر اساس برند</a>
-                                                                    </li>
-                                                                    <li><a href="">نود 32</a></li>
-                                                                    <li><a href="">کسپر اسکای </a></li>
-                                                                    <li><a href="">سکوریتی 360 </a></li>
-                                                                    <li><a href=""> بیت دیفندر</a></li>
-                                                                    <li><a href="">ایمن</a></li>
-                                                                </div>
-                                                                <div>
                                                                     <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">زیر منو شماره 1 </a></li>
                                                                     <li><a href="">زیر منو شماره 1</a></li>
                                                                     <li><a href="">زیر منو شماره 1</a></li>
