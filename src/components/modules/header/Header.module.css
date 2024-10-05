@@ -363,6 +363,9 @@
 .mega_menu_navbar li {
     margin-left: 1rem;
 }
+.mega_menu_navbar>li:hover .main_menu_active{
+    display: block;
+}
 
 .mega_menu_navbar li a {
     display: flex;
@@ -399,7 +402,7 @@
 }
 
 .main_menu_active {
-    display: block;
+    /* display: block; */
     background: #fff;
     box-shadow: var(--shadow-md);
     height: auto;
@@ -415,6 +418,7 @@
     top: 52px;
     right: -12px;
 }
+
 
 .main_menu_sub {
     background-color: #eee;
@@ -548,12 +552,16 @@
 }
 
 .main_menu_sub_list_second_active {
+    display: none !important;
     width: 100% !important;
     right: -11px !important;
     background: #fff url('/images/mega-img-1.jpg') no-repeat !important;
     background-position: left !important;
     background-size: 400px !important;
     min-width: 1345px;
+}
+.mega_menu_navbar>li:nth-child(2):hover .main_menu_sub_list_second_active  {
+    display: flex !important;
 }
 
 .main_menu_sub_list {

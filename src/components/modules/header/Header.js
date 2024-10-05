@@ -439,13 +439,15 @@ function Header() {
                                     <nav className="navbar navbar-expand-lg navbar-light">
                                         <div className="container-fluid">
                                             <ul className={`navbar-nav ${styles.mega_menu_navbar}`}>
-                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu1(true)} onMouseLeave={() => setShowSubmenu1(false)}>
-                                                    <a className={`${styles.mega_menu_category_button} nav-link btn `} href="">
+                                                <li className="nav-item">
+                                                    <a className={`nav-link ${styles.mega_menu_category_button} dropdown-item`} href="" id="hoveredMenu1" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
 
                                                         <i className="bi bi-list"></i>
-                                                        دسته بندی کالاها</a>
+                                                         دسته بندی کالاها
+                                                         </a>
                                                     <ul
-                                                        className={`dropdown-menu ${showSubmenu1 ? styles.main_menu_active : styles.main_menu}`} style={{ position: 'absolute' }}>
+                                                        className={`dropdown-menu ${ styles.main_menu_active }`} aria-labelledby="hoveredMenu2">
                                                         <li className={`${styles.main_menu_sub} nav-item dropdown`}>
                                                             <a className="dropdown-ite" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
@@ -652,12 +654,13 @@ function Header() {
 
                                                     </ul>
                                                 </li>
-                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu2(true)} onMouseLeave={() => setShowSubmenu2(false)}>
-                                                    <a className={`nav-link ${styles.mega_menu_nav_link}`} href="#">
+                                                <li className="nav-item" >
+                                                    <a className={`nav-link ${styles.mega_menu_nav_link} dropdown-item`} href="#" id="hoveredMenu2" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                         <i className="bi bi-tablet"></i>
                                                         <span>منو</span>
                                                     </a>
-                                                    <ul className={` ${showSubmenu2 ? styles.main_menu_sub_list_second_active : styles.main_menu_sub_list}`} style={{ position: 'absolute' }}>
+                                                    <ul className={` ${styles.main_menu_sub_list_second_active }`} aria-labelledby="hoveredMenu2">
                                                         <div>
                                                             <li className={styles.main_menu_sub_list_item}><a href="" className={`${styles.main_menu_sub_title} dropdown-item`}>بـرند</a></li>
                                                             <li className={styles.main_menu_sub_list_item}><a className="dropdown-item" href="">سامـسونگ</a></li>
