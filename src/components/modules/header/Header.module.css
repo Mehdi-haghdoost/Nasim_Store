@@ -379,7 +379,7 @@
 .mega_menu_category_button {
     background-color: var(--main-color-one) !important;
     color: #fff !important;
-    padding: 4px 22px;
+    padding: 4px 25px !important;
     border-radius: 25px;
     font-weight: normal !important;
 }
@@ -563,6 +563,9 @@
 .mega_menu_navbar>li:nth-child(2):hover .main_menu_sub_list_second_active  {
     display: flex !important;
 }
+.mega_menu_navbar>li:nth-child(3):hover .main_menu_sub_list_third_active  {
+    display: block !important;
+}
 
 .main_menu_sub_list {
     display: none;
@@ -597,6 +600,7 @@
 }
 
 .main_menu_sub_list_third_active {
+    display: none;
     align-items: unset;
     background-color: #fff;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);

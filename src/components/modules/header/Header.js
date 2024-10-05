@@ -7,8 +7,6 @@ function Header() {
 
     const [activeHamburger, setActiveHamburger] = useState(false)
     const [activeSubMenu, setactiveSubMenu] = useState({})
-    const [showSubmenu1, setShowSubmenu1] = useState(false);
-    const [showSubmenu2, setShowSubmenu2] = useState(false);
     const [showSubmenu3, setShowSubmenu3] = useState(false);
 
     const handleItemCheck = (index) => {
@@ -705,13 +703,15 @@ function Header() {
                                                         </div>
                                                     </ul>
                                                 </li>
-                                                <li className="nav-item" onMouseEnter={() => setShowSubmenu3(true)} onMouseLeave={() => setShowSubmenu3(false)}>
-                                                    <a className={`nav-link ${styles.mega_menu_nav_link}`} href="#">
+                                                <li className="nav-item" >
+                                                    <a className={`nav-link ${styles.mega_menu_nav_link} dropdown-item`} href="#" id="hoveredMenu3" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                         <i className="bi bi-menu-app"></i>
                                                         <span>منو ساده</span>
                                                     </a>
                                                     <ul
-                                                        className={`${showSubmenu3 ? styles.main_menu_sub_list_third_active : styles.main_menu_sub_list} mega-container`}
+                                                    aria-labelledby="hoveredMenu3"
+                                                        className={`${styles.main_menu_sub_list_third_active}`}
                                                     >
                                                         <li><a href="">منو شماره 1</a></li>
                                                         <li><a href="">منو شماره 2</a></li>
