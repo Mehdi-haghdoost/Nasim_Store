@@ -444,12 +444,53 @@ function Header() {
 
                                                         <i className="bi bi-list"></i>
                                                         دسته بندی کالاها</a>
-                                                    <ul className={`dropdown-menu ${showSubmenu1 ? styles.main_menu_active : styles.main_menu}`} style={{ position: 'absolute' }}>
-                                                        <li className={`${styles.main_menu_sub}`}>
-                                                            <a className="dropdown-item" href="#">
+                                                    <ul
+                                                    className={`dropdown-menu ${showSubmenu1 ? styles.main_menu_active : styles.main_menu}`} style={{ position: 'absolute' }}>
+                                                        <li className={`${styles.main_menu_sub} nav-item dropdown`}>
+                                                            <a className="dropdown-ite" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                                 <i className="bi bi-phone"></i>
                                                                 <span>موبایل</span>
                                                             </a>
+                                                            <ul class="dropdown-menu " aria-labelledby="navbarDropdown"
+                                                            >
+                                                              <div>
+                                                              <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">برند های مختلف گوشی</a>
+                                                                </li>
+                                                                <li><a href="">گوشی اپل</a></li>
+                                                                <li><a href="">گوشی سامسونگ</a></li>
+                                                                <li><a href="">گوشی شیائومی</a></li>
+                                                                <li><a href="">گوشی بلک بری</a></li>
+                                                                <li><a href="">گوشی ایرانی</a></li>
+                                                              </div>
+                                                                <div>
+                                                                <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">گوشی بر اساس قیمت</a></li>
+                                                                <li><a href="">گوشی تا 2 میلیون</a></li>
+                                                                <li><a href="">گوشی تا 5 میلیون</a></li>
+                                                                <li><a href="">گوشی تا 10 میلیون</a></li>
+                                                                <li><a href="">گوشی تا 12 میلیون</a></li>
+                                                                <li><a href="">گوشی تا 15 میلیون</a></li>
+                                                                </div>
+                                                                <div>
+                                                                <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">گوشی براساس حافظه
+                                                                    داخلی</a></li>
+                                                                <li><a href="">گوشی تا 16 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 32 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 64 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 128 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 256 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 512 گیگابایت</a></li>
+                                                                <li><a href="">گوشی تا 1 ترابایت</a></li>
+                                                                </div>
+                                                                <div>
+                                                                <li><a className={`${styles.main_menu_sub_title} dropdown-item`} href="">گوشی براساس کاربری</a>
+                                                                </li>
+                                                                <li><a href="">گوشی اقتصادی</a></li>
+                                                                <li><a href="">گوشی دانش آموزی</a></li>
+                                                                <li><a href="">گوشی لاکچری</a></li>
+                                                                <li><a href="">گوشی پرچمدار</a></li>
+                                                                </div>
+                                                            </ul>
                                                         </li>
                                                         <li className={`${styles.main_menu_sub}`}>
                                                             <a className="dropdown-item" href="#">
