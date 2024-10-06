@@ -1,3 +1,25 @@
+.navbar_fixed {
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    animation: fadeInDownBig 0.4s ease;
+    left: 0;
+    width: 100%;
+    top: 0;
+    background: #fff;
+    z-index: 999;
+}
+
+@keyframes fadeInDownBig {
+    0% {
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
 .header {
     background-color: #fff;
     padding-top: 30px;
@@ -186,8 +208,8 @@
     padding: 0 5px;
     color: #fff;
     border-radius: 11px;
-    box-shadow: 0 0 0 1px #fff;
     -webkit-box-shadow: #fff 0 0 0 1px;
+    box-shadow: 0 0 0 1px #fff;
     -webkit-animation-name: BasketBadge;
     animation-name: BasketBadge;
     -webkit-animation-duration: .4s;
@@ -277,5 +299,3 @@
 .avatar_dropdown_item i {
     margin-left: 0.25rem;
 }
-
-

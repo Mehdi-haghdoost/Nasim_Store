@@ -22,8 +22,6 @@ const geistMono = localFont({
 export const metadata = {
   title:' Nasim Store | فروشگاه اینترنتی نسیم استور',
   description: "فروشگاه اینترنتی نسیم استور اولین فروشگاه تخصصی لوازم جانبی موبایل و تبلت و لپ تاپ خرید پاور بانک و هندزفری بلوتوث و انوع آنتی ویروس.",
-
-  icon: 'images/user.png' // آدرس تصویر را در اینجا قرار دهید
 };
 
 export default function RootLayout({ children }) {

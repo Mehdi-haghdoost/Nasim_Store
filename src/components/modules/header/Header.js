@@ -7,8 +7,27 @@ import AuthHeader from './AuthHeader';
 
 function Header() {
 
+    const [fixedTop, setFixedTop] = useState(false);
     const [activeHamburger, setActiveHamburger] = useState(false)
     const [activeSubMenu, setactiveSubMenu] = useState({})
+
+    useEffect(() => {
+
+        const fixedNavbarToTop = () => {
+
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 200) {
+                setFixedTop(true)
+            } else {
+                setFixedTop(false)
+            }
+        }
+
+        window.addEventListener('scroll', fixedNavbarToTop)
+
+        return () => window.removeEventListener('scroll', fixedNavbarToTop)
+    }, [])
 
     const handleItemCheck = (index) => {
         setactiveSubMenu({
@@ -19,8 +38,8 @@ function Header() {
 
     return (
         <header className={styles.header}>
-            <div className='container-fluid'>
-                <div className="row align-items-center">
+            <nav className={`container-fluid ${fixedTop ? styles.navbar_fixed : ''}`}>
+                <div className={`row align-items-center`}>
                     {/* logo */}
                     <div className="col-lg-1 col-6 order-lg-1 order-1">
                         <div className="d-flex align-items-center">
@@ -396,7 +415,7 @@ function Header() {
                 <MegaMenu />
                 {/* mega-mebu-end */}
 
-            </div>
+            </nav>
         </header>
     )
 }
