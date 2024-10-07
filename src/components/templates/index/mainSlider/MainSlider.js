@@ -28,14 +28,20 @@ function MainSlider() {
                             </SwiperSlide>
 
                             <SwiperSlide>
+                              <ProductBox />
+
                                 <img className='img-fluid' src="/images/product/watch2.jpg" alt="slide2" />
                             </SwiperSlide>
 
                             <SwiperSlide>
+                              <ProductBox />
+
                                 <img className='img-fluid' src="/images/product/watch3.jpg" alt="slide3" />
                             </SwiperSlide>
 
                             <SwiperSlide>
+                              <ProductBox />
+
                                 <img className='img-fluid' src="/images/product/watch4.jpg" alt="slide4" />
                             </SwiperSlide>
                         </Swiper>

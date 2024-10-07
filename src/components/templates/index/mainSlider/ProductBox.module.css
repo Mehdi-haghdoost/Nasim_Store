@@ -23,3 +23,42 @@
     font-size: 13px;
     font-weight: normal;
 }
+.swiper_progress_bar {
+    position: absolute;
+    top: 17.5%;
+    width: 100%;
+    display: block;
+    z-index: 1;
+    height: 2px;
+}
+.swiper_progress_bar.active .slide_progress_bar {
+    opacity: 1;
+}
+
+.slide_progress_bar {
+    position: absolute;
+    height: 2px;
+    background: rgba(199, 199, 199, 0.3);
+    width: auto;
+    clear: both;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.swiper_progress_bar.animate .slide_progress_bar:after {
+    transition: width linear;
+    transition-delay: unset;
+    width: 100%;
+    transition-duration: 3s;
+}
+
+.swiper_progress_bar .slide_progress_bar:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--main-color-one);
+    height: 100%;
+    width: 0;
+    content: "";
+}
