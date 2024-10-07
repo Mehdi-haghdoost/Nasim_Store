@@ -1,11 +1,29 @@
 import React from 'react'
 import styles from './MegaMenu.module.css'
+import { useState,useEffect } from 'react';
 
 function MegaMenu() {
+
+    const [fixedTop,setFixedTop] = useState(false)
+
+    useEffect(() => {
+        const fixedNavbarToTop = () => {
+            const currentScroll = window.pageYOffset
+           
+            if(currentScroll >150) {
+                setFixedTop(true)
+            } else {
+                setFixedTop(false)
+            }
+        }
+        window.addEventListener('scroll',fixedNavbarToTop)
+        return () => window.removeEventListener('scroll',fixedNavbarToTop)
+    },[])
+
   return (
     <div className={`${styles.mega_menu} d-lg-block d-none`}>
                     <div className="container-fluid">
-                        <div>
+                        <div className={`${fixedTop ? styles.navbar_fixed : ''}`}>
                             <div className={styles.header_mega_menu}>
                                 <div className="col-lg-9">
                                     <nav className="navbar navbar-expand-lg navbar-light">

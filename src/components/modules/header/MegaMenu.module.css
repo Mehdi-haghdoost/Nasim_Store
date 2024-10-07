@@ -1,5 +1,25 @@
 /* mega_menu start */
+.navbar_fixed {
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    animation: fadeInDownBig 0.4s ease;
+    left: 0;
+    width: 100%;
+    top: 0;
+    background: #fff;
+    z-index: 999;
+}
 
+@keyframes fadeInDownBig {
+    0% {
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        transform: none;
+    }
+}
 .mega_menu {
     background: #fff;
     box-shadow: rgb(0 0 0 / 10%) 0 8px 10px 0;
