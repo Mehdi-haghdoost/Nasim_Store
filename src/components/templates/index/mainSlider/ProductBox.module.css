@@ -1,0 +1,25 @@
+.product_box {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.product_timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.timer_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 10px;
+}
+
+.timer_label span {
+    color: #f21919;
+    font-size: 13px;
+    font-weight: normal;
+}
