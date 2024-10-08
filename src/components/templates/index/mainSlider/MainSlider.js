@@ -20,7 +20,7 @@ function MainSlider() {
                             rewind={true}
                             navigation={true}
                             modules={[Navigation, Autoplay]}
-                            autoplay={{ delay: 1500 }}
+                            autoplay={{ delay: 6000 }}
                             className="mySwiper home-slider">
                             <SwiperSlide>
                               <ProductBox />
