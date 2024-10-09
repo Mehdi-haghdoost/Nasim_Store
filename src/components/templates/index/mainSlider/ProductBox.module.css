@@ -25,32 +25,3 @@
     font-weight: normal;
 }
 
-.progress {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10%;
-    direction: ltr;
-
-}
-
-.swiper_progress_bar {
-    position: relative;
-    overflow: hidden;
-    width: 350px;
-    height: 2px;
-    border-radius: 5px;
-    background-color: #eee;
-}
-
-
-.progress_bar_percent {
-    font-weight: 600;
-    font-family: 'Franklin Gothic Medium';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: #eee;
-    text-shadow: -1px 0 #555, 0 1px #555, 1px 0 #555, 0 -1px #555;
-}

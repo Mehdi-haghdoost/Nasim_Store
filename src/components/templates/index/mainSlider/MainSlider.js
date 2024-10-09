@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './MainSlider.module.css'
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -8,8 +8,12 @@ import 'swiper/css/navigation';
 import { Navigation, Autoplay } from 'swiper/modules';
 
 import ProductBox from './ProductBox';
+import ProgressBar from './ProgressBar';
 
 function MainSlider() {
+
+    const [activeSlide, setActiveSlide] = useState(0)
+
     return (
         <div className={`${styles.main_slider}`}>
             <div className='container-fluid'>
@@ -21,26 +25,29 @@ function MainSlider() {
                             navigation={true}
                             modules={[Navigation, Autoplay]}
                             autoplay={{ delay: 6000 }}
+                            onSlideChange={() => setActiveSlide(activeSlide + 1)}
                             className="mySwiper home-slider">
                             <SwiperSlide>
-                              <ProductBox />
+                                <ProductBox />
+                                <ProgressBar key={activeSlide} />
                                 <img className='img-fluid' src="/images/product/watch1.jpg" alt="slide1" />
                             </SwiperSlide>
 
                             <SwiperSlide>
-                              <ProductBox />
-
+                                <ProductBox />
+                                <ProgressBar key={activeSlide} />
                                 <img className='img-fluid' src="/images/product/watch2.jpg" alt="slide2" />
                             </SwiperSlide>
 
                             <SwiperSlide>
-                              <ProductBox />
-
+                                <ProductBox />
+                                <ProgressBar key={activeSlide} />
                                 <img className='img-fluid' src="/images/product/watch3.jpg" alt="slide3" />
                             </SwiperSlide>
 
                             <SwiperSlide>
-                              <ProductBox />
+                                <ProductBox />
+                                <ProgressBar key={activeSlide} />
 
                                 <img className='img-fluid' src="/images/product/watch4.jpg" alt="slide4" />
                             </SwiperSlide>
