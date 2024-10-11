@@ -1,11 +1,13 @@
 "use client"
-import React, { useState, useEffect } from 'react'
-import styles from './MainSlider.module.css'
+import React, { useState, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 import 'swiper/css';
+import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Navigation, Autoplay } from 'swiper/modules';
+
+
+import styles from './MainSlider.module.css'
+import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 
 import ProductBox from './ProductBox';
 import ProgressBar from './ProgressBar';
@@ -13,6 +15,13 @@ import ProgressBar from './ProgressBar';
 function MainSlider() {
 
     const [activeSlide, setActiveSlide] = useState(0)
+
+    const progressCircle = useRef(null);
+    const progressContent = useRef(null);
+    const onAutoplayTimeLeft = (s, time, progress) => {
+        progressCircle.current.style.setProperty('--progress', 1 - progress);
+        progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+    };
 
     return (
         <div className={`${styles.main_slider}`}>
@@ -53,7 +62,48 @@ function MainSlider() {
                             </SwiperSlide>
                         </Swiper>
                     </div>
-                    <div className="col-lg-9 order-lg-2 order-1"></div>
+                    <div className="col-lg-9 order-lg-2 order-1">
+                        <div className={`${styles.slider}`}>
+                            <div className={`${styles.swiper}`}>
+                                <div className={`${styles.swiper_wrapper}`}>
+                                    <Swiper
+                                        loop={true}
+                                        rewind={true}
+                                        spaceBetween={30}
+                                        centeredSlides={true}
+                                        autoplay={{
+                                            delay: 6000,
+                                            disableOnInteraction: false,
+                                        }}
+                                        pagination={{
+                                            clickable: true,
+                                        }}
+                                        navigation={true}
+                                        modules={[Autoplay, Pagination, Navigation]}
+                                        onAutoplayTimeLeft={onAutoplayTimeLeft}
+                                        className="mySwiper"
+                                    >
+                                        <SwiperSlide>
+                                            <img className='img-fluid' src="/images/slide2-2.jpg" alt="" />
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <img className='img-fluid' src="/images/slide3-1.jpg" alt="" />
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <img className='img-fluid' src="/images/slide4.jpg" alt="" />
+                                        </SwiperSlide>
+                                        <div className={`${styles.autoplay_progress}`} slot="container-end">
+                                            <svg viewBox="0 0 48 48" ref={progressCircle}>
+                                                <circle cx="24" cy="24" r="20"></circle>
+                                            </svg>
+                                            <span ref={progressContent}></span>
+                                        </div>
+                                    </Swiper>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

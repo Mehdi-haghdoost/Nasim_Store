@@ -7,7 +7,7 @@ function ProgressBar() {
 
 	useEffect(() => {
 		if (filled < 100) {
-			setTimeout(() => setFilled(prev => prev += 2), 110)
+			setTimeout(() => setFilled(prev => prev += 2), 117)
 		}
 	},[filled])
     return (
