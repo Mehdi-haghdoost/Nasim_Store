@@ -1,6 +1,5 @@
 .product_box {
     background-color: #fff;
-    box-shadow: var(--shadow-box);
     border-radius: 10px;
     padding: 10px;
 }
@@ -24,4 +23,3 @@
     font-size: 13px;
     font-weight: normal;
 }
-

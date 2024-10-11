@@ -1,9 +1,44 @@
+/* right slider */
+
+.swiper_slide {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 10px 0px !important;
+    border-radius: 10px;
+    margin-right: 8px;
+    background-color: #fff;
+}
+
+.mySwiper {
+    padding: 10px;
+    width: 314px;
+}
+
+.slider_img {
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    transition: 0.5s all ease-in-out;
+    width: 180px;
+}
+
+
 /* Left Slider */
 .slider {
     height: 378px;
     border-radius: 10px;
     box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0 !important;
 }
+
 .slider .swiper {
     height: 100%;
     margin-left: auto;
@@ -15,6 +50,7 @@
     z-index: 1;
     display: block;
 }
+
 .swiper_wrapper {
     position: relative;
     width: 100%;
@@ -26,7 +62,8 @@
     box-sizing: content-box;
 
 }
-.swiper_wrapper img  {
+
+.swiper_wrapper img {
     width: 100% !important;
     object-fit: cover;
     border-radius: 15px;
@@ -45,7 +82,8 @@
     font-weight: bold;
     color: #007aff;
 }
-.autoplay_progress svg  {
+
+.autoplay_progress svg {
     position: absolute;
     left: 0;
     top: 0px;
@@ -58,8 +96,5 @@
     stroke-dashoffset: calc(125.6px*(1 - var(--progress)));
     stroke-dasharray: 125.6;
     transform: rotate(-90deg);
-    
+
 }
-
-
-   
