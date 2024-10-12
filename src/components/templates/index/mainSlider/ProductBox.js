@@ -4,9 +4,6 @@ import Countdown from './Countdown'
 
 
 function ProductBox() {
-
- 
-
     return (
         <div className={`${styles.product_box}`} >
             <div className={`${styles.product_timer}`} >
@@ -15,7 +12,6 @@ function ProductBox() {
                 </div>
                 <Countdown />
             </div>
-           
         </div>
     )
 }
