@@ -15,11 +15,13 @@
     border-radius: 10px;
     margin-right: 8px;
     background-color: #fff;
+
 }
 
 .mySwiper {
     padding: 10px;
     width: 314px;
+    width: 100%;
 }
 
 .slider_img {
@@ -37,6 +39,7 @@
     height: 378px;
     border-radius: 10px;
     box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0 !important;
+    margin-bottom: 1.5rem;
 }
 
 .slider .swiper {

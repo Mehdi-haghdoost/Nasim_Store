@@ -31,42 +31,42 @@ function MainSlider() {
                     <div className="col-lg-3 order-lg-1 order-2">
                         <div className={`${styles.swiper_slide}`}>
                             <div className={`${styles.slide_product_box}`}>
-                        <Swiper
-                            loop={true}
-                            rewind={true}
-                            spaceBetween={30}                           
-                            modules={[Navigation, Autoplay]}
-                            autoplay={{ delay: 6000 }}
-                            onSlideChange={() => setActiveSlide(activeSlide + 1)}
-                            className={`${styles.mySwiper} home-slider`}>
-                            <SwiperSlide>
-                                <ProductBox />
-                                <ProgressBar key={activeSlide} />
-                                <img  className={`img-fluid ${styles.slider_img}`} src="/images/product/watch1.jpg" alt="slide1" />
-                                <ProductDetail />
-                            </SwiperSlide>
+                                <Swiper
+                                    loop={true}
+                                    rewind={true}
+                                    spaceBetween={30}
+                                    modules={[Navigation, Autoplay]}
+                                    autoplay={{ delay: 6000 }}
+                                    onSlideChange={() => setActiveSlide(activeSlide + 1)}
+                                    className={`${styles.mySwiper} home-slider`}>
+                                    <SwiperSlide>
+                                        <ProductBox />
+                                        <ProgressBar key={activeSlide} />
+                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch1.jpg" alt="slide1" />
+                                        <ProductDetail />
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <ProductBox />
-                                <ProgressBar key={activeSlide} />
-                                <img  className={`img-fluid ${styles.slider_img}`} src="/images/product/watch2.jpg" alt="slide2" />
-                                <ProductDetail />
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ProductBox />
+                                        <ProgressBar key={activeSlide} />
+                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch2.jpg" alt="slide2" />
+                                        <ProductDetail />
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <ProductBox />
-                                <ProgressBar key={activeSlide} />
-                                <img  className={`img-fluid ${styles.slider_img}`} src="/images/product/watch3.jpg" alt="slide3" />
-                                <ProductDetail />
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ProductBox />
+                                        <ProgressBar key={activeSlide} />
+                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch3.jpg" alt="slide3" />
+                                        <ProductDetail />
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <ProductBox />
-                                <ProgressBar key={activeSlide} />
-                                <img  className={`img-fluid ${styles.slider_img}`} src="/images/product/watch4.jpg" alt="slide4" />
-                                <ProductDetail />
-                            </SwiperSlide>
-                        </Swiper>
+                                    <SwiperSlide>
+                                        <ProductBox />
+                                        <ProgressBar key={activeSlide} />
+                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch4.jpg" alt="slide4" />
+                                        <ProductDetail />
+                                    </SwiperSlide>
+                                </Swiper>
                             </div>
                         </div>
                     </div>
