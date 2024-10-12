@@ -1,0 +1,7 @@
+.feature {
+    padding-top: 20px;
+}
+.feature .feature_item .image{
+    max-width: 50px;
+}
+
