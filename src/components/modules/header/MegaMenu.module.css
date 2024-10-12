@@ -362,3 +362,19 @@
     border-radius: 10px;
     list-style-type: none;
 }
+.border_animate {
+    --border-color: var(--main-color-one);
+    --border-width: 2px;
+    --bottom-distance: 0px;
+    color: #666;
+    display: inline-block;
+    background-image: linear-gradient(var(--border-color), var(--border-color));
+    background-size: 0 var(--border-width);
+    background-repeat: no-repeat;
+    transition: background-size 0.3s;
+    margin: 5px 0;
+    background-position:bottom ;
+}
+.border_animate:hover {
+    background-size: 100% var(--border-width);
+}

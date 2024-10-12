@@ -248,7 +248,7 @@ function MegaMenu() {
                                                     <a className={`nav-link ${styles.mega_menu_nav_link} dropdown-item`} href="#" id="hoveredMenu2" role="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
                                                         <i className="bi bi-tablet"></i>
-                                                        <span>منو</span>
+                                                        <span className={`${styles.border_animate}`}>منو</span>
                                                     </a>
                                                     <ul className={` ${styles.main_menu_sub_list_second_active }`} aria-labelledby="hoveredMenu2">
                                                         <div>
@@ -296,10 +296,10 @@ function MegaMenu() {
                                                     </ul>
                                                 </li>
                                                 <li className="nav-item" >
-                                                    <a className={`nav-link ${styles.mega_menu_nav_link} dropdown-item`} href="#" id="hoveredMenu3" role="button" data-bs-toggle="dropdown"
+                                                    <a className={`nav-link ${styles.mega_menu_nav_link} dropdown-item border-animate`} href="#" id="hoveredMenu3" role="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
                                                         <i className="bi bi-menu-app"></i>
-                                                        <span>منو ساده</span>
+                                                        <span className={`${styles.border_animate}`}>منو ساده</span>
                                                     </a>
                                                     <ul
                                                     aria-labelledby="hoveredMenu3"
@@ -322,7 +322,7 @@ function MegaMenu() {
                                                     </ul>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <a href="" className="nav-link border-animate fromCenter">
+                                                    <a href="" className={`nav-link ${styles.border_animate} fromCenter`}>
                                                         <i
                                                             className="bi bi-tag">
 
@@ -330,11 +330,11 @@ function MegaMenu() {
                                                         تخفیف ها و پیشنهاد ها</a>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <a href="" className="nav-link border-animate fromCenter">سوالی
+                                                    <a href="" className={`nav-link ${styles.border_animate} fromCenter`}>سوالی
                                                         دارید</a>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <a href="" className="nav-link border-animate fromCenter">در نسیم استور
+                                                    <a href="" className={`nav-link ${styles.border_animate} fromCenter`}>در نسیم استور
                                                         بفروشید</a>
                                                 </li>
                                             </ul>
