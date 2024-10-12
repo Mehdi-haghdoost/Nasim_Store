@@ -1,0 +1,43 @@
+.title h5 {
+    margin-right: 1rem;
+}
+
+.title h5>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
+
+.category_item{
+    transition: 200ms;
+    border-radius: 8px;
+}
+.category_item:hover{
+    transform: translateY(-7px);
+}
+
+.category_item:hover p{
+    color: var(--main-color-one);
+}
+
+.category_item .image {
+    height: 130px;
+    text-align: center;
+}
+
+.category_item .image img{
+    height: 100%;
+    object-fit: cover;
+}
+
+.light_btn {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    background-color: #f4f4f4;
+    font-size: 14px !important;
+    border-color: #ddd !important;
+}
+
+.light_btn:hover{
+    background-color: #fff;
+}
