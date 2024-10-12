@@ -1,8 +1,11 @@
+
+
 .product_title {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     height: 55px;
+
 }
 
 
@@ -10,11 +13,13 @@
 .title p {
     margin-bottom: 5px;
     font-weight: bold;
+
 }
 
 .title span {
     color: var(--text-muted-two) !important;
     font-size: 12px;
+
 }
 .rating {
     display: flex;
@@ -39,11 +44,13 @@
 .new_price {
     font-weight: bold;
     margin-bottom: 5px;
+    color: #333;
+
 }
 
 .old_price {
     text-decoration: line-through;
-    color: #aaa;
+    color: #333;
     margin-bottom: 0;
     font-weight: normal;
 }

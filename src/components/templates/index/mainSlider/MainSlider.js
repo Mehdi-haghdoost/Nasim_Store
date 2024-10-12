@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
+import 'swiper/swiper-bundle.css'
 
 import styles from './MainSlider.module.css'
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
@@ -30,7 +30,7 @@ function MainSlider() {
                 <div className="row">
                     <div className="col-lg-3 order-lg-1 order-2">
                         <div className={`${styles.swiper_slide}`}>
-                            <div className={`${styles.slide_product_box}`}>
+                            <div style={{width : '100%'}} className={`${styles.slide_product_box}`}>
                                 <Swiper
                                     loop={true}
                                     rewind={true}
@@ -85,31 +85,37 @@ function MainSlider() {
                                         }}
                                         pagination={{
                                             clickable: true,
+                                            bulletClass: `swiper-pagination-bullet ${styles.customBullet}`,
+                                            bulletActiveClass: `swiper-pagination-bullet-active ${styles.customBulletActive}`,
                                         }}
-                                        // navigation={true}
                                         modules={[Autoplay, Pagination, Navigation]}
                                         onAutoplayTimeLeft={onAutoplayTimeLeft}
                                         className="mySwiper"
                                     >
                                         <SwiperSlide>
-                                            <img className='img-fluid' src="/images/slide2-2.jpg" alt="" />
+
+                                            <img className='img-fluid' loading="lazy" src="/images/slide2-2.jpg" alt="" />
+
                                         </SwiperSlide>
                                         <SwiperSlide>
-                                            <img className='img-fluid' src="/images/slide3-1.jpg" alt="" />
+
+                                            <img className='img-fluid' loading="lazy" src="/images/slide3-1.jpg" alt="" />
+
                                         </SwiperSlide>
                                         <SwiperSlide>
-                                            <img className='img-fluid' src="/images/slide4.jpg" alt="" />
+
+                                            <img className='img-fluid' loading="lazy" src="/images/slide4.jpg" alt="" />
+
                                         </SwiperSlide>
-                                        <div className={`${styles.autoplay_progress}`} slot="container-end">
+                                        <div className={`${styles.autoplay_progress} d-none d-lg-block`} slot="container-end">
                                             <svg viewBox="0 0 48 48" ref={progressCircle}>
                                                 <circle cx="24" cy="24" r="20"></circle>
                                             </svg>
-                                            <span ref={progressContent}></span>
+                                            <span style={{ color: '#fff' }} ref={progressContent}></span>
                                         </div>
                                     </Swiper>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

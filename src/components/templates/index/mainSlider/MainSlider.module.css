@@ -18,11 +18,7 @@
 
 }
 
-.mySwiper {
-    padding: 10px;
-    width: 314px;
-    width: 100%;
-}
+
 
 .slider_img {
     height: 100%;
@@ -54,6 +50,13 @@
     display: block;
 }
 
+.mySwiper {
+    padding: 10px;
+    width: 314px;
+    height: 100%;
+
+}
+
 .swiper_wrapper {
     position: relative;
     width: 100%;
@@ -66,15 +69,21 @@
 
 }
 
+
+
 .swiper_wrapper img {
-    width: 100% !important;
+    width: 100%;
     object-fit: cover;
     border-radius: 15px;
+    height: 100%;
+    display: block;
+    margin: auto;
+    transition: 0.5s all ease-in-out;
 }
 
 .autoplay_progress {
     position: absolute;
-    right: 16px;
+    right: 35px;
     bottom: 16px;
     z-index: 10;
     width: 48px;
@@ -88,13 +97,13 @@
 
 .autoplay_progress svg {
     position: absolute;
-    left: 0;
-    top: 0px;
+    left: 17px;
+    bottom: 14px;
     z-index: 10;
     width: 100%;
     height: 100%;
     stroke-width: 4px;
-    stroke: #007aff;
+    stroke: var(--main-color-one);
     fill: none;
     stroke-dashoffset: calc(125.6px*(1 - var(--progress)));
     stroke-dasharray: 125.6;
@@ -102,6 +111,21 @@
 
 }
 
-.swiper-button-next {
-    display: none;
+.customBulletActive {
+    background: var(--main-color-one);
+    width: 25px;
+    height: 7px;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width:992px) {
+    .mySwiper {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width:768px) {
+    .swiper_wrapper img {
+        object-fit: fill;
+    }
 }
