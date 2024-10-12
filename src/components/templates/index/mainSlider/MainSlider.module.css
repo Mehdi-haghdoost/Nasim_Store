@@ -98,3 +98,7 @@
     transform: rotate(-90deg);
 
 }
+
+.swiper-button-next {
+    display: none;
+}

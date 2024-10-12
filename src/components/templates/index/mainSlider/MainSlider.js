@@ -34,8 +34,7 @@ function MainSlider() {
                         <Swiper
                             loop={true}
                             rewind={true}
-                            spaceBetween={30}
-                            navigation={true}
+                            spaceBetween={30}                           
                             modules={[Navigation, Autoplay]}
                             autoplay={{ delay: 6000 }}
                             onSlideChange={() => setActiveSlide(activeSlide + 1)}
@@ -81,13 +80,13 @@ function MainSlider() {
                                         spaceBetween={30}
                                         centeredSlides={true}
                                         autoplay={{
-                                            delay: 6000,
+                                            delay: 3000,
                                             disableOnInteraction: false,
                                         }}
                                         pagination={{
                                             clickable: true,
                                         }}
-                                        navigation={true}
+                                        // navigation={true}
                                         modules={[Autoplay, Pagination, Navigation]}
                                         onAutoplayTimeLeft={onAutoplayTimeLeft}
                                         className="mySwiper"

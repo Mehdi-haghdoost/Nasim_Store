@@ -32,6 +32,11 @@
     margin: 3px 0;
     color: #515151;
 }
+.countdown .countdown_container:first-child .countdown_value{
+    background-color: #ef473a !important;
+    color: #fff;
+}
+
 
 .countdown_container .countdown_value {
     background: #eee;
