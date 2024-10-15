@@ -14,6 +14,18 @@ export default function Home() {
       <Service />
       <Category />
       <Amazing />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
+      <br /><br /><br />
     </>
   );
 }
