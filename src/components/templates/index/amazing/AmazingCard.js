@@ -19,7 +19,7 @@ function AmazingCard() {
                 <div className="desc mt-3">
                     <div className={`${styles.title}`}>
                         <div className="d-flex align-items-center flex-wrap">
-                            <h3 className="text-overflow-1 font-18 me-2">لپ تاپ 14.2
+                            <h3 className="text-overflow-1 font-18 ms-2">لپ تاپ 14.2
                                 اینچی اپل مدل 2021 MacBook MKGR3 M1 Pro</h3>
                             <span className={`discount ${styles.danger_label} mt-sm-0 mt-3`}>17%
                                 تخفیف</span>
@@ -60,7 +60,7 @@ function AmazingCard() {
                     <div className="price d-flex align-items-center">
                         <h6 className="font-25 main-color-one-color">958,000</h6>
                         <h6 className="font-12 ms-1">هزار تومان</h6>
-                        <h6 className="font-13 old-price ms-2">1,500,000</h6>
+                        <h6 className={`font-13 ${styles.old_price} me-2`}>1,500,000</h6>
                     </div>
                     <div className="link">
                         <a href="" className="btn border-0 rounded-3 main-color-one-bg">

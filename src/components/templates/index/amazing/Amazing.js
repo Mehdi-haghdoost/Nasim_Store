@@ -37,9 +37,9 @@ function Amazing() {
                 <div className={`${styles.amazing_slider}`}>
                     <div className="row">
                         <div className="col-lg-8">
-                            <div className="amazing-pro-parent">
-                                <div className="swiper amazing-slider-slider">
-                                    <div className="swiper-wrapper">
+                            <div className={`${styles.amazing_parent} shadow-box`}>
+                                <div className={`swiper`}>
+                                    <div className={`${styles.swiper_wrapper}`}>
                                         <Swiper
                                             loop={true}
                                             rewind={true}

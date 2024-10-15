@@ -1,0 +1,43 @@
+.title {
+    overflow: hidden;
+}
+
+.danger_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 5px;
+    color: #f21919;
+    font-size: 13px;
+    display: inline-block;
+    font-family: var(--main-font);
+    font-weight: normal;
+}
+
+.short_desc {
+    height: 90px;
+    text-align: right;
+    margin-top: 0.5rem;
+    overflow-y: hidden;
+    margin-bottom: 10px;
+}
+
+.meta {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.meta ul {
+    display: flex;
+    align-items: center;
+}
+.meta ul li span {
+    padding: 0;
+}
+.old_price {
+    text-decoration: line-through;
+    color: #aaa;
+    margin-bottom: 0;
+    font-weight: normal;
+}
