@@ -1,0 +1,51 @@
+.title h5 {
+    margin-right: 1rem;
+}
+
+.title h5>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
+
+.site-slider .swiper-button-next,
+.site-slider .swiper-button-prev {
+    background-color: #fff;
+    padding: 3px 20px;
+    border-radius: 5px;
+    box-shadow: var(--shadow-md);
+    top: 90%;
+    right: 53% !important;
+}
+
+.site-slider .swiper-button-prev {
+    right: 49.5% !important;
+}
+
+.site-slider .swiper-button-next::after,
+.site-slider .swiper-button-prev::after {
+    color: var(--color-site);
+}
+
+.parent {
+    position: relative;
+}
+
+.parent::before {
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: var(--main-color-one);
+}
+
+.product_slider_swiper {
+    padding: 0 0 100px 0;
+}
+
+.mySlide {
+    width: 273.2px !important;
+    margin-left: 20px !important;
+}

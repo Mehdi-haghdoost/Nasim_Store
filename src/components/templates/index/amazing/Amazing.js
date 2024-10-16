@@ -49,7 +49,6 @@ function Amazing() {
                                                 delay: 4000,
                                                 disableOnInteraction: false,
                                             }}
-
                                             modules={[Autoplay]}
                                             className="mySwiper">
                                             <SwiperSlide>
