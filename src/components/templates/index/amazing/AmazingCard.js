@@ -1,20 +1,20 @@
 import React from 'react'
 import styles from './AmazingCard.module.css'
+import Countdown from '@/components/modules/countDownTimer/Countdown'
 function AmazingCard() {
   return (
     <div className={`swiper_slide`}>
     <div className={`${styles.slider_item} rounded-3 shadow-box bg-white`}>
         <div className="row">
             <div className="col-lg-4">
-                <div className="image">
+                <div className={`${styles.image}`}>
                     <img src="/images/product/laptop-1.jpg" loading="lazy"
                         className="img-fluid" alt="" />
                 </div>
             </div>
             <div className="col-lg-8">
-                <div className="timer">
-                    <div className='countdown' data-date="2025-01-01" data-time="18:30">
-                    </div>
+                <div className={`${styles.timer}`}>
+                   <Countdown />
                 </div>
                 <div className="desc mt-3">
                     <div className={`${styles.title}`}>

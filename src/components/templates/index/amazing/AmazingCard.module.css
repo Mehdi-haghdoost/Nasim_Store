@@ -2,6 +2,10 @@
     overflow: hidden;
 }
 
+.timer {
+    text-align: right;
+}
+
 .danger_label {
     padding: 5px 10px;
     background-color: #fc6d6d3b;
@@ -32,12 +36,32 @@
     display: flex;
     align-items: center;
 }
+
 .meta ul li span {
     padding: 0;
 }
+
 .old_price {
     text-decoration: line-through;
     color: #aaa;
     margin-bottom: 0;
     font-weight: normal;
+}
+
+@media only screen and (max-width: 992px) {
+     .slider_item .image img {
+        max-height: 300px;
+        display: block;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .timer {
+        text-align: center;
+    }
+    .meta ul{
+        align-items: flex-start;
+    }
+    .meta ul li {
+       padding: 7px 0;
+    }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './ProductBox.module.css'
-import Countdown from './Countdown'
+import Countdown from '../../../modules/countDownTimer/Countdown'
 
 
 function ProductBox() {
