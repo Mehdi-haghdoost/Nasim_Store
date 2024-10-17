@@ -35,14 +35,29 @@ function BestSell() {
                 <div className="container-fluid">
                     <div className={`swiper ${styles.product_slider_swiper}`}>
                         <div className={`${styles.swiper_wrapper}`}>
-                            <Swiper
-                                slidesPerView={3}
-                                spaceBetween={30}
-                                pagination={{
-                                    clickable: true,
-                                }}
+                            {/* <Swiper
+                               slidesPerView={1}
+                               spaceBetween={10}
+                               pagination={{
+                                 clickable: true,
+                               }}
+                               breakpoints={{
+                                640: {
+                                  slidesPerView: 2,
+                                  spaceBetween: 20,
+                                },
+                                768: {
+                                  slidesPerView: 4,
+                                  spaceBetween: 40,
+                                },
+                                1024: {
+                                  slidesPerView: 5,
+                                  spaceBetween: 50,
+                                },
+                              }}
+                              
                                 modules={[Pagination]}
-                                className="mySwiper"
+                                className={`${styles.mySwiper}`}
                             >
                                 <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
@@ -61,6 +76,51 @@ function BestSell() {
                                 </SwiperSlide>
 
                                 <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide>
+                            </Swiper> */}
+                            <Swiper
+                                slidesPerView={1}
+                                spaceBetween={10}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                breakpoints={{
+                                    640: {
+                                        slidesPerView: 2,
+                                        spaceBetween: 20,
+                                    },
+                                    768: {
+                                        slidesPerView: 3,
+                                        spaceBetween: 40,
+                                    },
+                                    1024: {
+                                        slidesPerView: 5,
+                                        spaceBetween: 50,
+                                    },
+                                }}
+                                modules={[Pagination]}
+                                className="mySwiper"
+                            >
+                                <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                    <Card />
+                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
                                 </SwiperSlide>
                             </Swiper>
