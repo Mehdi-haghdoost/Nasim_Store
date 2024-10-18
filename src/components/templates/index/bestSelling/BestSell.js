@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import styles from './BestSell.module.css'
-import { Pagination } from 'swiper/modules';
 import Card from './Card';
 
 function BestSell() {
@@ -33,61 +32,12 @@ function BestSell() {
 
             <div className={`${styles.parent}`}>
                 <div className="container-fluid">
-                    <div className={`swiper ${styles.product_slider_swiper}`}>
+                    <div className={`swiper ${styles.product_slider_swiper}`}
+                    >
                         <div className={`${styles.swiper_wrapper}`}>
-                            {/* <Swiper
-                               slidesPerView={1}
-                               spaceBetween={10}
-                               pagination={{
-                                 clickable: true,
-                               }}
-                               breakpoints={{
-                                640: {
-                                  slidesPerView: 2,
-                                  spaceBetween: 20,
-                                },
-                                768: {
-                                  slidesPerView: 4,
-                                  spaceBetween: 40,
-                                },
-                                1024: {
-                                  slidesPerView: 5,
-                                  spaceBetween: 50,
-                                },
-                              }}
-                              
-                                modules={[Pagination]}
-                                className={`${styles.mySwiper}`}
-                            >
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                            </Swiper> */}
                             <Swiper
                                 slidesPerView={1}
                                 spaceBetween={10}
-                                pagination={{
-                                    clickable: true,
-                                }}
                                 breakpoints={{
                                     576: {
                                         slidesPerView: 2,
@@ -110,7 +60,6 @@ function BestSell() {
                                         spaceBetween: 50,
                                     },
                                 }}
-                                modules={[Pagination]}
                                 className="mySwiper"
                             >
                                 <SwiperSlide className={`${styles.mySlide}`}>
@@ -133,8 +82,8 @@ function BestSell() {
                                 </SwiperSlide>
                             </Swiper>
                         </div>
-                        <div className="swiper-button-next"></div>
-                        <div className="swiper-button-prev"></div>
+                        <div className={`${styles.swiper_button_next}`}></div>
+                        <div className={`${styles.swiper_button_prev}`}></div>
                     </div>
                 </div>
             </div>
