@@ -31,3 +31,21 @@
 .mySlide {
     border-radius: 10px !important;
 }
+
+@media only screen and (min-width : 993px) {
+    .parent {
+        margin-top: 2rem;
+    }
+}
+
+@media only screen and (max-width : 992px) {
+    .parent {
+        margin-top: 22rem;
+    }
+}
+
+@media only screen and (max-width : 576px) {
+    .parent {
+        margin-top: 25rem;
+    }
+}

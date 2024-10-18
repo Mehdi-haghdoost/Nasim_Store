@@ -1,5 +1,6 @@
 import Header from "@/components/modules/header/Header";
 import Amazing from "@/components/templates/index/amazing/Amazing";
+import Banner from "@/components/templates/index/banner/Banner";
 import BestSell from "@/components/templates/index/bestSelling/BestSell";
 import Category from "@/components/templates/index/category/Category";
 import Feature from "@/components/templates/index/feature/Feature";
@@ -16,6 +17,7 @@ export default function Home() {
       <Category />
       <Amazing />
      <BestSell />
+     <Banner />
      <br /><br /><br />
      <br /><br /><br />
      <br /><br /><br />
