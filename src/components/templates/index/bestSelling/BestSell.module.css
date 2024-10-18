@@ -44,8 +44,37 @@
 .product_slider_swiper {
     padding: 0 0 100px 0;
 }
-
-/* .mySlide {
-    width: 273.2px !important;
-    margin-left: 20px !important;
+ .mySlide {
+    border-radius: 10px !important;
+} 
+/* @media only screen and (min-width:1400px) {
+    .mySlide {
+        width: 273.2px !important;
+        margin-left: 20px !important;
+        border-radius: 10px;
+    }
+}
+@media only screen and (min-width : 1200px) {
+    .mySlide {
+        width: 259.8px !important;
+        margin-left: 20px !important;
+    }
+}
+@media only screen and (min-width :1024px ) {
+    .mySlide {
+        width: 317.333px !important;
+        margin-left: 20px !important;
+    }
+}
+@media only screen and (min-width : 992px) {
+    .mySlide {
+        width: 485.5px !important;
+        margin-left: 20px !important;
+    }
+}
+@media only screen and (min-width:576px) {
+    .mySlide {
+        width: 270.5px!important;
+        margin-left: 20px !important;
+    }
 } */

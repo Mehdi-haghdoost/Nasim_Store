@@ -89,15 +89,23 @@ function BestSell() {
                                     clickable: true,
                                 }}
                                 breakpoints={{
-                                    640: {
+                                    576: {
                                         slidesPerView: 2,
                                         spaceBetween: 20,
                                     },
                                     768: {
-                                        slidesPerView: 3,
+                                        slidesPerView: 2,
                                         spaceBetween: 40,
                                     },
                                     1024: {
+                                        slidesPerView: 3,
+                                        spaceBetween: 50,
+                                    },
+                                    1200: {
+                                        slidesPerView: 4,
+                                        spaceBetween: 20,
+                                    },
+                                    1400: {
                                         slidesPerView: 5,
                                         spaceBetween: 50,
                                     },

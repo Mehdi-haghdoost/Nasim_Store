@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Card.module.css'
 function Card() {
     return (
-        <div className="swiper-slide">
+        <div className={`${styles.swiper_slide}`}>
                                 <div className={`${styles.product_box}`}>
                                     <div className={`${styles.product_timer}`}>
                                         <div className={`${styles.timer_label}`}>

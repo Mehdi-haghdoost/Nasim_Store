@@ -1,8 +1,12 @@
+
+.swiper_slide {
+    border-radius: 10px !important;
+}
 .product_box {
     background-color: #fff;
     box-shadow: var(--shadow-box) !important;
-    border-radius: 10px;
     padding: 10px;
+    border-radius: 10px;
 }
 
 .product_box .product_timer {
@@ -18,6 +22,7 @@
     margin: 5px 0;
     position: relative;
 }
+
 
 .product_timer .timer_label {
     padding: 5px 10px;
