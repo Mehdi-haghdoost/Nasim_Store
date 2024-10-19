@@ -71,7 +71,7 @@ body {
 }
 
 a,p,span{
-  color: var(--color-site);
+  color: var(--color-site) !important;
 }
 
 .nav-link{
