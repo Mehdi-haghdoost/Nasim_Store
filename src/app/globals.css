@@ -52,7 +52,7 @@
 }
 
 body {
-  background: var(--bg-site);
+  background: var(--bg-site) !important;
   color: var(--color-site);
   position: relative;
 }

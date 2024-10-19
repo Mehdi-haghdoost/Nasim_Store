@@ -34,7 +34,7 @@
 }
 .countdown .countdown_container:first-child .countdown_value{
     background-color: #ef473a !important;
-    color: #fff;
+    color: #fff !important;
 }
 
 

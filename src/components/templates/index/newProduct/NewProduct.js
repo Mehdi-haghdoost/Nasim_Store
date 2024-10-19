@@ -8,7 +8,7 @@ function NewProduct() {
             <div className="container-fluid">
                 <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
                     <div className={`${styles.title} d-flex align-items-center`}>
-                        <img src="assets/image/square.png" alt="" className="img-fluid" />
+                        <img src="/images/square.png" alt="" className="img-fluid" />
                         <h5 className="font-16 ms-3">
                             <span className="main-color-one-color d-inline-block ms-1">
                                 محصولات جدید

@@ -49,6 +49,10 @@
 }
 
 @media only screen and (max-width: 992px) {
+    .slider_item {
+        padding: 20px;
+        margin: 0 !important;
+    }
      .slider_item .image img {
         max-height: 300px;
         display: block;
