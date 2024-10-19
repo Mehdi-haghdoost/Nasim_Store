@@ -1,0 +1,8 @@
+.banner img{
+    transition: 300ms all ease-in-out;
+    width: 100%;
+}
+
+.banner img:hover{
+    transform: translateY(-7px);
+}
