@@ -1,3 +1,4 @@
+import Footer from "@/components/modules/footer/Footer";
 import Header from "@/components/modules/header/Header";
 import Amazing from "@/components/templates/index/amazing/Amazing";
 import Banner from "@/components/templates/index/banner/Banner";
@@ -26,12 +27,7 @@ export default function Home() {
       <PhoneBanner />
       <CustomerFavories />
       <Blog />
-      <br /><br /><br />
-      <br /><br /><br />
-      <br /><br /><br />
-      <br /><br /><br />
-      <br /><br /><br />
-      <br /><br /><br />
+      <Footer />
     </>
   );
 }
