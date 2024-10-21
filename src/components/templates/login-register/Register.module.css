@@ -1,0 +1,132 @@
+.bg_auth {
+    background: url('/images/auth-bg.jpg') no-repeat;
+    background-size: cover;
+}
+
+.content {
+    height: 100vh;
+    margin: 35px 0;
+}
+.comment_item {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+}
+
+.comment_item label.label_float {
+    position: absolute;
+    top: 4px;
+    background-color: #fff;
+    right: 15px;
+    padding: 5px;
+}
+
+.comment_item input,
+.comment_item select {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: right;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.auth_form {
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+.auth_form_title h2 {
+    color: var(--color-site) !important;
+    font-weight: 600 !important;
+}
+
+.btn_login {
+    padding: 12px 5px;
+    background-color: var(--main-color-three);
+    border-color: var(--main-color-three);
+    font-size: 15px;
+    border-radius: 0;
+}
+
+.btn_login:hover {
+    background-color: var(--main-color-three);
+    border-color: var(--main-color-three);
+}
+
+.loginTermsDesc {
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+    direction: rtl;
+    width: 90%;
+    display: block;
+    margin: auto;
+}
+
+.inline_btn_text {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+}
+
+.login_froget_password {
+    display: block;
+    font-size: 13px;
+    margin: 17px 0;
+    color: #0000008f !important;
+    text-align: center;
+}
+
+.register_btn_light {
+    color: #6d6d6d !important;
+    border: 1px solid #d6d6d6;
+    margin-bottom: 3rem;
+    cursor: pointer;
+    padding: 1rem;
+    background: #f2f2f2;
+}
+
+.register_btn_light:hover {
+    background-color: var(--main-color-one) !important;
+    color: #fff !important;
+}
+
+.redirect_to_home {
+    display: block;
+    width: max-content;
+    margin: 0 auto;
+    cursor: pointer;
+    font-size: 13px;
+    color: #34180e !important;
+}
+
+.inline_btn_text {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+}
+
+.underlined {
+    position: relative;
+    padding-bottom: 4px;
+    text-decoration: none;
+}
+
+.underlined:after {
+    position: absolute;
+    border-bottom: 1px solid #929292;
+    content: "";
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+.back_to_login {
+    font-size: 13px !important;
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 3rem;
+}
