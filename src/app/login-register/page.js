@@ -6,8 +6,8 @@ import React from 'react'
 function page() {
   return (
     // <Login />
-    <Register />
-    // <Sms />
+    // <Register />
+    <Sms />
   )
 }
 
