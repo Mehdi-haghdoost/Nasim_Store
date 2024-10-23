@@ -1,6 +1,11 @@
-import React from 'react'
+"use client"
+import React, { useRef, useState } from 'react'
 import styles from './Sms.module.css'
 function Sms() {
+
+    const [otp, setOtp] = useState(['', '', '', '','','']);
+    const inpuRefs = useRef([]);
+
     return (
         <div className={styles.bg_auth}>
             <div className={styles.content}>
@@ -25,12 +30,39 @@ function Sms() {
                                             </div>
 
                                             <div className={styles.otp_input}>
+                                                {otp.map((digit, index) => (
+                                                    <input
+                                                        key={{ index }}
+                                                        type='text'
+                                                        maxLength="1"
+                                                        ref={(el) => (inpuRefs.current[index] = el)}
+                                                        value={digit}
+                                                        onChange={(e) => {
+                                                            const newOtp = [...otp];
+                                                            newOtp[index] = e.target.value;
+                                                            setOtp(newOtp);
+
+                                                            if (e.target.value.length === 1 && index < otp.length - 1) {
+                                                                inpuRefs.current[index + 1].focus();
+                                                            }
+                                                        }}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                                                                inpuRefs.current[index - 1].focus();
+                                                                const newOtp = [...otp];
+                                                                newOtp[index - 1]  = '';
+                                                                setOtp(newOtp);
+
+                                                            }
+                                                        }}
+                                                        placeholder="_"
+                                                        step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
+                                                ))}
+                                                {/* <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
                                                 <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
                                                 <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
                                                 <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
+                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" /> */}
                                                 <input id="otp-value" placeholder="_" type="hidden" name="otp" />
                                             </div>
 
