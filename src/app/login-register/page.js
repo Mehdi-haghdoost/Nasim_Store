@@ -2,7 +2,6 @@
 
 import Login from '@/components/templates/login-register/Login'
 import Register from '@/components/templates/login-register/Register'
-import Sms from '@/components/templates/login-register/Sms'
 import { authTypes } from '@/utils/constans'
 import React, { useState } from 'react'
 
@@ -19,7 +18,6 @@ function page() {
     )}
     
     </>
-    // <Sms />
   )
 }
 

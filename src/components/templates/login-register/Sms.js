@@ -1,9 +1,13 @@
 "use client"
 import React, { useRef, useState } from 'react'
-import styles from './Sms.module.css'
-function Sms() {
+import styles from './Sms.module.css';
 
-    const [otp, setOtp] = useState(['', '', '', '','','']);
+
+
+
+function Sms({ hideOtpForm,type }) {
+
+    const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inpuRefs = useRef([]);
 
     return (
@@ -19,7 +23,7 @@ function Sms() {
 
                                         <div className={`${styles.auth_form} shadow-xl rounded-3  mt-5 bg-white`}>
                                             <div className={`${styles.auth_form_title} title-panel d-flex justify-content-between align-items-center mb-4 slider-title-desc-center`}>
-                                                <h2 className="text-center h4 text-muted title-font">ورود / ثبت نام</h2>
+                                                <h2 className="text-center h4 text-muted title-font">{type}</h2>
                                                 <a href="">
                                                     <img src="/images/logo.png" width="150" alt="" />
                                                 </a>
@@ -50,7 +54,7 @@ function Sms() {
                                                             if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
                                                                 inpuRefs.current[index - 1].focus();
                                                                 const newOtp = [...otp];
-                                                                newOtp[index - 1]  = '';
+                                                                newOtp[index - 1] = '';
                                                                 setOtp(newOtp);
 
                                                             }
@@ -58,11 +62,6 @@ function Sms() {
                                                         placeholder="_"
                                                         step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
                                                 ))}
-                                                {/* <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
-                                                <input placeholder="_" type="number" step="1" min="0" max="9" autocomplete="no" pattern="\d*" /> */}
                                                 <input id="otp-value" placeholder="_" type="hidden" name="otp" />
                                             </div>
 
@@ -81,13 +80,14 @@ function Sms() {
                                                 </button>
                                             </div>
                                         </div>
-
+                                        <p
+                                        onClick={hideOtpForm}
+                                        className={`${styles.redirect_to_home} mt-2`}>لغو</p>
                                         <p className={`${styles.loginTermsDesc} mt-3`}>با ورود و یا ثبت نام در سانیار شما <a className="underlined main-color-one-color fw-bold"
                                             href="/rules/">شرایط و
                                             قوانین</a> استفاده از سرویس‌های سایت سانیار و <a className="underlined main-color-one-color fw-bold"
                                                 href="/privacy-polices/">قوانین حریم
                                                 خصوصی</a> آن را می‌پذیرید.</p>
-
                                     </div>
                                 </div>
                             </div>
