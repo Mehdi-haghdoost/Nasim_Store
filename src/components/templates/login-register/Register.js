@@ -5,7 +5,7 @@ import Link from "next/link";
 import { showSwal } from '@/utils/helpers';
 import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
 
-function Register() {
+function Register({ showLoginForm }) {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -29,8 +29,8 @@ function Register() {
 
     if (password) {
       const isValidPassword = validatePassword(password)
-      if(!isValidPassword) {
-      return showSwal("لطفا پسورد معتبر وارد کنید", "warning", "تلاش مجدد")
+      if (!isValidPassword) {
+        return showSwal("لطفا پسورد معتبر وارد کنید", "warning", "تلاش مجدد")
       }
     } else {
       return showSwal("پسورد وارد شده قابل حدس هست", "error", "تلاش مجدد ");
@@ -130,7 +130,9 @@ function Register() {
                             }}
                             type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ثبت نام با رمز عبور</button>
                         </div>
-                        <Link href={"/"} className={`${styles.back_to_login}`}>برگشت به ورود</Link>
+                        <p
+                          onClick={showLoginForm}
+                          className={`${styles.back_to_login}`}>برگشت به ورود</p>
                       </form>
                       <Link className={`${styles.redirect_to_home}`} href={"/"}>لغو</Link>
                     </div>

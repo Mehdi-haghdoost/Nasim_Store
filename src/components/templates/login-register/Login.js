@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Login.module.css'
 import Link from "next/link";
-function Login() {
+function Login({showRegisterForm}) {
     return (
         <div className={`${styles.bg_auth}`}>
             <div className={`${styles.content}`}>
@@ -27,14 +27,6 @@ function Login() {
                                                     <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
                                                         کنید</label>
                                                 </div>
-
-                                                {/* <div className={`${styles.comment_item} mb-3 step-passwd`}>
-                                                    <input type="password" className={`form-control`} id="passwd" />
-                                                    <label for="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
-                                                        وارد
-                                                        کنید</label>
-
-                                                </div> */}
                                                 <div className={`${styles.comment_item} position-relative step-passwd`} style={{ display: 'block' }}>
                                                     <input type="password" className={`form-control`} id="passwd" />
                                                     <label for="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
@@ -48,13 +40,11 @@ function Login() {
                                                 <div className="form-group">
                                                     <button type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ورود</button>
                                                 </div>
-                                                {/* <span className={`${styles.login_froget_password}`} href="/forget-password">رمز عبور را فراموش کرده اید؟</span> */}
-                                                {/* <div className="form-group">
-                                                    <button type='button' className="main-color-one-bg py-3 btn w-100  rounded-3">ورود با پیامک</button>
-                                                </div> */}
                                                 <span className={`${styles.login_froget_password} text-end`} href="/register">آیا حساب کاربری ندارید ؟ </span>
                                                 <div className="form-group step-two">
-                                                    <button type="button" className={` ${styles.register_btn_light} py-3 btn w-100 btnForm rounded-3`}>ثبت نام</button>
+                                                    <button
+                                                    onClick={showRegisterForm}
+                                                    type="button" className={` ${styles.register_btn_light} py-3 btn w-100 btnForm rounded-3`}>ثبت نام</button>
                                                 </div>
 
                                             </form>
