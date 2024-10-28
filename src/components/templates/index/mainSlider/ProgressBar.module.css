@@ -16,7 +16,7 @@
 }
 
 
-.progress_bar_percent {
+/* .progress_bar_percent {
     font-weight: 600;
     font-family: 'Franklin Gothic Medium';
     position: absolute;
@@ -25,4 +25,4 @@
     transform: translate(-50%, -50%);
     color: #eee;
     text-shadow: -1px 0 #555, 0 1px #555, 1px 0 #555, 0 -1px #555;
-}
+} */

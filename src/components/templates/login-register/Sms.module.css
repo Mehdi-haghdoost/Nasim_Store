@@ -187,9 +187,7 @@
     text-align: center;
     width: 250px;
     height: 2px;
-    margin: 40px 0;
-    background-color: rgb(244, 244, 244);
-    border-color: rgb(58, 59, 156);
+    margin-bottom: 40px;
 }
 
 .countDownBar>span {
@@ -206,4 +204,20 @@
     text-align: center;
     border-bottom: 1px dashed var(--main-color-three);
     color: var(--main-color-three) !important;
+}
+
+.progress_parent {
+    width: 200px;
+    height: 2px;
+    background-color: rgb(244, 244, 244);
+    border-color: rgb(58, 59, 156);
+    margin: 2rem auto 0.5rem auto;
+}
+
+.progressBar {
+    background-color: var(--main-color-three);
+    position: relative;
+    overflow: hidden;
+    height: 3px;
+    border-radius: 5px;
 }

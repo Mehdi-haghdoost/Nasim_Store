@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './Sms.module.css';
+import ProgressBar from '../index/mainSlider/ProgressBar';
 
 
 
@@ -10,15 +11,20 @@ function Sms({ hideOtpForm, type }) {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [isTimerActive, setIsTimerActive] = useState(true);
+    const [progress, setProgress] = useState(0)
     const inpuRefs = useRef([]);
 
 
     const handleResendCode = () => {
-        console.log('hi');
         setIsTimerActive(true);
         setTimer(60);
+        setProgress(0)
     }
-
+    useEffect(() => {
+        if (progress < 100) {
+            setTimeout(() => setProgress(prev => prev += 1.65), 1000)
+        }
+    }, [progress])
     useEffect(() => {
         let interval = null;
         if (isTimerActive && timer > 0) {
@@ -30,7 +36,6 @@ function Sms({ hideOtpForm, type }) {
         }
         return () => clearInterval(interval);
     }, [timer])
-
 
 
     return (
@@ -86,6 +91,13 @@ function Sms({ hideOtpForm, type }) {
                                                         step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
                                                 ))}
                                                 <input id="otp-value" placeholder="_" type="hidden" name="otp" />
+                                            </div>
+
+                                            <div className={styles.progress_parent}>
+                                                <div className={styles.progressBar} style={{
+                                                    width: `${progress}%`,
+                                                }}>
+                                                </div>
                                             </div>
 
                                             {/* Countdown timer */}
