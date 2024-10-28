@@ -1,14 +1,37 @@
 "use client"
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './Sms.module.css';
 
 
 
 
-function Sms({ hideOtpForm,type }) {
+function Sms({ hideOtpForm, type }) {
 
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const [timer, setTimer] = useState(60);
+    const [isTimerActive, setIsTimerActive] = useState(true);
     const inpuRefs = useRef([]);
+
+
+    const handleResendCode = () => {
+        console.log('hi');
+        setIsTimerActive(true);
+        setTimer(60);
+    }
+
+    useEffect(() => {
+        let interval = null;
+        if (isTimerActive && timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1)
+            }, 1000);
+        } else if (timer === 0) {
+            setIsTimerActive(false);
+        }
+        return () => clearInterval(interval);
+    }, [timer])
+
+
 
     return (
         <div className={styles.bg_auth}>
@@ -66,13 +89,21 @@ function Sms({ hideOtpForm,type }) {
                                             </div>
 
                                             {/* Countdown timer */}
-                                            <div className="countDownContainer">
-                                                <div className="countdown-bar" id="countdownB">
-                                                    <div></div>
-                                                    <div></div>
+                                            {isTimerActive && (
+                                                <div className={styles.countDownContainer}>
+                                                    <div className={styles.countDownBar}>
+                                                        <span>00:</span>
+                                                        <span>00:</span>
+                                                        <span>{timer}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
 
+                                            {!isTimerActive && (
+                                                <a
+                                                    onClick={handleResendCode}
+                                                    className={`${styles.resendCode}`}>ارسال مجدد کد</a>
+                                            )}
 
                                             <div className="form-group mt-4">
                                                 <button type="submit" id="submit" className={`${styles.btn_login} w-100 btn text-white rounded-3`}>وورد به
@@ -81,8 +112,8 @@ function Sms({ hideOtpForm,type }) {
                                             </div>
                                         </div>
                                         <p
-                                        onClick={hideOtpForm}
-                                        className={`${styles.redirect_to_home} mt-2`}>لغو</p>
+                                            onClick={hideOtpForm}
+                                            className={`${styles.redirect_to_home} mt-2`}>لغو</p>
                                         <p className={`${styles.loginTermsDesc} mt-3`}>با ورود و یا ثبت نام در سانیار شما <a className="underlined main-color-one-color fw-bold"
                                             href="/rules/">شرایط و
                                             قوانین</a> استفاده از سرویس‌های سایت سانیار و <a className="underlined main-color-one-color fw-bold"
@@ -96,7 +127,7 @@ function Sms({ hideOtpForm,type }) {
 
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
