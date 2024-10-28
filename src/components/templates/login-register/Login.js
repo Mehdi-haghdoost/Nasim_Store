@@ -2,11 +2,35 @@ import React, { useState } from 'react'
 import styles from './Login.module.css'
 import Link from "next/link";
 import Sms from './Sms';
+import { showSwal } from '@/utils/helpers';
+import { validateEmail, validatePassword } from '@/utils/auth';
 function Login({ showRegisterForm }) {
 
     const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
+    const [password, setPassword] = useState('');
+    const [phoneOrEmail, setPhoneOrEmail] = useState("");
+
     const hideOtpForm = () => setIsLoginWithOtp(false);
 
+    const loginWithPassword = async () => {
+        if (!phoneOrEmail) {
+            return showSwal("لطفا شماره تلفن یا ایمیل خود را وارد کنید", "warning", "اوکی")
+        }
+
+        const isValidEmail = validateEmail(phoneOrEmail)
+        if (!isValidEmail) {
+            return showSwal("ایمیل وارد شده صحیح نیست", "error", "تلاش مجدد");
+        }
+
+        if (!password) {
+            return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
+        }
+
+        const isValidPassword = validatePassword(password)
+        if (!isValidPassword) {
+            return showSwal("پسورد به اندازه کافی قوی نیست", "error", "تلاش مجدد");
+        }
+    }
 
     return (
         <>
@@ -32,12 +56,18 @@ function Login({ showRegisterForm }) {
                                                         <form action="" id="form-auth">
 
                                                             <div className={`${styles.comment_item} mb-3 step-username`}>
-                                                                <input type="email" className={`form-control`} id="username" />
+                                                                <input
+                                                                    value={phoneOrEmail}
+                                                                    onChange={(event) => setPhoneOrEmail(event.target.value)}
+                                                                    type="email" className={`form-control`} id="username" />
                                                                 <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
                                                                     کنید</label>
                                                             </div>
                                                             <div className={`${styles.comment_item} position-relative step-passwd`} style={{ display: 'block' }}>
-                                                                <input type="password" className={`form-control`} id="passwd" />
+                                                                <input
+                                                                    value={password}
+                                                                    onChange={(event) => setPassword(event.target.value)}
+                                                                    type="password" className={`form-control`} id="passwd" />
                                                                 <label for="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
                                                                     وارد
                                                                     کنید</label>
@@ -49,7 +79,9 @@ function Login({ showRegisterForm }) {
                                                             </div>
 
                                                             <div className="form-group">
-                                                                <button type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ورود</button>
+                                                                <button
+                                                                    onClick={loginWithPassword}
+                                                                    type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ورود</button>
                                                             </div>
                                                             <span className={`${styles.login_froget_password} text-end`} href="/register">آیا حساب کاربری ندارید ؟ </span>
                                                             <div className="form-group step-two">
