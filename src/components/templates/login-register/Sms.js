@@ -126,9 +126,9 @@ function Sms({ hideOtpForm, type }) {
                                         <p
                                             onClick={hideOtpForm}
                                             className={`${styles.redirect_to_home} mt-2`}>لغو</p>
-                                        <p className={`${styles.loginTermsDesc} mt-3`}>با ورود و یا ثبت نام در سانیار شما <a className="underlined main-color-one-color fw-bold"
+                                        <p className={`${styles.loginTermsDesc} mt-3`}>با ورود و یا ثبت نام در نسیم استور شما <a className="underlined main-color-one-color fw-bold"
                                             href="/rules/">شرایط و
-                                            قوانین</a> استفاده از سرویس‌های سایت سانیار و <a className="underlined main-color-one-color fw-bold"
+                                            قوانین</a> استفاده از سرویس‌های سایت نسیم استور و <a className="underlined main-color-one-color fw-bold"
                                                 href="/privacy-polices/">قوانین حریم
                                                 خصوصی</a> آن را می‌پذیرید.</p>
                                     </div>

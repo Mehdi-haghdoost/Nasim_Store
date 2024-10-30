@@ -88,7 +88,7 @@ function Footer() {
                         </div>
                         <div className="col-lg-3 col-6">
                             <div className={`${styles.footer_menu_title}`}>
-                                <h4 className="font-16">سانیار</h4>
+                                <h4 className="font-16">نسیم</h4>
                                 <ul className="navbar-nav">
                                     <li className="nav-item"><a href="#" className="nav-link">اپلیکیشن</a></li>
                                     <li className="nav-item"><a href="#" className="nav-link">ارزهای جهانی</a></li>
