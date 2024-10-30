@@ -3,7 +3,7 @@ import styles from './Login.module.css'
 import Link from "next/link";
 import Sms from './Sms';
 import { showSwal } from '@/utils/helpers';
-import { validateEmail, validatePassword } from '@/utils/auth';
+import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
 function Login({ showRegisterForm }) {
 
     const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
@@ -30,6 +30,15 @@ function Login({ showRegisterForm }) {
         if (!isValidPassword) {
             return showSwal("پسورد به اندازه کافی قوی نیست", "error", "تلاش مجدد");
         }
+    }
+    const loginWithOtp = async () => {
+        const isValidPhone = validatePhone(phoneOrEmail)
+    if (!phoneOrEmail.trim()) {
+      return showSwal("لطفا شماره موبایل خود را وارد کنید", "warning", "تلاش مجدد")
+    } else if (!isValidPhone) {
+      return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
+    }
+        setIsLoginWithOtp(true)
     }
 
     return (
@@ -73,7 +82,7 @@ function Login({ showRegisterForm }) {
                                                                     کنید</label>
                                                                 <div className={`${styles.inline_btn_text}`}>
                                                                     <a
-                                                                        onClick={() => setIsLoginWithOtp(true)}
+                                                                        onClick={() => loginWithOtp()}
                                                                         className="btn border-0 main-color-one-bg">ورود با پیامک</a>
                                                                 </div>
                                                             </div>
