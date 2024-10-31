@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './details.module.css'
 
 import ProductImagesSlider from '../product/product-images-slider/ImageSlider';
+import Gallery from '../product/product-images-slider/ImageSlider';
 function Details() {
     return (
         <div className="product-meta py-20">
@@ -10,8 +11,8 @@ function Details() {
                     <div className="container-fluid">
                         <div className="row gy-3">
                             <div className="col-lg-4">
-                                <div className="pro_gallery">
-                                    <div className="icon-product-box">
+                                <div className={styles.pro_gallery}>
+                                    <div className={styles.icon_product_box}>
                                         <div className={styles.icon_product_box_item} data-bs-toggle="modal" data-bs-target="#shareModal" data-bs-placement="right" aria-label="اشتراک گذاری" data-bs-original-title="اشتراک گذاری">
                                             <i className="bi bi-share"></i>
                                         </div>
@@ -25,68 +26,9 @@ function Details() {
                                             <i className="bi bi-bar-chart"></i>
                                         </div>
                                     </div>
-                                    {/* <div className="swiper product-gallery swiper-initialized swiper-horizontal swiper-rtl swiper-backface-hidden">
-                                        <div className="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید" id="swiper-wrapper-90097d1e510bb9be5" aria-live="polite">
-                                            <div className="swiper-slide swiper-slide-active" role="group" aria-label="1 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img alt="" className="img-fluid" src="/images/product/laptop-1.jpg" />
-                                                </div>
-                                            </div>
-                                            <div className="swiper-slide swiper-slide-next" role="group" aria-label="2 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img alt="" className="img-fluid" src="/images/product/laptop-2.jpg" />
-                                                </div>
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="3 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img className="img-fluid" src="/images/product/laptop-3.jpg" />
-                                                </div>
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="4 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img className="img-fluid" src="/images/product/laptop-4.jpg" />
-                                                </div>
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="5 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img className="img-fluid" src="/images/product/laptop-5.jpg" />
-                                                </div>
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="6 / 6" style={{ width: '365px', marginLeft: '10px' }}>
-                                                <div className="swiper-zoom-container">
-                                                    <img className="img-fluid" src="/images/product/laptop2.jpg" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-button-next d-none d-lg-flex" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-90097d1e510bb9be5" aria-disabled="false"></div>
-                                        <div className="swiper-button-prev d-none d-lg-flex swiper-button-disabled" tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-90097d1e510bb9be5" aria-disabled="true"></div>
-                                        <div className="swiper-pagination d-none d-lg-block swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span className="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1" aria-current="true"></span><span className="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span className="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span><span className="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span><span className="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 5"></span><span className="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 6"></span></div>
-                                        <span className="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-                                    </div> */}
-                                    <ProductImagesSlider />
-                                    {/* <div thumbsslider="" className="swiper product-gallery-thumb swiper-initialized swiper-horizontal swiper-free-mode swiper-rtl swiper-watch-progress swiper-backface-hidden swiper-thumbs">
-                                        <div className="swiper-wrapper" id="swiper-wrapper-7a1a2199d9b23e10" aria-live="polite" style={{ transform: 'translate3d(0px, 0px, 0px)' }}>
-                                            <div className="swiper-slide swiper-slide-visible swiper-slide-active swiper-slide-fully-visible swiper-slide-thumb-active" role="group" aria-label="1 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-1.jpg" />
-                                            </div>
-                                            <div className="swiper-slide swiper-slide-next swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="2 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-2.jpg" />
-                                            </div>
-                                            <div className="swiper-slide swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="3 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-3.jpg" />
-                                            </div>
-                                            <div className="swiper-slide swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="4 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-4.jpg" />
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="5 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-5.jpg" />
-                                            </div>
-                                            <div className="swiper-slide" role="group" aria-label="6 / 6" style={{ width: '83.75px', marginLeft: '10px' }}>
-                                                <img className="img-fluid" src="/images/product/laptop-2.jpg" />
-                                            </div>
-                                        </div>
-                                        <span className="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-                                    </div> */}
+                                
+                                   <Gallery />
+                                   
                                 </div>
                             </div>
                             <div className="col-lg-8">
