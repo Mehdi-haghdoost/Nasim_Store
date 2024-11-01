@@ -535,6 +535,66 @@ a {
 
 /* end base style */
 
+
+/* productDetail */
+.product-meta-color{
+  margin-top: 20px;
+}
+
+.product-meta-color h5{
+  margin-bottom: 15px;
+}
+
+.product-meta-color-items{
+  margin-top: 10px;
+}
+
+.product-meta-color-items label {
+  background-color: #eee;
+  font-size: 14px;
+  border-radius: 25px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.product-meta-color-items label:hover{
+  background-color: #e2e2e2 !important;
+
+}
+
+.product-meta-color-items .btn-check:checked+.btn{
+  border-color: var(--main-color-two) !important;
+  box-shadow: 0 5px 5px #ffa41b31 !important;
+}
+
+.product-meta-color-items .btn-check:checked+.btn:hover{
+  background-color: transparent !important;
+}
+
+.product-meta-color-items label span {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 7px;
+  position: relative;
+}
+
+.product-meta-color-items .btn-check:checked+.btn span::before {
+  content: '\F26E';
+  color: #fff;
+  font-size: 22px;
+  font-family: 'bootstrap-icons', serif !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* end productDtail */
+
 /* swiper */
 .mySwiper .swiper-button-prev:after,
 .mySwiper .swiper-button-next:after {
@@ -588,10 +648,6 @@ a {
   box-sizing: border-box;
   padding: 10px 0;
 }
-
-/* .gallery-slider-2 .swiper-slide {
-  opacity: 1 !important;
-} */
 
 .articles_slider .swiper-button-prev,
 .articles_slider .swiper-button-next {
