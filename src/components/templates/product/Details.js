@@ -27,11 +27,11 @@ function Details() {
                                             <i className="bi bi-bar-chart"></i>
                                         </div>
                                     </div>
-                                   <Gallery />
+                                    <Gallery />
                                 </div>
                             </div>
                             <div className="col-lg-8">
-                               <ProductDetail />
+                                <ProductDetail />
                             </div>
                         </div>
                     </div>
