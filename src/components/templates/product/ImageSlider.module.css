@@ -1,5 +1,5 @@
 .swiper_slide {
-    width: 365px !important;
+    width: 100%!important;
     border: 1px solid #eee;
     border-radius: 10px;
     margin-bottom: 15px;
@@ -28,7 +28,7 @@
     border-radius: 10px;
 }
 
-.swiper_button_next {
+.swiper_button_next , .swiper_button_prev {
     background-color: #eee;
     width: 40px;
     height: 40px;
@@ -37,11 +37,6 @@
 }
 
 .swiper_button_prev {
-    background-color: #eee;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 50%;
     font-size: 16px !important;
 }
 

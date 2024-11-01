@@ -29,7 +29,17 @@ const Gallery = () => {
                     "--swiper-navigation-color": "#fff",
                     "--swiper-pagination-color": "#fff",
                 }}
-                spaceBetween={10}
+                spaceBetween={0}
+                rewind={true}
+               
+                slidesPerView={1}
+                breakpoints={{
+                    1200: {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                    },
+                }}
+                loop={true}
                 navigation={{
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev'
