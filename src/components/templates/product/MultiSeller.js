@@ -16,12 +16,13 @@ function MultiSeller() {
                                 <tbody className='text-center'>
                                     <tr>
                                         <td>
-                                            <div className='d-flex alig-items-start'>
-                                                <i className='bi bi-shop'></i>
-                                            </div>
-                                            <div className='text-start me-2'>
+                                            <div className='d-flex align-items-start'>
+                                                <div>
+                                                    <i className='bi bi-shop'></i>
+                                                </div>
+                                            <div className='text-end me-2'>
                                                 <h6 className='text-muted-2 font-14'> نسیم استور
-                                                    <span className={`${styles.success_label} rounded-pill me-1`}>
+                                                    <span className={`${styles.success_label} me-2 rounded-pill me-1`}>
                                                         منتخب
                                                     </span>
                                                 </h6>
@@ -36,6 +37,7 @@ function MultiSeller() {
                                                     </p>
                                                 </div>
                                             </div>
+                                            </div>
                                         </td>
                                         <td>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
@@ -44,7 +46,7 @@ function MultiSeller() {
                                                     d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z">
                                                 </path>
                                             </svg>
-                                            <p className='d-inline mb-0 font-14'>ارسالی نسیم استور</p>
+                                            <p className='d-inline me-2 mb-0 font-14'>ارسالی نسیم استور</p>
                                         </td>
                                         <td>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
@@ -56,6 +58,10 @@ function MultiSeller() {
                                                     d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z">
                                                 </path>
                                             </svg>
+                                            <p class="d-inline font-14 me-2 mb-0">گارانتی اصالت و سلامت فیزیکی کالا</p>
+                                        </td>
+                                        <td>
+
                                             <p className='fw-bold text-muted-2 mb-0 d-inline font-16'>389,500 </p>
                                             <span className='text-muted font-12'>تومان</span>
                                         </td>
@@ -70,13 +76,14 @@ function MultiSeller() {
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div className='d-flex alig-items-start'>
-                                                <i className='bi bi-shop'></i>
-                                            </div>
-                                            <div className='text-start me-2'>
-                                                <h6 className='text-muted-2 font-14'> نسیم استور
-                                                    <span className={`${styles.success_label} rounded-pill me-1`}>
-                                                        منتخب
+                                            <div className='d-flex align-items-start'>
+                                                <div>
+                                                    <i className='bi bi-shop'></i>
+                                                </div>
+                                            <div className='text-end me-2'>
+                                                <h6 className='text-muted-2 font-14'> جانبی کالا
+                                                    <span className={`${styles.danger_label} me-2 rounded-pill me-1`}>
+                                                        عملکرد ضعیف
                                                     </span>
                                                 </h6>
                                                 <div className='d-flex align-items-center mt-2'>
@@ -84,11 +91,12 @@ function MultiSeller() {
                                                         <span className='text-success me-1'>89.6%</span>
                                                         <span className='text-muted'>رضایت از کالا</span>
                                                     </p>
-                                                    <p className='pe-1 me-1 border-start font-12'>
+                                                    <p className='pe-1 me-1 border-end font-12'>
                                                         <span className='text-muted'>عملکرد</span>
                                                         <span className='text-success'>عالی</span>
                                                     </p>
                                                 </div>
+                                            </div>
                                             </div>
                                         </td>
                                         <td>
@@ -98,7 +106,7 @@ function MultiSeller() {
                                                     d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z">
                                                 </path>
                                             </svg>
-                                            <p className='d-inline mb-0 font-14'>ارسالی نسیم استور</p>
+                                            <p className='d-inline me-2 mb-0 font-14'>ارسالی نسیم استور</p>
                                         </td>
                                         <td>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
@@ -110,6 +118,10 @@ function MultiSeller() {
                                                     d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z">
                                                 </path>
                                             </svg>
+                                            <p class="d-inline font-14 me-2 mb-0">گارانتی اصالت و سلامت فیزیکی کالا</p>
+                                        </td>
+                                        <td>
+
                                             <p className='fw-bold text-muted-2 mb-0 d-inline font-16'>389,500 </p>
                                             <span className='text-muted font-12'>تومان</span>
                                         </td>
@@ -124,13 +136,14 @@ function MultiSeller() {
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div className='d-flex alig-items-start'>
-                                                <i className='bi bi-shop'></i>
-                                            </div>
-                                            <div className='text-start me-2'>
-                                                <h6 className='text-muted-2 font-14'> نسیم استور
-                                                    <span className={`${styles.success_label} rounded-pill me-1`}>
-                                                        منتخب
+                                            <div className='d-flex align-items-start'>
+                                                <div>
+                                                    <i className='bi bi-shop'></i>
+                                                </div>
+                                            <div className='text-end me-2'>
+                                                <h6 className='text-muted-2 font-14'> گرین کالا
+                                                    <span className={`${styles.warning_label} me-2 rounded-pill me-1`}>
+                                                        عملکرد متوسط
                                                     </span>
                                                 </h6>
                                                 <div className='d-flex align-items-center mt-2'>
@@ -144,6 +157,7 @@ function MultiSeller() {
                                                     </p>
                                                 </div>
                                             </div>
+                                            </div>
                                         </td>
                                         <td>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
@@ -152,7 +166,7 @@ function MultiSeller() {
                                                     d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z">
                                                 </path>
                                             </svg>
-                                            <p className='d-inline mb-0 font-14'>ارسالی نسیم استور</p>
+                                            <p className='d-inline me-2 mb-0 font-14'>ارسالی نسیم استور</p>
                                         </td>
                                         <td>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
@@ -164,6 +178,10 @@ function MultiSeller() {
                                                     d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z">
                                                 </path>
                                             </svg>
+                                            <p class="d-inline font-14 me-2 mb-0">گارانتی اصالت و سلامت فیزیکی کالا</p>
+                                        </td>
+                                        <td>
+
                                             <p className='fw-bold text-muted-2 mb-0 d-inline font-16'>389,500 </p>
                                             <span className='text-muted font-12'>تومان</span>
                                         </td>

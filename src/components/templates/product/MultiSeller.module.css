@@ -1,0 +1,106 @@
+.title_panel {
+    margin-bottom: 50px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.title_panel::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    height: 3px;
+    background-color: #0547b2;
+    width: 70px;
+    z-index: 2;
+}
+
+.title_panel::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    left: 0;
+    height: 3px;
+    background-color: #eee;
+    width: 100%;
+    z-index: 1;
+}
+
+.title_panel h6 {
+    font-weight: 600;
+    margin-bottom: 0;
+    font-family: var(--title-font);
+    color: var(--color-site);
+    line-height: 1.5;
+}
+
+.success_label {
+    padding: 5px 10px;
+    background-color: #6dfc9d3b;
+    border-radius: 5px;
+    color: #017040 !important;
+    font-size: 13px;
+    display: inline-block;
+    font-family: var(--main-font);
+    font-weight: normal;
+}
+
+.warning_label {
+    padding: 5px 10px;
+    background-color: #fcdc3c3b;
+    border-radius: 5px;
+    color: #705d01 !important;
+    font-size: 13px;
+    display: inline-block;
+    font-family: var(--main-font);
+    font-weight: normal;
+}
+
+.danger_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 5px;
+    color: #f21919 !important;
+    font-size: 13px;
+    display: inline-block;
+    font-family: var(--main-font);
+    font-weight: normal;
+}
+
+.responsive_table {
+    overflow: auto;
+    padding: 5px;
+}
+
+.responsive_table>table {
+    width: 100%;
+    border-collapse: collapse;
+    -webkit-overflow-scrolling: touch;
+}
+
+.main_table {
+    box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 0;
+    padding: 10px;
+    border-style: hidden;
+}
+
+.main_table tr {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.main_table tbody td {
+    max-width: 300px;
+    border: 1px solid #eee;
+    /* padding: 20px 0; */
+    text-align: center;
+    min-width: 100px;
+}
+
+.main_table tr td {
+    white-space: nowrap;
+}
