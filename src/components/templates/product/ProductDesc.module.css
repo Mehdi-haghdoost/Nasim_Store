@@ -4,7 +4,7 @@
 }
 
 .product_desc_list li {
-    padding: 0 8px;
+    padding: 0 10px;
 }
 
 .product_desc_list li::before {}
