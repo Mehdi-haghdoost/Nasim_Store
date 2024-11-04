@@ -419,6 +419,10 @@ a {
 .border-muted {
   border-color: var(--border-muted) !important;
 }
+.border_right_custom2 {
+  background-color: #eee;
+  border-radius: 10px;
+}
 
 .swiper-button-prev::after,
 .swiper-button-next::after {

@@ -1,0 +1,23 @@
+.product_desc_tab_title {
+    font-size: 22px !important;
+    margin-bottom: 0.5rem;
+}
+
+.box_list_title {
+    font-weight: bold;
+}
+
+.box_list svg {
+    margin-left: 5px;
+}
+
+.box_params_list p {
+    display: block;
+    padding: 14px 18px 12px;
+    font-size: 13px;
+    line-height: 1.692;
+    color: #4d4d4d !important;
+    min-height: 47px;
+    position: relative;
+    margin-bottom: 15px;
+}
