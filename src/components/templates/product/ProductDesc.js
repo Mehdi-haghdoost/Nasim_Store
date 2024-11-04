@@ -7,7 +7,8 @@ import Informations from './Informations';
 import Comments from './Comments';
 function ProductDesc() {
 
-    const [tab, setTab] = useState('descriptions')
+    const [tab, setTab] = useState('descriptions');
+
 
     return (
         <div className={`${styles.product_desc} py-20`}>

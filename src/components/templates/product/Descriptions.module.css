@@ -2,9 +2,11 @@
     font-size: 22px !important;
     margin-bottom: 0.5rem;
 }
+
 .product_desc_content_text {
     line-height: 35px;
 }
+
 .product_desc_read_more label {
     margin-top: 10px;
     cursor: pointer;
@@ -93,7 +95,8 @@
 .play_opacity {
     opacity: 0.2;
 }
-.play_opacity .play::before{
+
+.play_opacity .play::before {
     animation: none;
     background-color: transparent;
 }

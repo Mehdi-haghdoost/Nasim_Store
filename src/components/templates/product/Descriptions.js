@@ -71,17 +71,17 @@ function Descriptions() {
             </div>
           </div>
         </div>
-        <div 
-        onClick={() => setIsShowMore(prev => !prev)}
-        className={styles.product_desc_read_more}>
+        <div
+          onClick={() => setIsShowMore(prev => !prev)}
+          className={styles.product_desc_read_more}>
           {isShowMore ? (
             <label className='mb-2'>
-            بستن -
-          </label>
+              بستن -
+            </label>
           ) : (
             <label className='mb-2'>
-            بیشتر +
-          </label>
+              بیشتر +
+            </label>
           )}
           {isShowMore && (
             <p>
