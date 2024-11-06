@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
+import { Tagify } from 'react-tagify';
 import styles from './Comments.module.css';
 import { IoMdStar } from 'react-icons/io';
 import { FaRegStar } from "react-icons/fa";
 import { showSwal } from '@/utils/helpers';
 function Comments() {
     const [score, setScore] = useState(5);
+    const [tags, setTags] = useState([]);
+
+    const settings = {
+        placeholder: 'با کلید اینتر اضافه کنید',
+    }
 
     const submitScore = (score) => {
         setScore(score);
@@ -29,7 +35,7 @@ function Comments() {
                             <div className={styles.comment_item}>
                                 <input type="email" className="form-control" id='floatingInputEmail' />
                                 <label
-                                    className='form-label label-float'
+                                    className={`form-label ${styles.comment_item_label}`}
                                     htmlFor="floatingInputEmail">
                                     ایمیل خود را وارد کنید
                                 </label>
@@ -37,9 +43,9 @@ function Comments() {
                         </div>
                         <div className="col-sm-6">
                             <div className={styles.comment_item}>
-                                <input type="email" className="form-control" id='floatingInputName' />
+                                <input type="name" className="form-control" id='floatingInputName' />
                                 <label
-                                    className='form-label label-float'
+                                    className={`form-label ${styles.comment_item_label}`}
                                     htmlFor="floatingInputName">
                                     نام خود را وارد کنید
                                 </label>
@@ -47,7 +53,7 @@ function Comments() {
                         </div>
                         <div className="col-12">
                             <div className={`${styles.comment_item} d-flex alifn-items-center mb-3`}>
-                                <input type="checkbox" className='form-chech-input' id="rememberComment" />
+                                <input type="checkbox" className='form-check-input' id="rememberComment" />
                                 <label
                                     className='form-check-label d-block'
                                     htmlFor="rememberComment">
@@ -78,7 +84,7 @@ function Comments() {
                                     className='form-control' id="floatingTextarea">
                                 </textarea>
                                 <label
-                                    className='form-label label-float'
+                                    className={`form-label ${styles.comment_item_label}`}
                                     htmlFor="floatingTextarea">
                                     متن نظر
                                 </label>
@@ -86,15 +92,13 @@ function Comments() {
                         </div>
                         <div className="col-sm-6">
                             <div className='form-group mt-3'>
-                                <label
-                                    className='text-success mb-2'
-                                    htmlFor="tags-pos">
-                                    نقاط قوت
-                                </label>
-                                <input
-                                    className={`${styles.comment_tags} tags-pos form-control`}
-                                    placeholder='با کلید اینتر اضافه کنید'
-                                    name="tags-pos" id="tags-pos" />
+                                <label className='text-success mb-2' htmlFor="tags-pos"> نقاط قوت </label>
+                                <Tagify
+                                    className={`tagify ${styles.comment_tags} tags-pos form-control`}
+                                    settings={settings}
+                                    value={JSON.stringify(tags)} // تبدیل آرایه به رشته JSON
+                                    onChange={(e) => setTags(e.detail.tagify.value)} // دریافت مقدار صحیح
+                                />
                             </div>
                         </div>
                         <div className="col-sm-6">

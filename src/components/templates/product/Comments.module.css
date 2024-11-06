@@ -2,3 +2,31 @@
     font-size: 22px !important;
     margin-bottom: 0.5rem;
 }
+
+.comment_item {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+}
+
+.comment_item input[type="name"],
+.comment_item input[type="email"] {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: right;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.comment_item_label {
+    position: absolute;
+    top: 4px;
+    background-color: #fff;
+    right: 15px;
+    padding: 5px;
+}
+.comment_tags {
+    border-radius: 30px;
+    background: #f8f8f8;
+    
+}
