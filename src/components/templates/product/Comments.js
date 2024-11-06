@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
-import { Tagify } from 'react-tagify';
+import React, { useState, useRef, useEffect } from 'react'
+import Tagify from '@yaireo/tagify';
+import '@yaireo/tagify/dist/tagify.css';
 import styles from './Comments.module.css';
 import { IoMdStar } from 'react-icons/io';
 import { FaRegStar } from "react-icons/fa";
 import { showSwal } from '@/utils/helpers';
 function Comments() {
     const [score, setScore] = useState(5);
-    const [tags, setTags] = useState([]);
 
-    const settings = {
-        placeholder: 'با کلید اینتر اضافه کنید',
-    }
+    const strengthsInputRef = useRef();
+    const weaknessesInputRef = useRef();
+    useEffect(() => {
+        new Tagify(strengthsInputRef.current, { placeholder: 'با کلید اینتر اضافه کنید', });
+        new Tagify(weaknessesInputRef.current, { placeholder: 'با کلید اینتر اضافه کنید', });
+    }, []);
 
     const submitScore = (score) => {
         setScore(score);
@@ -93,12 +96,7 @@ function Comments() {
                         <div className="col-sm-6">
                             <div className='form-group mt-3'>
                                 <label className='text-success mb-2' htmlFor="tags-pos"> نقاط قوت </label>
-                                <Tagify
-                                    className={`tagify ${styles.comment_tags} tags-pos form-control`}
-                                    settings={settings}
-                                    value={JSON.stringify(tags)} // تبدیل آرایه به رشته JSON
-                                    onChange={(e) => setTags(e.detail.tagify.value)} // دریافت مقدار صحیح
-                                />
+                                <input ref={strengthsInputRef} className={`tagify ${styles.comment_tags} tags-pos form-control`} name="tags-pos" id="tags-pos" placeholder='با کلید اینتر اضافه کنید' />
                             </div>
                         </div>
                         <div className="col-sm-6">
@@ -108,10 +106,7 @@ function Comments() {
                                     htmlFor="tags-neg">
                                     نقاط ضعف
                                 </label>
-                                <input
-                                    className={`${styles.comment_tags} tags-neg form-control`}
-                                    placeholder='با کلید اینتر اضافه کنید'
-                                    name="tags-neg" id="tags-neg" />
+                                <input ref={weaknessesInputRef} className={`tagify ${styles.comment_tags} tags-neg form-control`} name="tags-neg" id="tags-neg" placeholder='با کلید اینتر اضافه کنید' />
                             </div>
                         </div>
                         <div className="col-12">
@@ -123,7 +118,7 @@ function Comments() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             <div className={`bg-light shadow-inner mb-4 ${styles.comment}`}>
                 <div className={styles.title}>
                     <div className='row align-items-center'>

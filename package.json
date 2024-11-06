@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@yaireo/tagify": "^4.31.6",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
