@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from 'react'
 import Tagify from '@yaireo/tagify';
 import '@yaireo/tagify/dist/tagify.css';
 import styles from './Comments.module.css';
-import { IoMdStar } from 'react-icons/io';
 import { FaRegStar } from "react-icons/fa";
+import { GoStarFill } from "react-icons/go";
 import { showSwal } from '@/utils/helpers';
 function Comments() {
     const [score, setScore] = useState(5);
 
     const strengthsInputRef = useRef();
     const weaknessesInputRef = useRef();
+
     useEffect(() => {
         new Tagify(strengthsInputRef.current, { placeholder: 'با کلید اینتر اضافه کنید', });
         new Tagify(weaknessesInputRef.current, { placeholder: 'با کلید اینتر اضافه کنید', });
@@ -72,11 +73,11 @@ function Comments() {
                             <div className='form-group mt-3'>
                                 <label>امتیاز شما</label>
                                 <div className={styles.rate}>
-                                    <IoMdStar onClick={() => submitScore(5)} />
-                                    <IoMdStar onClick={() => submitScore(4)} />
-                                    <IoMdStar onClick={() => submitScore(3)} />
-                                    <IoMdStar onClick={() => submitScore(2)} />
-                                    <IoMdStar onClick={() => submitScore(1)} />
+                                    <GoStarFill onClick={() => submitScore(5)} />
+                                    <GoStarFill onClick={() => submitScore(4)} />
+                                    <GoStarFill onClick={() => submitScore(3)} />
+                                    <GoStarFill onClick={() => submitScore(2)} />
+                                    <GoStarFill onClick={() => submitScore(1)} />
                                 </div>
                             </div>
                         </div>
@@ -96,7 +97,12 @@ function Comments() {
                         <div className="col-sm-6">
                             <div className='form-group mt-3'>
                                 <label className='text-success mb-2' htmlFor="tags-pos"> نقاط قوت </label>
-                                <input ref={strengthsInputRef} className={`tagify ${styles.comment_tags} tags-pos form-control`} name="tags-pos" id="tags-pos" placeholder='با کلید اینتر اضافه کنید' />
+                                <input
+                                    ref={strengthsInputRef}
+                                    className={`tagify ${styles.comment_tags} tags-pos form-control`}
+                                    name="tags-pos"
+                                    id="tags-pos"
+                                    placeholder='با کلید اینتر اضافه کنید' />
                             </div>
                         </div>
                         <div className="col-sm-6">
@@ -106,7 +112,12 @@ function Comments() {
                                     htmlFor="tags-neg">
                                     نقاط ضعف
                                 </label>
-                                <input ref={weaknessesInputRef} className={`tagify ${styles.comment_tags} tags-neg form-control`} name="tags-neg" id="tags-neg" placeholder='با کلید اینتر اضافه کنید' />
+                                <input
+                                    ref={weaknessesInputRef}
+                                    className={`tagify ${styles.comment_tags} tags-neg form-control`}
+                                    name="tags-neg"
+                                    id="tags-neg"
+                                    placeholder='با کلید اینتر اضافه کنید' />
                             </div>
                         </div>
                         <div className="col-12">
@@ -122,9 +133,9 @@ function Comments() {
             <div className={`bg-light shadow-inner mb-4 ${styles.comment}`}>
                 <div className={styles.title}>
                     <div className='row align-items-center'>
-                        <div className="col-10-sm">
+                        <div className="col-sm-10">
                             <div className="d-flex align-items-center">
-                                <div className={`${styles.avatar} p-2 bg-white shaodw-box rounded-circle`}>
+                                <div className={`${styles.avatar} p-2 bg-white shadow-box rounded-circle`}>
                                     <img className='img-fluid rounded-circle' src="/images/user.png" alt="" />
                                 </div>
                                 <div className='d-flex flex-wrap align-items-center me-2'>
@@ -134,12 +145,12 @@ function Comments() {
                             </div>
                         </div>
                         <div className="col-sm-2">
-                            <div className="d-flex justify-content-start">
+                            <div className="d-flex justify-content-end">
                                 <FaRegStar />
-                                <IoMdStar />
-                                <IoMdStar />
-                                <IoMdStar />
-                                <IoMdStar />
+                                <GoStarFill />
+                                <GoStarFill />
+                                <GoStarFill />
+                                <GoStarFill />
                             </div>
                         </div>
                     </div>
@@ -163,9 +174,9 @@ function Comments() {
                         <div className="col-md-8">
                             <div className={styles.comment_rates}>
                                 <div className={`${styles.comment_rates_positive} rounded-4`}>
-                                    <div className='d-flex align-items-center justify-content-end'>
+                                    <div className='d-flex align-items-center justify-content-start'>
                                         <h6 className='font-14 ms-3'>نقاط قوت</h6>
-                                        <nav className={`${styles.positive_nav} navbar flex-column1`}>
+                                        <nav className={`${styles.positive_nav} navbar flex-column`}>
                                             <ul className='navbar-nav flex-wrap'>
                                                 <li className='nav-item'>
                                                     <span className='nav-link font-14'>
@@ -192,9 +203,9 @@ function Comments() {
                                     </div>
                                 </div>
                                 <div className={`${styles.comment_rates_negative} rounded-4 mt-3`}>
-                                    <div className='d-flex align-items-center justify-content-end'>
+                                    <div className='d-flex align-items-center justify-content-start'>
                                         <h6 className='font-14 ms-3'>نقاط ضعف</h6>
-                                        <nav className={`${styles.negative_nav} navbar flex-column1`}>
+                                        <nav className={`${styles.negative_nav} navbar flex-column`}>
                                             <ul className='navbar-nav flex-wrap'>
                                                 <li className='nav-item'>
                                                     <span className='nav-link font-14'>
@@ -237,9 +248,9 @@ function Comments() {
             <div className={`bg-light shadow-inner mb-4 ${styles.comment}`}>
                 <div className={styles.title}>
                     <div className='row align-items-center'>
-                        <div className="col-10-sm">
+                        <div className="col-sm-10">
                             <div className="d-flex align-items-center">
-                                <div className={`${styles.avatar} p-2 bg-white shaodw-box rounded-circle`}>
+                                <div className={`${styles.avatar} p-2 bg-white shadow-box rounded-circle`}>
                                     <img className='img-fluid rounded-circle' src="/images/user.png" alt="" />
                                 </div>
                                 <div className='d-flex flex-wrap align-items-center me-2'>
@@ -249,12 +260,12 @@ function Comments() {
                             </div>
                         </div>
                         <div className="col-sm-2">
-                            <div className="d-flex justify-content-start">
+                            <div className="d-flex justify-content-end">
                                 <FaRegStar />
-                                <IoMdStar />
-                                <IoMdStar />
-                                <IoMdStar />
-                                <IoMdStar />
+                                <GoStarFill />
+                                <GoStarFill />
+                                <GoStarFill />
+                                <GoStarFill />
                             </div>
                         </div>
                     </div>
@@ -278,9 +289,9 @@ function Comments() {
                         <div className="col-md-8">
                             <div className={styles.comment_rates}>
                                 <div className={`${styles.comment_rates_positive} rounded-4`}>
-                                    <div className='d-flex align-items-center justify-content-end'>
+                                    <div className='d-flex align-items-center'>
                                         <h6 className='font-14 ms-3'>نقاط قوت</h6>
-                                        <nav className={`${styles.positive_nav} navbar flex-column1`}>
+                                        <nav className={`${styles.positive_nav} navbar flex-column`}>
                                             <ul className='navbar-nav flex-wrap'>
                                                 <li className='nav-item'>
                                                     <span className='nav-link font-14'>
@@ -307,9 +318,9 @@ function Comments() {
                                     </div>
                                 </div>
                                 <div className={`${styles.comment_rates_negative} rounded-4 mt-3`}>
-                                    <div className='d-flex align-items-center justify-content-end'>
+                                    <div className='d-flex align-items-center'>
                                         <h6 className='font-14 ms-3'>نقاط ضعف</h6>
-                                        <nav className={`${styles.negative_nav} navbar flex-column1`}>
+                                        <nav className={`${styles.negative_nav} navbar flex-column`}>
                                             <ul className='navbar-nav flex-wrap'>
                                                 <li className='nav-item'>
                                                     <span className='nav-link font-14'>
@@ -347,10 +358,10 @@ function Comments() {
                             </div>
                         </div>
                     </div>
-                    <div className={`bg-light shadow-inner mb-4 ${styles.comment}`}>
+                    <div className={`bg-light shadow-inner mb-4 ${styles.comment_response}`}>
                         <div className={styles.title}>
                             <div className='row align-items-center'>
-                                <div className="col-10-sm">
+                                <div className="col-sm-10">
                                     <div className="d-flex align-items-center">
                                         <div className={`${styles.avatar} p-2 bg-white shaodw-box rounded-circle`}>
                                             <img className='img-fluid rounded-circle' src="/images/user.png" alt="" />
@@ -362,12 +373,12 @@ function Comments() {
                                     </div>
                                 </div>
                                 <div className="col-sm-2">
-                                    <div className="d-flex justify-content-start">
+                                    <div className="d-flex justify-content-end">
                                         <FaRegStar />
-                                        <IoMdStar />
-                                        <IoMdStar />
-                                        <IoMdStar />
-                                        <IoMdStar />
+                                        <GoStarFill />
+                                        <GoStarFill />
+                                        <GoStarFill />
+                                        <GoStarFill />
                                     </div>
                                 </div>
                             </div>
@@ -391,9 +402,9 @@ function Comments() {
                                 <div className="col-md-8">
                                     <div className={styles.comment_rates}>
                                         <div className={`${styles.comment_rates_positive} rounded-4`}>
-                                            <div className='d-flex align-items-center justify-content-end'>
+                                            <div className='d-flex align-items-center justify-content-start'>
                                                 <h6 className='font-14 ms-3'>نقاط قوت</h6>
-                                                <nav className={`${styles.positive_nav} navbar flex-column1`}>
+                                                <nav className={`${styles.positive_nav} navbar flex-column`}>
                                                     <ul className='navbar-nav flex-wrap'>
                                                         <li className='nav-item'>
                                                             <span className='nav-link font-14'>
@@ -420,9 +431,9 @@ function Comments() {
                                             </div>
                                         </div>
                                         <div className={`${styles.comment_rates_negative} rounded-4 mt-3`}>
-                                            <div className='d-flex align-items-center justify-content-end'>
+                                            <div className='d-flex align-items-center justify-content-start'>
                                                 <h6 className='font-14 ms-3'>نقاط ضعف</h6>
-                                                <nav className={`${styles.negative_nav} navbar flex-column1`}>
+                                                <nav className={`${styles.negative_nav} navbar flex-column`}>
                                                     <ul className='navbar-nav flex-wrap'>
                                                         <li className='nav-item'>
                                                             <span className='nav-link font-14'>

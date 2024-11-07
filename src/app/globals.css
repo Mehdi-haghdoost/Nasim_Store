@@ -545,6 +545,31 @@ a {
 /* end base style */
 
 
+/* tagify */
+tag.tagify__tag {
+  background-color: #afffb2e1;
+  border-radius: 10px;
+}
+
+.tagify__tag>div::before {
+  inset: unset !important;
+}
+
+.tagify__tag-text {
+  color: #428e30 !important;
+}
+
+.tags-neg tag.tagify__tag {
+  background-color: #ffaeaedf;
+  border-radius: 10px;
+}
+.tags-neg .tagify__tag-text {
+  color: #480303 !important;
+}
+
+/* end tagify */
+
+
 /* productDetail */
 .product-meta-color {
   margin-top: 20px;
