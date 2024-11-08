@@ -590,6 +590,7 @@ tag.tagify__tag {
   display: inline-flex;
   align-items: center;
   margin-bottom: 15px;
+  margin-right: 0.5rem;
 }
 
 .product-meta-color-items label:hover {
