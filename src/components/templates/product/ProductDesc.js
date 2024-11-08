@@ -142,12 +142,12 @@ function ProductDesc() {
                                 </div>
                                 <div className={`${styles.product_meta_price} p-0 bg-transparent shadow-none`} >
                                     <div className='row gy-3'>
-                                    <div className="col-6 w-100-in-400">
-                                        <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center`}>1,500,000 تومان</p>
-                                    </div>
-                                    <div className="col-6 w-100-in-400">
-                                        <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>1,200,000 تومان</h6>
-                                    </div>
+                                        <div className="col-6 w-100-in-400">
+                                            <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center`}>1,500,000 تومان</p>
+                                        </div>
+                                        <div className="col-6 w-100-in-400">
+                                            <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>1,200,000 تومان</h6>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={`${styles.product_meta_action} p-0 bg-transparent shadow-none`}>

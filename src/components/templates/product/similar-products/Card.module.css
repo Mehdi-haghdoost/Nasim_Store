@@ -1,0 +1,141 @@
+.swiper_slide {
+    border-radius: 10px !important;
+}
+.product_box {
+    background-color: #fff;
+    box-shadow: var(--shadow-box) !important;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.product_box .product_timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.product_box .product_image {
+    height: 180px;
+    display: flex;
+    margin: 5px 0;
+    position: relative;
+}
+
+
+.product_timer .timer_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 10px;
+}
+
+.product_timer .timer_label span {
+    color: #f21919;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.product_header_btn a {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 50%;
+    background: #f4f4f4;
+    transition: 200ms;
+}
+
+.product_header_btn a:not(:last-child) {
+    margin-left: 5px;
+}
+
+.product_box .product_image img {
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    transition: 0.5s all ease-in-out;
+}
+
+.product_box .two_image {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.product_box:hover .one_image {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.product_box:hover .two_image {
+    z-index: 1;
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    transform: scale(1.07);
+}
+
+.product_box .product_title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.product_box .product_title .title {
+    text-align: right;
+}
+
+.product_box .product_title .title p {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.product_box .product_title .title span {
+    color: var(--text-muted-two) !important;
+    font-size: 12px;
+}
+
+.product_box .product_title .rating {
+    display: flex;
+    align-items: center;
+}
+
+.product_box .product_title .rating .icon i {
+    color: #fbc02a;
+    font-size: 14px;
+    vertical-align: super;
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+.product_box .product_action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 7px;
+    background: #f7f7f7;
+    border-radius: 10px;
+}
+
+.product_action .price .new_price {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.product_action .price .old_price {
+    text-decoration: line-through;
+    color: #aaa !important;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+.link a {
+padding: 5px;
+}
