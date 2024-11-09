@@ -117,3 +117,9 @@
     box-shadow: var(--shadow-md);
     border: 1px solid #eee;
 }
+
+@media only screen and (max-width : 992px) {
+    .btn_comment {
+        width: 100%;
+    }
+}
