@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '@/components/templates/faq/content/content.module.css';
+import styles from './content.module.css';
 import Accordion from './Accordion';
 function Content() {
     return (
