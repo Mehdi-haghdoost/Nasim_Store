@@ -563,6 +563,7 @@ tag.tagify__tag {
   background-color: #ffaeaedf;
   border-radius: 10px;
 }
+
 .tags-neg .tagify__tag-text {
   color: #480303 !important;
 }
@@ -718,6 +719,61 @@ tag.tagify__tag {
 
 
 /* ens swal */
+
+/* accordion.module.css */
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+
+@keyframes slideUp {
+  from {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  to {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+
+.accordion-collapse {
+  overflow: hidden;
+}
+
+.accordion-collapse.show {
+  animation: slideDown 0.5s ease-out forwards;
+}
+
+.accordion-collapse:not(.show) {
+  animation: slideUp 1.5s ease-in forwards;
+}
+
+.accordion-button {
+  transition: background-color 0.3s ease-in-out;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #e2e2e2;
+}
+
+.accordion-button:hover,
+.accordion-button:focus {
+  background-color: #d1d1d1;
+}
+
+/* end  accordion */
 
 @media (prefers-color-scheme: dark) {
   :root {
