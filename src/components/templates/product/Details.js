@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './details.module.css'
 
-import ProductDetail from '../product/productDetail';
+import ProductDetail from './ProductDetail';
 import Gallery from '../product/product-images-slider/ImageSlider';
 
 function Details() {
