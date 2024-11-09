@@ -17,7 +17,6 @@ function page() {
             <MultiSeller />
             <ProductDesc />
             <SimilarProducts />
-            <br /> <br />
             <Footer />
         </>
     )
