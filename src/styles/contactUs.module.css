@@ -1,0 +1,10 @@
+.form_check_label {
+    font-size: 14px;
+}
+.form_check_input {
+    border-radius: .25em;
+    float: right !important;
+    margin-right: -1.5em !important;
+    margin-left: 7px !important;
+
+}

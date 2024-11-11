@@ -73,11 +73,11 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 600;
-  margin-bottom: 0;
-  font-family: var(--title-font);
-  color: var(--color-site);
-  line-height: 1.5;
+  font-weight: 600 !important;
+  margin-bottom: 0 !important;
+  font-family: var(--title-font) !important;
+  color: var(--color-site) !important;
+  line-height: 1.5 !important;
 }
 
 a,
@@ -238,6 +238,35 @@ a {
 
 .font-30 {
   font-size: 30px;
+}
+
+.title-panel {
+  margin-bottom: 50px;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.title-panel::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  height: 3px;
+  background-color: #0547b2;
+  width: 70px;
+  z-index: 2;
+}
+
+.title-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background-color: #eee;
+  width: 100%;
+  z-index: 1;
 }
 
 .text-overflow-1 {
@@ -538,6 +567,13 @@ a {
 .form-counter:focus {
   border: none;
   outline: none;
+}
+
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  padding-right: 1.5em !important;
+  margin-bottom: .125rem;
 }
 
 /* end bootstrap touchspin */
