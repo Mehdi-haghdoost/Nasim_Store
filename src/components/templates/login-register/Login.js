@@ -1,43 +1,68 @@
 import React, { useState } from 'react'
-import styles from './Login.module.css'
+import styles from './Login.module.css';
+import { useFormik } from 'formik';
 import Link from "next/link";
 import Sms from './Sms';
 import { showSwal } from '@/utils/helpers';
 import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
+import loginSchema from '@/utils/login';
 function Login({ showRegisterForm }) {
 
+    const form = useFormik({
+        initialValues: { phoneOrEmail: '', password: '' },
+        validationSchema: loginSchema,
+        onSubmit: (values, { setSubmitting }) => {
+            setTimeout(() => {
+                console.log('Form Inputs Data =>', values);
+               swal({
+                title : 'با موفقیت وارد شدید',
+                // text : 'با موفقیت وارد شدید',
+                button : 'اوکی',
+                icon : '/images/success.png'
+               })
+                setSubmitting(false)
+
+            }, 1000);
+        }
+    })
+
     const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
-    const [password, setPassword] = useState('');
-    const [phoneOrEmail, setPhoneOrEmail] = useState("");
 
     const hideOtpForm = () => setIsLoginWithOtp(false);
 
     const loginWithPassword = async () => {
-        if (!phoneOrEmail) {
-            return showSwal("لطفا شماره تلفن یا ایمیل خود را وارد کنید", "warning", "اوکی")
+        if (!form.values.phoneOrEmail) {
+            return showSwal("لطفا شماره تلفن یا ایمیل خود را وارد نمایید ", "warning", "اوکی")
+        }
+        if (form.errors.phoneOrEmail || form.errors.password) {
+            if (form.errors.phoneOrEmail) {
+                return showSwal(form.errors.phoneOrEmail, 'error', 'OK');
+            } else if (form.errors.password) {
+                return showSwal(form.errors.password, 'error', 'OK');
+            }
+        } else {
+            form.handleSubmit();
         }
 
-        const isValidEmail = validateEmail(phoneOrEmail)
-        if (!isValidEmail) {
-            return showSwal("ایمیل وارد شده صحیح نیست", "error", "تلاش مجدد");
-        }
 
-        if (!password) {
+        if (!form.values.password) {
             return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
         }
 
-        const isValidPassword = validatePassword(password)
-        if (!isValidPassword) {
+        const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+        if (!passwordPattern.test(form.values.password)) {
             return showSwal("پسورد به اندازه کافی قوی نیست", "error", "تلاش مجدد");
         }
+
+        form.handleSubmit();
     }
     const loginWithOtp = async () => {
-        const isValidPhone = validatePhone(phoneOrEmail)
-    if (!phoneOrEmail.trim()) {
-      return showSwal("لطفا شماره موبایل خود را وارد کنید", "warning", "تلاش مجدد")
-    } else if (!isValidPhone) {
-      return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
-    }
+        const isValidPhone =/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g.test(form.values.phoneOrEmail);
+        if(!form.values.phoneOrEmail.trim()) {
+            return showSwal("لطفا شماره موبایل خود را وارد نمایید", "error", "تلاش مجدد");
+        } else if (!isValidPhone){
+            return showSwal("لطفا شماره موبایل معتبر وارد نمایید", "error", "تلاش مجدد");
+        }
         setIsLoginWithOtp(true)
     }
 
@@ -62,24 +87,37 @@ function Login({ showRegisterForm }) {
                                                                 <img src="/images/logo.png" width="150" alt="" />
                                                             </a>
                                                         </div>
-                                                        <form action="" id="form-auth">
+                                                        <form onSubmit={form.handleSubmit} >
 
                                                             <div className={`${styles.comment_item} mb-3 step-username`}>
                                                                 <input
-                                                                    value={phoneOrEmail}
-                                                                    onChange={(event) => setPhoneOrEmail(event.target.value)}
-                                                                    type="email" className={`form-control`} id="username" />
+                                                                    value={form.values.phoneOrEmail}
+                                                                    name='phoneOrEmail'
+                                                                    onChange={form.handleChange}
+                                                                    onBlur={form.handleBlur}
+                                                                    type="text"
+                                                                    className={`form-control`}
+                                                                    id="username"
+                                                                />
                                                                 <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
-                                                                    کنید</label>
+                                                                    کنید
+                                                                </label>
+                                                                {/* {form.errors.phoneOrEmail && form.touched.phoneOrEmail && swal('Error', form.errors.phoneOrEmail, 'error')} */}
                                                             </div>
                                                             <div className={`${styles.comment_item} position-relative step-passwd`} style={{ display: 'block' }}>
                                                                 <input
-                                                                    value={password}
-                                                                    onChange={(event) => setPassword(event.target.value)}
-                                                                    type="password" className={`form-control`} id="passwd" />
+                                                                    value={form.values.password}
+                                                                    onChange={form.handleChange}
+                                                                    onBlur={form.handleBlur}
+                                                                    type="password"
+                                                                    className={`form-control`}
+                                                                    id="passwd"
+                                                                    name='password'
+                                                                />
                                                                 <label for="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
                                                                     وارد
-                                                                    کنید</label>
+                                                                    کنید
+                                                                </label>
                                                                 <div className={`${styles.inline_btn_text}`}>
                                                                     <a
                                                                         onClick={() => loginWithOtp()}
@@ -129,4 +167,4 @@ function Login({ showRegisterForm }) {
     )
 }
 
-export default Login
+export default Login;
