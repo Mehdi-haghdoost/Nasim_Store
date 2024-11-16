@@ -4,8 +4,8 @@ import { useFormik } from 'formik';
 import Link from "next/link";
 import Sms from './Sms';
 import { showSwal } from '@/utils/helpers';
-import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
 import loginSchema from '@/utils/login';
+
 function Login({ showRegisterForm }) {
 
     const form = useFormik({

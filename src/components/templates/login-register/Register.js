@@ -5,13 +5,28 @@ import Link from "next/link";
 import { showSwal } from '@/utils/helpers';
 import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
 import Sms from './Sms';
+import registerSchema from '@/utils/register';
+import { useFormik } from 'formik';
 
 function Register({ showLoginForm }) {
 
-  const [name, setName] = useState("");
+  const form = useFormik({
+    initialValues: { name: '', email: '', password: '' },
+    validationSchema: registerSchema,
+    onSubmit: (values, { setSubmitting }) => {
+      setTimeout(() => {
+        swal({
+          title: 'اطلاعات شما با موفقیت ثبت شد',
+          button: 'اوکی',
+          icon: '/images/success.png'
+        })
+        setSubmitting(false);
+      }, 1000);
+    }
+  })
+
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [isRegisterWithPass, setIsRegisterWithPass] = useState(false)
   const [isRegisterWithOtp, setIsRegisterWithOtp] = useState(false);
 
@@ -19,28 +34,31 @@ function Register({ showLoginForm }) {
 
 
   const signUp = async () => {
-    if (!name.trim()) {
-      return showSwal("لطفا نام خود را وارد کنید", "warning", "تلاش مجدد")
+    if (!form.values.name.trim()) {
+      return showSwal("لطفا نام خود را وارد نمایید ", "warning", "اوکی")
+    }
+    if (form.errors.name) {
+      return showSwal(form.errors.name, "error", "اوکی")
     }
 
-    if (email) {
-      const isValidEmail = validateEmail(email)
-      if (!isValidEmail) {
-        return showSwal("لطفا ایمیل معتبر وارد کنید", "warning", "تلاش مجدد")
-      }
-    } else {
-      return showSwal("لطفا ایمیل خود را وارد کنید", "warning", "تلاش مجدد")
+
+    if (!form.values.email) {
+      return showSwal("لطفا ایمیل معتبر وارد کنید", "warning", "تلاش مجدد")
+    }
+    if (form.errors.email) {
+      return showSwal(form.errors.email, "error", "اوکی")
     }
 
-    if (password) {
-      const isValidPassword = validatePassword(password)
-      if (!isValidPassword) {
-        return showSwal("لطفا پسورد معتبر وارد کنید", "warning", "تلاش مجدد")
-      }
-    } else {
-      return showSwal("پسورد وارد شده قابل حدس هست", "error", "تلاش مجدد ");
+
+    if (!form.values.password) {
+      return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
+    }
+    if (form.errors.password) {
+      return showSwal(form.errors.password, "error", "اوکی")
     }
 
+    // اینجا باید پس از اعتبار سنجی فرم رو ارسال کنم
+    form.handleSubmit();
 
   }
 
@@ -76,34 +94,42 @@ function Register({ showLoginForm }) {
                                 <img src="/images/logo.png" width="150" alt="" />
                               </a>
                             </div>
-                            <form action="" id="form-auth">
+                            <form onSubmit={form.handleSubmit}>
                               {
                                 !isRegisterWithPass ? (
                                   <div className={`${styles.comment_item} mb-3 step-username`}>
                                     <input
                                       value={phone}
                                       onChange={(e) => setPhone(e.target.value)}
-                                      type="email" className={`form-control`} id="username" />
+                                      type="text" className={`form-control`} id="username" />
                                     <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن خود را وارد
                                       کنید</label>
                                   </div>
                                 ) : (
                                   <div className={`${styles.comment_item} mb-3 step-username`}>
                                     <input
-                                      value={name}
-                                      onChange={(e) => setName(e.target.value)}
-                                      type="email" className={`form-control`} id="username" />
-                                    <label for="username" className={`form-label ${styles.label_float}`}>نام خود را وارد کنید</label>
+                                      value={form.values.name}
+                                      onChange={form.handleChange}
+                                      onBlur={form.handleBlur}
+                                      name='name'
+                                      type="text"
+                                      className={`form-control`}
+                                      id="name" />
+                                    <label htmlFor="name" className={`form-label ${styles.label_float}`}>نام خود را وارد کنید</label>
                                   </div>
                                 )
                               }
                               {isRegisterWithPass && (
                                 <div className={`${styles.comment_item} mb-3 step-username`}>
                                   <input
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    type="email" className={`form-control`} id="username" />
-                                  <label for="username" className={`form-label ${styles.label_float}`}> ایمیل خود را وارد
+                                    value={form.values.email}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                    type="email"
+                                    name='email'
+                                    className={`form-control`}
+                                    id="email" />
+                                  <label htmlFor="email" className={`form-label ${styles.label_float}`}> ایمیل خود را وارد
                                     کنید</label>
                                 </div>
 
@@ -111,10 +137,14 @@ function Register({ showLoginForm }) {
                               {isRegisterWithPass && (
                                 <div className={`${styles.comment_item} mb-3 step-username`}>
                                   <input
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    type="password" className={`form-control`} id="username" />
-                                  <label for="username" className={`form-label ${styles.label_float}`}> رمز عبور را وارد کنید</label>
+                                    value={form.values.password}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                    name='password'
+                                    type="password"
+                                    className={`form-control`}
+                                    id="password" />
+                                  <label htmlFor="password" className={`form-label ${styles.label_float}`}> رمز عبور را وارد کنید</label>
                                 </div>
                               )}
                               <div cclassName={"form-group"}>
