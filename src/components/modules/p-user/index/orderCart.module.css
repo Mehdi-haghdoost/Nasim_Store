@@ -1,0 +1,27 @@
+.site_table_content {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    flex-wrap: wrap;
+}
+
+.site_table_content:last-child {
+    border-bottom: none;
+}
+
+.image,
+.order_detail,
+.pro_title {
+    margin: 5px 0;
+}
+
+.image img {
+    max-width: 150px;
+}
+
+.pro_title {
+    width: 200px;
+}
