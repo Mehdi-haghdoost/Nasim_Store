@@ -49,7 +49,6 @@ function page() {
                     <span className='main-color-one-color d-inline-block me-2'>سفارشات</span>
                   </h6>
                 </div>
-
                 <OrderCart />
                 <OrderCart />
               </div>
