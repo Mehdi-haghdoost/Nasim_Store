@@ -1,0 +1,14 @@
+.icon {
+    position: relative;
+}
+
+.icon::before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background-color: var(--main-color-two-shadow);
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: -1px;
+}
