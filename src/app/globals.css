@@ -394,7 +394,7 @@ a {
 .mco-hover,
 .mct-hover,
 .mctt-hover {
-  transition: 0.3s;
+  badge-spn: 0.3s;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
@@ -456,6 +456,12 @@ a {
 .border_right_custom2 {
   background-color: #eee;
   border-radius: 10px;
+}
+
+.badge-spn {
+  background-color: #ed9209;
+  margin-right: 5px;
+  color: #fff !important;
 }
 
 .swiper-button-prev::after,
@@ -1003,8 +1009,15 @@ tag.tagify__tag {
     margin-left: 10px;
   }
 
+  .st-dv {
+    margin: 5px 0;
+  }
+
   .st-dv-1 {
     margin: auto auto 10px;
+  }
+  .st-dv-2 {
+    width: 200px;
   }
 
   .factor-logo {
