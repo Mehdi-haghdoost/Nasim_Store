@@ -1,0 +1,11 @@
+.site_table h6>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem !important;
+    font-size: 16px;
+}
+
+.site_table h6,
+.site_table span {
+    letter-spacing: normal;
+    word-spacing: normal;
+}
