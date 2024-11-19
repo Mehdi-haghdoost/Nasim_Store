@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@/components/layouts/UserPanelLayout';
 import styles from '@/styles/p-user/index.module.css';
 import Box from '@/components/templates/p-user/index/Box';
-import OrderCart from '@/components/modules/p-user/index/orderCart';
+import OrderCart from '@/components/modules/p-user/index/OrderCart';
 
 function page() {
   return (
