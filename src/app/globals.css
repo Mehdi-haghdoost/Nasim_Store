@@ -626,6 +626,28 @@ tag.tagify__tag {
   margin-top: 10px;
 }
 
+.success-label {
+  padding: 5px 10px;
+  background-color: #6dfc9d3b;
+  border-radius: 5px;
+  color: #017040;
+  font-size: 13px;
+  display: inline-block;
+  font-family: var(--main-font);
+  font-weight: normal;
+}
+
+.danger-label {
+  padding: 5px 10px;
+  background-color: #fc6d6d3b;
+  border-radius: 5px;
+  color: #f21919;
+  font-size: 13px;
+  display: inline-block;
+  font-family: var(--main-font);
+  font-weight: normal;
+}
+
 .product-meta-color-items label {
   background-color: #eee;
   font-size: 14px;
@@ -910,6 +932,7 @@ tag.tagify__tag {
     padding: 10px;
   }
 
+
   #productTable-pane .list-inline-item {
     width: 100%;
   }
@@ -1016,6 +1039,7 @@ tag.tagify__tag {
   .st-dv-1 {
     margin: auto auto 10px;
   }
+
   .st-dv-2 {
     width: 200px;
   }
