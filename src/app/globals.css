@@ -648,6 +648,13 @@ tag.tagify__tag {
   font-weight: normal;
 }
 
+.main-table {
+  box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 0;
+}
+
 .product-meta-color-items label {
   background-color: #eee;
   font-size: 14px;

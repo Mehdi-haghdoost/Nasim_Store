@@ -1,0 +1,60 @@
+.responsive_table {
+    overflow-x: auto;
+    padding: 5px;
+}
+
+.responsive_table .table {
+    width: 100%;
+    border-collapse: collapse;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 0;
+    padding: 10px;
+    border-collapse: collapse;
+    border-radius: 10px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px #ddd;
+}
+
+.table thead {
+    background: #f8f8f8;
+    vertical-align: bottom;
+}
+
+.table thead th {
+    padding: 20px 0;
+}
+
+.table tr th {
+    white-space: nowrap;
+}
+
+.table th {
+    padding: 20px 0;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.table tr {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody {
+    vertical-align: inherit;
+}
+
+.table tbody td {
+    max-width: 300px;
+    border: 1px solid #eee;
+    min-width: 100px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.table>:not(caption)>*>* {
+    padding: .5rem .5rem;
+    color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
+    background-color: var(--bs-table-bg);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+}
