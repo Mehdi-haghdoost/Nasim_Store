@@ -2,6 +2,8 @@ import React from 'react'
 import Layout from '@/components/layouts/UserPanelLayout'
 import styles from '@/styles/p-user/orders.module.css';
 import Table from '@/components/templates/p-user/orders/Table';
+import Pagination from '@/components/templates/p-user/orders/Pagination';
+
 
 const Orders = () => {
     return (
@@ -17,6 +19,7 @@ const Orders = () => {
                         <Table />
                     </div>
                 </div>
+                <Pagination />
             </main>
         </Layout>
     )
