@@ -2,6 +2,7 @@
 import React from 'react'
 import styles from './table.module.css'
 import Link from 'next/link'
+import Pagination from './Pagination'
 
 
 const Table = () => {
@@ -79,6 +80,7 @@ const Table = () => {
                     </tr>
                 </tbody>
             </table>
+            <Pagination />
         </div>
     )
 }

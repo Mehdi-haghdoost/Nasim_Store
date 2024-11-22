@@ -1,0 +1,41 @@
+.ui_boxs {
+    padding-bottom: 20px;
+    border-radius: 10px;
+}
+
+.ui_box {
+    margin-bottom: 20px;
+}
+
+.ui_box_item {
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0 !important;
+}
+
+.ui_box_white .ui_box_item_title {
+    background-color: #f7f7f7;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.ui_box_item_title {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.ui_box_item_title h4 {
+    font-size: 18px;
+}
+
+
+.ui_box_white .ui_box_item_desc {
+    background-color: #fff;
+    padding: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.orders {
+    padding: 10px 0;
+}

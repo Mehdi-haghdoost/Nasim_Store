@@ -1,0 +1,23 @@
+.order_desc_list {
+    position: relative;
+}
+
+.order_desc_list::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 40px;
+    right: 0;
+    background-color: #eee;
+}
+
+.order_desc_list li {
+    padding: 0 10px;
+}
+
+.order_desc_list li button {
+    border: none;
+    background-color: transparent;
+    position: relative;
+}
