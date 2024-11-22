@@ -4,6 +4,8 @@ import React from 'react'
 import styles from '@/components/modules/p-user/Sidebar.module.css';
 import { usePathname } from 'next/navigation';
 import Link from "next/link";
+import ActiveLink from '@/utils/ActiveLink';
+
 
 function Sidebar() {
 
@@ -33,39 +35,39 @@ function Sidebar() {
                             <ul className='navbar-nav flex-column'>
                                 {path.includes("/p-user") ? (
                                     <>
-                                        <Link href={"/p-user"} className={`nav-link ${styles.sidbar_link_active}`} >
+                                        <ActiveLink href="/p-user"  >
                                             <i className='bi bi-house-door'></i>
                                             پروفایل
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/orders">
                                             <i className='bi bi-cart-check'></i>
                                             سفارش های من
                                             <span className={`badge rounded-pill ${styles.badge_spn}`}>5</span>
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/address">
                                             <i className='bi bi-pin-map'></i>
                                             آدرس های من
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/notifications">
                                             <i className='bi bi-bell'></i>
                                             پیام ها و اطلاعیه ها
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/comments">
                                             <i className='bi bi-chat-dots'></i>
                                             نظرات من
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/tickets">
                                             <i className='bi bi-question-circle'></i>
                                             درخواست پشتیبانی
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/wishlist">
                                             <i className='bi bi-heart'></i>
                                             محصولات مورد علاقه
-                                        </Link>
-                                        <Link href={"/p-user"} className='nav-item'>
+                                        </ActiveLink>
+                                        <ActiveLink href="/p-user/discount-codes">
                                             <i className='bi bi-gift'></i>
                                             کدهای تخفیف من
-                                        </Link>
+                                        </ActiveLink>
                                     </>
                                 ) : (
                                     <>
@@ -88,7 +90,7 @@ function Sidebar() {
                                             تخفیفات
                                         </Link>
                                         <Link href={"/p-admin"} className='nav-item' >
-                                        <i class="bi bi-people ms-2"></i>
+                                            <i class="bi bi-people ms-2"></i>
                                             کاربران
                                         </Link>
                                         <Link href={"/p-admin"} className='nav-item' >
@@ -96,7 +98,7 @@ function Sidebar() {
                                             کامنت ها
                                         </Link>
                                         <Link href={"/p-admin"} className='nav-item' >
-                                        <i class="bi bi bi-ticket ms-2"></i>
+                                            <i class="bi bi bi-ticket ms-2"></i>
                                             تیکت ها
                                         </Link>
                                     </>

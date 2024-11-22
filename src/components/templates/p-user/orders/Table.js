@@ -1,8 +1,11 @@
+
 import React from 'react'
 import styles from './table.module.css'
 import Link from 'next/link'
 
+
 const Table = () => {
+
     return (
         <div className={`p-0 ${styles.responsive_table}`}>
             <table className={`main-table rounded-0 ${styles.table}`}>
@@ -28,8 +31,8 @@ const Table = () => {
                             </span>
                         </td>
                         <td className='font-14'>
-                            <Link href={'/order-detail'}
-                            className='btn btn-sm border-0 main-color-one-bg'
+                            <Link href={'/p-user/order-detail/669937a4f94d2d4db2394576'}
+                                className='btn btn-sm border-0 main-color-one-bg'
                             >
                                 مشاهده
                                 <i className='bi bi-chevron-left text-white font-16'></i>
@@ -47,8 +50,8 @@ const Table = () => {
                             </span>
                         </td>
                         <td className='font-14'>
-                            <Link href={'/order-detail'}
-                            className='btn btn-sm border-0 main-color-one-bg'
+                            <Link href={'/p-user/order-detail/669937a4f94d2d4db2394576'}
+                                className='btn btn-sm border-0 main-color-one-bg'
                             >
                                 مشاهده
                                 <i className='bi bi-chevron-left text-white font-16'></i>
@@ -66,8 +69,8 @@ const Table = () => {
                             </span>
                         </td>
                         <td className='font-14'>
-                            <Link href={'/order-detail'}
-                            className='btn btn-sm border-0 main-color-one-bg'
+                            <Link href={`/p-user/order-detail/669937a4f94d2d4db2394576`}
+                                className='btn btn-sm border-0 main-color-one-bg'
                             >
                                 مشاهده
                                 <i className='bi bi-chevron-left text-white font-16'></i>

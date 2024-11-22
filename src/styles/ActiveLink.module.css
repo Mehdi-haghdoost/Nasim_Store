@@ -1,0 +1,10 @@
+.sidbar_link_active {
+    background-color: var(--main-color-one-shadow);
+    color: var(--color-site) !important;
+    font-weight: bold;
+}
+
+.sidbar_link_active i {
+    color: var(--main-color-one);
+    font-weight: bold;
+}
