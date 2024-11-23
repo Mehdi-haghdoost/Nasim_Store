@@ -7,12 +7,12 @@ function AuthHeader() {
     <div className="d-flex align-items-center justify-content-end">
         <div className={`btn-group rounded-pill shadow-sm ${styles.header_btn_group} `}>
             <div>
-                <Link href='/register' className={`${styles.header_register} btn btn-white border-o rounded-pill`}>
+                <Link href='/login-register' className={`${styles.header_register} btn btn-white border-o rounded-pill`}>
                     <i className='bi bi-person-circle font-20 text-muted me-1'></i>
-                    <span>ثبت نام</span>
+                    <span>ثبت نام / ورود</span>
                 </Link>
             </div>
-            <Link href="/login" className={`${styles.header_login} btn btn-white border-o rounded-pill`}>ورود</Link>
+            {/* <Link href="/login" className={`${styles.header_login} btn btn-white border-o rounded-pill`}>ورود</Link> */}
         </div>
         <div className={`${styles.header_whishlist} shadow-sm`}>
             <Link href='/wishlist'>
