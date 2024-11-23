@@ -655,6 +655,15 @@ tag.tagify__tag {
   margin-bottom: 0;
 }
 
+.main-table-2 h6 {
+  font-size: 14px;
+}
+
+.main-table-2 p {
+  font-size: 15px;
+  color: #333;
+}
+
 .product-meta-color-items label {
   background-color: #eee;
   font-size: 14px;
