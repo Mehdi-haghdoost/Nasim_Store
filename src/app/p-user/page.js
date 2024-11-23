@@ -32,10 +32,10 @@ function page() {
         </div>
         <div className={styles.status_panel_user}>
           <div className="row g-3">
-            <Box title='سفارشات من' iconClass="bi-cart" />
-            <Box title='آدرس های من' iconClass="bi-pin-map" />
-            <Box title='حساب کاربری من' iconClass="bi-person" />
-            <Box title='خروج از حساب' iconClass="bi-arrow-right-square" />
+            <Box href="/p-user/orders" title='سفارشات من' iconClass="bi-cart" />
+            <Box href="/p-user/orders" title='آدرس های من' iconClass="bi-pin-map" />
+            <Box href="/p-user/profile" title='حساب کاربری من' iconClass="bi-person" />
+            <Box href="/p-user/orders" title='خروج از حساب' iconClass="bi-arrow-right-square" />
           </div>
         </div>
         <div className={`${styles.latest_order} mt-3`}>

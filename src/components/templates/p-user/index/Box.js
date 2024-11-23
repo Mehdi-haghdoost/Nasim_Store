@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './box.module.css';
 import Link from 'next/link';
 
-function Box({title,iconClass}) {
+function Box({title,iconClass,href}) {
   return (
     <div className='col-lg-3 col-6 w-100-in-400'>
-        <Link href={"/p-user"}>
+        <Link href={href}>
         <div className="content-box">
             <div className="container-fluid">
                 <div className="item">

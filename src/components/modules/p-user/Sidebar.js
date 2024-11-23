@@ -35,7 +35,7 @@ function Sidebar() {
                             <ul className='navbar-nav flex-column'>
                                 {path.includes("/p-user") ? (
                                     <>
-                                        <ActiveLink href="/p-user"  >
+                                        <ActiveLink href="/p-user/profile"  >
                                             <i className='bi bi-house-door'></i>
                                             پروفایل
                                         </ActiveLink>
