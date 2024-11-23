@@ -1,0 +1,29 @@
+.modal {
+    position: fixed;
+    top: 3rem;
+    right: 33em;
+    z-index: 1055;
+    padding: 1rem;
+    max-height: calc(100vh - 8rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #fff;
+    border-color: rgba(0, 0, 0, 0.175);
+    transform: translateY(-30px);
+    transition: all 0.5s ease;
+    margin: 1.75rem;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal.open {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    transform: translateY(0);
+    transition: all 0.5s ease;
+}
+
+.modal_content {
+    overflow-x: hidden;
+}
