@@ -322,10 +322,10 @@ a {
 }
 
 .btn {
-  transition: 200ms;
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
+  transition: 200ms !important;
+  border-radius: 8px !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 .btn:not(.no-highlight):before {
@@ -462,6 +462,23 @@ a {
   background-color: #ed9209;
   margin-right: 5px;
   color: #fff !important;
+}
+
+.waves-effect {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+  z-index: 1;
+  will-change: opacity, transform;
+  -webkit-transition: all .3s ease-out;
+  transition: all .3s ease-out;
 }
 
 .swiper-button-prev::after,
@@ -655,6 +672,7 @@ tag.tagify__tag {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
 /* end new page */
 
 /* productDetail */

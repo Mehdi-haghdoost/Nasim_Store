@@ -1,0 +1,22 @@
+.dataTable table {
+    padding: 10px;
+    border-radius: 10px;
+    border-style: hidden;
+}
+
+.dataTable tr {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dataTable tbody td {
+    max-width: 300px;
+    border: 1px solid #eee;
+    min-width: 100px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.dataTable tr td {
+    white-space: nowrap;
+}

@@ -13,7 +13,9 @@ const UserProfile = () => {
                                 <h4 className="fw-bold">
                                     اطلاعات شخصی
                                 </h4>
-                                <button className="btn btn-sm main-color-one-bg waves-effect waves-light">
+                                <button
+                                    style={{ padding: "4px 12px" }}
+                                    className="btn btn-sm main-color-one-bg waves-effect waves-light">
                                     ویرایش
                                     <i className="bi bi-pencil-fill text-white"></i>
                                 </button>
