@@ -1,0 +1,15 @@
+.address_item_status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 15px 0;
+}
+
+.address_item_status_item ul {
+    border-color: var(--main-color-one-shadow);
+    box-shadow: var(--shadow-md);
+    z-index: 1001;
+}
+.address_item_status_item ul li a {
+    text-align: justify;
+}
