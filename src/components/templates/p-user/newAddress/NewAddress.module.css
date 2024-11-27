@@ -1,0 +1,29 @@
+.comment_item {
+    position: relative;
+    display: flex;
+    padding: 20px 0;
+}
+
+.comment_item input {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: right;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.comment_item label {
+    position: absolute;
+    top: 4px;
+    background-color: #fff;
+    right: 15px;
+    padding: 5px;
+}
+
+.comment_item select {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: right;
+    border-radius: 10px;
+    font-size: 14px;
+}
