@@ -15,7 +15,7 @@ const Address = () => {
                                 <h4 className="fw-bold">
                                     آدرس ها
                                 </h4>
-                                <Link href={'/newaddress'} className='btn main-color-one-bg btn-sm waves-effect waves-light d-flex align-items-normal'>
+                                <Link href={'/p-user/address/add-new'} className='btn main-color-one-bg btn-sm waves-effect waves-light d-flex align-items-normal'>
                                     ثبت آدرس جدید
                                     <i className='bi text-white bi-plus-circle me-2'></i>
                                 </Link>

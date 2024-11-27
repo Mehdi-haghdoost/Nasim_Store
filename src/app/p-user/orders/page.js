@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Layout from '@/components/layouts/UserPanelLayout'
 import styles from '@/styles/p-user/orders.module.css';
 import Table from '@/components/templates/p-user/orders/Table';
-import Pagination from '@/components/templates/p-user/orders/Pagination';
+import Pagination from '@/components/modules/p-user/pagination/Pagination';
 import LastOrders from '@/components/templates/p-user/orders/LastOrders';
 
 

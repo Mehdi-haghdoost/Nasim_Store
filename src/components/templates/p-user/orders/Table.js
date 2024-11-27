@@ -2,7 +2,7 @@
 import React from 'react'
 import styles from './table.module.css'
 import Link from 'next/link'
-import Pagination from './Pagination'
+import Pagination from '../../../modules/p-user/pagination/Pagination'
 
 
 const Table = () => {
