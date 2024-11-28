@@ -7,7 +7,7 @@ function ActiveLink({ href, children }) {
 
     const pathName = usePathname();
 
-    const isActive = pathName === href;
+    const isActive = pathName === href || pathName.includes(href);
 
 
     return (
