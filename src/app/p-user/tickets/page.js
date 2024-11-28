@@ -11,7 +11,7 @@ const page = () => {
                 <h5>لیست تیکت ها</h5>
                 <Link
                 className=' main-color-two-bg btn border-0 d-flex align-items-center rounded-pill ms-3'
-                href={"/p-user/tickets"}>
+                href={"/p-user/tickets/sendTicket"}>
                     ارسال تیکت جدید
                 </Link>
             </div>
