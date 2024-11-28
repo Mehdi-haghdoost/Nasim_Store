@@ -1,0 +1,30 @@
+.ticket_panel {
+    margin-bottom: 50px;
+    padding-bottom: 5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ticket_panel::before {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    right: 0;
+    height: 3px;
+    background-color: var(--main-color-two);
+    width: 70px;
+    z-index: 2;
+    width: 100%;
+}
+
+
+.ticket_panel h5,
+.ticket_panel a {
+    font-weight: 600;
+    margin-bottom: 0;
+    font-family: var(--title-font);
+    color: var(--color-site);
+    line-height: 1.5;
+}
