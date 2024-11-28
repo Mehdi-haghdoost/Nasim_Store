@@ -12,3 +12,12 @@
 .table_custom table td {
     min-width: 200px;
 }
+.table_custom tbody tr td a {
+    display: inline-flex;
+    padding-top: 8px;
+   
+} 
+
+.table_custom tbody tr td a i {
+    margin-left: 7px !important;
+}
