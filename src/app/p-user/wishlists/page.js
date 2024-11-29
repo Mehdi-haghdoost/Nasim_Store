@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '@/styles/p-user/wishlists.module.css';
 import Layout from '@/components/layouts/UserPanelLayout';
 import Card from '@/components/modules/p-user/wishlists/product';
+import Pagination from '@/components/modules/p-user/pagination/Pagination';
 
 const page = () => {
     return (
@@ -26,6 +27,7 @@ const page = () => {
                     </div>
                 </div>
             </div>
+            <Pagination />
         </Layout>
     )
 }
