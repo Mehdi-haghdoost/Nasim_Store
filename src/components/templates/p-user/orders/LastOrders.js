@@ -3,6 +3,12 @@ import styles from './LastOrders.module.css';
 import OrderCart from './OrderCart';
 
 function LastOrders() {
+
+    const orders = [
+        { id: 1, name: " گوشی موبایل شیائومی", totalPrice: "100000" },
+        { id: 2, name: " ساعت هوشمند سامسونگ", totalPrice: "2000000" },
+    ];
+
     return (
         <div className={styles.ui_boxs}>
             <div className={styles.ui_box}>
@@ -14,10 +20,9 @@ function LastOrders() {
                     </div>
                     <div className={`${styles.ui_box_item_desc} p-0`}>
                         <div className={styles.orders}>
-                            <OrderCart />
-                            <OrderCart />
-                            <OrderCart />
-                            <OrderCart />
+                            {orders.map(order => (
+                                <OrderCart order={JSON.parse(JSON.stringify(order))} />
+                            ))}
                         </div>
                     </div>
                 </div>

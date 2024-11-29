@@ -1,7 +1,8 @@
 import React from 'react'
 import styles from './OrderCart.module.css';
+import Link from 'next/link';
 
-function OrderCart() {
+function OrderCart({ order }) {
     return (
         <div className={styles.order_item}>
             <a href="">
@@ -27,7 +28,7 @@ function OrderCart() {
                         </li>
                         <li className="nav-item">
                             <span className="text-mute">مبلغ</span>
-                            <strong>25,000,000 تومان</strong>
+                            <strong>{order.totalPrice} تومان</strong>
                         </li>
                     </ul>
                 </div>
@@ -35,7 +36,14 @@ function OrderCart() {
                     <div className={styles.order_item_product_list_item}>
                         <img src="/images/product/product-image1.jpg" className='img-thumbnail' width="70" height="70" alt="" />
                     </div>
-                    <div className={styles.order_item_product_list_item}>
+                    <div>
+                        <Link
+                            className='font-14'
+                            href={`/product/${order.id}`}>
+                            {order.name}
+                        </Link>
+                    </div>
+                    {/* <div className={styles.order_item_product_list_item}>
                         <img src="/images/product/product-image2.jpg" className='img-thumbnail' width="70" height="70" alt="" />
                     </div>
                     <div className={styles.order_item_product_list_item}>
@@ -49,12 +57,14 @@ function OrderCart() {
                     </div>
                     <div className={styles.order_item_product_list_item}>
                         <img src="/images/product/product-image6.jpg" className='img-thumbnail' width="70" height="70" alt="" />
-                    </div>
+                    </div> */}
                 </div>
                 <div className={styles.order_item_show}>
                     <p>
                         <i className="bi bi-card-list"></i>
-                        مشاهده فاکتور
+                        <Link href={`/p-user/orders/${order.id}/invoice`}>
+                            مشاهده فاکتور
+                        </Link>
                     </p>
                 </div>
             </a>
