@@ -25,12 +25,19 @@ const Card = () => {
                         </div>
                     </Link>
                     <div className={styles.product_row_icon}>
-                        <a  className="btn btn-danger btn-sm ms-2" >
-                            <i className="bi bi-trash text-white"></i>
-                        </a>
-                        <a href="" className="btn main-color-one-bg btn-sm">
-                            <i className="bi bi-cart-plus text-white"></i>
-                        </a>
+                        <div className={styles.tooltip}>
+                            <a className="btn btn-danger btn-sm ms-2" >
+                                <i className="bi bi-trash text-white"></i>
+                            </a>
+                            <span className={styles.tooltipText}>حذف محصول</span>
+                        </div>
+                        <div className={styles.tooltip}>
+                            <a href="" className="btn main-color-one-bg btn-sm">
+                                <i className="bi bi-cart-plus text-white"></i>
+                            </a>
+                            <span className={styles.tooltipText}>افزودن به سبد خرید</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
