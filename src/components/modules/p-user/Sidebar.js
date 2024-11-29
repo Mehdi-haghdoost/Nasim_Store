@@ -60,7 +60,7 @@ function Sidebar() {
                                             <i className='bi bi-question-circle'></i>
                                             درخواست پشتیبانی
                                         </ActiveLink>
-                                        <ActiveLink href="/p-user/wishlist">
+                                        <ActiveLink href="/p-user/wishlists">
                                             <i className='bi bi-heart'></i>
                                             محصولات مورد علاقه
                                         </ActiveLink>
