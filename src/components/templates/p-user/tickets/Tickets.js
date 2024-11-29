@@ -39,8 +39,8 @@ const Tickets = () => {
                         <td className="align-middle text-center"><p className="mt-2 font-16">545315</p></td>
                         <td className="align-middle text-center">
                             <p className="mt-2 font-16">ارسال نشدن فلان سفارش برای من
-                                <span className="badge bg-secondary rounded-0 me-2 text-white">
-                                    در انتظار پاسخ
+                                <span className="badge bg-success rounded-0 me-2 text-white">
+                                    پاسخ داده شده
                                 </span>
                             </p>
                         </td>
@@ -59,8 +59,8 @@ const Tickets = () => {
                         <td className="align-middle text-center"><p className="mt-2 font-16">545315</p></td>
                         <td className="align-middle text-center">
                             <p className="mt-2 font-16">ارسال نشدن فلان سفارش برای من
-                                <span className="badge bg-secondary rounded-0 me-2 text-white">
-                                    در انتظار پاسخ
+                                <span className="badge bg-danger rounded-0 me-2 text-white">
+                                    بسته شده
                                 </span>
                             </p>
                         </td>

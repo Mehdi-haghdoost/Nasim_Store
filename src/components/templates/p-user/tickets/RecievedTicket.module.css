@@ -1,0 +1,87 @@
+
+.ticket_body {
+    background-color: #fff !important;
+}
+
+.ticket {
+    display: block;
+    position: relative;
+    padding-left: 66px !important;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff !important;
+    border: 1px solid #eee;
+}
+
+.ticket .ticket_author_ava {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 5px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.ticket .ticket_author_ava img {
+    display: block;
+    width: 100%;
+}
+
+.ticket .ticket_body {
+    background-color: #fff;
+    position: relative;
+    padding: 24px;
+    border: 1px solid #e1e7ec;
+    border-radius: 7px;
+}
+
+.ticket .ticket_body::before {
+    position: absolute;
+    content: '';
+    margin-top: -1px;
+    border-width: 10px;
+    border-color: transparent;
+    border-right-color: #e1e7ec !important;
+    top: 12px;
+    right: 100%;
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    pointer-events: none;
+}
+
+.ticket .ticket_body::after {
+    position: absolute;
+    content: '';
+    top: 5px;
+    right: 100%;
+    border-width: 12px !important;
+    border-color: transparent;
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    pointer-events: none;
+    border-right-color: #d8d8d8 !important;
+}
+
+.ticket .ticket_text {
+    margin-bottom: 12px;
+    line-height: 40px;
+}
+
+.ticket .ticket_footer {
+    display: table;
+    width: 100%;
+}
+
+.ticket .ticket_footer span {
+    color: #9da9b9 !important;
+    font-size: 13px;
+}
+
+.ticket_date {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
