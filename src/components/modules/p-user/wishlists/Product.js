@@ -7,7 +7,7 @@ const Card = () => {
         <div className='product-list-row'>
             <div className={styles.product_row}>
                 <div className={styles.product_row_desc}>
-                    <Link href={"/"}>
+                    <Link href={"/product/1"}>
                         <div className={styles.product_row_desc_item}>
                             <div className={styles.product_row_img}>
                                 <img src="/images/product/product-image1.jpg" alt="product" width="100" />
