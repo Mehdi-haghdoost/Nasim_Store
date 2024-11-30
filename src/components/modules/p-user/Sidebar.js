@@ -78,7 +78,7 @@ function Sidebar() {
                                             <i className='bi bi-heart'></i>
                                             محصولات مورد علاقه
                                         </ActiveLink>
-                                        <ActiveLink href="/p-user/discount-codes">
+                                        <ActiveLink href="/p-user/discountcodes">
                                             <i className='bi bi-gift'></i>
                                             کدهای تخفیف من
                                         </ActiveLink>
