@@ -5,11 +5,25 @@ import styles from '@/components/modules/p-user/Sidebar.module.css';
 import { usePathname } from 'next/navigation';
 import Link from "next/link";
 import ActiveLink from '@/utils/ActiveLink';
+import swal from "sweetalert";
+import { useRouter } from 'next/navigation';
 
 
 function Sidebar() {
 
     const path = usePathname();
+    const router = useRouter();
+    const logoutHandler = () => {
+        swal({
+            title: "آیا از خروج اطمینان دارید ؟",
+            icon: "warning",
+            buttons: ["نه", "آره"]
+        }).then((result) => {
+            if (result) {
+                router.push("/");
+            }
+        })
+    }
 
     return (
         <div className={styles.panel_side}>
@@ -104,7 +118,9 @@ function Sidebar() {
                                     </>
                                 )}
                             </ul>
-                            <div className={styles.profile_box_logout}>
+                            <div className={styles.profile_box_logout}
+                                onClick={logoutHandler}
+                            >
                                 <i className='bi bi-arrow-right-square'></i>
                                 خروج از حساب کاربری
                             </div>
