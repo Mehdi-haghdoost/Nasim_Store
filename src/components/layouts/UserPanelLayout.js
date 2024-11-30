@@ -11,16 +11,16 @@ function Layout({ children }) {
             <BreadCroumb />
             <div className={styles.content}>
                 <div className="container-fluid">
-            <div className={styles.dashboard_panel}>
-                <div className='row gy-3'>
-                    <div className='col-lg-3 d-lg-block d-none'>
-                        <Sidebar />
+                    <div className={styles.dashboard_panel}>
+                        <div className='row gy-3'>
+                            <div className='col-lg-3 d-lg-block d-none'>
+                                <Sidebar />
+                            </div>
+                            <div className='col-lg-9'>
+                                {children}
+                            </div>
+                        </div>
                     </div>
-                    <div className='col-lg-9'>
-                        {children}
-                    </div>
-                </div>
-            </div>
                 </div>
             </div>
             <Footer />
