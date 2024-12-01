@@ -1,0 +1,61 @@
+.roundedTable {
+    border-radius: 20px / 20px;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+.main_table {
+    box-shadow: rgb(0 0 0 / 10%) 0 0 10px 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 0;
+    padding: 10px;
+    border-style: hidden;
+}
+
+.main_table thead {
+    background: #f8f8f8;
+    height: 50px;
+}
+
+.main_table tr {
+    text-align: center;
+    vertical-align: middle;
+}
+.main_table th {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.main_table thead th,
+.main_table tbody td {
+    max-width: 300px;
+    border: 1px solid #eee;
+    padding: 20px 0;
+}
+
+.main_table tr th,
+.main-table tr td {
+    white-space: nowrap;
+}
+
+.main_table thead th {
+    line-height: 50px;
+    background-color: var(--bs-green);
+    color: #fff;
+    padding: 20px;
+}
+
+.roundedTable tr:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+
+.roundedTable tr td:first-child {
+    border-left: none;
+}
+
+.main-table tbody td {
+    min-width: 100px;
+    padding: 20px 10px;
+    text-align: center;
+}

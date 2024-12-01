@@ -15,7 +15,9 @@ const Layout = ({ children }) => {
                     <div className={styles.dashboard_panel}>
                         <div className='row gy-4'>
                             <div className="col-lg-3 d-lg-block d-none">
-                                <Sidebar />
+                                <div className="position-stickk top-0">
+                                    <Sidebar />
+                                </div>
                             </div>
                             <div className="col-lg-9">
                                 {children}

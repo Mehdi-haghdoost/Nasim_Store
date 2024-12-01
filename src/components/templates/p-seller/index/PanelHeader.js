@@ -6,7 +6,7 @@ const PanelHeader = () => {
         <div className={styles.panel_header}>
             <div className="content-box">
                 <div className="container-fluid">
-                    <div className="row gy-5 alig-items-center">
+                    <div className="row gy-5 align-items-center">
                         <div className="col-md-6 col-8">
                             <div className="d-flex align-items-center">
                                 <h6>نسیم عزیز به پنل کاربری خوش آمدید</h6>
@@ -28,7 +28,7 @@ const PanelHeader = () => {
                                     <div className="d-flex align-items-center">
                                         <h6 className="font-14">
                                             نسیم سودبر
-                                            <a href="#" className='ms-2'>
+                                            <a href="#" className='me-2'>
                                                 <i className="bi bi-pencil-square"></i>
                                             </a>
                                         </h6>

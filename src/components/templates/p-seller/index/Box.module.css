@@ -1,0 +1,25 @@
+.panel_seller_item {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.panel_seller_icon {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    background-color: var(--bs-green);
+    border-radius: 20px;
+    box-shadow: inset -1px 0 8px 4px rgb(255 254 254 / 28%);
+    margin-left: 10px;
+}
+.panel_seller_icon i {
+    font-size: 30px;
+    color: #fff;
+}
+
+.title_font {
+    font-family: 'title-font', serif;
+}

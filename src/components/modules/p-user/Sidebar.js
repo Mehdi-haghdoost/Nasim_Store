@@ -85,33 +85,33 @@ function Sidebar() {
                                     </>
                                 ) : (
                                     <>
-                                        <Link href={"/p-seller"} className={`nav-item ${styles.sidbar_link_active}`} >
+                                        <Link href={"/p-admin"} className={`nav-item ${styles.sidbar_link_active}`} >
                                             <i className='bi bi-house ms-2'></i>
                                             پروفایل
                                             <small className='badge rounded-pill bg-danger'>5</small>
                                         </Link>
 
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i className='bi bi-lightbulb ms-2'></i>
                                             آموزش
                                         </Link>
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i className='bi bi-cart-check ms-2'></i>
                                             سفارشات
                                         </Link>
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i className='bi bi-tags ms-2'></i>
                                             تخفیفات
                                         </Link>
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i class="bi bi-people ms-2"></i>
                                             کاربران
                                         </Link>
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i className='bi bi-chat-dots ms-2'></i>
                                             کامنت ها
                                         </Link>
-                                        <Link href={"/p-seller"} className='nav-item' >
+                                        <Link href={"/p-admin"} className='nav-item' >
                                             <i class="bi bi bi-ticket ms-2"></i>
                                             تیکت ها
                                         </Link>

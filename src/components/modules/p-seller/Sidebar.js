@@ -29,20 +29,10 @@ function Sidebar() {
         <div className={styles.panel_side}>
             <div className="content-box pb-0">
                 <div className="container-fluid">
-                    <div className={styles.panel_box}>
-                        <div className='d-flex align-items-center'>
-                            <img src="/images/user.png"
-                                className={`img-fluid rounded-circle ms-3 shadow-md ${styles.img_profile_panel}`}
-                                alt="userPhoto" />
-                            <div className='d-grid gap-2'>
-                                <h6 className='font-14 main-color-one-color'>
-                                    حساب کاربری من
-                                </h6>
-                                <h6 className='font-14'>
-                                    مهدی حق دوست
-                                </h6>
-                            </div>
-                        </div>
+                    <div className={styles.panel_nav_logo}>
+                        <Link className='text-center d-block mb-3' href={'/'}>
+                            <img src="/images/logo.png" alt="logo" width="150" className='img-fluid' />
+                        </Link>
                     </div>
                     <div className={styles.profile_box}>
                         <nav className={`navbar ${styles.profile_box_nav}`}>
