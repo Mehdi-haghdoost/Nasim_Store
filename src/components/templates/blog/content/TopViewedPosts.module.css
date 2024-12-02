@@ -1,0 +1,33 @@
+.title h5 {
+    margin-right: 1rem;
+}
+
+.title h5>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
+
+.parent {
+    position: relative;
+    margin-top: 2rem;
+}
+
+.parent::before {
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 400px;
+    z-index: -1;
+    background: var(--main-color-one);
+}
+
+.product_slider_swiper {
+    /* padding: 0 0 100px 0; */
+}
+
+.mySlide {
+    border-radius: 10px !important;
+}

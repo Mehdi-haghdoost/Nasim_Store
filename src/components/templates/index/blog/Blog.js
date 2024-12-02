@@ -17,7 +17,7 @@ function Blog() {
                     <div className={`${styles.title} d-flex align-items-center`}>
                         <img src="/images/square.png" alt="" className="img-fluid" />
                         <h5 className="font-16 ms-3">
-                            <span className="main-color-one-color d-inline-block ms-1">آحرین مطالب
+                            <span className="main-color-one-color d-inline-block ms-1">آخرین مطالب
                             </span>
                             وبلاگ</h5>
                     </div>

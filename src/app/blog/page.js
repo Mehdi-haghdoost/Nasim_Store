@@ -5,6 +5,7 @@ import Footer from '@/components/modules/footer/Footer';
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb';
 import CategoryBox from '@/components/templates/blog/Header/CategoryBox';
 import BlogHighlights from '@/components/templates/blog/Header/BlogHighlights';
+import TopViewedPosts from '@/components/templates/blog/content/TopViewedPosts';
 
 
 const page = () => {
@@ -23,6 +24,7 @@ const page = () => {
                         </div>
                     </div>
                 </div>
+                <TopViewedPosts />
             </div>
             <Footer />
         </>
