@@ -7,7 +7,7 @@ const Card = () => {
         <div className={`${styles.blog_item}`}>
             <a href="">
                 <div className={`${styles.image}`}>
-                    <img src="/images/blog-3.jpg" alt="" className="img-fluid" />
+                    <img src="/images/blog-2.jpg" alt="" className="img-fluid" />
                 </div>
                 <div className={`${styles.title}`}>
                     <div className="d-flex align-items-center justify-content-between">

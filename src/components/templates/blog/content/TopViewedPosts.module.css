@@ -11,6 +11,7 @@
 .parent {
     position: relative;
     margin-top: 2rem;
+    margin-bottom: 13rem;
 }
 
 .parent::before {
