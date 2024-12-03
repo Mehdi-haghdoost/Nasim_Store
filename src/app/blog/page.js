@@ -6,6 +6,7 @@ import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb';
 import CategoryBox from '@/components/templates/blog/Header/CategoryBox';
 import BlogHighlights from '@/components/templates/blog/Header/BlogHighlights';
 import TopViewedPosts from '@/components/templates/blog/content/TopViewedPosts';
+import LatestBlogVideos from '@/components/templates/blog/blog-lastVideos/LatestBlogVideos';
 
 
 const page = () => {
@@ -25,6 +26,7 @@ const page = () => {
                     </div>
                 </div>
                 <TopViewedPosts />
+                <LatestBlogVideos />
             </div>
             <Footer />
         </>
