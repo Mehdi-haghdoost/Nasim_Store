@@ -7,6 +7,7 @@ import CategoryBox from '@/components/templates/blog/Header/CategoryBox';
 import BlogHighlights from '@/components/templates/blog/Header/BlogHighlights';
 import TopViewedPosts from '@/components/templates/blog/content/TopViewedPosts';
 import LatestBlogVideos from '@/components/templates/blog/blog-lastVideos/LatestBlogVideos';
+import LatestBlogPosts from '@/components/templates/blog/blog-lastPosts/LatestBlogPosts';
 
 
 const page = () => {
@@ -27,6 +28,7 @@ const page = () => {
                 </div>
                 <TopViewedPosts />
                 <LatestBlogVideos />
+                <LatestBlogPosts />
             </div>
             <Footer />
         </>
