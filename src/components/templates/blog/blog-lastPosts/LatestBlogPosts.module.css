@@ -1,0 +1,9 @@
+.title h5 {
+    margin-right: 1rem;
+}
+
+.title h5>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
