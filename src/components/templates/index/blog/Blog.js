@@ -11,6 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import styles from './Blog.module.css'
+import Link from 'next/link';
 function Blog() {
     return (
         <div className={`${styles.blog_slider} py-20`}>
@@ -24,10 +25,10 @@ function Blog() {
                             وبلاگ</h5>
                     </div>
                     <div className="link">
-                        <a href="" className="border-animate fromCenter pb-1 fw-bold">
+                        <Link href={'/CategoryBlogs'} className="border-animate fromCenter pb-1 fw-bold">
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

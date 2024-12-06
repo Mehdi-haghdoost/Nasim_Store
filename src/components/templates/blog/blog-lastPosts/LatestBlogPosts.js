@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './LatestBlogPosts.module.css';
 import Cart from './Cart';
+import Link from 'next/link';
 
 const LatestBlogPosts = () => {
     return (
@@ -15,10 +16,10 @@ const LatestBlogPosts = () => {
                             وبلاگ</h5>
                     </div>
                     <div className="link">
-                        <a href="" className="border-animate fromCenter pb-1 fw-bold">
+                        <Link href={'/CategoryBlogs'} className="border-animate fromCenter pb-1 fw-bold">
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

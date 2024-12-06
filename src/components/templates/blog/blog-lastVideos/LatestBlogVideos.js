@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './LatestBlogVideos.module.css';
 import LatestVideosSidebar from './LatestVideosSidebar';
 import BlogVideoCollection from './BlogVideoCollection';
+import Link from 'next/link';
 
 const LatestBlogVideos = () => {
     return (
@@ -16,10 +17,10 @@ const LatestBlogVideos = () => {
                             وبلاگ</h5>
                     </div>
                     <div className="link">
-                        <a href="" className="border-animate fromCenter pb-1 fw-bold">
+                        <Link href={'/CategoryBlogs'} className="border-animate fromCenter pb-1 fw-bold">
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
