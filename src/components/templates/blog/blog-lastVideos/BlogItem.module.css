@@ -1,7 +1,7 @@
 .video_blog_item {
     display: flex;
     align-items: flex-start;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .video_blog_item .image {

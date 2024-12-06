@@ -77,17 +77,23 @@ const TopViewedPosts = () => {
                                 </SwiperSlide>
                                 <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
+                                </SwiperSlide>
+                                <SwiperSlide className={`${styles.mySlide}`}>
                                     <Card />
                                 </SwiperSlide>
                             </Swiper>
