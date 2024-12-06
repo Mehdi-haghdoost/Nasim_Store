@@ -31,9 +31,53 @@
 .mySlide {
     border-radius: 10px !important;
 }
+
 .site_slider {
     margin-top: 1rem;
 }
+
+.product_slider_swiper {
+    position: static !important;
+}
+
+.swiper_button_next,
+.swiper_button_prev {
+    background-color: #fff;
+    padding: 3px 20px;
+    border-radius: 5px;
+    box-shadow: var(--shadow-md);
+    top: 116% !important;
+    right: 48% !important;
+    position: absolute;
+    width: calc(var(--swiper-navigation-size) / 44* 27);
+    height: var(--swiper-navigation-size);
+    margin-top: calc(0px -(var(--swiper-navigation-size) / 2));
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.swiper_button_prev {
+    right: 51.8% !important;
+    left: auto;
+}
+
+.swiper_button_next::after,
+.swiper_button_prev::after {
+    color: var(--color-site) !important;
+    font-size: 16px !important;
+    font-family: swiper-icons;
+    font-size: var(--swiper-navigation-size);
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-variant: initial;
+    line-height: 1;
+}
+
+
 @media only screen and (max-width : 992px) {
     .site_slider {
         margin-top: 28rem;

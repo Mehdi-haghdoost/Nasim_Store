@@ -3,10 +3,12 @@ import React, { useRef, useState } from 'react';
 import Card from './Card';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 import styles from './Blog.module.css'
 function Blog() {
@@ -38,6 +40,11 @@ function Blog() {
                             <Swiper
                                 slidesPerView={1}
                                 spaceBetween={10}
+                                navigation={{
+                                    nextEl: `.${styles.swiper_button_next}`,
+                                    prevEl: `.${styles.swiper_button_prev}`,
+                                }}
+                                modules={[Navigation]}
                                 breakpoints={{
                                     576: {
                                         slidesPerView: 2,
@@ -82,8 +89,8 @@ function Blog() {
                                 </SwiperSlide>
                             </Swiper>
                         </div>
-                        <div className={`${styles.swiper_button_next}`}></div>
-                        <div className={`${styles.swiper_button_prev}`}></div>
+                        <div className={`swiper-button-next ${styles.swiper_button_next}`}></div>
+                        <div className={`swiper-button-prev ${styles.swiper_button_prev}`}></div>
                     </div>
                 </div>
             </div>
