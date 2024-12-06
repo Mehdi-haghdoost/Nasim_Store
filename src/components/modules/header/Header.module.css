@@ -9,6 +9,9 @@
     background: #fff;
     z-index: 999;
 }
+.action_link {
+    overflow: visible !important;
+}
 
 @keyframes fadeInDownBig {
     0% {

@@ -13,6 +13,7 @@ function Sidebar() {
 
     const path = usePathname();
     const router = useRouter();
+    
     const logoutHandler = () => {
         swal({
             title: "آیا از خروج اطمینان دارید ؟",

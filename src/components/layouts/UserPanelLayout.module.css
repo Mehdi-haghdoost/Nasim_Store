@@ -1,3 +1,94 @@
 .content {
     padding: 20px 0;
 }
+
+.panel_side {
+    position: sticky;
+    top: 0;
+}
+
+.panel_box {
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 10px;
+}
+
+.img_profile_panel {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.profile_box_nav ul {
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.profile_box_nav ul a {
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 0.5rem 5px;
+    border-radius: 5px;
+    transition: 0.3s ease-out;
+    margin-bottom: 3px;
+}
+
+.profile_box_nav ul a:hover {
+    background-color: var(--main-color-two-shadow);
+}
+
+.profile_box_nav ul a i,
+.profile_box_logout i {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.profile_box_nav ul a::before {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    width: 3px;
+    opacity: 0;
+    background-color: var(--main-color-one);
+    transition: 0.3s;
+}
+
+.sidbar_link_active {
+    background-color: var(--main-color-one-shadow);
+    color: var(--color-site) !important;
+    font-weight: bold;
+}
+
+.sidbar_link_active i {
+    color: var(--main-color-one);
+    font-weight: bold;
+}
+
+.badge_spn {
+    background-color: #ed9209;
+    margin-right: 5px;
+    color: var(--bs-badge-color) !important;
+}
+
+.profile_box_logout {
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    padding: 10px 5px;
+    border-top: 2px solid #eee;
+    cursor: pointer;
+}
+
+.custom_filter button {
+    z-index: 999;
+    margin: 0 !important;
+}
+
+.offcanvas_header {
+    justify-content: space-between;
+}

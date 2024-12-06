@@ -332,7 +332,7 @@ function Header() {
                     {/* action */}
                     <div className="d-lg-none d-block col-6 order-lg-5 order-2 ">
                         <div className='d-flex align-items-center justify-content-end'>
-                            <a href="" className='btn btn-light shadow-sm no-highlight btn-lg btn-action-cart '>
+                            <a href="" className={`btn btn-light shadow-sm no-highlight btn-lg btn-action-cart ${styles.action_link}`}>
                                 <i className="bi bi-basket font-30"></i>
                                 <span className={`${styles.header_cart_counter} main-color-one-bg d-inline-block rounded-pill`}>
                                     5
