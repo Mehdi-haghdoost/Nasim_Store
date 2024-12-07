@@ -4,14 +4,21 @@ import Link from 'next/link'
 import styles from './Header.module.css'
 import MegaMenu from './MegaMenu';
 import AuthHeader from './AuthHeader';
+import ShoppingCart from '../CartOffcanvas/ShoppingCart';
 
 function Header() {
 
-   
+
     const [activeHamburger, setActiveHamburger] = useState(false)
     const [activeSubMenu, setactiveSubMenu] = useState({})
+    const [isShowBascket, setIsShowBascket] = useState(false)
 
-    
+    const showBascket = (e) => {
+        e.preventDefault()
+        setIsShowBascket(prev => !prev)
+    }
+
+
 
     const handleItemCheck = (index) => {
         setactiveSubMenu({
@@ -332,12 +339,15 @@ function Header() {
                     {/* action */}
                     <div className="d-lg-none d-block col-6 order-lg-5 order-2 ">
                         <div className='d-flex align-items-center justify-content-end'>
-                            <a href="" className={`btn btn-light shadow-sm no-highlight btn-lg btn-action-cart ${styles.action_link}`}>
+                            <button href=""
+                            type='button'
+                                onClick={(e) => showBascket(e)}
+                                className={`btn btn-light shadow-sm no-highlight btn-lg btn-action-cart ${styles.action_link}`}>
                                 <i className="bi bi-basket font-30"></i>
                                 <span className={`${styles.header_cart_counter} main-color-one-bg d-inline-block rounded-pill`}>
                                     5
                                 </span>
-                            </a>
+                            </button>
                             <div className={styles.avatar}
                                 onClick={() => handleItemCheck(15)}
                             >
@@ -391,7 +401,7 @@ function Header() {
 
 
                     {/* auth */}
-                    <AuthHeader />
+                    <AuthHeader showBascket={showBascket} />
                     {/* end auth */}
                 </div>
 
@@ -400,6 +410,9 @@ function Header() {
                 {/* mega-mebu-end */}
 
             </nav>
+            {isShowBascket && (
+                <ShoppingCart isShowBascket={isShowBascket} showBascket={showBascket} />
+            )}
         </header>
     )
 }

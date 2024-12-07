@@ -1,5 +1,7 @@
 import React from 'react'
 import styles from './Category.module.css'
+import Link from 'next/link'
+import CategoryItem from './CategoryItem'
 function Category() {
     return (
         <div className="category py-20">
@@ -22,166 +24,14 @@ function Category() {
                 </div>
                 <div className={`${styles.category_items}`}>
                     <div className="row gy-3 justify-content-center">
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/mobile.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">تلفن همراه</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/varzeshi.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">کالای ورزشی</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/kalaye-degital.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">کالای دیجیتال</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/poshak.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">پوشاک</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/lavazem-tahrir.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">لوازم تحریر</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/milk.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">کالای سوپر مارکتی</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/children.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">اسباب بازی</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-
-                            <div className={`${styles.category_item} p-3 rounded-3 bg-white shadow-box`}>
-                                <a href="">
-                                    <div
-                                        className="d-flex align-items-center justify-content-md-flex-start justify-content-between">
-                                        <div className={`${styles.image}`}>
-                                            <img src="/images/abzar-khodro.png" alt="" className="img-fluid" />
-                                        </div>
-                                        <div className="text ms-3">
-                                            <p className="text-center font-14 text-overflow-1">لوازم خودرو</p>
-                                            <a href=""
-                                                className={`btn text-muted-two btn-sm font-14 px-3 ${styles.light_btn} shadow-sm`}><span>مشاهده</span>
-                                                <i
-                                                    className="bi bi-chevron-double-left font-16 main-color-one-color ms-2"></i></a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <CategoryItem title="تلفن همراه" src="/images/mobile.png" />
+                        <CategoryItem title="کالای  ورزشی" src="/images/varzeshi.png" />
+                        <CategoryItem title="کالای دیجیتال" src="/images/kalaye-degital.png" />
+                        <CategoryItem title="پوشاک" src="/images/poshak.png" />
+                        <CategoryItem title="لوازم تحریر" src="/images/lavazem-tahrir.png" />
+                        <CategoryItem title="کالای سوپر مارکتی" src="/images/milk.png" />
+                        <CategoryItem title="اسباب بازی" src="/images/children.png" />
+                        <CategoryItem title="لوازم خودرو" src="/images/abzar-khodro.png" />
                     </div>
                 </div>
             </div>

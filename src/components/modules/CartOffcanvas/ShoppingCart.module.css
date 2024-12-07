@@ -1,0 +1,46 @@
+.header {
+    justify-content: space-between;
+}
+.header button {
+    z-index: 999;
+    margin: 0 !important;
+}
+
+.cart_canvases .item {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.cart_canvases .item .price .price_off {
+    color: #05bf71 !important;
+}
+
+.cart_canvases .item .price .discount {
+    text-decoration: line-through;
+    color: #cccccc !important;
+    font-weight: normal !important;
+}
+
+.cart_canvases .item .action .remove {
+    padding: 0 7px;
+    box-shadow: var(--shadow-sm);
+    transition: 0.3s all ease-in-out;
+}
+
+.cart_canvases .item .factor .title {
+    padding-bottom: 10px;
+    border-bottom: 3px solid #eee;
+    margin-bottom: 10px;
+}
+
+.cart_canvases .item .factor .title img {
+    width: 25px;
+    margin-left: 5px !important;
+}
+
+.cart_canvases .item .factor .factor_item {
+    margin-bottom: 10px;
+}
