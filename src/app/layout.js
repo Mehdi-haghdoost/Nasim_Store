@@ -4,6 +4,7 @@ import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap-icons/font/bootstrap-icons.css"
 import BootstrapLoader from "@/utils/BootstrapLoader";
+import MobileFooter from "@/components/layouts/MobileFooter/MobileFooter";
 
 
 const geistSans = localFont({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         <AosInit />
         <BootstrapLoader />
         {children}
+        <MobileFooter />
       </body>
     </html>
   );
