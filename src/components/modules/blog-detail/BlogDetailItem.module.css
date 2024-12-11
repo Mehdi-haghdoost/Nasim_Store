@@ -1,0 +1,31 @@
+.mini_blog_item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: start;
+}
+
+.mini_blog_item .image {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.mini_blog_item img {
+    max-width: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.mini_blog_item .desc {
+    margin-right: 10px;
+}
+
+.mini_blog_item .title {
+    margin-bottom: 10px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
