@@ -1,0 +1,39 @@
+.blog_post_title_items {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.blog_post_title_item {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.blog_post_title_item img {
+    width: 30px;
+    height: 30px;
+}
+
+.blog_post_title_item p {
+    margin-right: 5px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.blog_post_content {
+    padding: 40px 0;
+}
+
+.blog_post_content p {
+    line-height: 36px;
+}
+
+.blog_post_content img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
