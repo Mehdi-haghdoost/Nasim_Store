@@ -4,7 +4,7 @@ import BlogDetailItem from '@/components/modules/blog-detail/BlogDetailItem';
 
 const SideBlogDetail = () => {
     return (
-        <div className={`${styles.side_blog_detail} poition-sticky top-0`}>
+        <div className={`${styles.side_blog_detail} position-sticky top-0`}>
             <div className={styles.latest_post}>
                 <div className="content-box">
                     <div className="container-fluid">
