@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './SideBlogDetail.module.css';
 import BlogDetailItem from '@/components/modules/blog-detail/BlogDetailItem';
+import BlogNewsItem from './BlogNewsItem';
 
 const SideBlogDetail = () => {
     return (
@@ -24,6 +25,16 @@ const SideBlogDetail = () => {
                                 <BlogDetailItem />
                             </ul>
                         </nav>
+                    </div>
+                </div>
+            </div>
+            <div className={`${styles.suggest_blogPost} mt-3`}>
+                <div className='content-box'>
+                    <div className="container-fluid">
+                        <div className="title-panel mb-2">
+                            <h6>داغ ترین مطلب امروز</h6>
+                        </div>
+                        <BlogNewsItem />
                     </div>
                 </div>
             </div>
