@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './CategoryBox.module.css';
+import Link from 'next/link';
 
 const CategoryBox = () => {
   return (
@@ -24,40 +25,68 @@ const CategoryBox = () => {
             <nav className="navbar">
               <ul className="navbar-nav">
                 <li className={`navbar-item ${styles.mco_hover}`}>
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'جدیدترین مطالب' }
+                  }}
+
+                    className="nav-link">
                     <i className="bi bi-newspaper font-25 ms-3"></i>
                     جدیدترین مطالب
-                  </a>
+                  </Link>
                 </li>
                 <li className="navbar-item">
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'علم و تکنولوژی' }
+                  }}
+                    className="nav-link">
                     <i className="bi bi-bounding-box-circles font-25 ms-3"></i>
                     علم و تکنولوژی
-                  </a>
+                  </Link>
                 </li>
                 <li className="navbar-item">
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'بازی ویدیویی' }
+                  }}
+                    className="nav-link">
                     <i className="bi bi-controller font-25 ms-3"></i>
                     بازی ویدیویی
-                  </a>
+                  </Link>
                 </li>
+
                 <li className="navbar-item">
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'کتاب و ادبیات' }
+                  }}
+                    className="nav-link">
                     <i className="bi bi-journal-richtext font-25 ms-3"></i>
                     کتاب و ادبیات
-                  </a>
+                  </Link>
                 </li>
+
                 <li className="navbar-item">
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'هنر و سینما' }
+                  }}
+                    className="nav-link">
                     <i className="bi bi-film font-25 ms-3"></i>
                     هنر و سینما
-                  </a>
+                  </Link>
                 </li>
+
                 <li className="navbar-item">
-                  <a href="" className="nav-link">
+                  <Link href={{
+                    pathname: '/Category-blogs',
+                    query: { title: 'سبک زندگی' }
+                  }}
+                    className="nav-link">
                     <i className="bi bi-cup-hot font-25 ms-3"></i>
                     سبک زندگی
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>

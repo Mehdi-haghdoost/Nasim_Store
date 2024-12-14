@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import styles from '@/styles/CategoryBlogs.module.css';
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
@@ -5,8 +7,14 @@ import Footer from '@/components/modules/footer/Footer'
 import Header from '@/components/modules/header/Header'
 import Pagination from '@/components/modules/p-user/pagination/Pagination';
 import CategoryBlogsPosts from '@/components/templates/CategoryBlogs/content/CategoryBlogsPosts';
+import { useSearchParams } from 'next/navigation';
 
 const page = () => {
+
+    const searchParams = useSearchParams();
+    const title = searchParams.get('title')
+    
+
     return (
         <>
             <Header />
@@ -19,7 +27,8 @@ const page = () => {
                                 <img src="/images/square.png" alt="" className="img-fluid" />
                                 <h5 className="font-16 ms-3">
                                     دسته بندی
-                                    <span className="main-color-one-color d-inline-block ms-1">تکنولوژی
+                                    <span className="main-color-one-color d-inline-block ms-1">
+                                        {title}
                                     </span>
                                 </h5>
                             </div>
