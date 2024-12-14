@@ -120,8 +120,8 @@ input[type=checkbox] {
 
 .form-control:focus,
 .form-select:focus {
-  box-shadow: none;
-  border-color: var(--main-color-one);
+  box-shadow: 0 0 0 0.25rem rgba(239, 57, 78, 0.5) !important;
+  border-color: var(--main-color-one) !important;
 }
 
 .content {

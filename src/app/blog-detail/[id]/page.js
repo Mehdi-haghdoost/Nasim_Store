@@ -5,6 +5,7 @@ import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb';
 import Footer from '@/components/modules/footer/Footer';
 import BlogContent from '@/components/templates/blog-detail/content/BlogContent';
 import BlogComments from '@/components/templates/blog-detail/blog-comments/BlogComments';
+import CommentForm from '@/components/templates/blog-detail/FeedbackForm/CommentForm';
 
 const page = () => {
     return (
@@ -13,6 +14,7 @@ const page = () => {
             <BreadCroumb />
             <BlogContent />
             <BlogComments />
+            <CommentForm />
             <Footer />
         </>
     )
