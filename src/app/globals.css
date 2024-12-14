@@ -700,14 +700,14 @@ tag.tagify__tag {
 }
 
 .danger-label {
-  padding: 5px 10px;
-  background-color: #fc6d6d3b;
+  padding: 5px 10px !important;
+  background-color: #fc6d6d3b !important;
   border-radius: 5px;
-  color: #f21919;
-  font-size: 13px;
-  display: inline-block;
-  font-family: var(--main-font);
-  font-weight: normal;
+  color: #f21919 !important;
+  font-size: 13px !important;
+  display: inline-block !important;
+  font-family: var(--main-font) !important;
+  font-weight: normal !important;
 }
 
 .main-table {

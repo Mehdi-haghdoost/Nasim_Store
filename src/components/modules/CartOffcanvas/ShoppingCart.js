@@ -56,7 +56,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                                 </button>
                                             </span>
                                             <input
-                                                type="number"
                                                 name="count"
                                                 className="counter form-counter"
                                                 value={productCount} />
