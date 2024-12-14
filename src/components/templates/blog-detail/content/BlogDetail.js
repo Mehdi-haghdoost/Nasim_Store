@@ -54,7 +54,7 @@ const BlogDetail = () => {
                             اشاره کنیم که این گوشی در سه رنگ آبی و سبز و مشکی راهی بازار شده است.</p>
                         <p>&nbsp;</p>
                         <figure className={styles.image_center}>
-                            <img src="/images/blog-1.jpg" alt="گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-1.jpg" className='img-fluid' alt="گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 className='mb-2'>صفحه نمایش شیائومی ردمی 9a</h2>
@@ -73,7 +73,7 @@ const BlogDetail = () => {
                             می&zwnj;دهد.</p>
                         <p>&nbsp;</p>
                         <figure className={styles.image_center}>
-                            <img src="/images/blog-2.jpg" alt="نمایشگر گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-2.jpg" className='img-fluid' alt="نمایشگر گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 className="mb-2">اسپیکر شیائومی 9A</h2>
@@ -85,7 +85,7 @@ const BlogDetail = () => {
                             هدفون به رادیو هم دسترسی خواهید داشت.</p>
                         <p>&nbsp;</p>
                         <figure>
-                            <img src="/images/blog-5.jpg" alt="سیستم تشخیص چهره گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-5.jpg" className='img-fluid' alt="سیستم تشخیص چهره گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 className="mb-2">نرم افزار و رابط کاربری ردمی 9A</h2>
@@ -121,7 +121,7 @@ const BlogDetail = () => {
                             خبری هم از حسگر تشخیص اثر انگشت نباشد.</p>
                         <p>&nbsp;</p>
                         <figure className={styles.image_center}>
-                            <img src="/images/blog-8.jpg" alt="پردازنده گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-8.jpg" className='img-fluid' alt="پردازنده گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 class="title gold mb-2">باتری شیائومی 9A</h2>
@@ -138,7 +138,7 @@ const BlogDetail = () => {
                             می&zwnj;کشد.</p>
                         <p>&nbsp;</p>
                         <figure className={styles.image_center}>
-                            <img src="/images/blog-4.jpg" alt="باتری و اسپیکر گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-4.jpg" className='img-fluid' alt="باتری و اسپیکر گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 className="mb-2">بررسی دوربین شیائومی ردمی 9a</h2>
@@ -155,7 +155,7 @@ const BlogDetail = () => {
                             وضوح Full HD و نرخ ۳۰ فریم بر ثانیه ضبط کنید. دوربین از فوکوس نسبتا سریعی هم
                             برخوردار است.</p>
                         <figure className={styles.image_center}>
-                            <img src="/images/blog-5.jpg" alt="دوربین گوشی موبایل شیائومی مدل Redmi 9A" />
+                            <img src="/images/blog-5.jpg" className='img-fluid' alt="دوربین گوشی موبایل شیائومی مدل Redmi 9A" />
                         </figure>
                         <p>&nbsp;</p>
                         <h2 className="mb-2">جمع بندی </h2>
