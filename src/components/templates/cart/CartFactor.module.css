@@ -1,0 +1,23 @@
+.cart_canvas .item {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.cart_canvas .item .factor .title {
+    padding-bottom: 10px;
+    border-bottom: 3px solid #eee;
+    margin-bottom: 10px;
+}
+
+.cart_canvas .item .factor .title img {
+    width: 25px;
+    margin-left: 5px !important;
+}
+
+.cart_canvas .item .factor .factor_item {
+    margin-bottom: 10px;
+}
+
