@@ -15,7 +15,7 @@ const SideBlogDetail = () => {
                             </h6>
                         </div>
                         <nav className="navbar">
-                            <ul className="navbar nav">
+                            <ul className="navbar nav flex-column flex-nowrap">
                                 <BlogDetailItem />
                                 <BlogDetailItem />
                                 <BlogDetailItem />
