@@ -16,7 +16,7 @@ import Link from 'next/link';
 
 const RelatedArticles = () => {
   return (
-    <div className={`${styles.blog_slider} py-20`}>
+    <div className={`${styles.blog_slider}`}>
             <div className="container-fluid">
                 <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
                     <div className={`${styles.title} d-flex align-items-center`}>

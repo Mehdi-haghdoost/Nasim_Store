@@ -11,7 +11,7 @@
 .parent {
     position: relative;
     margin-top: 2rem;
-    margin-bottom: 13rem;
+    margin-bottom: 11rem;
 }
 
 .parent::before {
@@ -23,6 +23,10 @@
     height: 340px;
     z-index: -1;
     background: var(--main-color-one);
+}
+
+.blog_slider {
+    padding-top: 20PX;
 }
 
 .product_slider_swiper {
@@ -68,4 +72,23 @@
     letter-spacing: 0;
     font-variant: initial;
     line-height: 1;
+}
+
+@media only screen and (max-width: 1200px) {
+    .swiper_button_prev {
+        right: 53.5% !important;
+    }
+}
+
+
+@media only screen and (max-width: 992px) {
+    .swiper_button_prev {
+        right: 54.5% !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .swiper_button_prev {
+        right: 58.5% !important;
+    }
 }
