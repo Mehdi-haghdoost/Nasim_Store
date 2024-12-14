@@ -42,6 +42,20 @@
     transform: translateY(-50%);
 }
 
+.line_step_boxs::after {
+    z-index: 3;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: #ccc;
+    box-shadow: var(--shadow-md);
+    border-radius: 50%;
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .line_step_box {
     width: 33.33%;
     text-align: center;
@@ -65,7 +79,7 @@
 
 .line_step_box.complete .icon {
     /* background: var(--main-color-two); */
-    
+
     color: #111;
     background: #ffd0d0;
     border-radius: 50%;
