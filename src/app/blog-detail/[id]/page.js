@@ -6,6 +6,7 @@ import Footer from '@/components/modules/footer/Footer';
 import BlogContent from '@/components/templates/blog-detail/content/BlogContent';
 import BlogComments from '@/components/templates/blog-detail/blog-comments/BlogComments';
 import CommentForm from '@/components/templates/blog-detail/FeedbackForm/CommentForm';
+import RelatedArticles from '@/components/templates/blog-detail/RelatedArticles/RelatedArticles';
 
 const page = () => {
     return (
@@ -15,6 +16,7 @@ const page = () => {
             <BlogContent />
             <BlogComments />
             <CommentForm />
+            <RelatedArticles />
             <Footer />
         </>
     )
