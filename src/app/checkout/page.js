@@ -4,6 +4,7 @@ import Header from '@/components/modules/header/Header';
 import Footer from '@/components/modules/footer/Footer';
 import LineStep from '@/components/templates/checkout/LineStep';
 import DiscountModal from '@/components/templates/checkout/DiscountModal';
+import CheckoutFrom from '@/components/templates/checkout/CheckoutFrom';
 
 const Checkout = () => {
   return (
@@ -14,6 +15,7 @@ const Checkout = () => {
       </div>
       <div className='container-fluid'>
         <DiscountModal />
+        <CheckoutFrom />
       </div>
 
       <Footer />
