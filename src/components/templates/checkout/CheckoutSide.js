@@ -1,28 +1,23 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './CheckoutSide.module.css';
 import DayItem from '@/components/modules/checkout/DayItem';
 import { showSwal } from '@/utils/helpers';
+import { DayPicker } from 'react-day-picker';
+import getNext6DaysWithJalali from '@/utils/WeekDaysInPersian';
 
 const CheckoutSide = () => {
-    const [selectDayIndex, setSelectDayIndex] = useState(null)
+
     const [selectDay, setSelectDay] = useState(null)
+    const [persianDays, setPersianDays] = useState(null)
 
-    const days = [
-        { name: "شنبه", date: "27 آذر" },
-        { name: "یکشنبه", date: "28 آذر" },
-        { name: "دوشنبه", date: "29 آذر" },
-        { name: "سه شنبه", date: "30 آذر" },
-        { name: "چهارشنبه", date: "1 دی" },
-        { name: "پنجشنبه", date: "2 دی" },
-    ];
+    useEffect(() => {
+        setPersianDays(getNext6DaysWithJalali)
+    }, [])
 
-    const handleDayClick = (index) => {
-        setSelectDayIndex(index)
-        setSelectDay(days[index])
-        console.log('selectDay ===>', selectDay);
-
+    const handleClickDay = (day) => {
+        setSelectDay(day)
     }
 
     const handlePayment = () => {
@@ -47,30 +42,14 @@ const CheckoutSide = () => {
                             </div>
                         </div>
                         <div className="row gy-3" >
-                            <DayItem name="شنبه" date="27 آذر"
-                                onClick={() => handleDayClick(0)}
-                                isActive={selectDayIndex === 0}
-                            />
-                            <DayItem name="یکشنبه" date="28 آذر"
-                                onClick={() => handleDayClick(1)}
-                                isActive={selectDayIndex === 1}
-                            />
-                            <DayItem name="دوشنبه" date="29 آذر"
-                                onClick={() => handleDayClick(2)}
-                                isActive={selectDayIndex === 2}
-                            />
-                            <DayItem name="سه شنبه" date="30 آذر"
-                                onClick={() => handleDayClick(3)}
-                                isActive={selectDayIndex === 3}
-                            />
-                            <DayItem name="چهارشنبه" date="1 دی"
-                                onClick={() => handleDayClick(4)}
-                                isActive={selectDayIndex === 4}
-                            />
-                            <DayItem name="پنجشنبه" date="2 دی"
-                                onClick={() => handleDayClick(5)}
-                                isActive={selectDayIndex === 5}
-                            />
+                            {persianDays?.map((day, index) => (
+                                <DayItem {...day}
+                                    onClick={() => handleClickDay(day)}
+                                    isActive ={selectDay === day}
+                                    key={index}
+                                />
+                            ))}
+
                         </div>
                     </div>
                 </div>
