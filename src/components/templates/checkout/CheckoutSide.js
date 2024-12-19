@@ -1,7 +1,39 @@
-import React from 'react'
+"use client";
+
+import React, { useState } from 'react'
 import styles from './CheckoutSide.module.css';
+import DayItem from '@/components/modules/checkout/DayItem';
+import { showSwal } from '@/utils/helpers';
 
 const CheckoutSide = () => {
+    const [selectDayIndex, setSelectDayIndex] = useState(null)
+    const [selectDay, setSelectDay] = useState(null)
+
+    const days = [
+        { name: "شنبه", date: "27 آذر" },
+        { name: "یکشنبه", date: "28 آذر" },
+        { name: "دوشنبه", date: "29 آذر" },
+        { name: "سه شنبه", date: "30 آذر" },
+        { name: "چهارشنبه", date: "1 دی" },
+        { name: "پنجشنبه", date: "2 دی" },
+    ];
+
+    const handleDayClick = (index) => {
+        setSelectDayIndex(index)
+        setSelectDay(days[index])
+        console.log('selectDay ===>', selectDay);
+
+    }
+
+    const handlePayment = () => {
+        if (!selectDay) {
+            return showSwal("لطفا یک روز را برای تحویل مرسوله انتخاب کنید", "warning", "تلاش مجدد ")
+        }
+
+        return showSwal("به صفحه ی پرداخت منتقل می شوید", "success", "اوکی ")
+
+    }
+
     return (
         <div className={`position-sticky ${styles.checkout_side} top-0`}>
             <div className={`${styles.cart_canvas} mb-4`}>
@@ -14,43 +46,31 @@ const CheckoutSide = () => {
                                 </i>
                             </div>
                         </div>
-                        <div className="row gy-3">
-                            <div className="col-4">
-                                <div className={`${styles.send_item} ${styles.active}`}>
-                                    <h6 className="font-14 text-center">یک شنبه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">27 آذر ماه</p>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className={`${styles.send_item} `}>
-                                    <h6 className="font-14 text-center">دو شنبه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">28 آذر ماه</p>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className={`${styles.send_item} `}>
-                                    <h6 className="font-14 text-center">سه شنبه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">29 آذر ماه</p>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className={`${styles.send_item} `}>
-                                    <h6 className="font-14 text-center">چهار شنبه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">30 آذر ماه</p>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className={`${styles.send_item} `}>
-                                    <h6 className="font-14 text-center">پنجشنبه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">1 دی ماه</p>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className={`${styles.send_item} `}>
-                                    <h6 className="font-14 text-center">جمعه</h6>
-                                    <p className="font-14 text-center mt-1 mb-0 text-muted">2 دی ماه</p>
-                                </div>
-                            </div>
+                        <div className="row gy-3" >
+                            <DayItem name="شنبه" date="27 آذر"
+                                onClick={() => handleDayClick(0)}
+                                isActive={selectDayIndex === 0}
+                            />
+                            <DayItem name="یکشنبه" date="28 آذر"
+                                onClick={() => handleDayClick(1)}
+                                isActive={selectDayIndex === 1}
+                            />
+                            <DayItem name="دوشنبه" date="29 آذر"
+                                onClick={() => handleDayClick(2)}
+                                isActive={selectDayIndex === 2}
+                            />
+                            <DayItem name="سه شنبه" date="30 آذر"
+                                onClick={() => handleDayClick(3)}
+                                isActive={selectDayIndex === 3}
+                            />
+                            <DayItem name="چهارشنبه" date="1 دی"
+                                onClick={() => handleDayClick(4)}
+                                isActive={selectDayIndex === 4}
+                            />
+                            <DayItem name="پنجشنبه" date="2 دی"
+                                onClick={() => handleDayClick(5)}
+                                isActive={selectDayIndex === 5}
+                            />
                         </div>
                     </div>
                 </div>
@@ -139,7 +159,9 @@ const CheckoutSide = () => {
                             <p className="mb-0">4,000,000 تومان </p>
                         </div>
                         <div className={`${styles.action} mt-3 d-flex align-items-center justify-content-center`}>
-                            <button className='btn border-0 main-color-two-bg rounded-3 py-2 d-block w-100'>پرداخت</button>
+                            <button className='btn border-0 main-color-two-bg rounded-3 py-2 d-block w-100'
+                                onClick={handlePayment}
+                            >پرداخت</button>
                         </div>
                     </div>
                 </div>

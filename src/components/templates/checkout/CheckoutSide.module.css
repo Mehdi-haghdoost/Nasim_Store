@@ -12,27 +12,7 @@
     margin-bottom: 10px;
 }
 
-.send_item {
-    border-radius: 10px !important;
-    padding: 5px;
-    position: relative;
-    cursor: pointer;
-    border: 2px solid transparent;
-}
 
-.send_item.active {
-    border-color: var(--main-color-one);
-}
-
-.send_item.active::before {
-    content: '\F26A';
-    position: absolute;
-    bottom: -10px;
-    left: -5px;
-    font-family: 'bootstrap-icons', serif;
-    font-size: 20px;
-    color: #0b8502;
-}
 
 .shipping_item {
     padding: 7px 7px;
