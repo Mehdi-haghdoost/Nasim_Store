@@ -1,0 +1,51 @@
+.payment_status .icon {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.payment_status .icon i {
+    font-size: 70px;
+    color: #0d9a00;
+}
+
+.payment_status .title {
+    text-align: center;
+}
+
+.payment_status .title h3 {
+    font-size: 25px;
+    color: #0d9a00 !important;
+}
+
+.payment_status .title p {
+    margin-bottom: 0;
+    margin-top: 15px;
+    color: #0d9a00 !important;
+    font-size: 18px;
+}
+
+.payment_status .pay_table {
+    margin: 25px auto 0 auto;
+    border-radius: 10px;
+    box-shadow: var(--shadow-box);
+    padding: 15px 15px;
+    max-width: 380px;
+    background-color: #fff;
+}
+
+.payment_status .pay_table .pay_table_title {
+    margin-bottom: 15px;
+    text-align: center;
+    padding-bottom: 7px;
+    border-bottom: 3px solid #eee;
+}
+
+.payment_status .pay_table .pay_table_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.payment_status .pay_table .pay_table_item:not(:last-child) {
+    margin-bottom: 20px;
+}
