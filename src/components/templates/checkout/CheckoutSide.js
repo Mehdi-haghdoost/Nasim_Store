@@ -11,6 +11,8 @@ const CheckoutSide = () => {
 
     const [selectDay, setSelectDay] = useState(null)
     const [persianDays, setPersianDays] = useState(null)
+    const [shippingMethod, setShippingMethod] = useState('Express')
+    const [paymentMethod, setPaymentMethod] = useState('DirectBankPayment')
 
     useEffect(() => {
         setPersianDays(getNext6DaysWithJalali)
@@ -45,7 +47,7 @@ const CheckoutSide = () => {
                             {persianDays?.map((day, index) => (
                                 <DayItem {...day}
                                     onClick={() => handleClickDay(day)}
-                                    isActive ={selectDay === day}
+                                    isActive={selectDay === day}
                                     key={index}
                                 />
                             ))}
@@ -67,14 +69,18 @@ const CheckoutSide = () => {
                         </div>
                         <div className="row gy-2">
                             <div className="col-12">
-                                <div className={styles.shipping_item}>
+                                <div className={`${styles.shipping_item} ${shippingMethod === "Economy" ? styles.active : ""} `}
+                                    onClick={() => setShippingMethod('Economy')}
+                                >
                                     <img src="/images/post-logo.png" className='img-thumbnail' alt="logo" />
                                     <h6 className="font-14 mx-2">پست معمولی :</h6>
                                     <p className="mb-0 text-muteted">8000 تومان</p>
                                 </div>
                             </div>
-                            <div className="col-12">
-                                <div className={`${styles.shipping_item} ${styles.active}`}>
+                            <div className="col-12"
+                                onClick={() => setShippingMethod('Express')}
+                            >
+                                <div className={`${styles.shipping_item} ${shippingMethod === "Express" ? styles.active : 'ّ'}`}>
                                     <img src="/images/post-logo.png" className='img-thumbnail' alt="logo" />
                                     <h6 className="font-14 mx-2">پست پیشتاز :</h6>
                                     <p className="mb-0 text-muteted">16000 تومان</p>
@@ -96,14 +102,18 @@ const CheckoutSide = () => {
                             </div>
                         </div>
                         <div className="row gy-2">
-                            <div className="col-12">
-                                <div className={`${styles.bank_item} ${styles.active}`}>
+                            <div className="col-12"
+                                onClick={() => setPaymentMethod('DirectBankPayment')}
+                            >
+                                <div className={`${styles.bank_item} ${paymentMethod === "DirectBankPayment" ? styles.active : ""}`}>
                                     <i className="bi bi-credit-card-2-back main-color-one-color"></i>
                                     <h6 className="font-14 mx-2">انتقال مستقیم بانکی</h6>
                                 </div>
                             </div>
-                            <div className="col-12">
-                                <div className={styles.bank_item}>
+                            <div className="col-12"
+                                onClick={() => setPaymentMethod('CashOnDelivery')}
+                            >
+                                <div className={`${styles.bank_item} ${paymentMethod === "CashOnDelivery" ? styles.active : ""}`}>
                                     <i className="bi bi-house-fill main-color-one-color"></i>
                                     <h6 className="font-14 mx-2">پرداخت هنگام دریافت</h6>
                                 </div>
@@ -145,7 +155,7 @@ const CheckoutSide = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
