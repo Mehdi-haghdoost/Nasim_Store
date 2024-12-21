@@ -44,7 +44,7 @@ const PaymentFailure = () => {
                     </div>
                     <div className={styles.pay_table_item}>
                         <h6 className="font-16">شماره سفارش</h6>
-                        <p className="mb-0" className="mb-0">45320235</p>
+                        <p className="mb-0">45320235</p>
                     </div>
                     <div className={styles.pay_table_item}>
                         <h6 className="font-16">قیمت کل</h6>

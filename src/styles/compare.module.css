@@ -1,0 +1,57 @@
+.title h5 {
+    margin-right: 1rem;
+}
+
+.title h5>span {
+    font-family: var(--title-font);
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
+
+.compare table {
+    border: 1px double #d7d7d7;
+}
+
+.compare table tr {
+    width: 100%;
+}
+
+.compare table tr th,
+.compare table tr td {
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: center;
+    min-width: 220px;
+    border: 1px double #d7d7d7;
+}
+
+.compare table tr td:nth-child(1) {
+    font-weight: bold;
+}
+
+.compare_add {
+    display: flex;
+    justify-content: center;
+}
+
+.compare_add_product {
+    width: 220px;
+    border: 1px dashed #cdcaca;
+    height: 100%;
+    padding: 30px 0;
+}
+
+.cap_icon i {
+    font-size: 30px;
+    color: #666;
+}
+
+.cap_title {
+    margin: 10px 0;
+}
+
+.compare .td_head {
+    font-size: 14px;
+    text-align: right !important;
+    background-color: rgba(238, 239, 241, 0.63) !important;
+}
