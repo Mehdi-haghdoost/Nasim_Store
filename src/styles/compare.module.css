@@ -31,12 +31,11 @@
 
 .compare_add {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 .compare_add_product {
     width: 220px;
-    border: 1px dashed #cdcaca;
     height: 100%;
     padding: 30px 0;
 }
@@ -54,4 +53,130 @@
     font-size: 14px;
     text-align: right !important;
     background-color: rgba(238, 239, 241, 0.63) !important;
+}
+
+.compare_product_box {
+    min-width: 300px;
+    box-shadow: none;
+}
+
+.product_box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.product_box .product_timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.product_box .product_timer .timer_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 10px;
+}
+
+.product_box .product_timer .timer_label span {
+    color: #f21919 !important;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.product_header_btn {
+    display: flex;
+}
+
+.product_header_btn a {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 50%;
+    background: #f4f4f4;
+    transition: 200ms;
+}
+
+.product_header_btn a:not(:last-child) {
+    margin-left: 5px;
+}
+
+.product_header_btn a i {
+    font-size: 16px;
+}
+
+.product_box .product_image {
+    height: 180px;
+    display: flex;
+    margin: 5px 0;
+    position: relative;
+}
+
+.product_box .product_image img {
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    transition: 0.5s all ease-in-out;
+}
+
+.product_box .product_title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.product_box .product_title .title p {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.product_box .product_title .title span {
+    color: var(--text-muted-two) !important;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.product_box .product_title .rating {
+    display: flex;
+    align-items: center;
+    border: none;
+}
+
+.product_box .product_title .rating .icon {
+    margin-right: 5px;
+}
+
+.product_box .product_title .rating .icon i {
+    color: #fbc02a;
+    font-size: 14px;
+    vertical-align: super;
+}
+
+.compare_box {
+    position: relative;
+    padding: 15px 0;
+}
+
+.compare_box .compare_delete {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    padding-bottom: 10px;
+}
+
+.compare_delete i {
+    color: #333;
+    cursor: pointer;
+    font-size: 20px;
+    transition: .2s all ease;
 }
