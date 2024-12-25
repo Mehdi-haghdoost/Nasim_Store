@@ -144,7 +144,6 @@ const page = () => {
 
                                                         </th>
                                                     </tr>
-
                                                 </thead>
                                                 <tbody>
                                                     <tr>
@@ -163,6 +162,12 @@ const page = () => {
                                                         <td className='text-end pe-5'>
                                                             مدل پردازنده گرافیکی
                                                         </td>
+                                                        <td className='text-end pe-5'>
+                                                            GeForce GTX 950M GDDR5
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            GeForce GTX 950M GDDR5
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan="5" className={styles.td_head}>
@@ -174,15 +179,31 @@ const page = () => {
                                                         <td className='text-end pe-5'>
                                                             ابعاد
                                                         </td>
+                                                        <td className='text-end pe-5'>
+                                                            129.5×99.1×137.2 ميلي متر
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            129.5×99.1×137.2 ميلي متر
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td className='text-end pe-5'>
                                                             نوع صفحه نمایش
+                                                        </td><td className='text-end pe-5'>
+                                                            Lcd
+                                                        </td><td className='text-end pe-5'>
+                                                            Oled
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td className='text-end pe-5'>
                                                             رزولوشن
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            1334 × 750 | Retina
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            1334 × 750 | Retina
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -195,10 +216,22 @@ const page = () => {
                                                         <td className='text-end pe-5'>
                                                             شبکه هاي ارتباطي
                                                         </td>
+                                                        <td className='text-end pe-5'>
+                                                            2G، 3G، 4G
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            2G، 3G، 4G
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td className='text-end pe-5'>
                                                             تعداد سیم کارت
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            تک سيم کارت
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            تک سيم کارت
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -211,29 +244,59 @@ const page = () => {
                                                         <td className='text-end pe-5'>
                                                             مدل پردازنده گرافیکی
                                                         </td>
+                                                        <td className='text-end pe-5'>
+                                                            GeForce GTX 950M GDDR5
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            GeForce GTX 950M GDDR5
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colSpan="5" className={styles.td_head}>
+                                                        <td className={styles.td_head}>
                                                             <i className="bi bi-chevron-double-left"></i>
                                                             <span>سیستم عامل</span>
                                                         </td>
+                                                        <td className='text-end pe-5'>
+                                                            بدون سیستم عامل
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            بدون سیستم عامل
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colSpan="5" className={styles.td_head}>
+                                                        <td className={styles.td_head}>
                                                             <i className="bi bi-chevron-double-left"></i>
                                                             <span>حافظه Cache</span>
                                                         </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colSpan="5" className={styles.td_head}>
-                                                            <i className="bi bi-chevron-double-left"></i>
-                                                            <span> ظرفیت حافظه RAM</span>
+                                                        <td className='text-end pe-5'>
+                                                            4 مگابایت
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            12 مگابایت
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colSpan="5" className={styles.td_head}>
+                                                        <td className={styles.td_head}>
+                                                            <i className="bi bi-chevron-double-left"></i>
+                                                            <span> ظرفیت حافظه RAM</span>
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            4 گیگ
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            12 گیگ
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={styles.td_head}>
                                                             <i className="bi bi-chevron-double-left"></i>
                                                             <span> قابلیت‌های دستگاه</span>
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            صفحه نمایش مات وبکم
+                                                        </td>
+                                                        <td className='text-end pe-5'>
+                                                            صفحه نمایش مات حسگر اثر انگشت کیبورد با نور پس زمینه وبکم
                                                         </td>
                                                     </tr>
                                                 </tbody>

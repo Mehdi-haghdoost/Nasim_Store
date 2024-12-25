@@ -11,7 +11,7 @@ import EmptyCart from '@/components/templates/cart/EmptyCart';
 
 const page = () => {
 
-    const [counter, setCounter] = useState();
+    const [counter, setCounter] = useState(2);
 
     return (
         <>
