@@ -11,7 +11,7 @@ const page = () => {
             <Header />
             <BreadCroumb />
             <CategoryBrand />
-            <div className="content">
+            <div className="content" style={{ overflowX: "hidden" }}>
                 {/* filter mobile */}
 
 
