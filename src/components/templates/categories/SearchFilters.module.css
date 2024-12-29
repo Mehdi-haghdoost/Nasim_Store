@@ -41,3 +41,29 @@
 .search_field .search_btn i {
     color: #fff;
 }
+
+.product_meta_color_items {
+    margin-top: 10px;
+}
+
+.filter_item {
+    margin-bottom: 30px;
+}
+
+.btn_outline_site {
+    padding: 20px 40px;
+    border: 2px solid #333333;
+    background-color: transparent;
+    transition: 0.3s all ease-in-out;
+    border-radius: 10px;
+    display: inline-block;
+    width: 100%;
+    font-size: 16px;
+    font-family: var(--title-font);
+}
+
+.btn_outline_site:hover {
+    background-color: var(--main-color-one);
+    color: #fff !important;
+    border-color: var(--main-color-one);
+}

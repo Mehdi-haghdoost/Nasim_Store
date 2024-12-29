@@ -82,9 +82,9 @@ const SearchFilters = () => {
                 <div className={styles.filter_item}>
                     <h5 className={styles.filter_item_title}>رنگ محصول</h5>
                     <div className={styles.filter_item_content}>
-                        <div className={styles.product_meta_color_items}>
+                        <div className='product-meta-color-items'>
                             <input type="radio" className='btn-check' name='options' id='option11'
-                                autoComplete='off' checked
+                                autoComplete='off'
                             />
                             <label htmlFor="option11" className='btn'>
                                 <span style={{ backgroundColor: "#c00" }}></span>
@@ -92,7 +92,7 @@ const SearchFilters = () => {
                             </label>
 
                             <input type="radio" className='btn-check' name='options' id='option22'
-                                autoComplete='off'
+                                autoComplete='off' defaultChecked
                             />
                             <label htmlFor="option22" className='btn'>
                                 <span style={{ backgroundColor: "#111" }}></span>

@@ -57,7 +57,7 @@ function productDetail() {
                 </h5>
                 <div className="product-meta-color-items">
                     <input
-                    type="radio" className="btn-check" name="options" id="option1" autocomplete="off"
+                    type="radio" className="btn-check" name="options" id="option1" autocomplete="off" defaultChecked
                          />
                     <label className="btn " htmlFor="option1">
                         <span style={{backgroundColor: '#c00'}}></span>

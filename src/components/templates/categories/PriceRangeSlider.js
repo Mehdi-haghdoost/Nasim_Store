@@ -19,7 +19,7 @@ const PriceRangeSlider = () => {
         <div>
             <h5 className={styles.filter_item_title}>قیمت</h5>
             <div className={styles.filter_item_content}>
-                <div className='p-3 mx-auto bg-white rounded shadow-lg d-flex flex-column align-items-center mb-3 w-100'>
+                <div className='p-3 mx-auto bg-white rounded  d-flex flex-column align-items-center mb-3 w-100'>
                     <div className='d-flex justify-content-between w-100'>
                         <input
                             type='range'
@@ -45,7 +45,7 @@ const PriceRangeSlider = () => {
                     </div>
                     <button
                         onClick={resetSlider}
-                        className={`px-4 py-2 bg-primary text-white rounded d-flex align-items-center ${styles.reset_price}`}
+                        className={`btn px-4 py-2 bg-primary text-white rounded d-flex align-items-center ${styles.reset_price} mt-2 border-0`}
                         style={{ backgroundColor: "#007bff", borderRadius: "0.25rem" }}
                     >
                         <FiRefreshCw className='ms-2' />
