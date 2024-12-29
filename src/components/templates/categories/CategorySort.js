@@ -19,7 +19,7 @@ const CategorySort = () => {
                             <span className={styles.storing}>مرتب سازی:</span>
                         </div>
                         <div className={`${styles.form_checks} me-0 mt-md-0 mt-3 d-flex`}>
-                            <div className="d-flex flex-row align-items-center flex-grow-1 gap-1 me-3">
+                            <div className="d-flex flex-row align-items-center flex-grow-1 gap-1 me-5">
                                 <input type="radio" name="spanColor" id="span1" className={styles.radio} />
                                 <label htmlFor="span1" className={styles.spanItem}> پیشفرض</label>
 

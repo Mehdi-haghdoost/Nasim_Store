@@ -1,0 +1,80 @@
+.product_box {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.product_box .product_timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.product_box .product_timer .timer_label {
+    padding: 5px 10px;
+    background-color: #fc6d6d3b;
+    border-radius: 10px;
+}
+
+.product_box .product_timer .timer_label span {
+    color: #f21919 !important;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.product_header_btn {
+    display: flex;
+}
+
+.product_header_btn .tooltip a:not(:last-child) {
+    margin-left: 5px;
+}
+
+.product_header_btn .tooltip a {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 50% !important;
+    background: #f4f4f4;
+    transition: 200ms !important;
+}
+
+.product_header_btn .tooltip a i {
+    font-size: 16px;
+}
+
+.product_header_btn .tooltip a:hover {
+    background-color: #ddd;
+}
+
+.tooltip {
+    position: relative !important;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltipText {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    background: rgb(55 51 51 / 75%);
+    color: #fff !important;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    bottom: 110%;
+    left: 64%;
+    transform: translateX(-50%);
+    transition: opacity .3s ease-in;
+    font-size: 10px;
+    width: 126px;
+}
+
+.tooltip:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+}

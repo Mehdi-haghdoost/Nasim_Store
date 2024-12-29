@@ -2,6 +2,7 @@ import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
 import Footer from '@/components/modules/footer/Footer'
 import Header from '@/components/modules/header/Header'
 import CategoryBrand from '@/components/templates/categories/CategoryBrand'
+import CategoryItems from '@/components/templates/categories/CategoryItems'
 import CategorySort from '@/components/templates/categories/CategorySort'
 import SearchFilters from '@/components/templates/categories/SearchFilters'
 import React from 'react'
@@ -24,6 +25,7 @@ const page = () => {
                     </div>
                     <div className="col-lg-9">
                         <CategorySort />
+                        <CategoryItems />
                     </div>
                 </div>
 
