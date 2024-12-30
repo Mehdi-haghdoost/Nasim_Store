@@ -1,6 +1,7 @@
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
 import Footer from '@/components/modules/footer/Footer'
 import Header from '@/components/modules/header/Header'
+import Pagination from '@/components/modules/p-user/pagination/Pagination'
 import CategoryBrand from '@/components/templates/categories/CategoryBrand'
 import CategoryItems from '@/components/templates/categories/CategoryItems'
 import CategorySort from '@/components/templates/categories/CategorySort'
@@ -13,24 +14,25 @@ const page = () => {
             <Header />
             <BreadCroumb />
             <CategoryBrand />
-            <div className="content" style={{ overflowX: "hidden" }}>
-                {/* filter mobile */}
+            <div className="content" >
+                <div className="container-fluid">
+                    {/* filter mobile */}
 
 
-                {/* end filter mobile */}
+                    {/* end filter mobile */}
 
-                <div className="row gy-3">
-                    <div className="col-lg-3 d-lg-block d-none">
-                        <SearchFilters />
-                    </div>
-                    <div className="col-lg-9">
-                        <CategorySort />
-                        <CategoryItems />
+                    <div className="row gy-3">
+                        <div className="col-lg-3 d-lg-block d-none">
+                            <SearchFilters />
+                        </div>
+                        <div className="col-lg-9" style={{ overflowX: "hidden" }}>
+                            <CategorySort />
+                            <CategoryItems />
+                            <Pagination />
+                        </div>
                     </div>
                 </div>
-
             </div>
-
             <Footer />
         </>
     )
