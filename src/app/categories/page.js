@@ -18,7 +18,7 @@ const page = () => {
             <div className="content" >
                 <div className="container-fluid">
                     {/* filter mobile */}
-                    <div className={`${styles.custom_filter} d-lg-none d-block`}>
+                    <div className="custom-filter d-lg-none d-block">
                         <button className={`btn border-0 main-color-two-bg shadow-box px-3 rounded-3position-fixed ${styles.btn_filter_float}`}
                             style={{ zIndex: "999", bottom: "80px", position: "fixed !important" }}
                             type='button'
@@ -30,7 +30,17 @@ const page = () => {
                             <span className="d-block font-14 text-white">فیلتر</span>
                         </button>
 
-
+                        <div className='offcanvas offcanvas-end' tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                            <div className='offcanvas-header justify-content-between'>
+                                <h5 className='offcanvas-title' id="offcanvasRightLabel">
+                                    فیلترها
+                                </h5>
+                                <button type='button' className='btn-close m-0' data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div className='offcanvas-body'>
+                                <SearchFilters />
+                            </div>
+                        </div>
                     </div>
 
                     {/* end filter mobile */}

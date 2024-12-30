@@ -866,6 +866,13 @@ tag.tagify__tag {
 
 /* ens swal */
 
+
+/*offcanvas start  */
+.custom-filter .offcanvas-body div {
+  box-shadow: none !important;
+}
+/* offcanvas end */
+
 /* accordion.module.css */
 
 @keyframes slideDown {
