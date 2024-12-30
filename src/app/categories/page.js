@@ -1,3 +1,5 @@
+import React from 'react'
+import styles from '@/styles/categories.module.css';
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
 import Footer from '@/components/modules/footer/Footer'
 import Header from '@/components/modules/header/Header'
@@ -6,7 +8,6 @@ import CategoryBrand from '@/components/templates/categories/CategoryBrand'
 import CategoryItems from '@/components/templates/categories/CategoryItems'
 import CategorySort from '@/components/templates/categories/CategorySort'
 import SearchFilters from '@/components/templates/categories/SearchFilters'
-import React from 'react'
 
 const page = () => {
     return (
@@ -17,7 +18,20 @@ const page = () => {
             <div className="content" >
                 <div className="container-fluid">
                     {/* filter mobile */}
+                    <div className={`${styles.custom_filter} d-lg-none d-block`}>
+                        <button className={`btn border-0 main-color-two-bg shadow-box px-3 rounded-3position-fixed ${styles.btn_filter_float}`}
+                            style={{ zIndex: "999", bottom: "80px", position: "fixed !important" }}
+                            type='button'
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasRight"
+                            aria-controls="offcanvasRight"
+                        >
+                            <i className="bi bi-funnel font-20 fw-bold text-white"></i>
+                            <span className="d-block font-14 text-white">فیلتر</span>
+                        </button>
 
+
+                    </div>
 
                     {/* end filter mobile */}
 
