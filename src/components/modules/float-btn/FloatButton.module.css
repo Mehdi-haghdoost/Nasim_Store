@@ -1,0 +1,89 @@
+/* .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+} */
+
+.top_btn {
+    /* position: fixed;
+    left: 50px;
+    bottom: 20px;
+    height: 46px;
+    width: 46px;
+    cursor: pointer;
+    display: block;
+    border-radius: 50px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+    z-index: 10000;
+    transform: translateY(15px);
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+    background: #eee;
+    box-shadow: 0 5px 15px #0763f657;
+    left: 12px;
+    line-height: 55px !important;
+    height: 55px !important;
+    width: 55px !important;
+    margin-top: 12px !important; */
+    position: fixed;
+    left: 50px;
+    bottom: 20px;
+    height: 46px;
+    width: 46px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+    background: #f8f8f8;
+    box-shadow: 0 5px 15px #0763f657;
+    line-height: 55px !important;
+    height: 55px !important;
+    width: 55px !important;
+    margin-top: 12px !important;
+}
+
+.top_btn.active {
+    left: 12px;
+    box-shadow: none !important;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.top_btn::after {
+    position: absolute;
+    content: '\F281';
+    font-family: 'bootstrap-icons';
+    text-align: center;
+    line-height: 46px;
+    font-size: 24px;
+    color: var(--main-color-one);
+    left: 4px;
+    top: 4px;
+    height: 46px;
+    width: 46px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+    animation: gototop 1.2s linear infinite alternate-reverse;
+}
+
+@keyframes gototop {
+    0% {
+        transform: translateY(-0.4rem);
+    }
+
+    100% {
+        transform: translateY(.8rem);
+    }
+}

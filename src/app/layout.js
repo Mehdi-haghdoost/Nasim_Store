@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap-icons/font/bootstrap-icons.css"
 import BootstrapLoader from "@/utils/BootstrapLoader";
 import MobileFooter from "@/components/layouts/MobileFooter/MobileFooter";
+import FloatButton from "@/components/modules/float-btn/FloatButton ";
 
 
 const geistSans = localFont({
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
         <BootstrapLoader />
         {children}
         <MobileFooter />
+        <FloatButton />
       </body>
     </html>
   );
