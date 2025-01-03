@@ -1,0 +1,141 @@
+.btn_colapzion {
+    position: fixed;
+    left: 0;
+    bottom: 90px;
+    text-align: center;
+    padding: 0 8px;
+    z-index: 801;
+}
+
+.btn_colapzion button {
+    background-color: #0b8502;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: block;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.btn_colapzion .btn_close::after,
+.btn_colapzion .btn_open::after {
+    font-family: bootstrap-icons, serif !important;
+    font-size: 30px;
+    position: relative;
+    top: 1px;
+    font-style: normal;
+    color: #fff;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.btn_colapzion .btn_close::after {
+    content: "\F618";
+}
+
+.btn_colapzion .btn_open::after {
+    content: "\F62A";
+}
+
+.options_items li {
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 1px dashed #ddd;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.options_items li:hover {
+    background-color: #0763f641;
+}
+
+.options_items li:nth-last-child(1) {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: 0.7s;
+    z-index: 800;
+}
+
+.overlay_open {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.float_contact {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.title {
+    position: relative;
+    left: 8px;
+    top: -6px;
+    padding: 3px;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background: #FFA41B;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon i {
+    font-size: 20px;
+    display: inherit;
+    color: #fff;
+}
+
+.options_items li:nth-child(2) .icon {
+    background: #1c39bb;
+}
+
+.options_items li:nth-child(3) .icon {
+    background: #0b8502;
+}
+
+.open {
+    position: absolute;
+    bottom: 48px;
+    left: 0px;
+    background-color: #fff;
+    padding: 10px;
+    list-style: none;
+    z-index: 800;
+    transition: transform .3s ease-in-out;
+    width: 300px;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    -webkit-border-radius: 10px;
+    border-radius: 8px;
+}
