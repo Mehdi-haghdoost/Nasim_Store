@@ -18,21 +18,21 @@ function page() {
                             <div className="row align-items-center">
                                 <div className="col-lg-6">
                                     <div className="mb-3">
-                                        <a href="">
+                                        <a href="tel:09211367465">
                                             <img src="/images/contact-page-eleman-3.png" alt="contactUs"
                                                 className='img-fluid'
                                             />
                                         </a>
                                     </div>
                                     <div className="mb-3">
-                                        <a href="">
+                                        <a href="https://t.me/Mehdi_madridista">
                                             <img src="/images/contact-page-eleman-1.png" alt="contactUs"
                                                 className='img-fluid'
                                             />
                                         </a>
                                     </div>
                                     <div className="mb-3">
-                                        <a href="">
+                                        <a href="https://wa.me/09211367465">
                                             <img src="/images/contact-page-eleman-2.png" alt="contactUs"
                                                 className='img-fluid'
                                             />

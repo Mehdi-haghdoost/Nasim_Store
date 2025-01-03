@@ -50,7 +50,7 @@ const ContactUsFloat = () => {
                     isOptionsOpen && (
                         <ul className={`${styles.options_items} ${isOptionsOpen ? styles.open : styles.close}`}>
                             <li>
-                                <Link href={'/'} style={{ textDecoration: "none", color: "#0761f6" }} >
+                                <Link href={'tel:09211367465'} style={{ textDecoration: "none", color: "#0761f6" }} >
                                     <div className={styles.float_contact}>
                                         <span className={styles.title}>پشتیبانی تلفنی</span>
                                         <div className={styles.icon}>
@@ -60,9 +60,9 @@ const ContactUsFloat = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href={'/'} style={{ textDecoration: "none", color: "#0761f6" }} >
+                                <Link href={'https://t.me/Mehdi_madridista'} style={{ textDecoration: "none", color: "#0761f6" }} >
                                     <div className={styles.float_contact}>
-                                        <span className={styles.title}>پشتیبانی تلفنی</span>
+                                        <span className={styles.title}>پشتیبانی تلگرام</span>
                                         <div className={styles.icon}>
                                             <i class="bi bi-telegram"></i>
                                         </div>
@@ -70,9 +70,9 @@ const ContactUsFloat = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href={'/'} style={{ textDecoration: "none", color: "#0761f6" }} >
+                                <Link href={'https://wa.me/09211367465'} style={{ textDecoration: "none", color: "#0761f6" }} >
                                     <div className={styles.float_contact}>
-                                        <span className={styles.title}>پشتیبانی تلفنی</span>
+                                        <span className={styles.title}>پشتیبانی واتس آپ</span>
                                         <div className={styles.icon}>
                                             <i class="bi-whatsapp"></i>
                                         </div>
