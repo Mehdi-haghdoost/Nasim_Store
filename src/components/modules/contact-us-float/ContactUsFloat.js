@@ -43,7 +43,7 @@ const ContactUsFloat = () => {
                 className={styles.btn_colapzion}
                 onClick={toggleOptions}
             >
-                <button className={isOptionsOpen ? styles.btn_open : styles.btn_close}>
+                <button className={`${isOptionsOpen ? styles.btn_open : styles.btn_close} ${styles.contactFire}`}>
 
                 </button>
                 {
