@@ -1,4 +1,3 @@
-const { UniqueArgumentDefinitionNamesRule } = require("graphql");
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
