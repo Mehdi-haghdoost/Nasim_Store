@@ -1,4 +1,4 @@
-const { GraqhQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType } = require('graphql')
+const { GraqhQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull } = require('graphql')
 
 const AddressType = require('./addressType');
 const WishType = require('./wishType');
@@ -10,7 +10,7 @@ const UserType = new GraqhQLObjectType({
     name: "UserType",
     fields: {
         _id: { type: GraphQLID },
-        name: { type: GraphQLString },
+        username: { type:new GraphQLNonNull(GraphQLString) },
         email: { type: GraphQLString },
         phone: { type: GraphQLString },
         role: { type: GraphQLString },

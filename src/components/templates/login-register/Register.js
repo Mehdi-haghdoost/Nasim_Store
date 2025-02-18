@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 function Register({ showLoginForm }) {
 
   const form = useFormik({
-    initialValues: { name: '', email: '', password: '' },
+    initialValues: { username: '', email: '', password: '' },
     validationSchema: registerSchema,
     onSubmit: (values, { setSubmitting }) => {
       setTimeout(() => {
@@ -34,11 +34,11 @@ function Register({ showLoginForm }) {
 
 
   const signUp = async () => {
-    if (!form.values.name.trim()) {
+    if (!form.values.username.trim()) {
       return showSwal("لطفا نام خود را وارد نمایید ", "warning", "اوکی")
     }
-    if (form.errors.name) {
-      return showSwal(form.errors.name, "error", "اوکی")
+    if (form.errors.username) {
+      return showSwal(form.errors.username, "error", "اوکی")
     }
 
 
@@ -108,7 +108,7 @@ function Register({ showLoginForm }) {
                                 ) : (
                                   <div className={`${styles.comment_item} mb-3 step-username`}>
                                     <input
-                                      value={form.values.name}
+                                      value={form.values.username}
                                       onChange={form.handleChange}
                                       onBlur={form.handleBlur}
                                       name='name'
