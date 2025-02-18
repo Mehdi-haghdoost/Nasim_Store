@@ -1,9 +1,9 @@
-const { GraqhQLObjectType, GraphQLID, GraphQLString, GraphQLList } = require('graphql')
+const { GraqhQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType } = require('graphql')
 
-const AddressType = require('./addressType');  
-const WishType = require('./wishType');       
+const AddressType = require('./addressType');
+const WishType = require('./wishType');
 const CartItemType = require('./cartItemType');
-const OrderType = require('./orderType');      
+const OrderType = require('./orderType');
 const DiscountCouponsType = require('./discountCouponsType')
 
 const UserType = new GraqhQLObjectType({
@@ -26,4 +26,12 @@ const UserType = new GraqhQLObjectType({
     }
 });
 
-module.exports = UserType;
+const AuthType = new GraphQLObjectType({
+    name: 'AuthType',
+    fields: {
+        token: { type: GraphQLString },
+        user: { type: UserType },
+    }
+})
+
+module.exports = { UserType, AuthType };
