@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
     // User information
-    userName: {
-        type : String,
+    username: {
+        type: String,
         required: true,
     },
 
@@ -109,4 +109,4 @@ const schema = new mongoose.Schema({
 
 const model = mongoose.models.User || mongoose.model("User", schema);
 
-export default model;
+module.exports = model;
