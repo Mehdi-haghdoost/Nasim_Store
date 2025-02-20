@@ -22,7 +22,7 @@ const registerUserSchema = new Schema({
 });
 
 const registerUserValidator = (obj) => {
-    return registerUserSchema.valdate(obj);
+    return registerUserSchema.validate(obj);
 };
 
 module.exports = {
