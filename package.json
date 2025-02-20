@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start-backend": "node src/graphql/graphql.js"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -15,6 +16,7 @@
     "bcryptjs": "^3.0.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "formik": "^2.4.6",
     "graphql": "^16.10.0",
@@ -30,6 +32,7 @@
     "react-tagify": "^1.0.7",
     "sweetalert": "^2.1.2",
     "swiper": "^11.1.15",
+    "validate": "^5.2.0",
     "yup": "^1.4.0"
   }
 }
