@@ -71,6 +71,8 @@ function Register({ showLoginForm }) {
       return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
     }
 
+    setIsRegisterWithOtp(true)
+
   }
 
   return (
@@ -152,7 +154,6 @@ function Register({ showLoginForm }) {
                                   onClick={() => {
                                     setIsRegisterWithPass(false)
                                     sentOtp()
-                                    setIsRegisterWithOtp(true)
                                   }}
                                   type='button' className="main-color-one-bg py-3 btn w-100 mb-3  rounded-3">ثبت نام با کد تایید</button>
                               </div>

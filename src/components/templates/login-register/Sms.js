@@ -118,8 +118,7 @@ function Sms({ hideOtpForm, type }) {
                                             )}
 
                                             <div className="form-group mt-4">
-                                                <button type="submit" id="submit" className={`${styles.btn_login} w-100 btn text-white rounded-3`}>وورد به
-                                                    سایت
+                                                <button type="submit" id="submit" className={`${styles.btn_login} w-100 btn text-white rounded-3`}>ثبت نام
                                                 </button>
                                             </div>
                                         </div>

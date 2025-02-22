@@ -34,4 +34,11 @@ const AuthType = new GraphQLObjectType({
     }
 })
 
-module.exports = { UserType, AuthType };
+const OtpType = new GraphQLObjectType({
+    name : "OtpType",
+    fields : {
+        message : {type : GraphQLString},
+    }
+})
+
+module.exports = { UserType, AuthType,OtpType };
