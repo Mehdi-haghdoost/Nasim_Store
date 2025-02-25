@@ -14,6 +14,20 @@ import ProgressBar from './ProgressBar';
 import ProductDetail from './ProductDetail';
 import Link from 'next/link';
 
+const leftSlides = [
+    { id: 1, image: "/images/slide2-2.jpg", href: "/categories" },
+    { id: 2, image: "/images/slide3-1.jpg", href: "/categories" },
+    { id: 3, image: "/images/slide4.jpg", href: "/categories" },
+]
+
+const rightSlides = [
+    { id: 1, image: "/images/product/watch1.jpg", href: "/product" },
+    { id: 2, image: "/images/product/watch2.jpg", href: "/product" },
+    { id: 3, image: "/images/product/watch3.jpg", href: "/product" },
+    { id: 4, image: "/images/product/watch4.jpg", href: "/product" },
+
+]
+
 function MainSlider() {
 
     const [activeSlide, setActiveSlide] = useState(0)
@@ -41,33 +55,16 @@ function MainSlider() {
                                     autoplay={{ delay: 6000 }}
                                     onSlideChange={() => setActiveSlide(activeSlide + 1)}
                                     className={`${styles.mySwiper} home-slider`}>
-                                    <SwiperSlide>
-                                        <ProductBox />
-                                        <ProgressBar key={activeSlide} />
-                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch1.jpg" alt="slide1" />
-                                        <ProductDetail />
-                                    </SwiperSlide>
-
-                                    <SwiperSlide>
-                                        <ProductBox />
-                                        <ProgressBar key={activeSlide} />
-                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch2.jpg" alt="slide2" />
-                                        <ProductDetail />
-                                    </SwiperSlide>
-
-                                    <SwiperSlide>
-                                        <ProductBox />
-                                        <ProgressBar key={activeSlide} />
-                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch3.jpg" alt="slide3" />
-                                        <ProductDetail />
-                                    </SwiperSlide>
-
-                                    <SwiperSlide>
-                                        <ProductBox />
-                                        <ProgressBar key={activeSlide} />
-                                        <img className={`img-fluid ${styles.slider_img}`} src="/images/product/watch4.jpg" alt="slide4" />
-                                        <ProductDetail />
-                                    </SwiperSlide>
+                                    {rightSlides.map((slide) => (
+                                        <SwiperSlide>
+                                            <Link href={`${slide.href}/${slide.id}`}>
+                                                <ProductBox />
+                                                <ProgressBar key={activeSlide} />
+                                                <img className={`img-fluid ${styles.slider_img}`} src={slide.image} alt={`Slide ${slide.id}`} />
+                                                <ProductDetail />
+                                            </Link>
+                                        </SwiperSlide>
+                                    ))}
                                 </Swiper>
                             </div>
                         </div>
@@ -94,23 +91,14 @@ function MainSlider() {
                                         onAutoplayTimeLeft={onAutoplayTimeLeft}
                                         className="mySwiper"
                                     >
-                                        <SwiperSlide>
-                                            <Link href={"/categories"}>
-                                                <img className='img-fluid' loading="lazy" src="/images/slide2-2.jpg" alt="" />
-                                            </Link>
-                                        </SwiperSlide>
+                                        {leftSlides.map((slide) => (
+                                            <SwiperSlide>
+                                                <Link key={slide.id} href={slide.href}>
+                                                    <img className='img-fluid' loading="lazy" src={slide.image} alt={`Slide ${slide.id}`} />
+                                                </Link>
+                                            </SwiperSlide>
+                                        ))}
 
-                                        <SwiperSlide>
-                                            <Link href={"/categories"}>
-                                                <img className='img-fluid' loading="lazy" src="/images/slide3-1.jpg" alt="" />
-                                            </Link>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <Link href={"/categories"}>
-                                                <img className='img-fluid' loading="lazy" src="/images/slide4.jpg" alt="" />
-                                            </Link>
-                                        </SwiperSlide>
                                         <div className={`${styles.autoplay_progress} d-none d-lg-block`} slot="container-end">
                                             <svg viewBox="0 0 48 48" ref={progressCircle}>
                                                 <circle cx="24" cy="24" r="20"></circle>
