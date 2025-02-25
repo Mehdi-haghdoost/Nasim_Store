@@ -12,6 +12,7 @@ import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import ProductBox from './ProductBox';
 import ProgressBar from './ProgressBar';
 import ProductDetail from './ProductDetail';
+import Link from 'next/link';
 
 function MainSlider() {
 
@@ -30,8 +31,9 @@ function MainSlider() {
                 <div className="row">
                     <div className="col-lg-3 order-lg-1 order-2">
                         <div className={`${styles.swiper_slide}`}>
-                            <div style={{width : '100%'}} className={`${styles.slide_product_box}`}>
+                            <div style={{ width: '100%' }} className={`${styles.slide_product_box}`}>
                                 <Swiper
+
                                     loop={true}
                                     rewind={true}
                                     spaceBetween={30}
@@ -93,19 +95,21 @@ function MainSlider() {
                                         className="mySwiper"
                                     >
                                         <SwiperSlide>
-
-                                            <img className='img-fluid' loading="lazy" src="/images/slide2-2.jpg" alt="" />
-
+                                            <Link href={"/categories"}>
+                                                <img className='img-fluid' loading="lazy" src="/images/slide2-2.jpg" alt="" />
+                                            </Link>
                                         </SwiperSlide>
+
                                         <SwiperSlide>
-
-                                            <img className='img-fluid' loading="lazy" src="/images/slide3-1.jpg" alt="" />
-
+                                            <Link href={"/categories"}>
+                                                <img className='img-fluid' loading="lazy" src="/images/slide3-1.jpg" alt="" />
+                                            </Link>
                                         </SwiperSlide>
+
                                         <SwiperSlide>
-
-                                            <img className='img-fluid' loading="lazy" src="/images/slide4.jpg" alt="" />
-
+                                            <Link href={"/categories"}>
+                                                <img className='img-fluid' loading="lazy" src="/images/slide4.jpg" alt="" />
+                                            </Link>
                                         </SwiperSlide>
                                         <div className={`${styles.autoplay_progress} d-none d-lg-block`} slot="container-end">
                                             <svg viewBox="0 0 48 48" ref={progressCircle}>
