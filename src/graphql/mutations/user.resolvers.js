@@ -89,7 +89,7 @@ const sendOtp = {
                 op: "pattern",
                 user: "u09211367465",
                 pass: "Faraz@1461240014841169",
-                fromNum: "10004223",
+                fromNum: "3000505",
                 toNum: phone,
                 patternCode: "d2q42ceze02l38o",
                 inputData: [{ "verification-code": code }]
@@ -150,7 +150,7 @@ const confirmOtpAndRegister = {
                     const email = `${phone}@gmail.com`;
                     const hashedPassword = await bcrypt.hash(phone, 10);
                     const newUser = {
-                        username: phone,
+                        
                         email,
                         phone,
                         password: hashedPassword,

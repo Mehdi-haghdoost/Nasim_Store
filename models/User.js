@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
     // User information
     username: {
         type: String,
+        default: "کاربر نسیم استور",
         required: true,
     },
 
