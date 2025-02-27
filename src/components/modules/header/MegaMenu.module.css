@@ -20,6 +20,7 @@
         transform: none;
     }
 }
+
 .mega_menu {
     background: #fff;
     box-shadow: rgb(0 0 0 / 10%) 0 8px 10px 0;
@@ -48,7 +49,8 @@
 .mega_menu_navbar li {
     margin-left: 1rem;
 }
-.mega_menu_navbar>li:hover .main_menu_active{
+
+.mega_menu_navbar>li:hover .main_menu_active {
     display: block;
 }
 
@@ -109,7 +111,7 @@
     background-color: #eee;
     border-radius: 0;
     border-bottom: 1px dashed #d2d2d2d9;
-    width: 200px;
+    width: 265px;
     margin: 0;
     padding: 15px 0;
 }
@@ -139,13 +141,13 @@
     display: flex;
     flex-wrap: wrap;
     transition: all 0.3s ease-in;
-    right: 200px;
+    right: 268px;
     top: 15px;
     min-height: 400px;
     max-height: 400px;
     /* overflow-y: scroll; */
     min-width: 200px;
-    width: 1132px;
+    width: 1035px;
     border: none;
 }
 
@@ -169,6 +171,7 @@
     color: var(--main-color-one);
     font-weight: bolder;
 }
+
 .main_menu_sub_title {
     color: #333 !important;
     font-size: 16px;
@@ -178,7 +181,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    width: 178px;
+    width: 197px;
 }
 
 
@@ -188,8 +191,9 @@
 
 .main_menu_sub_list_second_active>div>li:not(:first-child)>a:hover {
     color: var(--main-color-one) !important;
-    
+
 }
+
 .main_menu_sub_title:hover {
     color: #333 !important;
     background-color: transparent;
@@ -243,12 +247,14 @@
     background: #fff url('/images/mega-img-1.jpg') no-repeat !important;
     background-position: left !important;
     background-size: 400px !important;
-    min-width: 1345px;
+    min-width: 1340px;
 }
-.mega_menu_navbar>li:nth-child(2):hover .main_menu_sub_list_second_active  {
+
+.mega_menu_navbar>li:nth-child(2):hover .main_menu_sub_list_second_active {
     display: flex !important;
 }
-.mega_menu_navbar>li:nth-child(3):hover .main_menu_sub_list_third_active  {
+
+.mega_menu_navbar>li:nth-child(3):hover .main_menu_sub_list_third_active {
     display: block !important;
 }
 
@@ -362,6 +368,7 @@
     border-radius: 10px;
     list-style-type: none;
 }
+
 .border_animate {
     --border-color: var(--main-color-one);
     --border-width: 2px;
@@ -373,8 +380,9 @@
     background-repeat: no-repeat;
     transition: background-size 0.3s;
     margin: 5px 0;
-    background-position:bottom ;
+    background-position: bottom;
 }
+
 .border_animate:hover {
     background-size: 100% var(--border-width);
 }

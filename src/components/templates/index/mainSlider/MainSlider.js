@@ -56,13 +56,17 @@ function MainSlider() {
                                     onSlideChange={() => setActiveSlide(activeSlide + 1)}
                                     className={`${styles.mySwiper} home-slider`}>
                                     {rightSlides.map((slide) => (
-                                        <SwiperSlide>
-                                            <Link href={`${slide.href}/${slide.id}`}>
-                                                <ProductBox />
-                                                <ProgressBar key={activeSlide} />
-                                                <img className={`img-fluid ${styles.slider_img}`} src={slide.image} alt={`Slide ${slide.id}`} />
-                                                <ProductDetail />
+                                        <SwiperSlide key={slide.id}>
+                                            <ProductBox />
+                                            <ProgressBar key={activeSlide} />
+                                            <Link href={`${slide.href}/${slide.id}`} >
+                                                <img
+                                                    className={`img-fluid ${styles.slider_img}`}
+                                                    src={slide.image}
+                                                    alt={`Slide ${slide.id}`}
+                                                />
                                             </Link>
+                                            <ProductDetail />
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
@@ -92,8 +96,8 @@ function MainSlider() {
                                         className="mySwiper"
                                     >
                                         {leftSlides.map((slide) => (
-                                            <SwiperSlide>
-                                                <Link key={slide.id} href={slide.href}>
+                                            <SwiperSlide key={slide.id}>
+                                                <Link href={slide.href}>
                                                     <img className='img-fluid' loading="lazy" src={slide.image} alt={`Slide ${slide.id}`} />
                                                 </Link>
                                             </SwiperSlide>
