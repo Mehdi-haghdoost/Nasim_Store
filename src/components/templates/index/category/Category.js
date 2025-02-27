@@ -25,10 +25,10 @@ function Category() {
                 <div className={`${styles.category_items}`}>
                     <div className="row gy-3 justify-content-center">
                         <CategoryItem title="تلفن همراه" src="/images/mobile.png" />
-                        <CategoryItem title="کالای  ورزشی" src="/images/varzeshi.png" />
-                        <CategoryItem title="کالای دیجیتال" src="/images/kalaye-degital.png" />
+                        <CategoryItem title="کالای  دیجیتال" src="/images/digital-product.png" />
+                        <CategoryItem title="اسپیکرهای گیمینگ" src="/images/speaker-gaming.png" />
                         <CategoryItem title="پوشاک" src="/images/poshak.png" />
-                        <CategoryItem title="لوازم تحریر" src="/images/lavazem-tahrir.png" />
+                        <CategoryItem title="آنتی ویروس" src="/images/anti-virus.png" />
                         <CategoryItem title="کالای سوپر مارکتی" src="/images/milk.png" />
                         <CategoryItem title="اسباب بازی" src="/images/children.png" />
                         <CategoryItem title="لوازم خودرو" src="/images/abzar-khodro.png" />
