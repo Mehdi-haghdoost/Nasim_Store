@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { string } = require("yup");
+
 
 const schema = new mongoose.Schema({
     // User information
@@ -99,8 +99,7 @@ const schema = new mongoose.Schema({
             paymentStatus: { type: String, enum: ["PENDING", "PAID", "FAILED"], default: "PENDING" },
             deliveryDate: { type: Date },
             postalCode: {
-                type: string,
-                required: true
+                type: String,
             }
         }
     ],
