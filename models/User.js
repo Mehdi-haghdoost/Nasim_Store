@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { string } = require("yup");
 
 const schema = new mongoose.Schema({
     // User information
@@ -28,6 +29,17 @@ const schema = new mongoose.Schema({
         default: "USER",
     },
 
+    // تاریخ ثبت‌نام (به‌طور خودکار مقداردهی می‌شود)
+    registrationDate: {
+        type: Date,
+        default: Date.now,
+    },
+
+    // National ID (اختیاری)
+    nationalId: {
+        type: String, // کد ملی به صورت رشته‌ای
+        required: false, // اختیاری برای کاربر
+    },
 
     // Address management (supports multiple addresses per user)
     address: [
@@ -86,6 +98,10 @@ const schema = new mongoose.Schema({
             paymentMethod: { type: String, enum: ["DirectBankPayment", "CashOnDelivery"], required: true },
             paymentStatus: { type: String, enum: ["PENDING", "PAID", "FAILED"], default: "PENDING" },
             deliveryDate: { type: Date },
+            postalCode: {
+                type: string,
+                required: true
+            }
         }
     ],
 
