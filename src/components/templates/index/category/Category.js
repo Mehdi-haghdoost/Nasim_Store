@@ -26,12 +26,12 @@ function Category() {
                     <div className="row gy-3 justify-content-center">
                         <CategoryItem title="تلفن همراه" src="/images/mobile.png" />
                         <CategoryItem title="کالای  دیجیتال" src="/images/digital-product.png" />
-                        <CategoryItem title="اسپیکرهای گیمینگ" src="/images/speaker-gaming.png" />
-                        <CategoryItem title="پوشاک" src="/images/poshak.png" />
-                        <CategoryItem title="آنتی ویروس" src="/images/anti-virus.png" />
-                        <CategoryItem title="کالای سوپر مارکتی" src="/images/milk.png" />
-                        <CategoryItem title="اسباب بازی" src="/images/children.png" />
-                        <CategoryItem title="لوازم خودرو" src="/images/abzar-khodro.png" />
+                        <CategoryItem title="گجت های گیمینگ" src="/images/speaker-gaming.png" />
+                        <CategoryItem title="کنسول بازی" src="/images/console.png" />
+                        <CategoryItem title="آنتی ویروس" src="/images/antivirus.png" />
+                        <CategoryItem title="لپتاپ" src="/images/laptop.png" />
+                        <CategoryItem title="لوازم جانبی" src="/images/janebi.png" />
+                        <CategoryItem title="ساعت های هوشمند" src="/images/smartWatch.jpg" />
                     </div>
                 </div>
             </div>
