@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const UserModel = require("./User");
+const { provinces, cities } = require("../data/provincesCities");
+
 
 const schema = new mongoose.Schema({
 
-    user : {
+    user: {
         type: mongoose.Types.ObjectId,
-        ref : "USer",
-        required : true,
+        ref: "User",
+        required: true,
     },
 
     street: {
@@ -23,27 +25,36 @@ const schema = new mongoose.Schema({
     province: {
         type: String,
         required: true,
-        enum: ["تهران", "اصفهان", "خراسان رضوی", "فارس", "آذربایجان شرقی"],
+        enum: provinces,
+        default: "تهران",
     },
 
     city: {
         type: String,
         required: true,
+        enum: function () {
+            const selectedProvince = this.get("province") || "تهران";
+            const cityList = cities[selectedProvince];
+            return Array.isArray(cityList) ? cityList : [];
+        }
     },
 
     postalCode: {
         type: String,
         required: false,
+        match: [/^\d{10}$/, "کد پستی باید ۱۰ رقم باشد."],
     },
 
     phoneNumber: {
         type: String,
         required: false,
+        match: [/^0\d{2,3}-\d{7,8}$/, "فرمت شماره تلفن نامعتبر است."],
     },
 
     mobileNumber: {
         type: String,
         required: true,
+        match: [/^09\d{9}$/, "فرمت شماره همراه نامعتبر است."],
     },
 
     recipientName: {
