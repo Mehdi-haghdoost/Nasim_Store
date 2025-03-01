@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const AddressModel = require("./Address");
 
 const schema = new mongoose.Schema({
     // User information
@@ -42,15 +42,10 @@ const schema = new mongoose.Schema({
     },
 
     // Address management (supports multiple addresses per user)
-    address: [
+    addresses: [
         {
-            street: String,
-            fullAddress: String,
-            city: String,
-            postalCode: String,
-            country: { type: String, default: "ایران" },
-            isDefault: { type: Boolean, default: false }
-
+            type : mongoose.Types.ObjectId,
+            ref : "Address",            
         }
     ],
 
