@@ -33,7 +33,7 @@ const schema = new mongoose.Schema({
         type: String,
         required: false,
         trim: true,
-        match: match: [/^https?:\/\/[^\s/$.?#].[^\s]*$/, "آدرس وب‌سایت معتبر وارد کنید"],
+        match: [/^https?:\/\/[^\s/$.?#].[^\s]*$/, "آدرس وب‌سایت معتبر وارد کنید"],
     },
 
     rating: {
