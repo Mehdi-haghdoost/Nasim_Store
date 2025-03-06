@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const UserModel = require('./User');
 
 const schema = new mongoose.Schema({
     code: {
