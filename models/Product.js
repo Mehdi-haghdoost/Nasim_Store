@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const UserModel = require('./User');
 const SellerModel = require('./Seller');
+const CategoryModel = require("./Category");
 
 
 const schema = new mongoose.Schema({
@@ -43,6 +44,11 @@ const schema = new mongoose.Schema({
             },
         ],
         default: [],
+    },
+    category: {
+        type: mongoose.Types.ObjectId,
+        ref: "Category",
+        required: true
     },
 
     colors: {
