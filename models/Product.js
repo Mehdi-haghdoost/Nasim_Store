@@ -56,7 +56,7 @@ const schema = new mongoose.Schema({
             {
                 color: {
                     type: String,
-                    enum: ["قرمز", "مشکی", "سبز", "آبی"],
+                    enum: ["قرمز", "مشکی", "سبز", "آبی", "نارنجی", "بنفش"],
                     required: true,
                 },
                 available: {
@@ -142,6 +142,13 @@ const schema = new mongoose.Schema({
         max: 100,
         default: 0,
     },
+
+    salesCount: {
+        type: Number,
+        min: 0,
+        default: 0,
+    },
+    
 },
     { timestamps: true },
 );
