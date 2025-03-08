@@ -88,6 +88,19 @@ const schema = new mongoose.Schema({
         default: 0,
     },
 
+    // قیمت با تخفیف
+    discountedPrice: {
+        type: Number,
+        required: false,
+        min: 0,
+        default: null,
+    },
+
+    hasDiscount: {
+        type: Boolean,
+        required: false,
+    },
+
     // آیکون برند محصول (URL یا مسیر فایل)
     brandIcon: {
         type: String,
@@ -148,7 +161,7 @@ const schema = new mongoose.Schema({
         min: 0,
         default: 0,
     },
-    
+
 },
     { timestamps: true },
 );
