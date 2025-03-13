@@ -1,6 +1,7 @@
 const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLList, GraphQLFloat, GraphQLBoolean, GraphQLInt } = require("graphql");
 const {CategoryType} = require("./category.types");
 const {SellerType} = require("./seller.types");
+const {CommentType} = require("./comment.types");
 
 const HighlightType = new GraphQLObjectType({
     name: "HighlightType",
