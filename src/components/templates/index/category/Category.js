@@ -16,10 +16,10 @@ function Category() {
                         </h5>
                     </div>
                     <div className="link">
-                        <a href="" className="border-animate fromCenter pb-1 fw-bold d-flex align-items-center">
+                        <Link href={"categories"} className="border-animate fromCenter pb-1 fw-bold d-flex align-items-center">
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <div className={`${styles.category_items}`}>
