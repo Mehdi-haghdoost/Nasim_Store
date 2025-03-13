@@ -138,13 +138,11 @@ const schema = new mongoose.Schema({
 
     // لیست فروشندگان این محصول
     sellers: [
-        {
-            seller: {
-                type: mongoose.Types.ObjectId,
-                ref: "Seller",
-                required: true,
-            },
-        },
+       {
+        type : mongoose.Types.ObjectId,
+        ref : "Seller",
+        required : true,
+       }
     ],
 
     // میزان رضایت مشتریان از کالا بر حسب درصد
