@@ -43,7 +43,12 @@ const registerUser = {
 
         const user = await UserModel.create(newUser)
 
-        const token = jwt.sign({ id: user._id }, process.env.AccessTokenSecretKey, {
+        const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+        if (!AccessTokenSecretKey) {
+            throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
+        }
+
+        const token = jwt.sign({ id: user._id }, AccessTokenSecretKey, {
             expiresIn: "7d"
         })
 
@@ -150,7 +155,7 @@ const confirmOtpAndRegister = {
                     const email = `${phone}@gmail.com`;
                     const hashedPassword = await bcrypt.hash(phone, 10);
                     const newUser = {
-                        
+
                         email,
                         phone,
                         password: hashedPassword,
@@ -158,7 +163,12 @@ const confirmOtpAndRegister = {
                     };
 
                     const user = await UserModel.create(newUser);
-                    const token = jwt.sign({ id: user._id }, process.env.AccessTokenSecretKey, {
+                    const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+                    if (!AccessTokenSecretKey) {
+                        throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
+                    }
+                    
+                    const token = jwt.sign({ id: user._id }, AccessTokenSecretKey, {
                         expiresIn: "7d",
                     });
 
