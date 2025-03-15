@@ -1,3 +1,10 @@
+const jwt = require("jsonwebtoken");
+const UserModel = require("../../models/User");
+
+const getUserById = (id) => {
+    return UserModel.findOne({ _id: id });
+}
+
 const validatePhone = (phone) => {
     const pattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g;
 
@@ -15,8 +22,40 @@ const validatePassword = (password) => {
     return pattern.test(password)
 }
 
-export {
+const validateToken = async (req) => {
+    if (req) {
+        const authHeader = req.headers.authorization;
+
+        if (authHeader) {
+            const token = authHeader.replace("Bearer", "")
+            if (!token || token.trim() === "") {
+                throw new Error("توکنی یافت نشد !!")
+            }
+
+            const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+            if (!AccessTokenSecretKey) {
+                throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
+            }
+            
+            const { id } = jwt.verify(token, AccessTokenSecretKey);
+            const user = await getUserById(id);
+
+            if (!user) {
+                throw new Error("کاربر پیدا نشد");
+            }
+            return user;
+        } else {
+            throw new Error("احراز هویت نشده است !!");
+        }
+
+    } else {
+        throw new Error("احراز هویت نشده است !!");
+    }
+}
+
+module.exports = {
     validatePhone,
     validateEmail,
-    validatePassword
+    validatePassword,
+    validateToken,
 }
