@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLList, GraphQLFloat, GraphQLBoolean, GraphQLInt } = require("graphql");
+const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLList, GraphQLFloat, GraphQLBoolean, GraphQLInt, GraphQLInputObjectType } = require("graphql");
 const {CategoryType} = require("./category.types");
 const {SellerType} = require("./seller.types");
 const {CommentType} = require("./comment.types");
@@ -46,14 +46,14 @@ const ProductType = new GraphQLObjectType({
     }
 })
 
-const HighlightInputType = new GraphQLObjectType({
+const HighlightInputType = new GraphQLInputObjectType({
     name : "HighlightInput",
     fields : () => ({
         feature : {type : new GraphQLNonNull(GraphQLString)},
     }),
 });
 
-const ColorInputType = new GraphQLObjectType({
+const ColorInputType = new GraphQLInputObjectType({
     name : "ColorInput",
     fields : () => ({
         color : {type : new GraphQLNonNull(GraphQLString)},
@@ -61,7 +61,7 @@ const ColorInputType = new GraphQLObjectType({
     }),
 })
 
-const ProductInputType = new GraphQLObjectType({
+const ProductInputType = new GraphQLInputObjectType({
     name: "ProductInput",
     fields: () => ({
         image: { type: new GraphQLNonNull(GraphQLString) },
@@ -89,4 +89,8 @@ const ProductInputType = new GraphQLObjectType({
 module.exports = {
     ProductType,
     ProductInputType,
+    HighlightType,
+    ColorType,
+    HighlightInputType,
+    ColorInputType
 }
