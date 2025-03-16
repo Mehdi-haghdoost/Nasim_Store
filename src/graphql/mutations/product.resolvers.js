@@ -3,7 +3,7 @@ const { ProductType, ProductInputType } = require("../types/product.types");
 const ProductModel = require("../../../models/Product");
 const CategoryModel = require("../../../models/Category");
 const SellerModel = require("../../../models/Seller");
-const { validateToken } = require("@/utils/auth");
+const { validateToken } = require("../../utils/auth");
 
 const addProduct = {
     type: ProductType,

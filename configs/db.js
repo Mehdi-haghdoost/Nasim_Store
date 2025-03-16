@@ -14,8 +14,6 @@ const connectToDB = async () => {
 
         await mongoose.connect(process.env.MONGO_URL, {
             authSource: "admin",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
         });
         console.log('Connect To DB Successfully :))');
 

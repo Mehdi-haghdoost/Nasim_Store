@@ -1,10 +1,9 @@
 const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList } = require("graphql");
-const ProductType = require("./product.types");
 
 const ProductRefType = new GraphQLObjectType({
     name: "ProductRef",
     fields: () => ({
-        product: { type: new GraphQLNonNull(ProductType) },
+        product: { type: new GraphQLNonNull(GraphQLID) },
         price: { type: new GraphQLNonNull(GraphQLFloat) },
     }),
 });
