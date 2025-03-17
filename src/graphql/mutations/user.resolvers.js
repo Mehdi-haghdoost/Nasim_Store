@@ -52,6 +52,14 @@ const registerUser = {
             expiresIn: "7d"
         })
 
+        //  تست توکن : 
+        try {
+            const decoded = jwt.verify(token, AccessTokenSecretKey);
+            console.log("Token is valid:", decoded);
+          } catch (error) {
+            console.error("Token verification failed:", error);
+          }
+
         return {
             token,
             user,

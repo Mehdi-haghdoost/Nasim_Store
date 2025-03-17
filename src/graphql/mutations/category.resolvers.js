@@ -12,7 +12,7 @@ const addCategory = {
     resolve: async (_, { input }, context) => {
         try {
 
-            const user = validateToken(context.req);
+            const user =await validateToken(context.req);
             if (!user) {
                 throw new Error("احراز هویت نشده است")
             }

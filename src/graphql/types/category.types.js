@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLID } = require("graphql");
+const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLID, GraphQLInputObjectType } = require("graphql");
 
 const CategoryType = new GraphQLObjectType({
     name: "CategoryType",
@@ -11,7 +11,7 @@ const CategoryType = new GraphQLObjectType({
     })
 });
 
-const CategoryInputType = new GraphQLObjectType({
+const CategoryInputType = new GraphQLInputObjectType({
     name: "CategoryInput",
     fields: () => ({
         name: { type: new GraphQLNonNull(GraphQLString) },

@@ -25,9 +25,11 @@ const validatePassword = (password) => {
 const validateToken = async (req) => {
     if (req) {
         const authHeader = req.headers.authorization;
+        console.log('authHeader ==>', authHeader);
 
         if (authHeader) {
-            const token = authHeader.replace("Bearer", "")
+            const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+            console.log("Received token:", token);
             if (!token || token.trim() === "") {
                 throw new Error("توکنی یافت نشد !!")
             }

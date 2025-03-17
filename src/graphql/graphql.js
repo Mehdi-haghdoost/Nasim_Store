@@ -1,10 +1,10 @@
+require("dotenv").config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { createHandler } = require('graphql-http/lib/use/express');
 const schema = require('./index.resolver');
 const connectToDB = require('../../configs/db');
 
-require("dotenv").config();
 
 
 const app = express();
