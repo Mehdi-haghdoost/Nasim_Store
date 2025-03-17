@@ -8,7 +8,7 @@ const addSeller = {
     args: {
         input: { type: new GraphQLNonNull(SellerInputType) },
     },
-    resolve: async (_, { index }, context) => {
+    resolve: async (_, { input }, context) => {
         try {
             const user = await validateToken(context.req);
             if (!user) {
@@ -36,6 +36,7 @@ const addSeller = {
             })
 
             const savedSeller = await newSeller.save();
+            return savedSeller;
 
         } catch (error) {
             throw new Error(`خطا در ایجاد فروشنده  ${error.message}`)
