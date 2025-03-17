@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList } = require("graphql");
+const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType } = require("graphql");
 
 const ProductRefType = new GraphQLObjectType({
     name: "ProductRef",
@@ -23,7 +23,7 @@ const SellerType = new GraphQLObjectType({
     })
 })
 
-const ProductRefInputType = new GraphQLObjectType({
+const ProductRefInputType = new GraphQLInputObjectType({
     name: "ProductRefInput",
     fields: () => ({
         product: { type: new GraphQLNonNull(GraphQLID) },
@@ -31,7 +31,7 @@ const ProductRefInputType = new GraphQLObjectType({
     }),
 });
 
-const SellerInputType = new GraphQLObjectType({
+const SellerInputType = new GraphQLInputObjectType({
     name: "SellerInput",
     fields: () => ({
         name: { type: new GraphQLNonNull(GraphQLString) },

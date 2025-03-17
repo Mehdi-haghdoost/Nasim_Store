@@ -4,6 +4,7 @@ const { registerUser,
     confirmOtpAndRegister, } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory } = require("./mutations/category.resolvers");
+const { addSeller } = require("./mutations/seller.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -25,7 +26,8 @@ const RootMutation = new GraphQLObjectType({
         sendOtp,
         confirmOtpAndRegister,
         addProduct,
-        addCategory
+        addCategory,
+        addSeller,
     },
 });
 
