@@ -3,6 +3,18 @@ const UserModel = require('./User');
 const SellerModel = require('./Seller');
 const CategoryModel = require("./Category");
 
+const featureSchema = new mongoose.Schema({
+    key: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    value: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+});
 
 const schema = new mongoose.Schema({
     image: {
@@ -19,9 +31,9 @@ const schema = new mongoose.Schema({
 
     // ویژگی‌های کلی کالا
     features: {
-        type: [String],
-        required: false,
-        default: [],
+        type : [featureSchema],
+        required : false,
+        default : [],
     },
 
     rating: {
@@ -138,11 +150,11 @@ const schema = new mongoose.Schema({
 
     // لیست فروشندگان این محصول
     sellers: [
-       {
-        type : mongoose.Types.ObjectId,
-        ref : "Seller",
-        required : true,
-       }
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "Seller",
+            required: true,
+        }
     ],
 
     // میزان رضایت مشتریان از کالا بر حسب درصد
