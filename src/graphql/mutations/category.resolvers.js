@@ -1,7 +1,7 @@
 const { GraphQLNonNull, GraphQLList } = require("graphql");
 const CategoryModel = require("../../../models/Category");
 const { CategoryType, CategoryInputType } = require("../types/category.types");
-const { validateToken } = require("../../utils/auth");
+const { validateToken } = require("../../utils/authBackend");
 
 
 const addCategory = {

@@ -5,23 +5,6 @@ const getUserById = (id) => {
     return UserModel.findOne({ _id: id });
 }
 
-const validatePhone = (phone) => {
-    const pattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g;
-
-    return pattern.test(phone)
-}
-const validateEmail = (email) => {
-    const pattern = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/g;
-
-    return pattern.test(email)
-}
-
-const validatePassword = (password) => {
-    const pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/g;
-
-    return pattern.test(password)
-}
-
 const validateToken = async (req) => {
     if (req) {
         const authHeader = req.headers.authorization;
@@ -54,8 +37,5 @@ const validateToken = async (req) => {
 }
 
 module.exports = {
-    validatePhone,
-    validateEmail,
-    validatePassword,
     validateToken,
 }

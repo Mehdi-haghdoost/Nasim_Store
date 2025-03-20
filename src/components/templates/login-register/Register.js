@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styles from './Register.module.css'
 import Link from "next/link";
 import { showSwal } from '@/utils/helpers';
-import { validateEmail, validatePassword, validatePhone } from '@/utils/auth';
+import { validateEmail, validatePassword, validatePhone } from '@/utils/authFrontEnd';
 import Sms from './Sms';
 import registerSchema from '@/utils/register';
 import { useFormik } from 'formik';
@@ -77,7 +77,7 @@ function Register({ showLoginForm }) {
 
   return (
     <>
-      {!isRegisterWithOtp ? (
+      {/* {!isRegisterWithOtp ? (
         <>
           <div className={`${styles.bg_auth}`}>
             <div className={`${styles.content}`}>
@@ -198,7 +198,8 @@ function Register({ showLoginForm }) {
         </>
       ) : (
         <Sms hideOtpForm={hideOtpForm} type={"ثبت نام"} />
-      )}
+      )} */}
+      <div>helooooooooooooo</div>
     </>
 
   )

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 const UserModel = require("./User");
 const { provinces, cities } = require("../data/provincesCities");
 

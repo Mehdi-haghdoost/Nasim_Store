@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react'
 import styles from './Login.module.css';
 import { useFormik } from 'formik';
@@ -14,12 +15,12 @@ function Login({ showRegisterForm }) {
         onSubmit: (values, { setSubmitting }) => {
             setTimeout(() => {
                 console.log('Form Inputs Data =>', values);
-               swal({
-                title : 'با موفقیت وارد شدید',
-                // text : 'با موفقیت وارد شدید',
-                button : 'اوکی',
-                icon : '/images/success.png'
-               })
+                swal({
+                    title: 'با موفقیت وارد شدید',
+                    // text : 'با موفقیت وارد شدید',
+                    button: 'اوکی',
+                    icon: '/images/success.png'
+                })
                 setSubmitting(false)
 
             }, 1000);
@@ -34,15 +35,6 @@ function Login({ showRegisterForm }) {
         if (!form.values.phoneOrEmail) {
             return showSwal("لطفا شماره تلفن یا ایمیل خود را وارد نمایید ", "warning", "اوکی")
         }
-        if (form.errors.phoneOrEmail || form.errors.password) {
-            if (form.errors.phoneOrEmail) {
-                return showSwal(form.errors.phoneOrEmail, 'error', 'OK');
-            } else if (form.errors.password) {
-                return showSwal(form.errors.password, 'error', 'OK');
-            }
-        } else {
-            form.handleSubmit();
-        }
 
 
         if (!form.values.password) {
@@ -54,13 +46,21 @@ function Login({ showRegisterForm }) {
             return showSwal("پسورد به اندازه کافی قوی نیست", "error", "تلاش مجدد");
         }
 
+        if (form.errors.phoneOrEmail || form.errors.password) {
+            if (form.errors.phoneOrEmail) {
+                return showSwal(form.errors.phoneOrEmail, 'error', 'OK');
+            } else if (form.errors.password) {
+                return showSwal(form.errors.password, 'error', 'OK');
+            }
+        }
+
         form.handleSubmit();
     }
     const loginWithOtp = async () => {
-        const isValidPhone =/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g.test(form.values.phoneOrEmail);
-        if(!form.values.phoneOrEmail.trim()) {
+        const isValidPhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g.test(form.values.phoneOrEmail);
+        if (!form.values.phoneOrEmail.trim()) {
             return showSwal("لطفا شماره موبایل خود را وارد نمایید", "error", "تلاش مجدد");
-        } else if (!isValidPhone){
+        } else if (!isValidPhone) {
             return showSwal("لطفا شماره موبایل معتبر وارد نمایید", "error", "تلاش مجدد");
         }
         setIsLoginWithOtp(true)
@@ -87,7 +87,7 @@ function Login({ showRegisterForm }) {
                                                                 <img src="/images/logo.png" width="150" alt="" />
                                                             </a>
                                                         </div>
-                                                        <form onSubmit={form.handleSubmit} >
+                                                        <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(); }} >
 
                                                             <div className={`${styles.comment_item} mb-3 step-username`}>
                                                                 <input
@@ -99,7 +99,7 @@ function Login({ showRegisterForm }) {
                                                                     className={`form-control`}
                                                                     id="username"
                                                                 />
-                                                                <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
+                                                                <label htmlFor="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
                                                                     کنید
                                                                 </label>
                                                                 {/* {form.errors.phoneOrEmail && form.touched.phoneOrEmail && swal('Error', form.errors.phoneOrEmail, 'error')} */}
@@ -114,7 +114,7 @@ function Login({ showRegisterForm }) {
                                                                     id="passwd"
                                                                     name='password'
                                                                 />
-                                                                <label for="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
+                                                                <label htmlFor="passwd" className={`form-label ${styles.label_float}`}>رمز عبور خود را
                                                                     وارد
                                                                     کنید
                                                                 </label>
