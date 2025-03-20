@@ -10,7 +10,7 @@ const UserType = new GraphQLObjectType({
     name: "UserType",
     fields: {
         _id: { type: GraphQLID },
-        username: { type:new GraphQLNonNull(GraphQLString) },
+        username: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: GraphQLString },
         phone: { type: GraphQLString },
         role: { type: GraphQLString },
@@ -30,15 +30,16 @@ const AuthType = new GraphQLObjectType({
     name: 'AuthType',
     fields: {
         token: { type: GraphQLString },
+        refreshToken: { type: GraphQLString },
         user: { type: UserType },
     }
 })
 
 const OtpType = new GraphQLObjectType({
-    name : "OtpType",
-    fields : {
-        message : {type : GraphQLString},
+    name: "OtpType",
+    fields: {
+        message: { type: GraphQLString },
     }
 })
 
-module.exports = { UserType, AuthType,OtpType };
+module.exports = { UserType, AuthType, OtpType };

@@ -1,7 +1,8 @@
 const { GraphQLObjectType, GraphQLSchema, GraphQLString } = require("graphql");
 const { registerUser,
     sendOtp,
-    confirmOtpAndRegister, } = require("./mutations/user.resolvers");
+    confirmOtpAndRegister,
+    refreshTokenMutation, } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory, getCategories } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
@@ -23,6 +24,7 @@ const RootMutation = new GraphQLObjectType({
         addProduct,
         addCategory,
         addSeller,
+        refreshTokenMutation,
     },
 });
 
