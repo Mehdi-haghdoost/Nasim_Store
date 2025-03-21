@@ -428,7 +428,8 @@ const verifyOtpAndLogin = {
                     //  ست کردن کوکی ها  
                     setAuthCookies(res, accessToken, refreshToken);
 
-                    await OtpModel.deleteOne({ phone, code });
+                    await OtpModel.deleteMany({ phone });
+                    
                     return {
                         token: accessToken,
                         refreshToken,
