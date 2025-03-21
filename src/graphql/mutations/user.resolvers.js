@@ -244,9 +244,7 @@ const confirmOtpAndRegister = {
     resolve: async (_, { phone, code }, { res }) => {
         try {
             const otp = await OtpModel.findOne({ phone, code });
-            const date = new Date();
-            const now = date.getTime();
-
+            const now = Date.now();
             if (otp) {
                 if (otp.expTime > now) {
                     const hasUser = await UserModel.countDocuments();
@@ -394,9 +392,8 @@ const verifyOtpAndLogin = {
         try {
 
             const otp = await OtpModel.findOne({ phone, code });
+            const now = Date.now();
 
-            const date = new Date();
-            const now = date.getTime();
             if (otp) {
                 if (otp.expTime > now) {
                     const user = await UserModel.findOne({ phone })
@@ -429,7 +426,7 @@ const verifyOtpAndLogin = {
                     setAuthCookies(res, accessToken, refreshToken);
 
                     await OtpModel.deleteMany({ phone });
-                    
+
                     return {
                         token: accessToken,
                         refreshToken,
