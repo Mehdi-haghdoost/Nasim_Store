@@ -162,6 +162,79 @@ const sendOtp = {
     }
 };
 
+const sendOtpForLogin = {
+    type: OtpType,
+    args: {
+        phone: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, { phone }) => {
+        const code = Math.floor(Math.random() * 99999);
+        console.log("Your Login Code is :", code);
+
+        const now = new Date();
+        const expTime = now.getTime() + 300_000;
+        const minTimeBetweenRequests = now.getTime() - 60_000;
+
+        // چک کردن وجود کاربر
+        const isUserExist = await UserModel.findOne({ phone });
+        if (!isUserExist) {
+            throw new Error("کاربری با این شماره تلفن در سایت وجود ندارد");
+        }
+        // چک کردن زمان آخرین درخواست
+        const lastOtp = await OtpModel.findOne({ phone }).sort({ expTime: -1 });
+
+        if (lastOtp && lastOtp.expTime > minTimeBetweenRequests) {
+            throw new Error("لطفا تا ارسال درخواست مجدد یک دقیقه صبر کنید");
+        }
+
+        // حذف کدهای قبلی برای این شماره
+        await OtpModel.deleteMany({ phone });
+        console.log("کدهای تایید قبلی برای این شماره تلفن حذف شد");
+
+        const { response, body } = await sendRequest({
+            url: 'http://ippanel.com/api/select',
+            body: {
+                op: "pattern",
+                user: "u09211367465",
+                pass: "Faraz@1461240014841169",
+                fromNum: "3000505",
+                toNum: phone,
+                patternCode: "d2q42ceze02l38o",
+                inputData: [{ "verification-code": code }]
+            },
+            json: true
+        });
+
+        console.log("IPPANEL Response Status:", response.statusCode);
+        console.log("IPPANEL Response Body:", JSON.stringify(body));
+
+        if (response.statusCode === 200) {
+            // چک کردن فرمت جدید پاسخ (عدد به جای آرایه)
+            if (body && typeof body === 'number') { // فرض می‌کنیم عدد یعنی موفقیت
+                await OtpModel.create({
+                    phone,
+                    code,
+                    expTime
+                });
+                return { message: 'کد با موفقیت ارسال شد :))' };
+            } else if (body && Array.isArray(body) && body[0] === "0") { // فرمت قدیمی
+                await OtpModel.create({
+                    phone,
+                    code,
+                    expTime
+                });
+                return { message: 'کد با موفقیت ارسال شد :))' };
+            } else {
+                console.error("SMS failed, IPPANEL response:", body);
+                throw new Error(` ارسال پیامک ناموفق بود: ${JSON.stringify(body)}`);
+            }
+        } else {
+            console.error("IPPANEL server error:", response.statusCode, body);
+            throw new Error(` خطای سرور IPPANEL: ${response.statusCode} - ${JSON.stringify(body)}`);
+        }
+    }
+}
+
 const confirmOtpAndRegister = {
     type: AuthType,
     args: {
@@ -311,6 +384,84 @@ const loginUser = {
         }
     }
 }
+const verifyOtpAndLogin = {
+    type: OtpType,
+    args: {
+        phone: { type: new GraphQLNonNull(GraphQLString) },
+        code: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, { phone, code }, { res }) => {
+        try {
+
+            const otp = await OtpModel.findOne({ phone, code });
+
+            const date = new Date();
+            const now = date.getTime();
+            if (otp) {
+                if (otp.expTime > now) {
+                    const user = await UserModel.findOne({ phone })
+                    if (!user) {
+                        throw new Error("کاربری با این شماره تلفن یافت نشد !!")
+                    }
+
+                    const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+                    const RefreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+                    if (!AccessTokenSecretKey || !RefreshTokenSecretKey) {
+                        throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
+                    }
+
+                    const accessToken = jwt.sign({ id: user._id }, AccessTokenSecretKey, {
+                        expiresIn: "1h",
+                    });
+
+                    const refreshToken = jwt.sign({ id: user._id }, RefreshTokenSecretKey, {
+                        expiresIn: "30d",
+                    });
+
+                    const refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                    await RefreshTokenModel.create({
+                        userId: user._id,
+                        token: refreshToken,
+                        expiresAt: refreshTokenExpiresAt,
+                    });
+
+                    //  ست کردن کوکی ها  
+                    setAuthCookies(res, accessToken, refreshToken);
+
+                    await OtpModel.deleteOne({ phone, code });
+                    return {
+                        token: accessToken,
+                        refreshToken,
+                        user: {
+                            _id: user._id,
+                            username: user.username,
+                            email: user.email,
+                            phone: user.phone,
+                            role: user.role,
+                            address: user.addresses,
+                            wishlist: user.wishlist,
+                            cart: user.cart,
+                            orderHistory: user.orderHistory,
+                            orders: user.orders,
+                            discountCoupons: user.discountCoupons,
+                            dateOfBirth: user.dateOfBirth ? user.dateOfBirth.toISOString() : null,
+                            createdAt: user.createdAt.toISOString(),
+                            updatedAt: user.updatedAt.toISOString(),
+                        }
+                    }
+
+                } else {
+                    throw new Error('کد منقضی شده است :((')
+                }
+            } else {
+                throw new Error("کد نا معتبر است :((")
+            }
+        } catch (error) {
+            console.log("Error ===>", error);
+            throw new Error(`خطای ناشناخته سمت سرور رخ داد =>>>>>> ${error.message}`)
+        }
+    }
+}
 
 const refreshTokenMutation = {
     type: AuthType,
@@ -369,10 +520,14 @@ const refreshTokenMutation = {
     },
 };
 
+
+
 module.exports = {
     registerUser,
     sendOtp,
+    sendOtpForLogin,
     confirmOtpAndRegister,
     loginUser,
+    verifyOtpAndLogin,
     refreshTokenMutation,
 };
