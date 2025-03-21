@@ -385,7 +385,7 @@ const loginUser = {
     }
 }
 const verifyOtpAndLogin = {
-    type: OtpType,
+    type: AuthType,
     args: {
         phone: { type: new GraphQLNonNull(GraphQLString) },
         code: { type: new GraphQLNonNull(GraphQLString) },
