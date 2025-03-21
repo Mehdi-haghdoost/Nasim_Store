@@ -7,21 +7,7 @@ const OtpModel = require('./../../../models/Otp')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const { sendRequest } = require('../../utils/requestHelper');
-
-// تابع کمکی برای ست کردن کوکی‌ها
-const setAuthCookies = (res, accessToken, refreshToken) => {
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true, // کوکی فقط از طریق سرور قابل دسترسیه
-        maxAge: 1 * 60 * 60 * 1000,
-        sameSite: 'Strict', // جلوگیری از CSRF
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000, // ۳۰ روز (هماهنگ با Refresh Token)
-        sameSite: 'Strict',
-    });
-}
+const { setAuthCookies } = require("../../utils/authBackend");
 
 
 const registerUser = {
@@ -193,7 +179,7 @@ const confirmOtpAndRegister = {
                     const hasUser = await UserModel.countDocuments();
                     const isRegisteredUser = await UserModel.findOne({ phone });
                     if (isRegisteredUser) {
-                        throw new Error("A user with this phone number already exists");
+                        throw new Error("کاربری با این شماره تلفن قبلاً ثبت‌نام کرده است");
                     }
 
                     const email = `${phone}@gmail.com`;
@@ -235,14 +221,14 @@ const confirmOtpAndRegister = {
 
                     return { token: accessToken, refreshToken, user };
                 } else {
-                    throw new Error("Code has expired :((");
+                    throw new Error("کد منقضی شده است :((");
                 }
             } else {
-                throw new Error("Invalid code :((");
+                throw new Error("کد نامعتبر است :((");
             }
         } catch (error) {
             console.log("Error ===>", error);
-            throw new Error(error.message || "Unknown server error occurred!!");
+            throw new Error(error.message || "خطای ناشناخته سرور رخ داد!!");
         }
     },
 }
@@ -293,6 +279,7 @@ const loginUser = {
 
         // ست کردن کوکی‌ها
         setAuthCookies(res, accessToken, refreshToken);
+
         try {
             const decodedAccess = jwt.verify(accessToken, AccessTokenSecretKey);
             const decodedRefresh = jwt.verify(refreshToken, RefreshTokenSecretKey);
@@ -366,17 +353,8 @@ const refreshTokenMutation = {
             expiresIn: "1h",
         });
 
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            maxAge: 1 * 60 * 60 * 1000,
-            sameSite: 'Strict',
-        });
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-            sameSite: 'Strict',
-        });
+        // ست کردن کوکی‌ها با استفاده از تابع واردشده
+        setAuthCookies(res, accessToken, refreshToken);
 
         return {
             token: accessToken,
