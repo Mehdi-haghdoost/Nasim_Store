@@ -18,7 +18,7 @@ app.use(
     "/graphql",
     createHandler({
         schema,
-        context: (req) => ({ req }),
+        context: (req,res) => ({ req,res }),
     })
 );
 

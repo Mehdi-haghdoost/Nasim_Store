@@ -77,7 +77,7 @@ function Register({ showLoginForm }) {
 
   return (
     <>
-      {/* {!isRegisterWithOtp ? (
+      {!isRegisterWithOtp ? (
         <>
           <div className={`${styles.bg_auth}`}>
             <div className={`${styles.content}`}>
@@ -198,8 +198,8 @@ function Register({ showLoginForm }) {
         </>
       ) : (
         <Sms hideOtpForm={hideOtpForm} type={"ثبت نام"} />
-      )} */}
-      <div>helooooooooooooo</div>
+      )}
+
     </>
 
   )
