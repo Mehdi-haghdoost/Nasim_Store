@@ -2,19 +2,29 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../../models/User");
 
 // تابع کمکی برای ست کردن کوکی‌ها
-const setAuthCookies = (res, accessToken, refreshToken) => {
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true, // کوکی فقط از طریق سرور قابل دسترسیه
-        maxAge: 1 * 60 * 60 * 1000,
-        sameSite: 'Strict', // جلوگیری از CSRF
-    });
+const setAuthCookies = function(res, accessToken, refreshToken) {
 
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000, // ۳۰ روز (هماهنگ با Refresh Token)
-        sameSite: 'Strict',
-    });
-}
+    if (res && typeof res.cookie === 'function') {
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000, // 1 ساعت
+            sameSite: 'lax'
+        });
+        
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 روز
+            sameSite: 'lax'
+        });
+    }
+    
+    return {
+        accessToken,
+        refreshToken
+    };
+};
 
 const getUserById = (id) => {
     return UserModel.findOne({ _id: id });

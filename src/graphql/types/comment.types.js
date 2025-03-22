@@ -1,4 +1,5 @@
 const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType } = require("graphql");
+const ProductModel = require('../../../models/Product');
 
 const CommentStatusEnum = new GraphQLEnumType({
     name: "CommentStatus",
@@ -20,7 +21,12 @@ const CommentType = new GraphQLObjectType({
         return {
             _id: { type: GraphQLID },
             user: { type: new GraphQLNonNull(UserType) },
-            product: { type: new GraphQLNonNull(ProductType) },
+            product: {
+                type: new GraphQLNonNull(ProductType),
+                resolve: async (comment) => {
+                    return await ProductModel.findById(comment.product);
+                }
+            },
             name: { type: new GraphQLNonNull(GraphQLString) },
             email: { type: new GraphQLNonNull(GraphQLString) },
             website: { type: GraphQLString },
@@ -38,7 +44,6 @@ const CommentType = new GraphQLObjectType({
 const CommentInputType = new GraphQLInputObjectType({
     name: "CommentInput",
     fields: () => ({
-        user: { type: new GraphQLNonNull(GraphQLID) },
         product: { type: new GraphQLNonNull(GraphQLID) },
         name: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },

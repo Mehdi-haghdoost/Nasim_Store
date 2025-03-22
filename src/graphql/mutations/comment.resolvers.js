@@ -49,8 +49,8 @@ const addComment = {
             const newComment = await CommentModel.create({
                 user: user._id,
                 product: existingProduct._id,
-                name: UserDoc.name,
-                email: UserDoc.email,
+                name:name || UserDoc.name,
+                email: email || UserDoc.email,
                 website: website || null,
                 rating,
                 commentText,
