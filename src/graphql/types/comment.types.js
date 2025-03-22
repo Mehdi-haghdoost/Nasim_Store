@@ -1,4 +1,4 @@
-const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList } = require("graphql");
+const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType } = require("graphql");
 const { UserType } = require("./user.types");
 
 const CommentStatusEnum = new GraphQLEnumType({
@@ -30,7 +30,7 @@ const CommentType = new GraphQLObjectType({
     }),
 });
 
-const CommentInputType = new GraphQLObjectType({
+const CommentInputType = new GraphQLInputObjectType({
     name: "CommentInput",
     fields: () => ({
         user: { type: new GraphQLNonNull(GraphQLID) },

@@ -6,6 +6,7 @@ const { registerUser,
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory, getCategories } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
+const { addComment } = require("./mutations/comment.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -25,6 +26,7 @@ const RootMutation = new GraphQLObjectType({
         addCategory,
         addSeller,
         refreshTokenMutation,
+        addComment,
     },
 });
 
