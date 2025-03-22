@@ -11,7 +11,7 @@ const addComment = {
     },
     resolve: async (_, { input }, { req }) => {
         try {
-            const { product, commentText, rating, strengths, weaknesses } = input;
+            const { product, commentText, rating, name, email, website, strengths, weaknesses } = input;
 
             const user = await validateToken(req)
             if (!user) {
@@ -28,12 +28,24 @@ const addComment = {
                 throw new Error("محصول پیدا نشد")
             }
 
+            // اعتبارسنجی وب‌سایت (اگه وارد شده باشه)
+            if (website) {
+                const websiteRegex = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
+                if (!websiteRegex.test(website)) {
+                    throw new Error("آدرس وب‌سایت معتبر وارد کنید");
+                }
+            }
+            // اعتبارسنجی ایمیل
+            const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/g;
+            if (!emailRegex.test(email)) {
+                throw new Error("ایمیل معتبر وارد کنید");
+            }
             const newComment = await CommentModel.create({
                 user: user._id,
                 product: existingProduct._id,
                 name: user.name,
                 email: user.email,
-                website: null,
+                website: newComment.website,
                 rating,
                 commentText,
                 strengths: strengths || [],
@@ -41,12 +53,14 @@ const addComment = {
                 status: "pending"
             })
 
-            // ۷. اضافه کردن آیدی کامنت به لیست comments کاربر
+            //    اضافه کردن آیدی کامنت به لیست comments کاربر
             user.comments.push(newComment._id);
             await user.save();
-            // ۸. اضافه کردن آیدی کامنت به لیست comments محصول
+            
+            // اضافه کردن آیدی کامنت به لیست comments محصول
             existingProduct.comments.push(newComment._id);
-            await product.save();
+            await existingProduct.save();
+
 
             return {
                 _id: newComment._id,
