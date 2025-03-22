@@ -1,5 +1,6 @@
 const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull } = require('graphql')
 const CommentModel = require("../../../models/Comment");
+const { CommentType } = require('./comment.types');
 
 // const {AddressType} = require('./address.types');
 // const {WishType} = require('./wish.types');

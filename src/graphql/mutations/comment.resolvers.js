@@ -1,6 +1,6 @@
 const { GraphQLNonNull } = require("graphql");
 const { CommentType, CommentInputType } = require("../types/comment.types");
-const { validateToken } = require("@/utils/authBackend");
+const { validateToken } = require("../../utils/authBackend");
 const ProductModel = require("../../../models/Product");
 const CommentModel = require("../../../models/Comment");
 
