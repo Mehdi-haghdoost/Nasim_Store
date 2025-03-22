@@ -14,11 +14,13 @@ const CommentType = new GraphQLObjectType({
     name: "CommentType",
     fields: () => {
         const { UserType } = require("./user.types");
+        const { ProductType } = require("./product.types");
+
 
         return {
             _id: { type: GraphQLID },
             user: { type: new GraphQLNonNull(UserType) },
-            product: { type: new GraphQLNonNull(GraphQLID) },
+            product: { type: new GraphQLNonNull(ProductType) },
             name: { type: new GraphQLNonNull(GraphQLString) },
             email: { type: new GraphQLNonNull(GraphQLString) },
             website: { type: GraphQLString },
