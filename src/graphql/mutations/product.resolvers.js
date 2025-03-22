@@ -13,7 +13,7 @@ const addProduct = {
     },
     resolve: async (_, { input }, context) => {
         try {
-            const { role } = await validateToken(context.req);
+            const { role } = await validateToken(context.req,context.res);
             if (!role) {
                 throw new Error("احراز هویت لازم می باشد")
             }
