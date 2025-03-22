@@ -21,10 +21,10 @@ async function startServer() {
             "/graphql",
             createHandler({
                 schema,
-                context: (request) => {
+                context: (req,res) => {
                     return {
-                        req: request.raw.req,
-                        res: request.raw.res
+                        req: req,
+                        res: res
                     };
                 },
             })
