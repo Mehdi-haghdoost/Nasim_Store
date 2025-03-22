@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const AddressModel = require("./Address");
+const CommentModel = require("./Comment");
+
 
 const schema = new mongoose.Schema({
     // User information
@@ -111,7 +113,14 @@ const schema = new mongoose.Schema({
 
     dateOfBirth: {
         type: Date,
-    }
+    },
+
+    Comments: [
+        {
+            type : mongoose.Types.ObjectId,
+            ref : "Comment"
+        }
+    ],
 
 
 },
