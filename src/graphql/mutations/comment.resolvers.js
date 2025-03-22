@@ -3,6 +3,7 @@ const { CommentType, CommentInputType } = require("../types/comment.types");
 const { validateToken } = require("../../utils/authBackend");
 const ProductModel = require("../../../models/Product");
 const CommentModel = require("../../../models/Comment");
+const UserModel = require("../../../models/User");
 
 const addComment = {
     type: CommentType,
@@ -20,6 +21,11 @@ const addComment = {
 
             if (!["USER", "ADMIN"].includes(user.role)) {
                 throw new Error("برای ثبت کامنت لطفا لاگین کنید")
+            }
+
+            const UserDoc = await UserModel.findById(user._id);
+            if (!UserDoc) {
+                throw new Error("کاربر پیدا نشد !!")
             }
 
             // چک کردن وجود محصول
@@ -43,9 +49,9 @@ const addComment = {
             const newComment = await CommentModel.create({
                 user: user._id,
                 product: existingProduct._id,
-                name: user.name,
-                email: user.email,
-                website: newComment.website,
+                name: UserDoc.name,
+                email: UserDoc.email,
+                website: website || null,
                 rating,
                 commentText,
                 strengths: strengths || [],
@@ -54,9 +60,9 @@ const addComment = {
             })
 
             //    اضافه کردن آیدی کامنت به لیست comments کاربر
-            user.comments.push(newComment._id);
-            await user.save();
-            
+            UserDoc.comments.push(newComment._id);
+            await UserDoc.save();
+
             // اضافه کردن آیدی کامنت به لیست comments محصول
             existingProduct.comments.push(newComment._id);
             await existingProduct.save();
@@ -66,7 +72,7 @@ const addComment = {
                 _id: newComment._id,
                 user: {
                     _id: user._id,
-                    username: user.username,
+                    username: UserDoc.username,
                     role: user.role,
                 },
                 product: newComment.product,

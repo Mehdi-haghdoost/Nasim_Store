@@ -115,7 +115,7 @@ const schema = new mongoose.Schema({
         type: Date,
     },
 
-    Comments: [
+    comments: [
         {
             type : mongoose.Types.ObjectId,
             ref : "Comment"
