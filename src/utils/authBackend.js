@@ -22,10 +22,16 @@ const getUserById = (id) => {
 
 const validateToken = async (req) => {
     if (req) {
-        const authHeader = req.headers.authorization;
+        let token;
 
+        const authHeader = req.headers.authorization;
         if (authHeader) {
-            const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+            token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+
+            if (!token && req.cookies && req.cookies.accessToken) {
+                token = req.cookies.accessToken
+            }
+            
             if (!token || token.trim() === "") {
                 throw new Error("توکنی یافت نشد !!")
             }
