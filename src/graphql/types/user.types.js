@@ -1,4 +1,5 @@
 const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull } = require('graphql')
+const CommentModel = require("../../../models/Comment");
 
 // const {AddressType} = require('./address.types');
 // const {WishType} = require('./wish.types');
@@ -21,6 +22,22 @@ const UserType = new GraphQLObjectType({
         orders: { type: new GraphQLList(GraphQLString) },
         discountCoupons: { type: new GraphQLList(GraphQLString) },
         dateOfBirth: { type: GraphQLString },
+        comments: {
+            type: new GraphQLList(CommentType),
+            resolve: async (parent) => {
+                try {
+                    if (!parent.comments || parent.comments.length === 0) {
+                        return [];
+                    }
+
+                    const comments = await CommentModel.find({ _id: { $in: parent.comments } });
+                    return comments;
+                } catch (error) {
+                    console.log(`خطا در بازیبای کامنت ها ${error.message}`);
+                    throw new Error(`خطا در بازیابی کامنت‌ها. لطفاً دوباره تلاش کنید.${error.message}`);
+                }
+            }
+        },
         createdAt: { type: GraphQLString },
         updatedAt: { type: GraphQLString },
     }
