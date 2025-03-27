@@ -1,5 +1,5 @@
 const { GraphQLNonNull } = require("graphql");
-const { CommentType, CommentInputType } = require("../types/comment.types");
+const { CommentType, CommentInputType, ReplyCommentInputType } = require("../types/comment.types");
 const { validateToken } = require("../../utils/authBackend");
 const ProductModel = require("../../../models/Product");
 const CommentModel = require("../../../models/Comment");
@@ -49,7 +49,7 @@ const addComment = {
             const newComment = await CommentModel.create({
                 user: user._id,
                 product: existingProduct._id,
-                name:name || UserDoc.name,
+                name: name || UserDoc.name,
                 email: email || UserDoc.email,
                 website: website || null,
                 rating,
@@ -92,6 +92,120 @@ const addComment = {
         }
     }
 }
+
+const replyToComment = {
+    type: CommentType,
+    args: {
+        input: { type: new GraphQLNonNull(ReplyCommentInputType) }
+    },
+    resolve: async (_, { input }, { req }) => {
+        try {
+            const { parentId, commentText, name, email, website } = input;
+
+            const user = await validateToken(req);
+            if (!user) {
+                throw new Error("کاربر احراز هویت نشده است")
+            }
+
+            if (!["USER", "ADMIN"].includes(user.role)) {
+                throw new Error("برای ثبت پاسخ لطفا لاگین کنید")
+            }
+
+            const UserDoc = await UserModel.findById(user._id);
+            if (!UserDoc) {
+                throw new Error("کاربر پیدا نشد !!")
+            }
+
+            // پیدا کردن کامنت والد
+            const parentComment = await CommentModel.findById(parentId);
+            if (!parentComment) {
+                throw new Error("کامنت مورد نظر برای پاسخ یافت نشد")
+            }
+
+            // بررسی وضعیت کامنت والد
+            if (!parentComment.status !== "active") {
+                throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
+            }
+
+            // ایجاد کامنت پاسخ
+            const replyComment = await CommentModel.create({
+                user: user._id,
+                product: parentComment.product, // پاسخ روی همان محصول ثبت می‌شود
+                name: name || UserDoc.name,
+                email: email || UserDoc.email,
+                website: website || null,
+                rating: 0, // رتبه‌دهی برای پاسخ‌ها نیاز نیست
+                commentText,
+                strengths: [], // نقاط قوت برای پاسخ‌ها نیاز نیست
+                weaknesses: [], // نقاط ضعف برای پاسخ‌ها نیاز نیست
+                parent: parentId,
+                isReply: true,
+                status: user.role === "ADMIN" ? "active" : "pending" // اگر ادمین باشد، پاسخ مستقیماً تایید می‌شود
+            });
+
+
+            // اضافه کردن پاسخ به آرایه replies کامنت والد
+            parentComment.replies.push(replyComment._id);
+            await parentComment.save();
+
+            // اضافه کردن آیدی کامنت پاسخ به لیست comments کاربر
+            UserDoc.comments.push(replyComment._id);
+            await UserDoc.save();
+
+
+            return {
+                _id: replyComment._id,
+                user: {
+                    _id: user._id,
+                    username: UserDoc.username,
+                    role: user.role,
+                },
+                product: replyComment.product,
+                name: replyComment.name,
+                email: replyComment.email,
+                website: replyComment.website,
+                rating: replyComment.rating,
+                commentText: replyComment.commentText,
+                strengths: replyComment.strengths,
+                weaknesses: replyComment.weaknesses,
+                parent: parentComment,
+                replies: [],
+                isReply: replyComment.isReply,
+                status: replyComment.status,
+                createdAt: replyComment.createdAt.toISOString(),
+                updatedAt: replyComment.updatedAt.toISOString(),
+            };
+
+        } catch (error) {
+            throw new Error(`خطا در ثبت پاسخ: ${error.message}`);
+        }
+    }
+};
+
+// resolver برای دریافت تمام کامنت‌های یک محصول (بدون کامنت‌های پاسخ)
+const getProductComments = {
+    type: new GraphQLList(CommentType),
+    args: {
+        productId: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    resolve: async (_, { productId }, { req }) => {
+        try {
+            // فقط کامنت‌های اصلی که پاسخ نیستند را برمی‌گرداند
+            const comments = await CommentModel.find({
+                product: productId,
+                isReply: false,
+                status: "active"
+            }).populate('user').sort({ createdAt: -1 });
+
+            return comments;
+        } catch (error) {
+            throw new Error(`خطا در دریافت کامنت‌ها: ${error.message}`);
+        }
+    }
+};
+
 module.exports = {
     addComment,
+    replyToComment,
+    getProductComments,
 }
