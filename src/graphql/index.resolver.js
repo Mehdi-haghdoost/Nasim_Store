@@ -7,13 +7,15 @@ const { registerUser,
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory, getCategories } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
-const { addComment } = require("./mutations/comment.resolvers");
+const { addComment, replyToComment } = require("./mutations/comment.resolvers");
+const { getProductComments } = require("./queries/user.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     fields: {
-        getCategories
+        getCategories,
+        getProductComments,
     }
 })
 
@@ -28,7 +30,8 @@ const RootMutation = new GraphQLObjectType({
         addSeller,
         refreshTokenMutation,
         addComment,
-        loginUser
+        replyToComment,
+        loginUser,
     },
 });
 
