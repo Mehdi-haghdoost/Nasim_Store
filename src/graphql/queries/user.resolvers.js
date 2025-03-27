@@ -8,7 +8,7 @@ const getProductComments = {
     args: {
         productId: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { productId }, { req }) => {
+    resolve: async (_, { productId }) => {
         try {
             // فقط کامنت‌های اصلی که پاسخ نیستند را برمی‌گرداند
             const comments = await CommentModel.find({
