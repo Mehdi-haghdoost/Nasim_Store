@@ -122,11 +122,9 @@ const replyToComment = {
                 throw new Error("کامنت مورد نظر برای پاسخ یافت نشد")
             }
 
-            // بررسی وضعیت کامنت والد
-            if (!parentComment.status !== "active") {
+            if (!parentComment.status.includes("active")) {
                 throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
             }
-
             // ایجاد کامنت پاسخ
             const replyComment = await CommentModel.create({
                 user: user._id,
@@ -134,7 +132,7 @@ const replyToComment = {
                 name: name || UserDoc.name,
                 email: email || UserDoc.email,
                 website: website || null,
-                rating: 0, // رتبه‌دهی برای پاسخ‌ها نیاز نیست
+                rating: 1, // رتبه‌دهی برای پاسخ‌ها نیاز نیست
                 commentText,
                 strengths: [], // نقاط قوت برای پاسخ‌ها نیاز نیست
                 weaknesses: [], // نقاط ضعف برای پاسخ‌ها نیاز نیست
