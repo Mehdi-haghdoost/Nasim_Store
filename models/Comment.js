@@ -62,6 +62,24 @@ const schema = new mongoose.Schema({
         default: [],
     },
 
+    // اضافه کردن فیلدهای مربوط به ساختار کامنت‌های تو در تو
+    parent: {
+        type: mongoose.Types.ObjectId,
+        ref: "Comment",
+        default: null, // اگر null باشد یعنی کامنت اصلی است
+    },
+
+    replies: [{
+        type: mongoose.Types.ObjectId,
+        ref: "Comment",
+    }],
+
+    // آیا یک کامنت پاسخ است یا کامنت اصلی
+    isReply: {
+        type: Boolean,
+        default: false,
+    },
+
     status: {
         type: String,
         enum: ["active", "pending", "rejected", "archived"],
