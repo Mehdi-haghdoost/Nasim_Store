@@ -35,7 +35,7 @@ const CommentType = new GraphQLObjectType({
             strengths: { type: new GraphQLList(GraphQLString) },
             weaknesses: { type: new GraphQLList(GraphQLString) },
             parent : {
-                tye : CommentType,
+                type : CommentType,
                 resolve : async (comment) => {
                     if(!comment.parent) return null ;
                     return await CommentModel.findById(comment.parent).populate('user')
