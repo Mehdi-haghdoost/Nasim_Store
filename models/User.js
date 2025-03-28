@@ -37,17 +37,17 @@ const schema = new mongoose.Schema({
         default: Date.now,
     },
 
-    // National ID (اختیاری)
+
     nationalId: {
-        type: String, // کد ملی به صورت رشته‌ای
-        required: false, // اختیاری برای کاربر
+        type: String,
+        required: false,
     },
 
     // Address management (supports multiple addresses per user)
     addresses: [
         {
-            type : mongoose.Types.ObjectId,
-            ref : "Address",            
+            type: mongoose.Types.ObjectId,
+            ref: "Address",
         }
     ],
 
@@ -117,12 +117,21 @@ const schema = new mongoose.Schema({
 
     comments: [
         {
-            type : mongoose.Types.ObjectId,
-            ref : "Comment"
+            type: mongoose.Types.ObjectId,
+            ref: "Comment"
         }
     ],
 
+    postalCode: {
+        type: String,
+        required: false,
+    },
 
+    bio: {
+        type: String,
+        required: false,
+        trim: true,
+    },
 },
     { timestamps: true }
 );
