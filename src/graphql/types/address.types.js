@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLString, GraphQLInputObjectType } = require("graphql");
+const { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLString, GraphQLInputObjectType, GraphQLBoolean } = require("graphql");
 
 const AddressType = new GraphQLObjectType({
     name: "AddressType",
@@ -8,6 +8,7 @@ const AddressType = new GraphQLObjectType({
         province: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
         fullAddress:  { type: new GraphQLNonNull(GraphQLString) },
+        isDefault: { type: new GraphQLNonNull(GraphQLBoolean) },
     }
 });
 
@@ -18,6 +19,7 @@ const AddressInputType  = new GraphQLInputObjectType({
         province: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
         fullAddress:  { type: new GraphQLNonNull(GraphQLString) },
+        isDefault: { type: GraphQLBoolean },
     }
 });
 
