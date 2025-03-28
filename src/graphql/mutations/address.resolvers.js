@@ -1,5 +1,5 @@
-const { GraphQLNonNull } = require("graphql");
-const { AddressType, AddressInputType } = require("../types/address.types");
+const { GraphQLNonNull, GraphQLBoolean } = require("graphql");
+const { AddressType, AddressInputType, UpdateAddressDefaultInputType } = require("../types/address.types");
 const { validateToken } = require("../../utils/authBackend");
 const AddressModel = require('../../../models/Address');
 const UserModel = require('../../../models/User');
@@ -61,7 +61,91 @@ const addNewAddress = {
     }
 }
 
+const deleteAddress = {
+    type: GraphQLBoolean,
+    args: {
+        addressId: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    resolve: async (_, { addressId }, { req }) => {
+        try {
+            const user = await validateToken(req);
+            if (!user) throw new Error('کاربر احراز هویت نشده است');
+
+            const address = await AddressModel.findOne({ _id: addressId, user: user._id });
+            if (!address) throw new Error('آدرس مورد نظر یافت نشد یا شما مجاز به حذف آن نیستید');
+
+            if (address.isDefault) {
+                const otherAddress = await AddressModel.findOne({ user: user._id, _id: { $ne: addressId } });
+                if (otherAddress) {
+                    otherAddress.isDefault = true;
+                    await otherAddress.save();
+                }
+            }
+
+            await UserModel.findByIdAndUpdate(user._id, { $pull: { addresses: addressId } });
+            await AddressModel.findByIdAndDelete(addressId);
+
+            return true;
+        } catch (error) {
+            throw new Error(`خطا در حذف آدرس: ${error.message}`);
+        }
+    },
+};
+
+const updateAddressDefault = {
+    type: AddressType,
+    args: {
+        input: { type: new GraphQLNonNull(UpdateAddressDefaultInputType) },
+    },
+    resolve: async (_, { input }, { req }) => {
+        try {
+            const { addressId, isDefault } = input;
+            const user = await validateToken(req);
+            if (!user) throw new Error('کاربر احراز هویت نشده است');
+
+            const address = await AddressModel.findOne({ _id: addressId, user: user._id });
+            if (!address) throw new Error('آدرس مورد نظر یافت نشد یا شما مجاز به تغییر آن نیستید');
+
+            if (isDefault) {
+                await AddressModel.updateMany(
+                    { user: user._id, _id: { $ne: addressId } },
+                    { $set: { isDefault: false } }
+                );
+            } else {
+                const defaultAddressesCount = await AddressModel.countDocuments({
+                    user: user._id,
+                    isDefault: true,
+                    _id: { $ne: addressId },
+                });
+
+                if (defaultAddressesCount === 0) {
+                    const otherAddress = await AddressModel.findOne({
+                        user: user._id,
+                        _id: { $ne: addressId },
+                    });
+
+                    if (otherAddress) {
+                        otherAddress.isDefault = true;
+                        await otherAddress.save();
+                    } else {
+                        throw new Error('نمی‌توانید تنها آدرس خود را غیر پیش‌فرض کنید');
+                    }
+                }
+            }
+
+            address.isDefault = isDefault;
+            await address.save();
+
+            return address;
+        } catch (error) {
+            throw new Error(`خطا در به‌روزرسانی آدرس: ${error.message}`);
+        }
+    },
+};
+
 
 module.exports = {
-    addNewAddress
+    addNewAddress,
+    deleteAddress,
+    updateAddressDefault,
 };
