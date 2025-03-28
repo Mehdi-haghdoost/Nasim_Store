@@ -16,13 +16,21 @@ const addNewAddress = {
                 throw new Error('کاربر احراز هویت نشده است')
             }
 
-            const { street, province, city, fullAddress } = input;
+            const { street, province, city, fullAddress,isDefault } = input;
+
+            // اگه isDefault true باشه، بقیه آدرس‌ها رو غیرپیش‌فرض کن
+            if (isDefault) {
+                await AddressModel.updateMany(
+                    { user: user._id, isDefault: true },
+                    { $set: { isDefault: false } }
+                );
 
             const newAddress = new AddressModel({
                 street,
                 province,
                 city,
                 fullAddress,
+                isDefault: isDefault || false,
                 createdAt: new Date().toISOString(),
             });
 
