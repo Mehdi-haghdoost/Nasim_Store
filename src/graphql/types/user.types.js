@@ -1,6 +1,8 @@
 const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull, GraphQLInputObjectType } = require('graphql')
 const CommentModel = require("../../../models/Comment");
+const AddressModel = require('../../../models/Address');
 const { CommentType } = require('./comment.types');
+
 
 // const {AddressType} = require('./address.types');
 // const {WishType} = require('./wish.types');
@@ -16,9 +18,24 @@ const UserType = new GraphQLObjectType({
         email: { type: GraphQLString },
         phone: { type: GraphQLString },
         role: { type: GraphQLString },
+        nationalId: { type: GraphQLString },
         postalCode: { type: GraphQLString },
         bio: { type: GraphQLString },
-        address: { type: new GraphQLList(GraphQLString) },
+        address: {
+            type: new GraphQLList(GraphQLString),
+            resolve: async (parent) => {
+                try {
+                    if (!parent.address || parent.address.length === 0) {
+                        return [];
+                    }
+                    const addresses = await AddressModel.find({ _id: { $in: parent.address } });
+                    return addresses;
+                } catch (error) {
+                   
+                    throw new Error(`خطا در بازیابی آدرس‌ها: ${error.message}`);
+                }
+            }
+        },
         wishlist: { type: new GraphQLList(GraphQLString) },
         cart: { type: new GraphQLList(GraphQLString) },
         orderHistory: { type: new GraphQLList(GraphQLString) },
