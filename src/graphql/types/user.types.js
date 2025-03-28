@@ -1,4 +1,4 @@
-const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull } = require('graphql')
+const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull, GraphQLInputObjectType } = require('graphql')
 const CommentModel = require("../../../models/Comment");
 const { CommentType } = require('./comment.types');
 
@@ -16,6 +16,8 @@ const UserType = new GraphQLObjectType({
         email: { type: GraphQLString },
         phone: { type: GraphQLString },
         role: { type: GraphQLString },
+        postalCode: { type: GraphQLString },
+        bio: { type: GraphQLString },
         address: { type: new GraphQLList(GraphQLString) },
         wishlist: { type: new GraphQLList(GraphQLString) },
         cart: { type: new GraphQLList(GraphQLString) },
@@ -60,4 +62,18 @@ const OtpType = new GraphQLObjectType({
     }
 })
 
-module.exports = { UserType, AuthType, OtpType };
+
+// تعریف تایپ ورودی برای به‌روزرسانی پروفایل کاربر
+const UserProfileInputType = new GraphQLInputObjectType({
+    name: "UserProfileInput",
+    fields: {
+        username: { type: GraphQLString },
+        email: { type: GraphQLString },
+        phone: { type: GraphQLString },
+        nationalId: { type: GraphQLString },
+        postalCode: { type: GraphQLString },
+        bio: { type: GraphQLString },
+    }
+});
+
+module.exports = { UserType, AuthType, OtpType, UserProfileInputType };
