@@ -18,7 +18,7 @@ const schema = new mongoose.Schema({
 
     fullAddress: {
         type: String,
-        required: false,
+        required: true,
     },
 
     // استان
@@ -53,13 +53,13 @@ const schema = new mongoose.Schema({
 
     mobileNumber: {
         type: String,
-        required: true,
+        required: false,
         match: [/^09\d{9}$/, "فرمت شماره همراه نامعتبر است."],
     },
 
     recipientName: {
         type: String,
-        required: true,
+        required: false,
     },
 
     isDefault: {
