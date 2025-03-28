@@ -1,4 +1,4 @@
-const { GraphQLNonNull, GraphQLBoolean } = require("graphql");
+const { GraphQLNonNull, GraphQLBoolean, GraphQLID } = require("graphql");
 const { AddressType, AddressInputType, UpdateAddressDefaultInputType } = require("../types/address.types");
 const { validateToken } = require("../../utils/authBackend");
 const AddressModel = require('../../../models/Address');
@@ -50,7 +50,7 @@ const addNewAddress = {
             // اضافه کردن آدرس به لیست آدرس‌های کاربر
             await UserModel.findByIdAndUpdate(
                 user._id,
-                { $push: { address: savedAddress._id } },
+                { $push: { addresses: savedAddress._id } },
                 { new: true }
             );
 
