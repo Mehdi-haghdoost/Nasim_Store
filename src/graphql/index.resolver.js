@@ -10,7 +10,7 @@ const { addCategory, getCategories } = require("./mutations/category.resolvers")
 const { addSeller } = require("./mutations/seller.resolvers");
 const { addComment, replyToComment } = require("./mutations/comment.resolvers");
 const { getProductComments } = require("./queries/user.resolvers");
-const { getAllAddress } = require("./queries/address.resolvers");
+const { getAllAddress, linkExistingAddresses } = require("./queries/address.resolvers");
 const { addNewAddress, deleteAddress, updateAddressDefault } = require("./mutations/address.resolvers");
 
 
@@ -20,6 +20,7 @@ const RootQuery = new GraphQLObjectType({
         getCategories,
         getProductComments,
         getAllAddress,
+        linkExistingAddresses,
     }
 })
 
@@ -40,6 +41,7 @@ const RootMutation = new GraphQLObjectType({
         addNewAddress,
         deleteAddress,
         updateAddressDefault,
+        linkExistingAddresses,
     },
 });
 

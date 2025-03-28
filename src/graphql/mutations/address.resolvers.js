@@ -61,6 +61,7 @@ const addNewAddress = {
     }
 }
 
+
 const deleteAddress = {
     type: GraphQLBoolean,
     args: {
