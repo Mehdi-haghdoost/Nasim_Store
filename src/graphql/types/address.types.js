@@ -23,7 +23,16 @@ const AddressInputType  = new GraphQLInputObjectType({
     }
 });
 
+const UpdateAddressDefaultInputType = new GraphQLInputObjectType({
+    name: 'UpdateAddressDefaultInput',
+    fields: {
+      addressId: { type: new GraphQLNonNull(GraphQLID) },
+      isDefault: { type: new GraphQLNonNull(GraphQLBoolean) },
+    },
+  });
+
 module.exports = {
     AddressType,
     AddressInputType,
+    UpdateAddressDefaultInputType,
 }

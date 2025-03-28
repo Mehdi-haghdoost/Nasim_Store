@@ -3,6 +3,7 @@ const { AddressType, AddressInputType } = require("../types/address.types");
 const { validateToken } = require("../../utils/authBackend");
 const AddressModel = require('../../../models/Address');
 const UserModel = require('../../../models/User');
+const { provinces, cities } = require("../../../data/provincesCities");
 
 const addNewAddress = {
     type: AddressType,
@@ -16,7 +17,15 @@ const addNewAddress = {
                 throw new Error('کاربر احراز هویت نشده است')
             }
 
-            const { street, province, city, fullAddress,isDefault } = input;
+            const { street, province, city, fullAddress, isDefault } = input;
+
+            // اعتبارسنجی province و city
+            if (!provinces.includes(province)) {
+                throw new Error('استان نامعتبر است');
+            }
+            if (!cities[province].includes(city)) {
+                throw new Error('شهر نامعتبر است');
+            }
 
             // اگه isDefault true باشه، بقیه آدرس‌ها رو غیرپیش‌فرض کن
             if (isDefault) {
@@ -24,8 +33,10 @@ const addNewAddress = {
                     { user: user._id, isDefault: true },
                     { $set: { isDefault: false } }
                 );
+            }
 
             const newAddress = new AddressModel({
+                user: user._id,
                 street,
                 province,
                 city,
@@ -48,7 +59,8 @@ const addNewAddress = {
             throw new Error(`خطا در ثبت آدرس: ${error.message}`);
         }
     }
-};
+}
+
 
 module.exports = {
     addNewAddress

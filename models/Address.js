@@ -32,11 +32,6 @@ const schema = new mongoose.Schema({
     city: {
         type: String,
         required: true,
-        enum: function () {
-            const selectedProvince = this.get("province") || "تهران";
-            const cityList = cities[selectedProvince];
-            return Array.isArray(cityList) ? cityList : [];
-        }
     },
 
     postalCode: {
