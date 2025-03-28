@@ -3,7 +3,8 @@ const { registerUser,
     sendOtp,
     confirmOtpAndRegister,
     refreshTokenMutation,
-    loginUser, } = require("./mutations/user.resolvers");
+    loginUser,
+    updateUserProfile, } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory, getCategories } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
@@ -32,6 +33,7 @@ const RootMutation = new GraphQLObjectType({
         addComment,
         replyToComment,
         loginUser,
+        updateUserProfile,
     },
 });
 

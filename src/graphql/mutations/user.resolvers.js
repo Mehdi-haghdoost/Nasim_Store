@@ -1,5 +1,5 @@
 const { GraphQLString, GraphQLNonNull, GraphQLObjectType } = require("graphql");
-const { AuthType, OtpType } = require("../types/user.types");
+const { AuthType, OtpType, UserType, UserProfileInputType } = require("../types/user.types");
 const { registerUserValidator } = require("../../utils/validators");
 const UserModel = require('./../../../models/User')
 const RefreshTokenModel = require('../../../models/RefreshToken');
@@ -7,7 +7,7 @@ const OtpModel = require('./../../../models/Otp')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const { sendRequest } = require('../../utils/requestHelper');
-const { setAuthCookies } = require("../../utils/authBackend");
+const { setAuthCookies, validateToken } = require("../../utils/authBackend");
 
 
 const registerUser = {
@@ -518,7 +518,104 @@ const refreshTokenMutation = {
     },
 };
 
+const updateUserProfile = {
+    type: UserType,
+    args: {
+        input: { type: new GraphQLNonNull(UserProfileInputType) },
+    },
+    resolve: async (_, { input }, { req }) => {
+        try {
+            // احراز هویت کاربر
+            const user = await validateToken(req);
+            if (!user) {
+                throw new Error("کاربر احراز هویت نشده است !!")
+            }
 
+            // پیدا کردن کاربر در دیتا بیس
+            const UserDoc = await UserModel.findById(user._id);
+            if (!UserDoc) {
+                throw new Error('کاربر پیدا نشد')
+            }
+
+            // بررسی ایمیل تکراری
+            if (input.email && input.email !== UserDoc.email) {
+                const existingEmail = await UserModel.findOne({
+                    email: input.email,
+                    _id: { $ne: user._id }
+                });
+                if (existingEmail) {
+                    throw new Error('این ایمیل قبلاً توسط کاربر دیگری استفاده شده است')
+                }
+            }
+
+            // بررسی شماره تلفن تکراری
+            if (input.phone && input.phone !== UserDoc.phone) {
+                const existingPhone = await UserModel.findOne({
+                    phone: input.phone,
+                    _id: { $ne: user._id }
+                });
+                if (existingPhone) {
+                    throw new Error("این شماره تلفن قبلاً توسط کاربر دیگری استفاده شده است");
+                }
+            }
+
+            // بررسی کد ملی (اگر وارد شده باشد)
+            if (input.nationalId) {
+                const nationalIdRegex = /^\d{10}$/;
+                if (!nationalIdRegex.test(input.nationalId)) {
+                    throw new Error("کد ملی باید دقیقاً 10 رقم باشد");
+                }
+            }
+
+            // بررسی کد پستی (اگر وارد شده باشد)
+            if (input.postalCode) {
+                const postalCodeRegex = /^\d{10}$/;
+                if (!postalCodeRegex.test(input.postalCode)) {
+                    throw new Error("کد پستی باید دقیقاً 10 رقم باشد");
+                }
+            }
+
+            // بروزرسانی فیلدهای کاربر
+            const updateData = {};
+
+            if (input.username) updateData.username = input.username;
+            if (input.email) updateData.email = input.email;
+            if (input.phone) updateData.phone = input.phone;
+            if (input.nationalId) updateData.nationalId = input.nationalId;
+            if (input.postalCode) updateData.postalCode = input.postalCode;
+            if (input.bio !== undefined) updateData.bio = input.bio;
+
+            // به‌روزرسانی اطلاعات کاربر در دیتابیس
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                user._id,
+                { $set: updateData },
+                { new: true, runValidators: true }
+            );
+
+            return {
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                phone: updatedUser.phone,
+                role: updatedUser.role,
+                nationalId: updatedUser.nationalId,
+                postalCode: updatedUser.postalCode,
+                bio: updatedUser.bio,
+                address: updatedUser.addresses,
+                wishlist: updatedUser.wishlist,
+                cart: updatedUser.cart,
+                orderHistory: updatedUser.orderHistory,
+                orders: updatedUser.orders,
+                discountCoupons: updatedUser.discountCoupons,
+                dateOfBirth: updatedUser.dateOfBirth ? updatedUser.dateOfBirth.toISOString() : null,
+                createdAt: updatedUser.createdAt.toISOString(),
+                updatedAt: updatedUser.updatedAt.toISOString(),
+            }
+        } catch (error) {
+            throw new Error(`خطا در به‌روزرسانی پروفایل: ${error.message}`);
+        }
+    }
+}
 
 module.exports = {
     registerUser,
@@ -528,4 +625,5 @@ module.exports = {
     loginUser,
     verifyOtpAndLogin,
     refreshTokenMutation,
+    updateUserProfile,
 };
