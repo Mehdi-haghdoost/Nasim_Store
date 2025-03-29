@@ -12,6 +12,8 @@ const { addComment, replyToComment } = require("./mutations/comment.resolvers");
 const { getProductComments } = require("./queries/user.resolvers");
 const { getAllAddress, linkExistingAddresses } = require("./queries/address.resolvers");
 const { addNewAddress, deleteAddress, updateAddressDefault } = require("./mutations/address.resolvers");
+const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/ticket.resolver");
+const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -21,6 +23,9 @@ const RootQuery = new GraphQLObjectType({
         getProductComments,
         getAllAddress,
         linkExistingAddresses,
+        getUserTickets,
+        getTicketById,
+        getDepartments,
     }
 })
 
@@ -42,6 +47,9 @@ const RootMutation = new GraphQLObjectType({
         deleteAddress,
         updateAddressDefault,
         linkExistingAddresses,
+        createTicket,
+        addMessageToTicket,
+        closeTicket,
     },
 });
 

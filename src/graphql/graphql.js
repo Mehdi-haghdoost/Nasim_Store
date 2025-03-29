@@ -5,10 +5,17 @@ const { createHandler } = require('graphql-http/lib/use/express');
 const cookieParser = require('cookie-parser');
 const schema = require('./index.resolver');
 const connectToDB = require('../../configs/db');
+const fileUpload = require('express-fileupload');
 
 
 
 const app = express();
+
+// استفاده از میدلور
+app.use(fileUpload({
+    limits: { fileSize: 10 * 1024 * 1024 }, // محدودیت 10 مگابایت
+    createParentPath: true
+}));
 
 app.use(cookieParser());
 
