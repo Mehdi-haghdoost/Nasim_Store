@@ -2,6 +2,8 @@ const { GraphQLID, GraphQLString, GraphQLList, GraphQLObjectType, GraphQLNonNull
 const CommentModel = require("../../../models/Comment");
 const AddressModel = require('../../../models/Address');
 const { CommentType } = require('./comment.types');
+const TicketModel = require('../../../models/Ticket');
+const { TicketType } = require('./ticket.types');
 
 
 // const {AddressType} = require('./address.types');
@@ -59,6 +61,21 @@ const UserType = new GraphQLObjectType({
                 } catch (error) {
                     console.log(`خطا در بازیبای کامنت ها ${error.message}`);
                     throw new Error(`خطا در بازیابی کامنت‌ها. لطفاً دوباره تلاش کنید.${error.message}`);
+                }
+            }
+        },
+        tickets: {
+            type: new GraphQLList(TicketType),
+            resolve: async (parent) => {
+                try {
+                    if (!parent.tickets || parent.tickets.length === 0) {
+                        return [];
+                    }
+
+                    const tickets = await TicketModel.find({ _id: { $in: parent.tickets } });
+                    return tickets;
+                } catch (error) {
+                    throw new Error(`خطا در بازیابی تیکت‌ها. لطفاً دوباره تلاش کنید.${error.message}`);
                 }
             }
         },
