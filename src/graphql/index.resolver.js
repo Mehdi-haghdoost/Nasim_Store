@@ -14,6 +14,7 @@ const { getAllAddress, linkExistingAddresses } = require("./queries/address.reso
 const { addNewAddress, deleteAddress, updateAddressDefault } = require("./mutations/address.resolvers");
 const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/ticket.resolver");
 const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
+const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -26,6 +27,8 @@ const RootQuery = new GraphQLObjectType({
         getUserTickets,
         getTicketById,
         getDepartments,
+        getUserWishlist,
+        isInWishlist,
     }
 })
 
@@ -50,6 +53,8 @@ const RootMutation = new GraphQLObjectType({
         createTicket,
         addMessageToTicket,
         closeTicket,
+        addToWishlist,
+        removeFromWishlist,
     },
 });
 
