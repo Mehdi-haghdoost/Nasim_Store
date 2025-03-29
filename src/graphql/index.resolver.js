@@ -16,6 +16,8 @@ const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/t
 const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
 const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.resolvers");
 const { getUserWishlist, isInWishlist } = require("./queries/wishlist.resolvers");
+const { addToCart, updateCartItem, removeFromCart, clearCart } = require("./mutations/cart.resolvers");
+const { getUserCart } = require("./queries/cart.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -30,6 +32,7 @@ const RootQuery = new GraphQLObjectType({
         getDepartments,
         getUserWishlist,
         isInWishlist,
+        getUserCart,
     }
 })
 
@@ -56,6 +59,10 @@ const RootMutation = new GraphQLObjectType({
         closeTicket,
         addToWishlist,
         removeFromWishlist,
+        addToCart,
+        updateCartItem,
+        removeFromCart,
+        clearCart,
     },
 });
 
