@@ -1,5 +1,6 @@
 const { GraphQLObjectType, GraphQLID, GraphQLInt, GraphQLString, GraphQLList, GraphQLFloat, GraphQLInputObjectType, GraphQLNonNull } = require("graphql");
 const { SellerType } = require("./seller.types");
+const { ProductType } = require("./product.types");
 
 // تعریف نوع آیتم سبد خرید
 const CartItemType = new GraphQLObjectType({
@@ -9,7 +10,7 @@ const CartItemType = new GraphQLObjectType({
         product: { type: ProductType },
         quantity: { type: GraphQLInt },
         color: { type: GraphQLString },
-        siza: { type: GraphQLString },
+        size: { type: GraphQLString },
         selectedSeller: { type: SellerType },
     }
 });

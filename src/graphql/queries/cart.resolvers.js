@@ -14,7 +14,7 @@ const getUserCart = {
             const populatedUser = await UserModel.findById(user._id)
                 .populate({
                     path: 'cart.product',
-                    model: 'product'
+                    model: 'Product'
                 })
                 .populate({
                     path: 'cart.selectedSeller',
