@@ -6,7 +6,7 @@ const UserModel = require("../../../models/User");
 // دریافت لیست علاقه‌مندی‌های کاربر
 const getUserWishlist = {
     type: new GraphQLList(ProductType),
-    resolve: async (_, _, { req }) => {
+    resolve: async (_, args, { req }) => {
         try {
             const user = await validateToken(req);
             if (!user) {
@@ -22,7 +22,7 @@ const getUserWishlist = {
                 throw new Error("کاربر پیدا نشد");
             }
 
-            return userWithWishlist.wishlist | [];
+            return userWithWishlist.wishlist || [];
         } catch (error) {
             throw new Error(`خطا در دریافت لیست علاقه‌مندی‌ها: ${error.message}`);
         }
@@ -33,7 +33,7 @@ const getUserWishlist = {
 const isInWishlist = {
     type: GraphQLBoolean,
     args: {
-        productId: { type: GraphQLNonNull(GraphQLID) }
+        productId: { type: new GraphQLNonNull(GraphQLID) }
     },
     resolve: async (_, { productId }, { req }) => {
         try {
