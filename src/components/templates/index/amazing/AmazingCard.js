@@ -40,7 +40,7 @@ function AmazingCard() {
                     </div>
                 </div>
                 <div className={`${styles.meta}`}>
-                    <ul className="navbar-nav flex-lg-row justify-content-between">
+                    <ul className="navbar-nav flex-lg-row justify-content-between px-2 py-0">
                         <li className="nav-item"><span
                             className="nav-link text-overflow-1 font-14 fw-bold">
                             صفحه نمایش 27 اینج </span></li>
@@ -56,7 +56,7 @@ function AmazingCard() {
                     </ul>
                 </div>
                 <div
-                    className="foot mt-3 d-flex justify-content-between align-items-center flex-wrap">
+                    className="foot mt-3 d-flex justify-content-between align-items-center flex-wrap p-3">
                     <div className="price d-flex align-items-center">
                         <h6 className="font-25 main-color-one-color">958,000</h6>
                         <h6 className="font-12 ms-1">هزار تومان</h6>

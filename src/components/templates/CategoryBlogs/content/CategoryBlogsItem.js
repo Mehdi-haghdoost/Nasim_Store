@@ -7,7 +7,7 @@ const CategoryBlogsItem = () => {
         
             <div className="col-md-3">
                 <div className={styles.blog_item}>
-                    <Link href={"/"}>
+                    <Link href={"/blog-detail/2123"}>
                         <div className={styles.image}>
                             <img src="/images/blog-1.jpg" className='img-fluid' alt="blogimage" />
                         </div>

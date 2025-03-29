@@ -81,7 +81,10 @@ const schema = new mongoose.Schema({
 
     cart: [{
         product: { type: mongoose.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, default: 1 }
+        quantity: { type: Number, default: 1 },
+        color: { type: String, required: false },
+        size: { type: String, required: false },
+        selectedSeller: { type: mongoose.Types.ObjectId, ref: "Seller" }
     }],
 
     orders: [{ type: mongoose.Types.ObjectId, ref: "Order" }],
