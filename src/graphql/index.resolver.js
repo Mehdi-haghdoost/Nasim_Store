@@ -15,6 +15,7 @@ const { addNewAddress, deleteAddress, updateAddressDefault } = require("./mutati
 const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/ticket.resolver");
 const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
 const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.resolvers");
+const { getUserWishlist, isInWishlist } = require("./queries/wishlist.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
