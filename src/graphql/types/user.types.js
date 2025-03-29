@@ -28,10 +28,14 @@ const UserType = new GraphQLObjectType({
                     if (!parent.address || parent.address.length === 0) {
                         return [];
                     }
+                    // اگر آدرس‌ها قبلاً populate شده‌اند
+                    if (typeof parent.addresses[0] !== 'string' && parent.addresses[0]._id) {
+                        return parent.addresses;
+                    }
                     const addresses = await AddressModel.find({ _id: { $in: parent.address } });
                     return addresses;
                 } catch (error) {
-                   
+
                     throw new Error(`خطا در بازیابی آدرس‌ها: ${error.message}`);
                 }
             }

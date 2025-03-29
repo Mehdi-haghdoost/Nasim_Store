@@ -14,6 +14,28 @@ const schema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    
+       // دپارتمان
+       department: {
+        type: String,
+        enum: ["technical", "financial", "sales", "general"],
+        required: true,
+    },
+
+    // ساب دپارتمان
+    subDepartment: {
+        type: String,
+        required: false,
+        trim: true,
+    },
+
+     // اولویت
+     priority: {
+        type: String,
+        enum: ["low", "medium", "high"],
+        default: "medium",
+        required: true,
+    },
 
     // وضعیت درخواست
     status: {
@@ -76,6 +98,15 @@ const schema = new mongoose.Schema({
                     required: true,
                     trim: true,
                 },
+                fileName: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                },
+                fileType: {
+                    type: String,
+                    required: false,
+                },
                 uploadedAt: {
                     type: Date,
                     default: Date.now,
@@ -88,6 +119,15 @@ const schema = new mongoose.Schema({
 },
     { timestamps: false } // فقط از createdAt و updatedAt استفاده می‌کنیم
 );
+
+schema.statics.getDepartmentsMap = function() {
+    return {
+        "technical": ["سوالات فنی", "مشکلات سایت", "مشکلات اپلیکیشن"],
+        "financial": ["پرداخت", "بازپرداخت", "فاکتور"],
+        "sales": ["سفارش‌ها", "محصولات", "قیمت‌گذاری"],
+        "general": ["پیشنهاد", "انتقاد", "سایر"]
+    };
+};
 
 const model = mongoose.models.Ticket || mongoose.model("Ticket", schema);
 
