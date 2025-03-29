@@ -1,5 +1,4 @@
 const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLInputObjectType, GraphQLNonNull } = require("graphql");
-const { UserType } = require("./user.types");
 
 const TicketStatusEnum = new GraphQLEnumType({
     name: "TicketStatusEnum",
@@ -33,7 +32,7 @@ const PriorityEnum = new GraphQLEnumType({
 
 // تعریف Enum برای فرستنده پیام
 const MessageSenderEnum = new GraphQLEnumType({
-    name : "MessageSenderEnum",
+    name: "MessageSenderEnum",
     values: {
         USER: { value: "user" },
         SUPPORT: { value: "support" },
@@ -41,49 +40,54 @@ const MessageSenderEnum = new GraphQLEnumType({
 });
 
 const TicketMessageType = new GraphQLObjectType({
-    name : "TicketMessageType",
-    fields : {
-        _id : {type : GraphQLID},
-        sender : {type :MessageSenderEnum},
-        text : {type : GraphQLString},
-        createdAt : {type : GraphQLString},
+    name: "TicketMessageType",
+    fields: {
+        _id: { type: GraphQLID },
+        sender: { type: MessageSenderEnum },
+        text: { type: GraphQLString },
+        createdAt: { type: GraphQLString },
     }
 });
 
 // تایپ برای پیوست‌ها
 const TicketAttachmentType = new GraphQLObjectType({
-    name : "TicketAttachmentType",
-    fields : {
-        _id : {type : GraphQLID},
-        fileUrl : {type : GraphQLString},
-        fileName : {type : GraphQLString},
-        fileType : {type : GraphQLString},
-        uploadedAt : {type : GraphQLString},
+    name: "TicketAttachmentType",
+    fields: {
+        _id: { type: GraphQLID },
+        fileUrl: { type: GraphQLString },
+        fileName: { type: GraphQLString },
+        fileType: { type: GraphQLString },
+        uploadedAt: { type: GraphQLString },
     }
 });
 
 const TicketType = new GraphQLObjectType({
-    name : "TicketType",
-    fields : () => ({
-        _id : {type : GraphQLID},
-        user : {
-            type : UserType,
-            resolve : async (ticket) => {
-                return await ticket.populate('user').execPopulate().then(t => t.user);
-            }
-        },
-        title : {type : GraphQLString},
-        department : {type : DepartmentEnum},
-        subDepartment : {type : GraphQLString},
-        priority : {type : PriorityEnum},
-        status : {type : TicketStatusEnum},
-        createdAt : {type : GraphQLString},
-        updatedAt : {type : GraphQLString},
-        initialRequest : {type : GraphQLString},
-        username : {type : GraphQLString},
-        messages : {type : new GraphQLList(TicketMessageType)},
-        attachments : {type : new GraphQLList(TicketAttachmentType)},
-    })
+    name: "TicketType",
+    fields: () => {
+        const { UserType } = require("./user.types");
+
+        return {
+
+            _id: { type: GraphQLID },
+            user: {
+                type: UserType,
+                resolve: async (ticket) => {
+                    return await ticket.populate('user').execPopulate().then(t => t.user);
+                }
+            },
+            title: { type: GraphQLString },
+            department: { type: DepartmentEnum },
+            subDepartment: { type: GraphQLString },
+            priority: { type: PriorityEnum },
+            status: { type: TicketStatusEnum },
+            createdAt: { type: GraphQLString },
+            updatedAt: { type: GraphQLString },
+            initialRequest: { type: GraphQLString },
+            username: { type: GraphQLString },
+            messages: { type: new GraphQLList(TicketMessageType) },
+            attachments: { type: new GraphQLList(TicketAttachmentType) },
+        }
+    }
 });
 
 // تایپ ورودی برای ایجاد تیکت جدید
