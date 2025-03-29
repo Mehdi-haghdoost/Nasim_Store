@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const AddressModel = require("./Address");
 const CommentModel = require("./Comment");
+const TicketModel = require('./Ticket');
 
 
 const schema = new mongoose.Schema({
@@ -132,6 +133,12 @@ const schema = new mongoose.Schema({
         required: false,
         trim: true,
     },
+    tickets: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "Ticket"
+        }
+    ]
 },
     { timestamps: true }
 );
