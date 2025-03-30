@@ -10,7 +10,7 @@ const Card = ({ post }) => {
         return (
             <div className={`${styles.swiper_slide}`}>
                 <div className={`${styles.blog_item}`}>
-                    <Link href="">
+                    <Link href={`/blog-detail/${post.id}`}>
                         <div className={`${styles.image}`}>
                             <img src="/images/blog-3.jpg" alt="" className="img-fluid" />
                         </div>
