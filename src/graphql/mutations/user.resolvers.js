@@ -619,53 +619,55 @@ const updateUserProfile = {
 
 const logout = {
     type: GraphQLBoolean,
-    resolve: async (_, args, { req, res }) => {
+    resolve: async (_, args, context) => {
         try {
-            if (!req || !req.cookies) {
-                // اگر کوکی نداریم، توکن را از هدر بررسی می‌کنیم
-                const authHeader = req?.headers?.authorization
-                if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                    throw new Error('کاربر احراز هویت نشده است');
-                }
-
-                // توکن را از هدر استخراج می‌کنیم
-                const token = authHeader.split(' ')[1];
-                if (!token) {
-                    throw new Error('توکن نامعتبر است');
-                }
-
-                // حذف توکن از دیتابیس
-                const deletedToken = await RefreshTokenModel.deleteOne({
-                    token: { $regex: new RegExp(token.substring(0, 20)) }
-                });
-
-                // پاک کردن کوکی‌ها (در صورت وجود)
-                if (res && typeof res.clearCookie === 'function') {
+            // استخراج توکن از هدر Authorization یا کوکی‌ها
+            let token = null;
+            
+            // بررسی Authorization header
+            const req = context.req || {};
+            const authHeader = req.headers?.authorization || '';
+            if (authHeader.startsWith('Bearer ')) {
+                token = authHeader.slice(7); // جدا کردن بخش 'Bearer ' از توکن
+            }
+            
+            // اگر توکن از هدر پیدا نشد، دنبال کوکی‌ها می‌گردیم
+            if (!token && req.cookies) {
+                token = req.cookies.accessToken || req.cookies.refreshToken;
+            }
+            
+            // اگر هیچ توکنی پیدا نشد
+            if (!token) {
+                throw new Error('توکن احراز هویت یافت نشد. کاربر احتمالاً قبلاً از سیستم خارج شده است');
+            }
+            
+            // حذف توکن از دیتابیس - هم با مطابقت دقیق و هم با regex
+            await RefreshTokenModel.deleteMany({
+                $or: [
+                    { token: token },
+                    { token: { $regex: new RegExp(token.substring(0, 20)) } }
+                ]
+            });
+            
+            // تلاش برای پاک کردن کوکی‌ها (اگر res درست تعریف شده باشد)
+            const res = context.res;
+            if (res && typeof res.clearCookie === 'function') {
+                try {
                     res.clearCookie('accessToken');
                     res.clearCookie('refreshToken');
+                } catch (cookieError) {
+                    console.warn('خطا در پاک کردن کوکی‌ها:', cookieError);
+                    // خطای پاک کردن کوکی را نادیده می‌گیریم، چون حذف توکن از دیتابیس مهم‌تر است
                 }
-
-                return true;
             }
-
-            // اگر کوکی‌ها وجود داشته باشند
-            // پاک کردن کوکی‌های احراز هویت
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
-
-            // حذف رفرش توکن از دیتابیس
-            const refreshToken = req.cookies.refreshToken;
-            if (refreshToken) {
-                await RefreshTokenModel.deleteOne({ token: refreshToken });
-            }
-
+            
             return true;
-
         } catch (error) {
+            console.error('خطا در فرایند خروج از حساب کاربری:', error);
             throw new Error(`خطا در خروج از حساب کاربری: ${error.message}`);
         }
     }
-}
+};
 
 module.exports = {
     registerUser,
