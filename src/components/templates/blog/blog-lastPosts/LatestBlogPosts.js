@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import styles from './LatestBlogPosts.module.css';
 import Cart from './Cart';
 import Link from 'next/link';
 
-const LatestBlogPosts = () => {
+const LatestBlogPosts = ({ posts = [] }) => {
     return (
         <div className={styles.grid_post_blog}>
             <div className="container-fluid">
@@ -25,18 +25,20 @@ const LatestBlogPosts = () => {
             </div>
             <div className="container-fluid">
                 <div className="row gy-3">
-                    <Cart />
-                    <Cart />
-                    <Cart />
-                    <Cart />
-                    <Cart />
-                    <Cart />
-                    <Cart />
-                    <Cart />
+                    {posts.length > 0 ? (
+                        posts.map((post) => (
+                            <Cart key={post.id} post={post} />
+                        ))
+                    ) : (
+                        // نمایش کارت‌های خالی اگر پستی وجود نداشته باشد
+                        Array(8).fill().map((_, index) => (
+                            <Cart key={index} />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LatestBlogPosts
+export default LatestBlogPosts;

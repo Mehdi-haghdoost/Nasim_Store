@@ -11,8 +11,12 @@ import MainSlider from "@/components/templates/index/mainSlider/MainSlider"
 import NewProduct from "@/components/templates/index/newProduct/NewProduct";
 import PhoneBanner from "@/components/templates/index/phoneBanner/PhoneBanner";
 import Service from "@/components/templates/index/service/Service";
+import { getAllPosts } from '@/lib/mdx';
 
 export default function Home() {
+   // دریافت همه پست‌های بلاگ از سیستم MDX
+   const blogPosts = getAllPosts();
+
   return (
     <>
       <Header />
@@ -26,7 +30,7 @@ export default function Home() {
       <NewProduct />
       <PhoneBanner />
       <CustomerFavories />
-      <Blog />
+      <Blog posts={blogPosts} />
       <Footer />
     </>
   );

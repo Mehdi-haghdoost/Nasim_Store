@@ -663,7 +663,6 @@ const logout = {
             
             return true;
         } catch (error) {
-            console.error('خطا در فرایند خروج از حساب کاربری:', error);
             throw new Error(`خطا در خروج از حساب کاربری: ${error.message}`);
         }
     }

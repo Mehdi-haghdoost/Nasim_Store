@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
-
 import Card from './Card';
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -14,7 +14,7 @@ import 'swiper/css/navigation';
 import styles from './TopViewedPosts.module.css';
 import Link from 'next/link';
 
-const TopViewedPosts = () => {
+const TopViewedPosts = ({ posts = [] }) => {
     return (
         <div className={`${styles.blog_slider} py-20`}>
             <div className="container-fluid">
@@ -75,30 +75,20 @@ const TopViewedPosts = () => {
                                 }}
                                 className="mySwiper"
                             >
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
+                                 {posts.length > 0 ? (
+                                    posts.map((post) => (
+                                        <SwiperSlide key={post.id} className={`${styles.mySlide}`}>
+                                            <Card post={post} />
+                                        </SwiperSlide>
+                                    ))
+                                ) : (
+                                    // نمایش کارت‌های خالی اگر پستی وجود نداشته باشد
+                                    Array(8).fill().map((_, index) => (
+                                        <SwiperSlide key={index} className={`${styles.mySlide}`}>
+                                            <Card />
+                                        </SwiperSlide>
+                                    ))
+                                )}
                             </Swiper>
                         </div>
                         <div className={`swiper-button-next ${styles.swiper_button_next}`}></div>

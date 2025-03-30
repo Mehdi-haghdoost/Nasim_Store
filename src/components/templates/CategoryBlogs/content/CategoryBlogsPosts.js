@@ -1,22 +1,48 @@
-import React from 'react'
+// import React from 'react'
+// import styles from './CategoryBlogsPosts.module.css';
+// import CategoryBlogsItem from './CategoryBlogsItem';
+
+// const CategoryBlogsPosts = () => {
+//     return (
+//         <div className='row gy-3'>
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//             <CategoryBlogsItem />
+//         </div>
+
+
+//     )
+// }
+
+// export default CategoryBlogsPosts
+
+"use client";
+
+import React from 'react';
 import styles from './CategoryBlogsPosts.module.css';
 import CategoryBlogsItem from './CategoryBlogsItem';
 
-const CategoryBlogsPosts = () => {
+const CategoryBlogsPosts = ({ posts = [] }) => {
     return (
         <div className='row gy-3'>
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
-            <CategoryBlogsItem />
+            {posts.length > 0 ? (
+                // اگر پست وجود داشته باشد، آنها را نمایش می‌دهیم
+                posts.map((post) => (
+                    <CategoryBlogsItem key={post.id} post={post} />
+                ))
+            ) : (
+                // اگر پستی وجود نداشته باشد، پست‌های نمونه نمایش داده می‌شوند
+                Array(8).fill().map((_, index) => (
+                    <CategoryBlogsItem key={index} />
+                ))
+            )}
         </div>
+    );
+};
 
-
-    )
-}
-
-export default CategoryBlogsPosts
+export default CategoryBlogsPosts;

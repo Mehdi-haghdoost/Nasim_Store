@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import Card from './Card';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,7 +12,8 @@ import 'swiper/css/navigation';
 
 import styles from './Blog.module.css'
 import Link from 'next/link';
-function Blog() {
+
+function Blog({ posts = [] }) {
     return (
         <div className={`${styles.blog_slider} py-20`}>
             <div className="container-fluid">
@@ -35,8 +36,7 @@ function Blog() {
 
             <div className={`${styles.parent}`}>
                 <div className="container-fluid">
-                    <div className={`swiper ${styles.product_slider_swiper}`}
-                    >
+                    <div className={`swiper ${styles.product_slider_swiper}`}>
                         <div className={`${styles.swiper_wrapper}`}>
                             <Swiper
                                 slidesPerView={1}
@@ -70,24 +70,20 @@ function Blog() {
                                 }}
                                 className="mySwiper"
                             >
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
+                                {posts.length > 0 ? (
+                                    posts.map((post) => (
+                                        <SwiperSlide key={post.id} className={`${styles.mySlide}`}>
+                                            <Card post={post} />
+                                        </SwiperSlide>
+                                    ))
+                                ) : (
+                                    // نمایش کارت‌های خالی اگر پستی وجود نداشته باشد
+                                    Array(8).fill().map((_, index) => (
+                                        <SwiperSlide key={index} className={`${styles.mySlide}`}>
+                                            <Card />
+                                        </SwiperSlide>
+                                    ))
+                                )}
                             </Swiper>
                         </div>
                         <div className={`swiper-button-next ${styles.swiper_button_next}`}></div>
@@ -95,9 +91,8 @@ function Blog() {
                     </div>
                 </div>
             </div>
-
         </div>
-    )
+    );
 }
 
-export default Blog
+export default Blog;
