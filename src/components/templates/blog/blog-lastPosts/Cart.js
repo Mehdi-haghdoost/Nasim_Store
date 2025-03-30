@@ -8,7 +8,7 @@ const Cart = ({ post }) => {
         return (
             <div className="col-lg-3">
                 <div className={styles.blog_item}>
-                    <Link href={'/'}>
+                    <Link href={`/blog-detail/${post.id}`}>
                         <div className={styles.image}>
                             <img src="/images/blog-1.jpg" alt="blog_item" className='img-fluid' />
                         </div>
