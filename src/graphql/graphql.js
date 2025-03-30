@@ -30,8 +30,8 @@ async function startServer() {
                 schema,
                 context: (req,res) => {
                     return {
-                        req: req,
-                        res: res
+                        req: req.raw || req, // برخی از محیط‌ها از req.raw استفاده می‌کنند
+                        res: res.raw || res  // برخی از محیط‌ها از res.raw استفاده می‌کنند
                     };
                 },
             })
