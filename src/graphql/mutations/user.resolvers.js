@@ -621,10 +621,34 @@ const logout = {
     type: GraphQLBoolean,
     resolve: async (_, args, { req, res }) => {
         try {
-            if (!req.cookies.accessToken && !req.cookies.refreshToken) {
-                throw new Error('کاربر قبلاً از سیستم خارج شده است');
+            if (!req || !req.cookies) {
+                // اگر کوکی نداریم، توکن را از هدر بررسی می‌کنیم
+                const authHeader = req?.headers?.authorization
+                if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                    throw new Error('کاربر احراز هویت نشده است');
+                }
+
+                // توکن را از هدر استخراج می‌کنیم
+                const token = authHeader.split(' ')[1];
+                if (!token) {
+                    throw new Error('توکن نامعتبر است');
+                }
+
+                // حذف توکن از دیتابیس
+                const deletedToken = await RefreshTokenModel.deleteOne({
+                    token: { $regex: new RegExp(token.substring(0, 20)) }
+                });
+
+                // پاک کردن کوکی‌ها (در صورت وجود)
+                if (res && typeof res.clearCookie === 'function') {
+                    res.clearCookie('accessToken');
+                    res.clearCookie('refreshToken');
+                }
+
+                return true;
             }
 
+            // اگر کوکی‌ها وجود داشته باشند
             // پاک کردن کوکی‌های احراز هویت
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
@@ -632,13 +656,11 @@ const logout = {
             // حذف رفرش توکن از دیتابیس
             const refreshToken = req.cookies.refreshToken;
             if (refreshToken) {
-                const deletedToken = await RefreshTokenModel.deleteOne({ token: refreshToken });
-                if (deletedToken.deletedCount === 0) {
-                    throw new Error('توکن موردنظر در سیستم یافت نشد');
-                }
+                await RefreshTokenModel.deleteOne({ token: refreshToken });
             }
 
             return true;
+
         } catch (error) {
             throw new Error(`خطا در خروج از حساب کاربری: ${error.message}`);
         }
