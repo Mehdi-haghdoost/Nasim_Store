@@ -1,4 +1,4 @@
-const { GraphQLString, GraphQLNonNull, GraphQLObjectType } = require("graphql");
+const { GraphQLString, GraphQLNonNull, GraphQLObjectType, GraphQLBoolean } = require("graphql");
 const { AuthType, OtpType, UserType, UserProfileInputType } = require("../types/user.types");
 const { registerUserValidator } = require("../../utils/validators");
 const UserModel = require('./../../../models/User')
@@ -615,6 +615,34 @@ const updateUserProfile = {
             throw new Error(`خطا در به‌روزرسانی پروفایل: ${error.message}`);
         }
     }
+};
+
+const logout = {
+    type: GraphQLBoolean,
+    resolve: async (_, args, { req, res }) => {
+        try {
+            if (!req.cookies.accessToken && !req.cookies.refreshToken) {
+                throw new Error('کاربر قبلاً از سیستم خارج شده است');
+            }
+
+            // پاک کردن کوکی‌های احراز هویت
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
+
+            // حذف رفرش توکن از دیتابیس
+            const refreshToken = req.cookies.refreshToken;
+            if (refreshToken) {
+                const deletedToken = await RefreshTokenModel.deleteOne({ token: refreshToken });
+                if (deletedToken.deletedCount === 0) {
+                    throw new Error('توکن موردنظر در سیستم یافت نشد');
+                }
+            }
+
+            return true;
+        } catch (error) {
+            throw new Error(`خطا در خروج از حساب کاربری: ${error.message}`);
+        }
+    }
 }
 
 module.exports = {
@@ -626,4 +654,5 @@ module.exports = {
     verifyOtpAndLogin,
     refreshTokenMutation,
     updateUserProfile,
+    logout
 };
