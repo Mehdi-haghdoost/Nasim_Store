@@ -9,10 +9,20 @@ import CommentForm from '@/components/templates/blog-detail/FeedbackForm/Comment
 import RelatedArticles from '@/components/templates/blog-detail/RelatedArticles/RelatedArticles';
 import { getAllPostIds, getPostData, getAllPosts } from '@/lib/mdx';
 
-// تولید مسیرهای استاتیک برای همه پست‌های بلاگ
+// تولید مسیرهای استاتیک برای تمام پست‌های بلاگ
 export async function generateStaticParams() {
   const paths = getAllPostIds();
   return paths.map(path => path.params);
+}
+
+export async function generateMetadata({ params }) {
+  const { id } = params;
+  const postData = getPostData(id);
+  
+  return {
+    title: postData.title || 'جزئیات بلاگ',
+    description: postData.description || '',
+  };
 }
 
 export default async function BlogDetailPage({ params }) {
