@@ -34,11 +34,22 @@ const submitContact = {
             // Save to database
             await contact.save();
 
+            const contactToReturn = {
+                id: contact._id,
+                _id: contact._id,
+                name: contact.name,
+                email: contact.email,
+                message: contact.message,
+                saveInfo: contact.saveInfo,
+                createdAt: contact.createdAt
+            };
+          
             return {
                 success: true,
                 message: "پیام شما با موفقیت ارسال شد",
-                contact,
+                contact: contactToReturn,
             };
+
         } catch (error) {
             return {
                 success: false,
