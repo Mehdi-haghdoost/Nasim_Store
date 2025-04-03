@@ -23,7 +23,7 @@ const submitContact = {
       const saveInfo = args.saveInfo === "true";
 
       // Create new contact
-      const contact = new Contact({
+      const contact = new ContactModel({
         name: args.name,
         email: args.email,
         message: args.message,
