@@ -36,7 +36,7 @@ const RootQuery = new GraphQLObjectType({
         getUserWishlist,
         isInWishlist,
         getUserCart,
-        ContactQueries,
+        ...ContactQueries,
     }
 })
 
@@ -68,7 +68,7 @@ const RootMutation = new GraphQLObjectType({
         removeFromCart,
         clearCart,
         logout,
-        ContactMutations,
+        ...ContactMutations,
     },
 });
 
