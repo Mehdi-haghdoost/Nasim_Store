@@ -12,11 +12,11 @@ const schema = new mongoose.Schema({
         match: [/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/g, "لطفا یک ایمیل معتبر وارد کنید"],
         trim: true,
     },
-    messgae: {
+    message: {
         type: String,
+        required: [true, "متن پیام الزامی است"],
         trim: true,
-        default: "",
-    },
+      },
     saveInfo: {
         type: Boolean,
         default: false,
