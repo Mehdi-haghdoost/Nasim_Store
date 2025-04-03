@@ -19,8 +19,8 @@ const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.reso
 const { getUserWishlist, isInWishlist } = require("./queries/wishlist.resolvers");
 const { addToCart, updateCartItem, removeFromCart, clearCart } = require("./mutations/cart.resolvers");
 const { getUserCart } = require("./queries/cart.resolvers");
-const { ContactQueries } = require("./queries/contact.resolvers");
-const { ContactMutations } = require("./mutations/contact.resolvers");
+const { getContacts, getContactById } = require("./queries/contact.resolvers");
+const { submitContact } = require("./mutations/contact.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -36,7 +36,8 @@ const RootQuery = new GraphQLObjectType({
         getUserWishlist,
         isInWishlist,
         getUserCart,
-        ContactQueries,
+        getContacts,
+        getContactById,
        
     }
 })
@@ -69,7 +70,7 @@ const RootMutation = new GraphQLObjectType({
         removeFromCart,
         clearCart,
         logout,
-        ContactMutations,
+        submitContact,
        
     },
 });
