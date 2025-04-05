@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const REGISTER_USER = `gql
+export const REGISTER_USER = gql`
 mutation RegisterUser($username : String!,$email : String!, $phone :String , $password : String!) {
     registerUser(username : $username, email : $email, phone : $phone, password : $password) {
         token
@@ -14,4 +14,13 @@ mutation RegisterUser($username : String!,$email : String!, $phone :String , $pa
         }
     }
 }
-`
+`;
+
+export const SEND_OTP = gql`
+mutation SendOtp($phone : String!) {
+sendOtp(phone: $phone) {
+    message
+    }
+}
+`;
+
