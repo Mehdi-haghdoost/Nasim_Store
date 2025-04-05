@@ -1,7 +1,7 @@
 const { GraphQLList, GraphQLBoolean, GraphQLNonNull, GraphQLID } = require("graphql");
 const { ProductType } = require("../types/product.types");
-const { validateToken } = require("../../utils/authBackend");
-const UserModel = require("../../../models/User");
+const { validateToken } = require("../../../utils/authBackend");
+const UserModel = require("../../../../models/User");
 
 // دریافت لیست علاقه‌مندی‌های کاربر
 const getUserWishlist = {

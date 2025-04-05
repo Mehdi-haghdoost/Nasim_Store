@@ -38,9 +38,9 @@ const ProductType = new GraphQLObjectType({
     name: "ProductType",
     fields: () => {
 
-        const CategoryModel = require("../../../models/Category");
-        const SellerModel = require("../../../models/Seller");
-        const CommentModel = require("../../../models/Comment");
+        const CategoryModel = require("../../../../models/Category");
+        const SellerModel = require("../../../../models/Seller");
+        const CommentModel = require("../../../../models/Comment");
         return {
             _id: { type: new GraphQLNonNull(GraphQLID) },
             image: { type: new GraphQLNonNull(GraphQLString) },

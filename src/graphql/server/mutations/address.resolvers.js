@@ -1,9 +1,9 @@
 const { GraphQLNonNull, GraphQLBoolean, GraphQLID } = require("graphql");
 const { AddressType, AddressInputType, UpdateAddressDefaultInputType } = require("../types/address.types");
-const { validateToken } = require("../../utils/authBackend");
-const AddressModel = require('../../../models/Address');
-const UserModel = require('../../../models/User');
-const { provinces, cities } = require("../../../data/provincesCities");
+const { validateToken } = require("../../../utils/authBackend");
+const AddressModel = require('../../../../models/Address');
+const UserModel = require('../../../../models/User');
+const { provinces, cities } = require("../../../../data/provincesCities");
 
 const addNewAddress = {
     type: AddressType,

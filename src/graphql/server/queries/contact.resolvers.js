@@ -1,5 +1,5 @@
 const { GraphQLList, GraphQLID, } = require("graphql");
-const ContactModel = require('../../../models/Contact');
+const ContactModel = require('../../../../models/Contact');
 const { ContactType } = require("../types/contact.types");
 
 

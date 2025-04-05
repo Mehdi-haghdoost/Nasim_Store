@@ -1,6 +1,6 @@
 const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType, GraphQLBoolean } = require("graphql");
-const ProductModel = require('../../../models/Product');
-const CommentModel = require("../../../models/Comment")
+const ProductModel = require('../../../../models/Product');
+const CommentModel = require("../../../../models/Comment")
 const CommentStatusEnum = new GraphQLEnumType({
     name: "CommentStatus",
     values: {

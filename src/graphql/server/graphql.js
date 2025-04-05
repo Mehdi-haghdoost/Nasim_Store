@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { createHandler } = require('graphql-http/lib/use/express');
 const cookieParser = require('cookie-parser');
 const schema = require('./index.resolver');
-const connectToDB = require('../../configs/db');
+const connectToDB = require('../../../configs/db');
 const fileUpload = require('express-fileupload');
 
 

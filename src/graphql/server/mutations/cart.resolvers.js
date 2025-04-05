@@ -1,8 +1,8 @@
 const { GraphQLNonNull, GraphQLBoolean, GraphQLID } = require("graphql");
 const { CartItemType, AddToCartInputType, UpdateCartItemInputType } = require("../types/cart.types");
-const { validateToken } = require("../../utils/authBackend");
-const ProductModel = require('../../../models/Product');
-const UserModel = require('../../../models/User');
+const { validateToken } = require("../../../utils/authBackend");
+const ProductModel = require('../../../../models/Product');
+const UserModel = require('../../../../models/User');
 
 const addToCart = {
     type: CartItemType,

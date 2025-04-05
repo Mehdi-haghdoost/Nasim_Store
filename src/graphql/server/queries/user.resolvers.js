@@ -1,6 +1,6 @@
 const { GraphQLNonNull, GraphQLList, GraphQLID } = require("graphql");
 const { CommentType } = require("../types/comment.types");
-const CommentModel = require("../../../models/Comment");
+const CommentModel = require("../../../../models/Comment");
 
 // resolver برای دریافت تمام کامنت‌های یک محصول (بدون کامنت‌های پاسخ)
 const getProductComments = {

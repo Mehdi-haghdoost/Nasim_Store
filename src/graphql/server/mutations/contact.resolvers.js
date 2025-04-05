@@ -1,6 +1,6 @@
 
 const { GraphQLString } = require("graphql");
-const ContactModel = require('../../../models/Contact');
+const ContactModel = require('../../../../models/Contact');
 const { ContactResponseType } = require("../types/contact.types");
 
 

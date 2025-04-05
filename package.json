@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start-backend": "node src/graphql/graphql.js"
+    "start-backend": "node src/graphql/server/graphql.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.6",
     "@popperjs/core": "^2.11.8",
     "@yaireo/tagify": "^4.31.6",
     "aos": "^2.3.4",

@@ -4,7 +4,7 @@ const CategoryType = new GraphQLObjectType({
     name: "CategoryType",
     fields: () => {
         const { ProductType } = require("./product.types");
-        const ProductModel = require("../../../models/Product");
+        const ProductModel = require("../../../../models/Product");
         return {
             _id: { type: new GraphQLNonNull(GraphQLID) },
             name: { type: new GraphQLNonNull(GraphQLString) },

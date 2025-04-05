@@ -1,8 +1,8 @@
 const { GraphQLList, GraphQLString } = require("graphql");
 const { AddressType } = require("../types/address.types");
-const UserModel = require('../../../models/User');
-const AddressModel = require('../../../models/Address');
-const { validateToken } = require("../../utils/authBackend");
+const UserModel = require('../../../../models/User');
+const AddressModel = require('../../../../models/Address');
+const { validateToken } = require("../../../utils/authBackend");
 
 const getAllAddress = {
     type: new GraphQLList(AddressType),

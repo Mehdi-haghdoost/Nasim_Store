@@ -1,7 +1,7 @@
 const { GraphQLList, GraphQLNonNull, GraphQLID } = require("graphql");
-const { validateToken } = require("../../utils/authBackend");
+const { validateToken } = require("../../../utils/authBackend");
 const { TicketType, DepartmentInfoType } = require("../types/ticket.types");
-const TicketModel = require('../../../models/Ticket')
+const TicketModel = require('../../../../models/Ticket')
 // دریافت لیست تیکت‌های کاربر
 const getUserTickets = {
     type: new GraphQLList(TicketType),

@@ -1,8 +1,8 @@
 const { GraphQLNonNull } = require("graphql");
 const { SellerType, SellerInputType } = require("../types/seller.types");
-const { validateToken } = require("../../utils/authBackend");
+const { validateToken } = require("../../../utils/authBackend");
 
-const SellerModel = require("../../../models/Seller");
+const SellerModel = require("../../../../models/Seller");
 
 const addSeller = {
     type: SellerType,

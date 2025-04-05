@@ -1,8 +1,8 @@
 const { GraphQLNonNull } = require("graphql");
 const { WishlistOperationResultType, WishlistItemInputType } = require("../types/wishlist.types");
-const { validateToken } = require("../../utils/authBackend");
-const ProductModel = require('../../../models/Product');
-const UserModel = require('../../../models/User');
+const { validateToken } = require("../../../utils/authBackend");
+const ProductModel = require('../../../../models/Product');
+const UserModel = require('../../../../models/User');
 
 // اضافه کردن محصول به لیست علاقه‌مندی‌ها
 const addToWishlist = {

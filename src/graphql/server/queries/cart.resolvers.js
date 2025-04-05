@@ -1,6 +1,6 @@
-const { validateToken } = require("../../utils/authBackend");
+const { validateToken } = require("../../../utils/authBackend");
 const { CartType } = require("../types/cart.types");
-const UserModel = require('../../../models/User');
+const UserModel = require('../../../../models/User');
 
 const getUserCart = {
     type: CartType,

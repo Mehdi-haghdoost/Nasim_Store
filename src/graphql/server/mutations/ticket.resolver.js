@@ -1,8 +1,8 @@
 const { GraphQLNonNull, GraphQLID, GraphQLString } = require("graphql");
 const { TicketType, CreateTicketInputType, AddMessageInputType, DepartmentInfoType } = require("../types/ticket.types");
-const { validateToken } = require("../../utils/authBackend");
-const TicketModel = require("../../../models/Ticket");
-const UserModel = require("../../../models/User");
+const { validateToken } = require("../../../utils/authBackend");
+const TicketModel = require("../../../../models/Ticket");
+const UserModel = require("../../../../models/User");
 const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");

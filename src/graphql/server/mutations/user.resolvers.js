@@ -1,13 +1,13 @@
 const { GraphQLString, GraphQLNonNull, GraphQLObjectType, GraphQLBoolean } = require("graphql");
 const { AuthType, OtpType, UserType, UserProfileInputType } = require("../types/user.types");
-const { registerUserValidator } = require("../../utils/validators");
-const UserModel = require('./../../../models/User')
-const RefreshTokenModel = require('../../../models/RefreshToken');
-const OtpModel = require('./../../../models/Otp')
+const { registerUserValidator } = require("../../../utils/validators");
+const UserModel = require('../../../../models/User')
+const RefreshTokenModel = require('../../../../models/RefreshToken');
+const OtpModel = require('../../../../models/Otp')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
-const { sendRequest } = require('../../utils/requestHelper');
-const { setAuthCookies, validateToken } = require("../../utils/authBackend");
+const { sendRequest } = require('../../../utils/requestHelper');
+const { setAuthCookies, validateToken } = require("../../../utils/authBackend");
 
 
 const registerUser = {
