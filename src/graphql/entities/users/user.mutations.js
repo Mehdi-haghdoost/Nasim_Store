@@ -49,3 +49,27 @@ export const CONFIRM_OTP_AND_REGISTER = gql`
     }
 `;
 
+const LOGIN_USER = gql`
+    mutation LoginUser($phoneOrEmail : String! , $password : String!) {
+        loginUser(phoneOrEmail : $phoneOrEmail , password : $password) {
+            token
+            refreshToken
+            user {
+                _id
+                username
+                email
+                phone
+                role
+                address
+                wishlist
+                cart
+                orderHistory
+                orders
+                discountCoupons
+                dateOfBirth
+                createdAt
+                updatedAt
+        }
+        }
+    }
+`
