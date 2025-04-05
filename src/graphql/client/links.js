@@ -1,4 +1,6 @@
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
+import { from } from '@apollo/client';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
@@ -13,12 +15,16 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const authLink = setContext((_, { headers }) => {
     // Get the authentication token from local storage if it exists
     const token = localStorage.getItem('token');
-    
+
     // Return the headers to the context so httpLink can read them
     return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : '',
-      }
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : '',
+        }
     };
-  });
+});
+
+export const createLinks = (httpLink) => {
+    return from([errorLink, authLink, httpLink]);
+};
