@@ -99,3 +99,18 @@ const VERIFY_OTP_AND_LOGIN = gql`
     }
 `;
 
+export const REFRESH_TOKEN = gql`
+  mutation RefreshToken {
+    refreshTokenMutation {
+      token
+      refreshToken
+      user {
+        _id
+        username
+        email
+        phone
+        role
+      }
+    }
+  }
+`;
