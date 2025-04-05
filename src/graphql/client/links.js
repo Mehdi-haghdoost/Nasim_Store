@@ -10,3 +10,15 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (networkError) console.error(`[Network error]: ${networkError}`);
 });
 
+const authLink = setContext((_, { headers }) => {
+    // Get the authentication token from local storage if it exists
+    const token = localStorage.getItem('token');
+    
+    // Return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : '',
+      }
+    };
+  });
