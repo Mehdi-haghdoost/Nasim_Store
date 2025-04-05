@@ -24,3 +24,10 @@ sendOtp(phone: $phone) {
 }
 `;
 
+export const SEND_OTP_FOR_LOGIN = gql`
+    mutation SendOtpForLogin($phone : String!) {
+        sendOtpForLogin(phone : $phone) {
+            message
+        }
+    }
+`;
