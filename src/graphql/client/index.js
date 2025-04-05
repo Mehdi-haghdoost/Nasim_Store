@@ -1,4 +1,5 @@
 const { HttpLink, ApolloClient, InMemoryCache } = require("@apollo/client");
+const {createLinks} = require('./links');
 
 const httpLink = new HttpLink({
     uri: "http://localhost:4005/graphql",

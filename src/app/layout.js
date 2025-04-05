@@ -7,6 +7,7 @@ import BootstrapLoader from "@/utils/BootstrapLoader";
 import MobileFooter from "@/components/layouts/MobileFooter/MobileFooter";
 import FloatButton from "@/components/modules/float-btn/FloatButton ";
 import ContactUsFloat from "@/components/modules/contact-us-float/ContactUsFloat";
+import ApolloProvider from "@/utils/ApolloProvider";
 
 
 const geistSans = localFont({
@@ -32,10 +33,12 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AosInit />
         <BootstrapLoader />
-        {children}
-        <MobileFooter />
-        <ContactUsFloat />
-        <FloatButton />
+        <ApolloProvider>
+          {children}
+          <MobileFooter />
+          <ContactUsFloat />
+          <FloatButton />
+        </ApolloProvider>
       </body>
     </html>
   );
