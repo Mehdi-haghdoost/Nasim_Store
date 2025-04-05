@@ -31,3 +31,21 @@ export const SEND_OTP_FOR_LOGIN = gql`
         }
     }
 `;
+
+
+export const CONFIRM_OTP_AND_REGISTER = gql`
+    mutation ConfirmOtpAndRegister($phone : String!, $code : String!) {
+        confirmOtpAndRegister(phone : $phone , code : $code) {
+             token
+            refreshToken
+            user {
+                _id
+                username
+                email
+                phone
+                role
+            }
+         }
+    }
+`;
+
