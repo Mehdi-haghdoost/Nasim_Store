@@ -114,3 +114,22 @@ export const REFRESH_TOKEN = gql`
     }
   }
 `;
+
+export const UPDATE_USER_PROFILE = gql`
+  mutation UpdateUserProfile($input: UserProfileInput!) {
+    updateUserProfile(input: $input) {
+      _id
+      username
+      email
+      phone
+      role
+      nationalId
+      postalCode
+      bio
+      address
+      dateOfBirth
+      createdAt
+      updatedAt
+    }
+  }
+`;
