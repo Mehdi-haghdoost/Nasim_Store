@@ -72,4 +72,30 @@ const LOGIN_USER = gql`
         }
         }
     }
-`
+`;
+
+const VERIFY_OTP_AND_LOGIN = gql`
+    mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
+        verifyOtpAndLogin(phone : $phone , code : $code) {
+                token
+                refreshToken
+                user {
+                    _id
+                    username
+                    email
+                    phone
+                    role
+                    address
+                    wishlist
+                    cart
+                    orderHistory
+                    orders
+                    discountCoupons
+                    dateOfBirth
+                    createdAt
+                    updatedAt
+                }
+        }
+    }
+`;
+
