@@ -133,3 +133,9 @@ export const UPDATE_USER_PROFILE = gql`
     }
   }
 `;
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout
+  }
+`;
