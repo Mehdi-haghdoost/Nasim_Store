@@ -13,7 +13,7 @@ const initialState = {
     token: typeof window !== "undefined" ? localStorage.getItem('token') : null,
     refreshToken: typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null,
     user: null,
-    lodaing: false,
+    loading: false,
     error: null,
     otpSent: false,
     otpVerified: false,
@@ -26,11 +26,11 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setLoading: (state, action) => {
-            state.lodaing = action.payload;
+            state.loading = action.payload;
         },
         setError: (state, action) => {
             state.error = action.payload;
-            state.lodaing = false;
+            state.loading = false;
         },
         clearError: (state) => {
             state.error = null;

@@ -1,7 +1,7 @@
 // # ترکیب کننده تمام ریدیوسرها
 
 import { combineReducers } from "redux";
-import authReducer from './slices/authSlice';
+import authReducer from '../slices/authSlice';
 
 
 /**
