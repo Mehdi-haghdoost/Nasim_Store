@@ -1,7 +1,6 @@
-//  # اسلایس مربوط به احراز هویت
+// # اسلایس مربوط به احراز هویت با پشتیبانی از کوکی‌ها
 
 import { createSlice } from "@reduxjs/toolkit";
-
 import {
     loginUser,
     registerUser,
@@ -14,23 +13,17 @@ import {
     logoutUser
 } from "../actions/authThunks";
 
-
-/**
- * Authentication slice for Redux store
- * Manages user authentication state including tokens and user data
- */
-
 const initialState = {
     isAuthenticated: false,
-    token: typeof window !== "undefined" ? localStorage.getItem('token') : null,
-    refreshToken: typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null,
+    token: null, // دیگر ذخیره نمی‌کنیم چون از کوکی‌ها استفاده می‌شه
+    refreshToken: null, // دیگر ذخیره نمی‌کنیم چون از کوکی‌ها استفاده می‌شه
     user: null,
     loading: false,
     error: null,
     otpSent: false,
     otpVerified: false,
     otpMessage: null,
-    registrationType: 'standard',  // 'standard', 'otp'
+    registrationType: 'standard', // 'standard', 'otp'
 };
 
 const authSlice = createSlice({
@@ -55,8 +48,6 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
                 state.user = action.payload.user;
                 state.loading = false;
                 state.error = null;
@@ -69,15 +60,12 @@ const authSlice = createSlice({
             })
 
         // Register User
-        builder
             .addCase(registerUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
                 state.user = action.payload.user;
                 state.loading = false;
                 state.error = null;
@@ -89,7 +77,6 @@ const authSlice = createSlice({
             })
 
         // Send OTP
-        builder
             .addCase(sendOtp.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -107,7 +94,6 @@ const authSlice = createSlice({
             })
 
         // Send OTP for Login
-        builder
             .addCase(sendOtpForLogin.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -125,15 +111,12 @@ const authSlice = createSlice({
             })
 
         // Confirm OTP and Register
-        builder
             .addCase(confirmOtpAndRegister.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(confirmOtpAndRegister.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
                 state.user = action.payload.user;
                 state.loading = false;
                 state.error = null;
@@ -145,15 +128,12 @@ const authSlice = createSlice({
             })
 
         // Verify OTP and Login
-        builder
             .addCase(verifyOtpAndLogin.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(verifyOtpAndLogin.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
                 state.user = action.payload.user;
                 state.loading = false;
                 state.error = null;
@@ -165,7 +145,6 @@ const authSlice = createSlice({
             })
 
         // Update User Profile
-        builder
             .addCase(updateUserProfile.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -181,14 +160,11 @@ const authSlice = createSlice({
             })
 
         // Refresh Token
-        builder
             .addCase(refreshToken.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(refreshToken.fulfilled, (state, action) => {
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
                 state.user = action.payload.user;
                 state.loading = false;
                 state.error = null;
@@ -199,15 +175,12 @@ const authSlice = createSlice({
             })
 
         // Logout User
-        builder
             .addCase(logoutUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isAuthenticated = false;
-                state.token = null;
-                state.refreshToken = null;
                 state.user = null;
                 state.otpSent = false;
                 state.otpVerified = false;
@@ -222,7 +195,6 @@ const authSlice = createSlice({
             });
     },
 });
-
 
 export const { clearError, otpVerifySuccess } = authSlice.actions;
 export default authSlice.reducer;
