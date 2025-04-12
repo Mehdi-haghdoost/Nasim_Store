@@ -1,9 +1,9 @@
 "use client";
 
 import { ApolloProvider as Provider } from "@apollo/client";
-import { provider as ReduxProvider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import client from "@/graphql/client";
-import store from '@/store';
+import store from '@/Redux/store';
 
 /**
  * Providers component
