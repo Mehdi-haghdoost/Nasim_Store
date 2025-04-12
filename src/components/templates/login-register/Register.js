@@ -1,66 +1,93 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Register.module.css'
 import Link from "next/link";
 import { showSwal } from '@/utils/helpers';
-import { validateEmail, validatePassword, validatePhone } from '@/utils/authFrontEnd';
+import { validateEmail, validatePassword, validatePhone } from '@/utils/authFrontend';
 import Sms from './Sms';
 import registerSchema from '@/utils/register';
 import { useFormik } from 'formik';
+import { useAuth } from '@/Redux/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+
 
 function Register({ showLoginForm }) {
+
+  const { register, loading, error, requestOtp, otpSent, otpMessage } = useAuth();
+  const router = useRouter();
 
   const form = useFormik({
     initialValues: { username: '', email: '', password: '' },
     validationSchema: registerSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      setTimeout(() => {
-        swal({
-          title: 'اطلاعات شما با موفقیت ثبت شد',
-          button: 'اوکی',
-          icon: '/images/success.png'
-        })
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+
+      try {
+        const response = await register(values.username, values.email, null, values.password);
+
+        if (response && response.meta && response.meta.requestStatus === 'fulfilled') {
+          showSwal("ثبت نام شما با موفقیت انجام شد", "success", "اوکی");
+
+          resetForm();
+          setTimeout(() => {
+            router.push('/');
+          }, 1000);
+        } else {
+          // در صورت خطا
+          const errorMessage = response && response.payload ? response.payload : "خطا در ثبت نام";
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        console.error("Register error:", error);
+        showSwal(error.message || "خطا در ثبت نام", "error", "تلاش مجدد");
+      } finally {
         setSubmitting(false);
-      }, 1000);
+      }
     }
   })
 
   const [phone, setPhone] = useState("");
-
   const [isRegisterWithPass, setIsRegisterWithPass] = useState(false)
   const [isRegisterWithOtp, setIsRegisterWithOtp] = useState(false);
 
-  const hideOtpForm = () => setIsRegisterWithOtp(false);
+  useEffect(() => {
+    if (otpSent && otpMessage) {
+      showSwal(otpMessage, "success", "تایید")
+    }
+  }, [otpSent, otpMessage]);
 
+  useEffect(() => {
+    if (error) {
+      showSwal(error, 'error', 'تلاش مجدد')
+    }
+  }, [error]);
+
+  const hideOtpForm = () => setIsRegisterWithOtp(false);
 
   const signUp = async () => {
     if (!form.values.username.trim()) {
-      return showSwal("لطفا نام خود را وارد نمایید ", "warning", "اوکی")
+      return showSwal("لطفا نام خود را وارد نمایید ", "warning", "اوکی");
     }
     if (form.errors.username) {
-      return showSwal(form.errors.username, "error", "اوکی")
+      return showSwal(form.errors.username, "error", "اوکی");
     }
-
-
     if (!form.values.email) {
-      return showSwal("لطفا ایمیل معتبر وارد کنید", "warning", "تلاش مجدد")
+      return showSwal("لطفا ایمیل معتبر وارد کنید", "warning", "تلاش مجدد");
     }
     if (form.errors.email) {
-      return showSwal(form.errors.email, "error", "اوکی")
+      return showSwal(form.errors.email, "error", "اوکی");
     }
-
-
     if (!form.values.password) {
-      return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
+      return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی");
     }
     if (form.errors.password) {
-      return showSwal(form.errors.password, "error", "اوکی")
+      return showSwal(form.errors.password, "error", "اوکی");
     }
 
-    // اینجا باید پس از اعتبار سنجی فرم رو ارسال کنم
+    console.log("اعتبارسنجی با موفقیت انجام شد، در حال فراخوانی onSubmit فرمیک");
+
     form.handleSubmit();
 
-  }
+  };
 
   const sentOtp = async () => {
 
@@ -71,8 +98,12 @@ function Register({ showLoginForm }) {
       return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
     }
 
-    setIsRegisterWithOtp(true)
-
+    try {
+      await requestOtp(phone);
+      setIsRegisterWithOtp(true);
+    } catch (error) {
+      // خطا در Redux مدیریت می‌شود
+    }
   }
 
   return (
@@ -113,11 +144,11 @@ function Register({ showLoginForm }) {
                                       value={form.values.username}
                                       onChange={form.handleChange}
                                       onBlur={form.handleBlur}
-                                      name='name'
+                                      name='username'
                                       type="text"
                                       className={`form-control`}
-                                      id="name" />
-                                    <label htmlFor="name" className={`form-label ${styles.label_float}`}>نام خود را وارد کنید</label>
+                                      id="username" />
+                                    <label htmlFor="username" className={`form-label ${styles.label_float}`}>نام خود را وارد کنید</label>
                                   </div>
                                 )
                               }
@@ -149,13 +180,18 @@ function Register({ showLoginForm }) {
                                   <label htmlFor="password" className={`form-label ${styles.label_float}`}> رمز عبور را وارد کنید</label>
                                 </div>
                               )}
-                              <div cclassName={"form-group"}>
+                              <div className={"form-group"}>
                                 <button
                                   onClick={() => {
                                     setIsRegisterWithPass(false)
                                     sentOtp()
                                   }}
-                                  type='button' className="main-color-one-bg py-3 btn w-100 mb-3  rounded-3">ثبت نام با کد تایید</button>
+                                  type='button'
+                                  className="main-color-one-bg py-3 btn w-100 mb-3  rounded-3"
+                                  disabled={loading}
+                                >
+                                  {loading ? 'در حال پردازش...' : 'ثبت نام با کد تایید'}
+                                </button>
                               </div>
 
 
@@ -168,7 +204,12 @@ function Register({ showLoginForm }) {
                                       setIsRegisterWithPass(true)
                                     }
                                   }}
-                                  type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ثبت نام با رمز عبور</button>
+                                  type="button"
+                                  className="main-color-one-bg py-3 btn w-100  rounded-3"
+                                  disabled={loading}
+                                >
+                                  {loading ? 'در حال پردازش...' : (isRegisterWithPass ? 'ثبت نام' : 'ثبت نام با رمز عبور')}
+                                </button>
                               </div>
                               <p
                                 onClick={showLoginForm}
@@ -197,7 +238,11 @@ function Register({ showLoginForm }) {
           </div>
         </>
       ) : (
-        <Sms hideOtpForm={hideOtpForm} type={"ثبت نام"} />
+        <Sms
+          hideOtpForm={hideOtpForm}
+          type={"ثبت نام"}
+          phone={phone}
+        />
       )}
 
     </>
