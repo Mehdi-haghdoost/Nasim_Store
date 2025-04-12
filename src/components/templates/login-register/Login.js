@@ -1,33 +1,65 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Login.module.css';
 import { useFormik } from 'formik';
 import Link from "next/link";
 import Sms from './Sms';
 import { showSwal } from '@/utils/helpers';
 import loginSchema from '@/utils/login';
+import { useAuth } from '@/Redux/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 function Login({ showRegisterForm }) {
+
+    const { login, loading, error, isAuthenticated, requestLoginOtp } = useAuth();
+    const router = useRouter();
 
     const form = useFormik({
         initialValues: { phoneOrEmail: '', password: '' },
         validationSchema: loginSchema,
-        onSubmit: (values, { setSubmitting }) => {
-            setTimeout(() => {
+        onSubmit: async (values, { setSubmitting }) => {
+            try {
                 console.log('Form Inputs Data =>', values);
-                swal({
-                    title: 'با موفقیت وارد شدید',
-                    // text : 'با موفقیت وارد شدید',
-                    button: 'اوکی',
-                    icon: '/images/success.png'
-                })
-                setSubmitting(false)
+                const result = await login(values.phoneOrEmail, values.password);
 
-            }, 1000);
+                if (result.payload && result.payload.user) {
+                    showSwal('با موفقیت وارد شدید', 'success', 'اوکی');
+
+                    // ریدایرکت به صفحه اصلی یا داشبورد پس از موفقیت
+                    setTimeout(() => {
+                        router.push('/')
+                    }, 1000);
+                } else if (result.error) {
+                    showSwal(result.error.message || 'خطا در ورود', 'error', 'تلاش مجدد');
+                }
+
+            } catch (error) {
+                console.error('Login error:', err);
+                showSwal(err.message || 'خطا در ورود', 'error', 'تلاش مجدد');
+            } finally {
+                setSubmitting(false);
+            }
+
+
         }
     })
 
     const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
+
+    // بررسی وضعیت احراز هویت
+    useEffect(() => {
+        if (isAuthenticated) {
+            // اگر کاربر قبلاً لاگین شده است، به صفحه اصلی یا داشبورد هدایت شود
+            router.push('/');
+        }
+    }, [isAuthenticated, router]);
+
+    // بررسی خطاها
+    useEffect(() => {
+        if (error) {
+            showSwal(error, 'error', 'تلاش مجدد');
+        }
+    }, [error])
 
     const hideOtpForm = () => setIsLoginWithOtp(false);
 
@@ -41,16 +73,13 @@ function Login({ showRegisterForm }) {
             return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
         }
 
-        const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-        if (!passwordPattern.test(form.values.password)) {
-            return showSwal("پسورد به اندازه کافی قوی نیست", "error", "تلاش مجدد");
-        }
-
-        if (form.errors.phoneOrEmail || form.errors.password) {
-            if (form.errors.phoneOrEmail) {
-                return showSwal(form.errors.phoneOrEmail, 'error', 'OK');
-            } else if (form.errors.password) {
-                return showSwal(form.errors.password, 'error', 'OK');
+        // اعتبارسنجی فرم
+        const errors = await form.validateForm();
+        if (Object.keys(errors).length > 0) {
+            if (errors.phoneOrEmail) {
+                return showSwal(errors.phoneOrEmail, 'error', 'اوکی');
+            } else if (errors.password) {
+                return showSwal(errors.password, 'error', 'اوکی');
             }
         }
 
@@ -63,7 +92,15 @@ function Login({ showRegisterForm }) {
         } else if (!isValidPhone) {
             return showSwal("لطفا شماره موبایل معتبر وارد نمایید", "error", "تلاش مجدد");
         }
-        setIsLoginWithOtp(true)
+
+        try {
+            // ارسال درخواست OTP
+            await requestLoginOtp(form.values.phoneOrEmail);
+            setIsLoginWithOtp(true);
+        } catch (error) {
+            showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
+        }
+
     }
 
     return (
@@ -102,7 +139,6 @@ function Login({ showRegisterForm }) {
                                                                 <label htmlFor="username" className={`form-label ${styles.label_float}`}>شماره تلفن یا ایمیل خود را وارد
                                                                     کنید
                                                                 </label>
-                                                                {/* {form.errors.phoneOrEmail && form.touched.phoneOrEmail && swal('Error', form.errors.phoneOrEmail, 'error')} */}
                                                             </div>
                                                             <div className={`${styles.comment_item} position-relative step-passwd`} style={{ display: 'block' }}>
                                                                 <input
@@ -128,7 +164,11 @@ function Login({ showRegisterForm }) {
                                                             <div className="form-group">
                                                                 <button
                                                                     onClick={loginWithPassword}
-                                                                    type="button" className="main-color-one-bg py-3 btn w-100  rounded-3">ورود</button>
+                                                                    type="button" 
+                                                                    className="main-color-one-bg py-3 btn w-100 rounded-3"
+                                                                    disabled={loading}>
+                                                                    {loading ? 'در حال پردازش...' : 'ورود'}
+                                                                </button>
                                                             </div>
                                                             <span className={`${styles.login_froget_password} text-end`} href="/register">آیا حساب کاربری ندارید ؟ </span>
                                                             <div className="form-group step-two">
@@ -161,7 +201,11 @@ function Login({ showRegisterForm }) {
                     </div>
                 </>
             ) : (
-                <Sms hideOtpForm={hideOtpForm} type={"ورود"} />
+                <Sms
+                  hideOtpForm={hideOtpForm}
+                  type={"ورود"}
+                  phone={form.values.phoneOrEmail}
+                />
             )}
         </>
     )
