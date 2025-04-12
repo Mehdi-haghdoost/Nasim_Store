@@ -19,73 +19,78 @@ const registerUser = {
         password: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args, { res }) => {
-        const validationResult = registerUserValidator(args);
-
-        const error = validationResult[0] ? validationResult[0].message : undefined;
-
-        if (error) throw new Error(error);
-
-        const { username, email, phone, password, otp } = args;
-
-        const hasUser = await UserModel.countDocuments();
-
-        const isRegisteredUser = await UserModel.findOne({ email });
-        if (isRegisteredUser) {
-            throw new Error("کاربری با این مشخصات قبلا ثبت نام کرده است");
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = {
-            username,
-            email,
-            phone,
-            password: hashedPassword,
-            role: hasUser ? 'USER' : 'ADMIN',
-        };
-
-        const user = await UserModel.create(newUser)
-
-        const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
-        const RefreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
-        if (!AccessTokenSecretKey || !RefreshTokenSecretKey) {
-            throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
-        }
-
-        const accessToken = jwt.sign({ id: user._id }, AccessTokenSecretKey, {
-            expiresIn: "1h"
-        });
-
-        const refreshToken = jwt.sign({ id: user._id }, RefreshTokenSecretKey, {
-            expiresIn: "30d"
-        })
-
-        const refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-
-        await RefreshTokenModel.create({
-            userId: user._id,
-            token: refreshToken,
-            expiresAt: refreshTokenExpiresAt,
-        })
-
-        // ست کردن کوکی‌ها
-        setAuthCookies(res, accessToken, refreshToken);
-
-        //  تست توکن : 
         try {
-            const decodedAccess = jwt.verify(accessToken, AccessTokenSecretKey);
-            const decodedRefresh = jwt.verify(refreshToken, RefreshTokenSecretKey);
-            console.log("access Token is valid:", decodedAccess);
-            console.log("refresh Token is valid:", decodedRefresh);
-        } catch (error) {
-            console.error("Token verification failed:", error);
-        }
+            const validationResult = registerUserValidator(args);
 
-        return {
-            token: accessToken,
-            refreshToken,
-            user,
-        };
+            const error = validationResult[0] ? validationResult[0].message : undefined;
+
+            if (error) throw new Error(error);
+
+            const { username, email, phone, password, otp } = args;
+
+            const hasUser = await UserModel.countDocuments();
+
+            const isRegisteredUser = await UserModel.findOne({ email });
+            if (isRegisteredUser) {
+                throw new Error("کاربری با این مشخصات قبلا ثبت نام کرده است");
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const newUser = {
+                username,
+                email,
+                phone,
+                password: hashedPassword,
+                role: hasUser ? 'USER' : 'ADMIN',
+            };
+
+            const user = await UserModel.create(newUser)
+
+            const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+            const RefreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+            if (!AccessTokenSecretKey || !RefreshTokenSecretKey) {
+                throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
+            }
+
+            const accessToken = jwt.sign({ id: user._id }, AccessTokenSecretKey, {
+                expiresIn: "1h"
+            });
+
+            const refreshToken = jwt.sign({ id: user._id }, RefreshTokenSecretKey, {
+                expiresIn: "30d"
+            })
+
+            const refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+
+            await RefreshTokenModel.create({
+                userId: user._id,
+                token: refreshToken,
+                expiresAt: refreshTokenExpiresAt,
+            })
+
+            // ست کردن کوکی‌ها
+            setAuthCookies(res, accessToken, refreshToken);
+            console.log("User registered successfully:", user._id);
+            //  تست توکن : 
+            try {
+                const decodedAccess = jwt.verify(accessToken, AccessTokenSecretKey);
+                const decodedRefresh = jwt.verify(refreshToken, RefreshTokenSecretKey);
+                console.log("access Token is valid:", decodedAccess);
+                console.log("refresh Token is valid:", decodedRefresh);
+            } catch (error) {
+                console.error("Token verification failed:", error);
+            }
+
+            return {
+                token: accessToken,
+                refreshToken,
+                user,
+            };
+        } catch (error) {
+            console.error("Error in registerUser:", error);
+            throw new Error(error.message || "خطا در ثبت‌نام کاربر");
+        }
     }
 }
 
@@ -623,24 +628,24 @@ const logout = {
         try {
             // استخراج توکن از هدر Authorization یا کوکی‌ها
             let token = null;
-            
+
             // بررسی Authorization header
             const req = context.req || {};
             const authHeader = req.headers?.authorization || '';
             if (authHeader.startsWith('Bearer ')) {
                 token = authHeader.slice(7); // جدا کردن بخش 'Bearer ' از توکن
             }
-            
+
             // اگر توکن از هدر پیدا نشد، دنبال کوکی‌ها می‌گردیم
             if (!token && req.cookies) {
                 token = req.cookies.accessToken || req.cookies.refreshToken;
             }
-            
+
             // اگر هیچ توکنی پیدا نشد
             if (!token) {
                 throw new Error('توکن احراز هویت یافت نشد. کاربر احتمالاً قبلاً از سیستم خارج شده است');
             }
-            
+
             // حذف توکن از دیتابیس - هم با مطابقت دقیق و هم با regex
             await RefreshTokenModel.deleteMany({
                 $or: [
@@ -648,7 +653,7 @@ const logout = {
                     { token: { $regex: new RegExp(token.substring(0, 20)) } }
                 ]
             });
-            
+
             // تلاش برای پاک کردن کوکی‌ها (اگر res درست تعریف شده باشد)
             const res = context.res;
             if (res && typeof res.clearCookie === 'function') {
@@ -660,7 +665,7 @@ const logout = {
                     // خطای پاک کردن کوکی را نادیده می‌گیریم، چون حذف توکن از دیتابیس مهم‌تر است
                 }
             }
-            
+
             return true;
         } catch (error) {
             throw new Error(`خطا در خروج از حساب کاربری: ${error.message}`);
