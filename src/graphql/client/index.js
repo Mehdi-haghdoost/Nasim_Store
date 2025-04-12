@@ -1,23 +1,26 @@
 const { HttpLink, ApolloClient, InMemoryCache } = require("@apollo/client");
-const {createLinks} = require('./links');
+const { createLinks } = require('./links');
 
 const httpLink = new HttpLink({
-    uri: "http://localhost:4005/graphql",
+    uri: 'http://localhost:4005/graphql',
+    credentials: 'include',
 });
 
 const client = new ApolloClient({
     link: createLinks(httpLink),
     cache: new InMemoryCache(),
     defaultOptions: {
-        fetchPolicy: 'cache-and-network',
-        errorPolicy: 'ignore',
-    },
-    query: {
-        fetchPolicy: 'network-only',
-        errorPolicy: 'all',
-    },
-    mutate: {
-        errorPolicy: 'all',
+        watchQuery: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'ignore',
+        },
+        query: {
+            fetchPolicy: 'network-only',
+            errorPolicy: 'all',
+        },
+        mutate: {
+            errorPolicy: 'all',
+        },
     },
 });
 
