@@ -12,16 +12,11 @@ import {
 } from "../actions/authThunks";
 import { clearError } from "../slices/authSlice";
 
-
-/**
- * Custom hook for accessing authentication state and actions
- * Provides methods for auth operations and access to the current auth state
- */
 export const useAuth = () => {
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
 
-    // Helper methods for auth operations
+    // توابع کمکی برای عملیات احراز هویت
     const login = (phoneOrEmail, password) => {
         dispatch(clearError());
         return dispatch(loginUser({ phoneOrEmail, password }));
@@ -29,12 +24,12 @@ export const useAuth = () => {
 
     const register = (username, email, phone, password) => {
         dispatch(clearError());
-        return dispatch(registerUser({ username, email, phone, password }))
+        return dispatch(registerUser({ username, email, phone, password }));
     };
 
     const logout = () => {
         dispatch(clearError());
-        return dispatch(logoutUser(phone));
+        return dispatch(logoutUser());
     };
 
     const requestOtp = (phone) => {
@@ -73,8 +68,6 @@ export const useAuth = () => {
         user: auth.user,
         loading: auth.loading,
         error: auth.error,
-        token: auth.token,
-        refreshToken: auth.refreshToken,
         otpSent: auth.otpSent,
         otpVerified: auth.otpVerified,
         otpMessage: auth.otpMessage,
