@@ -49,7 +49,7 @@ export const CONFIRM_OTP_AND_REGISTER = gql`
     }
 `;
 
-const LOGIN_USER = gql`
+export const LOGIN_USER = gql`
     mutation LoginUser($phoneOrEmail : String! , $password : String!) {
         loginUser(phoneOrEmail : $phoneOrEmail , password : $password) {
             token
@@ -74,7 +74,7 @@ const LOGIN_USER = gql`
     }
 `;
 
-const VERIFY_OTP_AND_LOGIN = gql`
+export const VERIFY_OTP_AND_LOGIN = gql`
     mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
         verifyOtpAndLogin(phone : $phone , code : $code) {
                 token
