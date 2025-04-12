@@ -2,11 +2,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './Sms.module.css';
 import ProgressBar from '../index/mainSlider/ProgressBar';
+import { useAuth } from '@/Redux/hooks/useAuth';
+import { showSwal } from '@/utils/helpers';
 
 
 
 
-function Sms({ hideOtpForm, type }) {
+function Sms({ hideOtpForm, type, phone }) {
 
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
@@ -14,17 +16,78 @@ function Sms({ hideOtpForm, type }) {
     const [progress, setProgress] = useState(0)
     const inpuRefs = useRef([]);
 
+    const {
+        confirmOtp,
+        loginWithOtp,
+        requestOtp,
+        requestLoginOtp,
+        loading,
+        error,
+        isAuthenticated,
+        otpMessage
+    } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            showSwal(`${type}با موفقیت انجام شد`, "success", "تایید")
+            hideOtpForm();
+        }
+    }, [isAuthenticated, hideOtpForm, type]);
+
+    useEffect(() => {
+        if (error) {
+            showSwal(error, 'error', 'تلاش مجدد');
+        }
+    }, [error]);
+
+    useEffect(() => {
+        if (otpMessage) {
+            showSwal(otpMessage, 'success', 'تایید');
+        }
+    }, [otpMessage]);
+
 
     const handleResendCode = () => {
+        if (type === 'ثبت نام') {
+            requestOtp(phone);
+        } else {
+            requestLoginOtp(phone);
+        }
+
         setIsTimerActive(true);
         setTimer(60);
-        setProgress(0)
+        setProgress(0);
     }
+
+
     useEffect(() => {
         if (progress < 100) {
             setTimeout(() => setProgress(prev => prev += 1.65), 1000)
         }
     }, [progress])
+
+    // تابع برای ارسال کد تایید
+    const handleSubmit = () => {
+        // تبدیل آرایه رقم‌ها به یک رشته
+        const otpCode = otp.join('');
+
+        if (otpCode.length !== 6) {
+            return showSwal("لطفا کد تایید 6 رقمی را وارد کنید", "warning", "تلاش مجدد");
+        }
+
+        if (type === 'ثبت نام') {
+            confirmOtp(phone, otpCode);
+        } else {
+            loginWithOtp(phone, otpCode)
+        }
+    };
+
+    useEffect(() => {
+        if (progress < 100) {
+            setTimeout(() => setProgress(prev => prev += 1.65), 1000)
+        }
+    }, [progress]);
+
     useEffect(() => {
         let interval = null;
         if (isTimerActive && timer > 0) {
@@ -64,7 +127,7 @@ function Sms({ hideOtpForm, type }) {
                                             <div className={styles.otp_input}>
                                                 {otp.map((digit, index) => (
                                                     <input
-                                                        key={{ index }}
+                                                        key={index}
                                                         type='text'
                                                         maxLength="1"
                                                         ref={(el) => (inpuRefs.current[index] = el)}
@@ -118,7 +181,14 @@ function Sms({ hideOtpForm, type }) {
                                             )}
 
                                             <div className="form-group mt-4">
-                                                <button type="submit" id="submit" className={`${styles.btn_login} w-100 btn text-white rounded-3`}>ثبت نام
+                                                <button
+                                                    type="button"
+                                                    id="submit"
+                                                    className={`${styles.btn_login} w-100 btn text-white rounded-3`}
+                                                    onClick={handleSubmit}
+                                                    disabled={loading}
+                                                >
+                                                    {loading ? 'در حال پردازش...' : 'ثبت نام'}
                                                 </button>
                                             </div>
                                         </div>
