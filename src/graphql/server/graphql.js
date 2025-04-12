@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { createHandler } = require('graphql-http/lib/use/express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const schema = require('./index.resolver');
 const connectToDB = require('../../../configs/db');
 const fileUpload = require('express-fileupload');
@@ -10,6 +11,14 @@ const fileUpload = require('express-fileupload');
 
 
 const app = express();
+
+// فعال‌سازی CORS - اضافه شده
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true, 
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization','Cookie'] 
+}));
 
 // استفاده از میدلور
 app.use(fileUpload({
