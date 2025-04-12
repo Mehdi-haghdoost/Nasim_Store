@@ -9,15 +9,20 @@ const setAuthCookies = function(res, accessToken, refreshToken) {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 3600000, // 1 ساعت
-            sameSite: 'lax'
+            sameSite: 'lax',
+            path : '/',
         });
         
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 روز
-            sameSite: 'lax'
+            sameSite: 'lax',
+            path : '/',
         });
+        console.log("Cookies set successfully");
+    } else {
+        console.error("Invalid res object, cannot set cookies");
     }
     
     return {
