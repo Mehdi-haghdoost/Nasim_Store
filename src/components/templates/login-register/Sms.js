@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation';
 import styles from './Sms.module.css';
 import ProgressBar from '../index/mainSlider/ProgressBar';
 import { useAuth } from '@/Redux/hooks/useAuth';
@@ -10,11 +11,12 @@ import { showSwal } from '@/utils/helpers';
 
 function Sms({ hideOtpForm, type, phone }) {
 
-    const [otp, setOtp] = useState(['', '', '', '', '']);
+    const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [isTimerActive, setIsTimerActive] = useState(true);
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(0);
     const inpuRefs = useRef([]);
+    const router = useRouter();
 
     const {
         confirmOtp,
@@ -29,10 +31,14 @@ function Sms({ hideOtpForm, type, phone }) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            showSwal(` ${type} با موفقیت انجام شد`, "success", "تایید")
-            hideOtpForm();
+            showSwal(`${type} با موفقیت انجام شد`, "success", "تایید");
+            // بعد از ثبت نام موفق، کاربر را به صفحه اصلی هدایت می‌کنیم
+            setTimeout(() => {
+                hideOtpForm();
+                router.push('/');
+            }, 2000);
         }
-    }, [isAuthenticated, hideOtpForm, type]);
+    }, [isAuthenticated, hideOtpForm, type, router]);
 
     useEffect(() => {
         if (error) {
@@ -71,14 +77,20 @@ function Sms({ hideOtpForm, type, phone }) {
         // تبدیل آرایه رقم‌ها به یک رشته
         const otpCode = otp.join('');
 
-        if (otpCode.length !== 5) {
-            return showSwal("لطفا کد تایید 5 رقمی را وارد کنید", "warning", "تلاش مجدد");
+        if (otpCode.length !== 6) {
+            return showSwal("لطفا کد تایید 6 رقمی را وارد کنید", "warning", "تلاش مجدد");
         }
 
-        if (type === 'ثبت نام') {
-            confirmOtp(phone, otpCode);
-        } else {
-            loginWithOtp(phone, otpCode)
+        try {
+            console.log(`درخواست تایید کد برای شماره: ${phone} با کد: ${otpCode}`);
+            if (type === 'ثبت نام') {
+                confirmOtp(phone, otpCode);
+            } else {
+                loginWithOtp(phone, otpCode);
+            }
+        } catch (err) {
+            console.error("خطا در تایید کد:", err);
+            showSwal(err.message || "خطا در تایید کد", "error", "تلاش مجدد");
         }
     };
 
@@ -98,7 +110,7 @@ function Sms({ hideOtpForm, type, phone }) {
             setIsTimerActive(false);
         }
         return () => clearInterval(interval);
-    }, [timer])
+    }, [timer, isTimerActive])
 
 
     return (
@@ -151,7 +163,7 @@ function Sms({ hideOtpForm, type, phone }) {
                                                             }
                                                         }}
                                                         placeholder="_"
-                                                        step="1" min="0" max="9" autocomplete="no" pattern="\d*" />
+                                                        step="1" min="0" max="9" autoComplete="no" pattern="\d*" />
                                                 ))}
                                                 <input id="otp-value" placeholder="_" type="hidden" name="otp" />
                                             </div>
@@ -188,7 +200,7 @@ function Sms({ hideOtpForm, type, phone }) {
                                                     onClick={handleSubmit}
                                                     disabled={loading}
                                                 >
-                                                    {loading ? 'در حال پردازش...' : 'ثبت نام'}
+                                                    {loading ? 'در حال پردازش...' : type}
                                                 </button>
                                             </div>
                                         </div>
@@ -212,4 +224,4 @@ function Sms({ hideOtpForm, type, phone }) {
     )
 }
 
-export default Sms
+export default Sms;
