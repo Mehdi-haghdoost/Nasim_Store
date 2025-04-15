@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 function Login({ showRegisterForm }) {
 
-    const { login, loading, error, isAuthenticated, requestLoginOtp } = useAuth();
+    const { login, loading, error, isAuthenticated, requestLoginOtp, otpSent, otpMessage } = useAuth();
     const router = useRouter();
 
     const form = useFormik({
@@ -34,17 +34,16 @@ function Login({ showRegisterForm }) {
                 }
 
             } catch (error) {
-                console.error('Login error:', err);
-                showSwal(err.message || 'خطا در ورود', 'error', 'تلاش مجدد');
+                console.error('Login error:', error);
+                showSwal(error.message || 'خطا در ورود', 'error', 'تلاش مجدد');
             } finally {
                 setSubmitting(false);
             }
-
-
         }
-    })
+    });
 
     const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
+    const [isOtpRequestPending, setIsOtpRequestPending] = useState(false);
 
     // بررسی وضعیت احراز هویت
     useEffect(() => {
@@ -59,7 +58,29 @@ function Login({ showRegisterForm }) {
         if (error) {
             showSwal(error, 'error', 'تلاش مجدد');
         }
-    }, [error])
+    }, [error]);
+
+    // بررسی وضعیت درخواست OTP
+    useEffect(() => {
+        // اگر درخواست OTP در حال انجام بود و حالا به پایان رسیده
+        if (isOtpRequestPending && !loading) {
+            setIsOtpRequestPending(false);
+            
+            // بررسی وضعیت خطا
+            if (!error && otpSent) {
+                // اگر خطایی نبود و OTP ارسال شده، به صفحه SMS برویم
+                console.log("OTP برای ورود با موفقیت ارسال شد، انتقال به صفحه SMS");
+                setIsLoginWithOtp(true);
+                
+                if (otpMessage) {
+                    showSwal(otpMessage, "success", "تایید");
+                }
+            } else if (error) {
+                // اگر خطایی وجود داشت، صفحه را تغییر نمی‌دهیم
+                console.error("خطای ارسال OTP برای ورود:", error);
+            }
+        }
+    }, [loading, error, otpSent, otpMessage, isOtpRequestPending]);
 
     const hideOtpForm = () => setIsLoginWithOtp(false);
 
@@ -67,7 +88,6 @@ function Login({ showRegisterForm }) {
         if (!form.values.phoneOrEmail) {
             return showSwal("لطفا شماره تلفن یا ایمیل خود را وارد نمایید ", "warning", "اوکی")
         }
-
 
         if (!form.values.password) {
             return showSwal("لطفا پسورد خود را وارد کنید", "warning", "اوکی")
@@ -85,6 +105,7 @@ function Login({ showRegisterForm }) {
 
         form.handleSubmit();
     }
+
     const loginWithOtp = async () => {
         const isValidPhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g.test(form.values.phoneOrEmail);
         if (!form.values.phoneOrEmail.trim()) {
@@ -93,14 +114,27 @@ function Login({ showRegisterForm }) {
             return showSwal("لطفا شماره موبایل معتبر وارد نمایید", "error", "تلاش مجدد");
         }
 
+        // نمایش پیام در حال بارگذاری
+        showSwal("در حال ارسال کد تایید...", "info", "منتظر بمانید");
+        
+        // تنظیم وضعیت درخواست به حالت در حال انجام
+        setIsOtpRequestPending(true);
+        
         try {
-            // ارسال درخواست OTP
+            console.log("درخواست OTP برای ورود با شماره:", form.values.phoneOrEmail);
+            
+            // ارسال درخواست OTP به سرور بدون تغییر وضعیت isLoginWithOtp
             await requestLoginOtp(form.values.phoneOrEmail);
-            setIsLoginWithOtp(true);
+            
+            // توجه: انتقال به صفحه SMS در useEffect انجام می‌شود
+            // پس از بررسی نتیجه درخواست
+            
         } catch (error) {
+            // در صورت خطا در همین تابع، وضعیت درخواست را به پایان رسیده تغییر می‌دهیم
+            setIsOtpRequestPending(false);
+            console.error("خطای ارسال OTP برای ورود (catch):", error);
             showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
         }
-
     }
 
     return (
