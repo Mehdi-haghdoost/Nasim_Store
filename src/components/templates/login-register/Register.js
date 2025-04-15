@@ -49,11 +49,25 @@ function Register({ showLoginForm }) {
   const [isRegisterWithPass, setIsRegisterWithPass] = useState(false)
   const [isRegisterWithOtp, setIsRegisterWithOtp] = useState(false);
 
+  const [isOtpRequestPending, setIsOtpRequestPending] = useState(false);
+
   useEffect(() => {
-    if (otpSent && otpMessage) {
-      showSwal(otpMessage, "success", "تایید")
+    // اگر درخواست OTP در حال انجام بود و حالا به پایان رسیده
+    if (isOtpRequestPending && !loading) {
+      setIsOtpRequestPending(false);
+      
+      // بررسی وضعیت خطا
+      if (!error && otpSent) {
+        // اگر خطایی نبود و OTP ارسال شده، به صفحه SMS برویم
+        console.log("OTP با موفقیت ارسال شد، انتقال به صفحه SMS");
+        setIsRegisterWithOtp(true);
+      } else if (error) {
+        // اگر خطایی وجود داشت، پیام خطا نمایش دهیم
+        console.error("خطای ارسال OTP:", error);
+        showSwal(error, "error", "تلاش مجدد");
+      }
     }
-  }, [otpSent, otpMessage]);
+  }, [loading, error, otpSent, isOtpRequestPending]);
 
   useEffect(() => {
     if (error) {
@@ -97,27 +111,28 @@ function Register({ showLoginForm }) {
       return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
     }
 
+    // نمایش پیام در حال بارگذاری
+    showSwal("در حال ارسال کد تایید...", "info", "منتظر بمانید");
+    
+    // تنظیم وضعیت درخواست به حالت در حال انجام
+    setIsOtpRequestPending(true);
+    
     try {
       console.log("درخواست OTP برای شماره:", phone);
-
-      // فعال کردن نمایش کامپوننت Sms قبل از ارسال درخواست OTP
-      // این باعث می‌شود که حتی اگر Redux به کندی پاسخ دهد، کاربر به صفحه بعدی منتقل شود
-      setIsRegisterWithOtp(true);
-
-      // ارسال درخواست OTP به سرور
+      
+      // ارسال درخواست OTP به سرور بدون تغییر وضعیت isRegisterWithOtp
       await requestOtp(phone);
-
-      console.log("OTP با موفقیت ارسال شد");
+      
+      // توجه: انتقال به صفحه SMS در useEffect انجام می‌شود
+      // پس از بررسی نتیجه درخواست
+      
     } catch (error) {
-      console.error("خطای ارسال OTP:", error);
-
-      // در صورت خطا، برگشت به صفحه قبلی
-      setIsRegisterWithOtp(false);
-
+      // در صورت خطا در همین تابع، وضعیت درخواست را به پایان رسیده تغییر می‌دهیم
+      setIsOtpRequestPending(false);
+      console.error("خطای ارسال OTP (catch):", error);
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
     }
   }
-
 
   return (
     <>
@@ -148,7 +163,7 @@ function Register({ showLoginForm }) {
                                       value={phone}
                                       onChange={(e) => setPhone(e.target.value)}
                                       type="text" className={`form-control`} id="username" />
-                                    <label for="username" className={`form-label ${styles.label_float}`}>شماره تلفن خود را وارد
+                                    <label htmlFor="username" className={`form-label ${styles.label_float}`}>شماره تلفن خود را وارد
                                       کنید</label>
                                   </div>
                                 ) : (
@@ -263,4 +278,4 @@ function Register({ showLoginForm }) {
   )
 }
 
-export default Register
+export default Register;
