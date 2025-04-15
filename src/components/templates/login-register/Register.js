@@ -111,23 +111,15 @@ function Register({ showLoginForm }) {
       return showSwal("لطفا شماره موبایل معتبر وارد کنید", "warning", "تلاش مجدد")
     }
 
-    // نمایش پیام در حال بارگذاری
+
     showSwal("در حال ارسال کد تایید...", "info", "منتظر بمانید");
     
-    // تنظیم وضعیت درخواست به حالت در حال انجام
+
     setIsOtpRequestPending(true);
     
     try {
-      console.log("درخواست OTP برای شماره:", phone);
-      
-      // ارسال درخواست OTP به سرور بدون تغییر وضعیت isRegisterWithOtp
       await requestOtp(phone);
-      
-      // توجه: انتقال به صفحه SMS در useEffect انجام می‌شود
-      // پس از بررسی نتیجه درخواست
-      
     } catch (error) {
-      // در صورت خطا در همین تابع، وضعیت درخواست را به پایان رسیده تغییر می‌دهیم
       setIsOtpRequestPending(false);
       console.error("خطای ارسال OTP (catch):", error);
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
