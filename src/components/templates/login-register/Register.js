@@ -99,7 +99,12 @@ function Register({ showLoginForm }) {
 
     try {
       console.log("درخواست OTP برای شماره:", phone);
-      await requestOtp(phone);
+      const result = await requestOtp(phone);
+      console.log("نتیجه درخواست OTP:", result);
+
+      if(!error) {
+        setIsRegisterWithOtp(true);
+      }
     } catch (error) {
       console.error("خطای ارسال OTP:", error);
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
