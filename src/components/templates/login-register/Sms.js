@@ -10,7 +10,7 @@ import { showSwal } from '@/utils/helpers';
 
 function Sms({ hideOtpForm, type, phone }) {
 
-    const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const [otp, setOtp] = useState(['', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [isTimerActive, setIsTimerActive] = useState(true);
     const [progress, setProgress] = useState(0)
@@ -29,7 +29,7 @@ function Sms({ hideOtpForm, type, phone }) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            showSwal(`${type}با موفقیت انجام شد`, "success", "تایید")
+            showSwal(` ${type} با موفقیت انجام شد`, "success", "تایید")
             hideOtpForm();
         }
     }, [isAuthenticated, hideOtpForm, type]);
@@ -71,8 +71,8 @@ function Sms({ hideOtpForm, type, phone }) {
         // تبدیل آرایه رقم‌ها به یک رشته
         const otpCode = otp.join('');
 
-        if (otpCode.length !== 6) {
-            return showSwal("لطفا کد تایید 6 رقمی را وارد کنید", "warning", "تلاش مجدد");
+        if (otpCode.length !== 5) {
+            return showSwal("لطفا کد تایید 5 رقمی را وارد کنید", "warning", "تلاش مجدد");
         }
 
         if (type === 'ثبت نام') {
