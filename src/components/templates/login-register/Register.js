@@ -90,7 +90,6 @@ function Register({ showLoginForm }) {
   };
 
   const sentOtp = async () => {
-
     const isValidPhone = validatePhone(phone)
     if (!phone.trim()) {
       return showSwal("لطفا شماره موبایل خود را وارد کنید", "warning", "تلاش مجدد")
@@ -99,12 +98,14 @@ function Register({ showLoginForm }) {
     }
 
     try {
+      console.log("درخواست OTP برای شماره:", phone);
       await requestOtp(phone);
-      setIsRegisterWithOtp(true);
     } catch (error) {
-      // خطا در Redux مدیریت می‌شود
+      console.error("خطای ارسال OTP:", error);
+      showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
     }
   }
+
 
   return (
     <>
