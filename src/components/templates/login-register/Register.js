@@ -99,14 +99,21 @@ function Register({ showLoginForm }) {
 
     try {
       console.log("درخواست OTP برای شماره:", phone);
-      const result = await requestOtp(phone);
-      console.log("نتیجه درخواست OTP:", result);
 
-      if(!error) {
-        setIsRegisterWithOtp(true);
-      }
+      // فعال کردن نمایش کامپوننت Sms قبل از ارسال درخواست OTP
+      // این باعث می‌شود که حتی اگر Redux به کندی پاسخ دهد، کاربر به صفحه بعدی منتقل شود
+      setIsRegisterWithOtp(true);
+
+      // ارسال درخواست OTP به سرور
+      await requestOtp(phone);
+
+      console.log("OTP با موفقیت ارسال شد");
     } catch (error) {
       console.error("خطای ارسال OTP:", error);
+
+      // در صورت خطا، برگشت به صفحه قبلی
+      setIsRegisterWithOtp(false);
+
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
     }
   }
