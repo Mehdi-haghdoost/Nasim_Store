@@ -5,7 +5,9 @@ const { registerUser,
     refreshTokenMutation,
     loginUser,
     updateUserProfile,
-    logout, } = require("./mutations/user.resolvers");
+    logout,
+    sendOtpForLogin,
+    verifyOtpAndLogin, } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory, getCategories } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
@@ -71,6 +73,8 @@ const RootMutation = new GraphQLObjectType({
         clearCart,
         logout,
         submitContact,
+        sendOtpForLogin,
+        verifyOtpAndLogin,
        
     },
 });
