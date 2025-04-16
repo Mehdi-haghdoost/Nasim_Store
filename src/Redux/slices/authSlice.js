@@ -188,6 +188,9 @@ const authSlice = createSlice({
                 state.registrationType = 'standard';
                 state.loading = false;
                 state.error = null;
+                   // سبد خرید کاربر لاگین شده در localStorage باقی می‌ماند
+                // اما کلید آن را عوض می‌کنیم تا به سبد خرید مهمان تبدیل شود
+                // این کار در cartThunks انجام می‌شود
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.loading = false;

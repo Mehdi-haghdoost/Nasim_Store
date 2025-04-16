@@ -79,14 +79,8 @@ const schema = new mongoose.Schema({
         }
     ],
 
-    cart: [{
-        product: { type: mongoose.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, default: 1 },
-        color: { type: String, required: false },
-        size: { type: String, required: false },
-        selectedSeller: { type: mongoose.Types.ObjectId, ref: "Seller" }
-    }],
-
+    // سبد خرید حذف شد و به localStorage منتقل شد
+    
     orders: [{ type: mongoose.Types.ObjectId, ref: "Order" }],
 
     orderHistory: [

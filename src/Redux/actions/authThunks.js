@@ -182,7 +182,7 @@ export const refreshToken = createAsyncThunk(
  */
 export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
-    async (_, { rejectWithValue }) => {
+    async (_, { dispatch, rejectWithValue }) => {
         try {
             await client.mutate({
                 mutation: LOGOUT
@@ -193,6 +193,10 @@ export const logoutUser = createAsyncThunk(
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             }
+            
+            // پاک کردن سبد خرید کاربر (تبدیل به سبد خرید مهمان)
+            // این کار را با dispatch کردن اکشن clearCartState انجام می‌دهیم
+            dispatch({ type: 'cart/clearCartState' });
 
             return true;
         } catch (error) {
