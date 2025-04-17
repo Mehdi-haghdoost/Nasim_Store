@@ -9,6 +9,9 @@ import FloatButton from "@/components/modules/float-btn/FloatButton ";
 import ContactUsFloat from "@/components/modules/contact-us-float/ContactUsFloat";
 import ApolloProvider from "@/utils/ApolloProvider";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,6 +41,17 @@ export default function RootLayout({ children }) {
           <MobileFooter />
           <ContactUsFloat />
           <FloatButton />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={true}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </ApolloProvider>
       </body>
     </html>
