@@ -1,10 +1,20 @@
-import React from 'react'
-import styles from './details.module.css'
-
+import React from 'react';
+import styles from './details.module.css';
 import ProductDetail from './ProductDetail';
 import Gallery from '../product/product-images-slider/ImageSlider';
 
-function Details() {
+function Details({ product }) {
+    // اگر محصول وجود نداشته باشد
+    if (!product) {
+        return <div>در حال بارگذاری...</div>;
+    }
+
+    
+    const images = [
+        `/images/product/${product.image}`,
+        // اگر چندین تصویر دارید، می‌توانید آن‌ها را اینجا اضافه کنید
+    ];
+
     return (
         <div className="product-meta py-20">
             <div className="container-fluid">
@@ -27,17 +37,18 @@ function Details() {
                                             <i className="bi bi-bar-chart"></i>
                                         </div>
                                     </div>
-                                    <Gallery />
+                                    <Gallery images={images} />
                                 </div>
                             </div>
                             <div className="col-lg-8">
-                                <ProductDetail />
+                                <ProductDetail product={product} />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
+
 export default Details;

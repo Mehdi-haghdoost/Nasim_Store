@@ -1,6 +1,71 @@
-import React from 'react'
-import styles from './productDetail.module.css'
-function productDetail() {
+'use client';
+
+import React, { useState } from 'react';
+import styles from './productDetail.module.css';
+import { useCart } from '@/Redux/hooks/useCart';
+
+function ProductDetail({ product }) {
+
+    // استفاده از هوک useCart برای دسترسی به عملکردهای سبد خرید
+    const { addToCart, loading, error } = useCart();
+
+    // تعیین تعداد محصول
+    const [quantity, setQuantity] = useState(1);
+
+
+    // تعیین رنگ انتخاب شده
+    const [selectedColor, setSelectedColor] = useState(() => {
+        // پیدا کردن اولین رنگ موجود
+        if (product.colors && product.colors.length > 0) {
+            // جستجو برای اولین رنگ موجود
+            const firstAvailableColor = product.colors.find(color => color.available);
+            if (firstAvailableColor) {
+                return firstAvailableColor.color;
+            }
+        }
+        return null; // اگر هیچ رنگی موجود نباشد
+    });
+
+    // افزایش تعداد محصول
+    const increaseQuantity = () => {
+        // بررسی موجودی محصول
+        if (product && product.stock > quantity) {
+            setQuantity(quantity + 1);
+        }
+    };
+
+    // کاهش تعداد محصول
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    // افزودن به سبد خرید
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+
+        if (!product) {
+            console.error('اطلاعات محصول در دسترس نیست');
+            return;
+        }
+
+        // تنها نام رنگ را ارسال کنید، نه کل شیء رنگ
+        const colorValue = selectedColor;
+
+        console.log('Adding to cart:', {
+            productId: product._id,
+            color: colorValue,
+            quantity
+        });
+
+        // افزودن محصول به سبد خرید
+        addToCart(product, quantity, colorValue, null);
+    };
+    // اگر اطلاعات محصول هنوز لود نشده‌اند
+    if (!product) {
+        return <div>در حال بارگذاری...</div>;
+    }
 
     return (
         <>
@@ -8,14 +73,15 @@ function productDetail() {
                 <div className="row align-items-baseline gy-3">
                     <div className="col-lg-8">
                         <h5 className="font-16">
-                            ساعت هوشمند سامسونگ مدل Galaxy Watch3 SM-R840 45mm بند چرمی
+                            {product.title}
                         </h5>
-                        <p className="mb-0 mt-2 text-muted">Samsung smart watch model Galaxy Watch3 SM-R840 45mm
-                            leather strap</p>
+                        <p className="mb-0 mt-2 text-muted">
+                            {product.originalName}
+                        </p>
                     </div>
                     <div className="col-lg-4">
                         <a href="" className="text-lg-start d-block">
-                            <img src="/images/brand1-1.png" alt="" className="img-fluid" />
+                            <img src={`/images/brand/${product.brandIcon}`} alt="" className="img-fluid" />
                         </a>
                     </div>
                 </div>
@@ -26,27 +92,33 @@ function productDetail() {
                         <div className={styles.product_meta_feature_items}>
                             <h5 className="title font-16 mb-2">ویژگی های کالا</h5>
                             <ul className="navbar-nav">
-                                <li className="nav item"><span>نوع اتصال:</span><strong>با سیم</strong></li>
-                                <li className="nav item"><span>رابط ها:</span><strong>3.5 میلیمتری</strong></li>
-                                <li className="nav item"><span>مقدار رم :</span><strong>8 گیگابایت</strong></li>
-                                <li className="nav item"><span>نوع گوشی:</span><strong>دوگوشی</strong></li>
+                                {product.features && product.features.length > 0 ? (
+                                    product.features.slice(0, 4).map((feature, index) => (
+                                        <li key={index} className="nav item">
+                                            <span>{feature.key}:</span><strong>{feature.value}</strong>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li className="nav item"><span>اطلاعات محصول موجود نیست</span></li>
+                                )}
                             </ul>
                         </div>
                     </div>
                     <div className="col-lg-4">
                         <div className={styles.product_meta_rating}>
                             <div className="d-flex align-items-center justify-content-lg-end">
-                                <div className={`${styles.count_comment} text-muted`}>16 دیدگاه</div>
+                                <div className={`${styles.count_comment} text-muted`}>
+                                    {product.comments ? product.comments.length : '0'} دیدگاه
+                                </div>
                                 <div className={styles.count_rating}>
-                                    <span>(17) 4.5</span>
+                                    <span>({product.rating || '0'}) {product.rating || '0'}</span>
                                     <i className="bi bi-star-fill"></i>
                                 </div>
                             </div>
                         </div>
                         <div className={`${styles.product_meta_garanty} justify-content-lg-end justify-content-start`}>
                             <i className="bi bi-shield-fill-check"></i>
-                            <span className="text-muted"> گارانتی اصالت و سلامت فیزیکی کالا
-                            </span>
+                            <span className="text-muted"> گارانتی اصالت و سلامت فیزیکی کالا</span>
                         </div>
                     </div>
                 </div>
@@ -56,56 +128,88 @@ function productDetail() {
                     انتخاب رنگ کالا
                 </h5>
                 <div className="product-meta-color-items">
-                    <input
-                    type="radio" className="btn-check" name="options" id="option1" autocomplete="off" defaultChecked
-                         />
-                    <label className="btn " htmlFor="option1">
-                        <span style={{backgroundColor: '#c00'}}></span>
-                        قرمز
-                    </label>
-
-                    <input type="radio" className="btn-check" name="options" id="option2" autocomplete="off" />
-                    <label className="btn " htmlFor="option2">
-                        <span style={{backgroundColor: '#111'}}></span>
-                        مشکی
-                    </label>
-
-                    <input type="radio" className="btn-check" name="options" id="option3" autocomplete="off"
-                        disabled />
-                    <label className="btn " htmlFor="option3">
-                        <span style={{backgroundColor: '#00cc5f'}}></span>
-                        سبز
-                    </label>
-
-                    <input type="radio" className="btn-check" name="options" id="option4" autocomplete="off" />
-                    <label className="btn " htmlFor="option4">
-                        <span style={{backgroundColor: '#1b69f0'}}></span>
-                        آبی
-                    </label>
+                    {product.colors && product.colors.length > 0 ? (
+                        product.colors.map((colorItem, index) => (
+                            <React.Fragment key={index}>
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="colorOptions"
+                                    id={`colorOption${index}`}
+                                    autoComplete="off"
+                                    checked={selectedColor === colorItem.color}
+                                    onChange={() => setSelectedColor(colorItem.color)}
+                                    disabled={!colorItem.available}
+                                />
+                                <label className="btn" htmlFor={`colorOption${index}`}>
+                                    <span style={{ backgroundColor: getColorCode(colorItem.color) }}></span>
+                                    {colorItem.color}
+                                </label>
+                            </React.Fragment>
+                        ))
+                    ) : (
+                        <p>رنگ‌های محصول موجود نیست</p>
+                    )}
                 </div>
             </div>
             <div className={`${styles.productmeta_count} text-muted`}>
-                <span>14 عدد در انبار</span>
+                <span>{product.stock || '0'} عدد در انبار</span>
             </div>
             <div className={styles.product_meta_action}>
                 <div className="row align-items-center gy-3">
+                    {product.hasDiscount && (
+                        <div className="col-lg-3 col-6 w-100-in-400">
+                            <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center`}>
+                                {product.price ? product.price.toLocaleString() : '0'} تومان
+                            </p>
+                        </div>
+                    )}
                     <div className="col-lg-3 col-6 w-100-in-400">
-                        <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center`}>1,500,000 تومان</p>
-                    </div>
-                    <div className="col-lg-3 col-6 w-100-in-400">
-                        <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>1,200,000 تومان</h6>
+                        <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>
+                            {product.hasDiscount
+                                ? (product.discountedPrice ? product.discountedPrice.toLocaleString() : '0')
+                                : (product.price ? product.price.toLocaleString() : '0')
+                            } تومان
+                        </h6>
                     </div>
                     <div className="col-lg-3 col-6 w-100-in-400">
                         <div className="d-flex justify-content-center">
-                            <a href="" className="btn w-100 border-0 main-color-three-bg"><i className="bi bi-basket text-white font-20 ms-1"></i>خرید کالا</a>
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={loading || product.stock <= 0}
+                                className="btn w-100 border-0 main-color-three-bg"
+                            >
+                                <i className="bi bi-basket text-white font-20 ms-1"></i>
+                                {loading ? 'در حال افزودن...' : (product.stock <= 0 ? 'ناموجود' : 'خرید کالا')}
+                            </button>
                         </div>
+                        {error && <div className="text-danger mt-2 text-center">{error}</div>}
                     </div>
                     <div className="col-lg-3 col-6 w-100-in-400">
                         <div className="counter">
-                            <div className="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span className="input-group-btn input-group-prepend"><button className="btn-counter waves-effect waves-light bootstrap-touchspin-down" type="button">-</button></span>
-                                <input type="text" name="count" className="counter form-counter" value="1" />
+                            <div className="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                <span className="input-group-btn input-group-prepend">
+                                    <button
+                                        className="btn-counter waves-effect waves-light bootstrap-touchspin-down"
+                                        type="button"
+                                        onClick={decreaseQuantity}
+                                        disabled={quantity <= 1 || loading}
+                                    >-</button>
+                                </span>
+                                <input
+                                    type="text"
+                                    name="count"
+                                    className="counter form-counter"
+                                    value={quantity}
+                                    readOnly
+                                />
                                 <span className="input-group-btn input-group-append">
-                                    <button className="btn-counter waves-effect waves-light bootstrap-touchspin-up" type="button">+</button>
+                                    <button
+                                        className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
+                                        type="button"
+                                        onClick={increaseQuantity}
+                                        disabled={product.stock <= quantity || loading}
+                                    >+</button>
                                 </span>
                             </div>
                         </div>
@@ -113,7 +217,21 @@ function productDetail() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default productDetail
+// تابع کمکی برای تبدیل نام رنگ به کد رنگ
+function getColorCode(colorName) {
+    const colorMap = {
+        'قرمز': '#c00',
+        'مشکی': '#111',
+        'سبز': '#00cc5f',
+        'آبی': '#1b69f0',
+        'نارنجی': '#ff6600',
+        'بنفش': '#6a0dad'
+    };
+
+    return colorMap[colorName] || '#ccc';
+}
+
+export default ProductDetail;
