@@ -871,6 +871,7 @@ tag.tagify__tag {
 .custom-filter .offcanvas-body div {
   box-shadow: none !important;
 }
+
 /* offcanvas end */
 
 /* accordion.module.css */
@@ -927,6 +928,42 @@ tag.tagify__tag {
 }
 
 /* end  accordion */
+
+/* use Toast */
+
+/* سفارشی‌سازی توست‌ها */
+.Toastify__toast {
+  font-family: var(--font-geist-sans);
+  border-radius: 8px;
+}
+
+.Toastify__toast--success {
+  background-color: #4caf50;
+}
+
+.Toastify__toast--error {
+  background-color: #f44336;
+}
+
+.Toastify__toast--info {
+  background-color: #2196f3;
+}
+
+.Toastify__toast--warning {
+  background-color: #ff9800;
+}
+
+.Toastify__toast-body {
+  align-items: center;
+  font-size: 14px;
+  direction: rtl;
+}
+
+.Toastify__progress-bar {
+  height: 3px;
+}
+
+/* end of use Toast */
 
 @media (prefers-color-scheme: dark) {
   :root {
