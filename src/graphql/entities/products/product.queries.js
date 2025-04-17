@@ -1,9 +1,7 @@
 import { gql } from '@apollo/client';
 
-// Query برای دریافت اطلاعات محصول
-// نام query باید با resolver های سرور مطابقت داشته باشد
 export const GET_PRODUCT = gql`
-  query Product($id: ID!) {
+  query product($id: ID!) {
     product(id: $id) {
       _id
       title
@@ -18,22 +16,22 @@ export const GET_PRODUCT = gql`
       rating
       brandIcon
       features {
-        name
+        key
         value
       }
       colors {
-        name
-        code
+        color
         available
       }
       sellers {
         _id
         name
-        customerSatisfaction
-        isSelected
-        price
-        shippingMethod
-        performance
+        performance     
+        satisfaction    
+        performanceStatus
+        isSelected      
+        logo            
+        rating          
       }
       category {
         _id
@@ -45,43 +43,47 @@ export const GET_PRODUCT = gql`
           username
         }
         rating
-        text
+        commentText
         createdAt
       }
+      customerSatisfaction
+      salesCount
+      createdAt
+      updatedAt
     }
   }
 `;
-
-// Query برای دریافت محصولات مشابه
 export const GET_SIMILAR_PRODUCTS = gql`
-  query SimilarProducts($categoryId: ID!, $limit: Int) {
+  query similarProducts($categoryId: ID!, $limit: Int) {
     similarProducts(categoryId: $categoryId, limit: $limit) {
       _id
       title
       originalName
-      image
+      image  # اینجا هم image
       price
       discountedPrice
       hasDiscount
-      rating
       stock
+      rating
+      brandIcon
     }
   }
 `;
 
-// Query برای دریافت محصولات پرفروش
 export const GET_BEST_SELLING_PRODUCTS = gql`
-  query BestSellingProducts($limit: Int) {
+  query bestSellingProducts($limit: Int) {
     bestSellingProducts(limit: $limit) {
       _id
       title
       originalName
-      image
+      image  # اینجا هم image
       price
       discountedPrice
       hasDiscount
-      rating
       stock
+      rating
+      brandIcon
+      salesCount
     }
   }
 `;

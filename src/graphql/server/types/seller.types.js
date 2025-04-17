@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType } = require("graphql");
+const { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType, GraphQLBoolean } = require("graphql");
 
 const ProductRefType = new GraphQLObjectType({
     name: "ProductRef",
@@ -17,6 +17,11 @@ const SellerType = new GraphQLObjectType({
         contactNumber: { type: new GraphQLNonNull(GraphQLString) },
         logo: { type: new GraphQLNonNull(GraphQLString) },
         rating: { type: GraphQLFloat },
+        // فیلدهای جدید
+        performance: { type: GraphQLString },
+        satisfaction: { type: GraphQLString },
+        performanceStatus: { type: GraphQLString },
+        isSelected: { type: GraphQLBoolean },
         product: { type: new GraphQLList(ProductRefType) },
         createdAt: { type: new GraphQLNonNull(GraphQLString) },
         updatedAt: { type: new GraphQLNonNull(GraphQLString) },
@@ -39,6 +44,10 @@ const SellerInputType = new GraphQLInputObjectType({
         contactNumber: { type: new GraphQLNonNull(GraphQLString) },
         logo: { type: new GraphQLNonNull(GraphQLString) },
         rating: { type: GraphQLFloat },
+        performance: { type: GraphQLString },
+        satisfaction: { type: GraphQLString },
+        performanceStatus: { type: GraphQLString },
+        isSelected: { type: GraphQLBoolean },
         product: { type: new GraphQLList(ProductRefInputType) },
     }),
 });
