@@ -2,8 +2,9 @@ const { GraphQLNonNull, GraphQLBoolean, GraphQLID } = require("graphql");
 const { CartItemType, AddToCartInputType, UpdateCartItemInputType } = require("../types/cart.types");
 const { validateToken } = require("../../../utils/authBackend");
 const ProductModel = require('../../../../models/Product');
-const UserModel = require('../../../../models/User');
 
+// میوتیشن افزودن به سبد خرید
+// این فقط اطلاعات محصول را برمی‌گرداند و ذخیره‌سازی در localStorage توسط کلاینت انجام می‌شود
 const addToCart = {
     type: CartItemType,
     args: {
@@ -11,9 +12,14 @@ const addToCart = {
     },
     resolve: async (_, { input }, { req }) => {
         try {
-            const user = await validateToken(req);
-            if (!user) {
-                throw new Error('کاربر احراز هویت نشده است');
+            // بررسی احراز هویت کاربر (اختیاری)
+            // نیازی به الزام لاگین برای افزودن به سبد خرید نیست
+            // حتی کاربر مهمان هم می‌تواند به سبد خرید اضافه کند
+            let user = null;
+            try {
+                user = await validateToken(req);
+            } catch (error) {
+                // اگر کاربر لاگین نباشد، ادامه می‌دهیم
             }
 
             const { productId, quantity = 1, color, size, sellerId } = input;
@@ -29,115 +35,47 @@ const addToCart = {
                 throw new Error('موجودی محصول کافی نیست');
             }
 
-            const userDoc = await UserModel.findById(user._id);
-
-            // بررسی آیا محصول قبلاً در سبد خرید وجود دارد
-            const existingItemIndex = userDoc.cart.findIndex(
-                item => item.product.toString() === productId &&
-                    item.color === color &&
-                    item.size === size
-            );
-
-            if (existingItemIndex > -1) {
-                // اگر محصول با همان مشخصات در سبد وجود دارد، تعداد را افزایش بده
-                userDoc.cart[existingItemIndex].quantity += quantity;
-            } else {
-                // افزودن محصول جدید به سبد خرید
-                userDoc.cart.push({
-                    product: productId,
-                    quantity,
-                    color,
-                    size,
-                    selectedSeller: sellerId
-                });
-            }
-
-            await userDoc.save();
-
-            // دریافت آخرین آیتم اضافه شده با اطلاعات کامل
-            const updatedUser = await UserModel.findById(user._id)
-                .populate({
-                    path: 'cart.product',
-                    model: 'Product'
-                })
-                .populate({
-                    path: 'cart.selectedSeller',
-                    model: 'Seller'
-                });
-
-            const cartItem = existingItemIndex > -1
-                ? updatedUser.cart[existingItemIndex]
-                : updatedUser.cart[updatedUser.cart.length - 1];
-
-            return cartItem;
-
+            // ما فقط اطلاعات محصول را برمی‌گردانیم
+            // ذخیره‌سازی در localStorage توسط کلاینت انجام می‌شود
+            return {
+                _id: Math.random().toString(36).substr(2, 9), // یک شناسه موقت
+                product,
+                quantity,
+                color,
+                size,
+                selectedSeller: sellerId ? await SellerModel.findById(sellerId) : null
+            };
         } catch (error) {
             throw new Error(`خطا در افزودن به سبد خرید: ${error.message}`);
         }
     }
 };
 
+// میوتیشن به‌روزرسانی آیتم سبد خرید
+// این فقط اطلاعات آیتم به‌روز شده را برمی‌گرداند
 const updateCartItem = {
-    type: CartItemType,
+    type: GraphQLBoolean,
     args: {
         input: { type: new GraphQLNonNull(UpdateCartItemInputType) }
     },
     resolve: async (_, { input }, { req }) => {
         try {
-            const user = await validateToken(req);
-            if (!user) {
-                throw new Error('کاربر احراز هویت نشده است');
-            }
-
             const { itemId, quantity } = input;
 
-            const userDoc = await UserModel.findById(user._id);
-
-            // پیدا کردن آیتم در سبد خرید
-            const cartItemIndex = userDoc.cart.findIndex(item => item._id.toString() === itemId);
-
-            if (cartItemIndex === -1) {
-                throw new Error('آیتم موردنظر در سبد خرید یافت نشد');
+            if (quantity < 0) {
+                throw new Error('مقدار باید بزرگتر یا مساوی صفر باشد');
             }
 
-            if (quantity <= 0) {
-                // حذف آیتم اگر تعداد 0 یا کمتر باشد
-                userDoc.cart.splice(cartItemIndex, 1);
-                await userDoc.save();
-                return null; // چون آیتم حذف شده، null برمی‌گردانیم
-            } else {
-                // بررسی موجودی محصول
-                const productId = userDoc.cart[cartItemIndex].product;
-                const product = await ProductModel.findById(productId);
-
-                if (product.stock < quantity) {
-                    throw new Error('موجودی محصول کافی نیست');
-                }
-
-                // بروزرسانی تعداد
-                userDoc.cart[cartItemIndex].quantity = quantity;
-                await userDoc.save();
-
-                // بازگرداندن آیتم به‌روز شده با اطلاعات کامل
-                const updatedUser = await UserModel.findById(user._id)
-                    .populate({
-                        path: 'cart.product',
-                        model: 'Product'
-                    })
-                    .populate({
-                        path: 'cart.selectedSeller',
-                        model: 'Seller'
-                    });
-
-                return updatedUser.cart[cartItemIndex];
-            }
+            // ما فقط موفقیت عملیات را برمی‌گردانیم
+            // به‌روزرسانی واقعی در localStorage توسط کلاینت انجام می‌شود
+            return true;
         } catch (error) {
             throw new Error(`خطا در بروزرسانی سبد خرید: ${error.message}`);
         }
     }
 };
 
-// حذف محصول از سبد خرید
+// میوتیشن حذف محصول از سبد خرید
 const removeFromCart = {
     type: GraphQLBoolean,
     args: {
@@ -145,24 +83,8 @@ const removeFromCart = {
     },
     resolve: async (_, { itemId }, { req }) => {
         try {
-            const user = await validateToken(req);
-            if (!user) {
-                throw new Error('کاربر احراز هویت نشده است');
-            }
-
-            const userDoc = await UserModel.findById(user._id);
-
-            // پیدا کردن آیتم در سبد خرید
-            const cartItemIndex = userDoc.cart.findIndex(item => item._id.toString() === itemId);
-
-            if (cartItemIndex === -1) {
-                throw new Error('آیتم موردنظر در سبد خرید یافت نشد');
-            }
-
-            // حذف آیتم از سبد خرید
-            userDoc.cart.splice(cartItemIndex, 1);
-            await userDoc.save();
-
+            // ما فقط موفقیت عملیات را برمی‌گردانیم
+            // حذف واقعی از localStorage توسط کلاینت انجام می‌شود
             return true;
         } catch (error) {
             throw new Error(`خطا در حذف از سبد خرید: ${error.message}`);
@@ -170,18 +92,13 @@ const removeFromCart = {
     }
 };
 
-// پاک کردن کامل سبد خرید
+// میوتیشن پاک کردن کامل سبد خرید
 const clearCart = {
     type: GraphQLBoolean,
     resolve: async (_, args, { req }) => {
         try {
-            const user = await validateToken(req);
-            if (!user) {
-                throw new Error('کاربر احراز هویت نشده است');
-            }
-
-            await UserModel.findByIdAndUpdate(user._id, { cart: [] });
-
+            // ما فقط موفقیت عملیات را برمی‌گردانیم
+            // پاک کردن واقعی از localStorage توسط کلاینت انجام می‌شود
             return true;
         } catch (error) {
             throw new Error(`خطا در پاک کردن سبد خرید: ${error.message}`);

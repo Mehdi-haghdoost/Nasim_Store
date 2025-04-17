@@ -23,6 +23,7 @@ const { addToCart, updateCartItem, removeFromCart, clearCart } = require("./muta
 const { getUserCart } = require("./queries/cart.resolvers");
 const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
+const { product, similarProducts, bestSellingProducts } = require("./queries/product.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
@@ -40,6 +41,9 @@ const RootQuery = new GraphQLObjectType({
         getUserCart,
         getContacts,
         getContactById,
+        product,
+        similarProducts,
+        bestSellingProducts
        
     }
 })

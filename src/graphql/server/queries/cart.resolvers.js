@@ -1,50 +1,29 @@
 const { validateToken } = require("../../../utils/authBackend");
 const { CartType } = require("../types/cart.types");
-const UserModel = require('../../../../models/User');
 
+// این query صرفاً برای سازگاری با API قبلی نگه داشته شده است
+// اما در واقع هیچ اطلاعاتی از سرور برنمی‌گرداند
+// چون همه اطلاعات سبد خرید در localStorage کلاینت نگهداری می‌شود
 const getUserCart = {
     type: CartType,
     resolve: async (_, args, { req }) => {
         try {
-            const user = await validateToken(req);
-            if (!user) {
-                throw new Error('کاربر احراز هویت نشده است');
+            // بررسی احراز هویت کاربر (اختیاری)
+            let user = null;
+            try {
+                user = await validateToken(req);
+            } catch (error) {
+                // اگر کاربر لاگین نباشد، یک سبد خرید خالی برمی‌گردانیم
             }
 
-            const populatedUser = await UserModel.findById(user._id)
-                .populate({
-                    path: 'cart.product',
-                    model: 'Product'
-                })
-                .populate({
-                    path: 'cart.selectedSeller',
-                    model: 'Seller'
-                })
-            // محاسبه قیمت کل، تخفیف و قیمت نهایی
-            let totalPrice = 0;
-            let totalDiscount = 0;
-
-            populatedUser.cart.forEach(item => {
-                const product = item.product;
-                const quantity = item.quantity;
-
-                if (product.hasDiscount) {
-                    totalPrice += product.price * quantity;
-                    totalDiscount += (product.price - product.discountedPrice) * quantity;
-                } else {
-                    totalPrice += product.price * quantity;
-                }
-            });
-
-            const finalPrice = totalPrice - totalDiscount;
-
+            // برگرداندن یک سبد خرید خالی
+            // اطلاعات واقعی در کلاینت از localStorage خوانده می‌شود
             return {
-                items: populatedUser.cart,
-                totalPrice,
-                totalDiscount,
-                finalPrice,
+                items: [],
+                totalPrice: 0,
+                totalDiscount: 0,
+                finalPrice: 0,
             };
-
         } catch (error) {
             throw new Error(`خطا در دریافت سبد خرید: ${error.message}`);
         }
