@@ -31,6 +31,11 @@ const addSeller = {
                 contactNumber: input.contactNumber,
                 logo: input.logo,
                 rating: input.rating || 0,
+                // فیلدهای جدید
+                performance: input.performance || "متوسط",
+                satisfaction: input.satisfaction || "0%",
+                performanceStatus: input.performanceStatus || "warning",
+                isSelected: input.isSelected || false,
                 product: input.product || [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),

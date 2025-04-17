@@ -33,6 +33,30 @@ const schema = new mongoose.Schema({
         max: 5,
     },
 
+    // فیلدهای جدید برای عملکرد و رضایت مشتریان
+    performance: {
+        type: String,
+        enum: ['عالی', 'متوسط', 'ضعیف'],
+        default: 'متوسط'
+    },
+
+    satisfaction: {
+        type: String,
+        default: '0%',
+        trim: true
+    },
+
+    performanceStatus: {
+        type: String,
+        enum: ['success', 'warning', 'danger'],
+        default: 'warning'
+    },
+
+    isSelected: {
+        type: Boolean,
+        default: false
+    },
+
     product: [{
         product: {
             type: mongoose.Types.ObjectId,
