@@ -65,6 +65,33 @@ const getCartFromLocalStorage = () => {
 };
 
 /**
+ * تبدیل داده‌های فروشنده به یک ساختار استاندارد
+ * @param {Object|String} sellerData شناسه فروشنده یا آبجکت فروشنده
+ * @returns {Object|null} آبجکت فروشنده با ساختار یکسان یا null
+ */
+const normalizeSellerData = (sellerData) => {
+  if (!sellerData) return null;
+
+  // اگر sellerData یک شیء باشد و شامل _id و name باشد
+  if (typeof sellerData === 'object' && sellerData._id) {
+    return {
+      _id: sellerData._id,
+      name: sellerData.name || "فروشنده نامشخص"
+    };
+  }
+  
+  // اگر sellerData فقط یک ID باشد
+  if (typeof sellerData === 'string') {
+    return {
+      _id: sellerData,
+      name: "فروشگاه نسیم" // نام پیش‌فرض
+    };
+  }
+  
+  return null;
+};
+
+/**
  * Thunk برای افزودن محصول به سبد خرید
  */
 export const addToCartThunk = createAsyncThunk(
@@ -81,25 +108,39 @@ export const addToCartThunk = createAsyncThunk(
         return rejectWithValue('موجودی محصول کافی نیست');
       }
 
-      console.log('Adding to cart:', {
+      // نرمال‌سازی اطلاعات فروشنده
+      const normalizedSeller = normalizeSellerData(sellerId);
+
+      console.log('Adding to cart (normalized):', {
         product: product._id,
         color,
         size,
         quantity,
-        sellerId
+        sellerId: normalizedSeller
       });
 
       // بررسی آیا محصول قبلاً در سبد خرید وجود دارد
       const existingItemIndex = items.findIndex(item => {
-        // برابری آیدی محصول
-        const productIdMatch = String(item.product._id) === String(product._id);
+        // بررسی آیدی محصول (با حذف پسوند فروشنده اگر وجود داشته باشد)
+        let itemProductId = String(item.product._id);
+        let currentProductId = String(product._id);
+        
+        // حذف پسوند فروشنده از آیدی محصول اگر وجود داشته باشد
+        if (itemProductId.includes('_')) {
+          itemProductId = itemProductId.split('_')[0];
+        }
+        if (currentProductId.includes('_')) {
+          currentProductId = currentProductId.split('_')[0];
+        }
+        
+        const productIdMatch = itemProductId === currentProductId;
 
-        // برابری رنگ
-        let colorMatch = true;
+        // برابری رنگ - این فیلد حتماً مقایسه شود
+        let colorMatch = false; // پیش‌فرض: عدم تطابق
         if (color !== null && item.color !== null) {
           colorMatch = String(item.color) === String(color);
         } else {
-          // اگر یکی null و دیگری مقداری داشته باشد، تطابق ندارند
+          // اگر هر دو null باشند، تطابق دارند
           colorMatch = (item.color === null && color === null);
         }
 
@@ -112,20 +153,37 @@ export const addToCartThunk = createAsyncThunk(
           sizeMatch = (item.size === null && size === null);
         }
 
-        // برابری فروشنده
-        let sellerMatch = true;
-        if (sellerId !== null && item.selectedSeller !== null) {
-          sellerMatch = String(item.selectedSeller) === String(sellerId);
+        // برابری فروشنده - این فیلد حتماً مقایسه شود
+        let sellerMatch = false; // پیش‌فرض: عدم تطابق
+        
+        if (normalizedSeller && item.selectedSeller) {
+          // مقایسه بر اساس آیدی فروشنده
+          const itemSellerId = item.selectedSeller._id || item.selectedSeller;
+          const currentSellerId = normalizedSeller._id;
+          
+          sellerMatch = String(itemSellerId) === String(currentSellerId);
+          
+          console.log('Seller comparison:', {
+            itemSellerId,
+            currentSellerId,
+            match: sellerMatch
+          });
         } else {
-          // اگر یکی null و دیگری مقداری داشته باشد، تطابق ندارند
-          sellerMatch = (item.selectedSeller === null && sellerId === null);
+          // اگر هر دو null باشند، تطابق دارند
+          sellerMatch = (item.selectedSeller === null && normalizedSeller === null);
         }
 
         console.log('Comparing item:', {
           itemId: item.product._id,
+          currentId: product._id,
+          itemProductId,
+          currentProductId,
           itemColor: item.color,
+          currentColor: color,
           itemSize: item.size,
+          currentSize: size,
           itemSeller: item.selectedSeller,
+          currentSeller: normalizedSeller,
           matches: {
             productId: productIdMatch,
             color: colorMatch,
@@ -152,7 +210,7 @@ export const addToCartThunk = createAsyncThunk(
           quantity,
           color,
           size,
-          selectedSeller: sellerId,
+          selectedSeller: normalizedSeller,
           _id: Math.random().toString(36).substr(2, 9) // یک شناسه موقت برای آیتم سبد خرید
         });
       }
