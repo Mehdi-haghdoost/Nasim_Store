@@ -9,10 +9,25 @@ function MultiSeller({ product, sellers }) {
 
     // استفاده از state برای مدیریت هیدراسیون
     const [isClient, setIsClient] = useState(false);
+    
+    // انتخاب رنگ پیش‌فرض از محصول
+    const [defaultColor, setDefaultColor] = useState(null);
 
     useEffect(() => {
         setIsClient(true);
-    }, []);
+        
+        // پیدا کردن رنگ پیش‌فرض از محصول
+        if (product && product.colors && product.colors.length > 0) {
+            // ابتدا تلاش می‌کنیم اولین رنگ موجود را پیدا کنیم
+            const firstAvailableColor = product.colors.find(color => color.available);
+            if (firstAvailableColor) {
+                setDefaultColor(firstAvailableColor.color);
+            } else {
+                // اگر هیچ رنگی موجود نبود، اولین رنگ را انتخاب می‌کنیم
+                setDefaultColor(product.colors[0].color);
+            }
+        }
+    }, [product]);
 
     const handleAddToCart = (e, seller) => {
         e.preventDefault();
@@ -22,7 +37,29 @@ function MultiSeller({ product, sellers }) {
             return;
         }
 
-        addToCart(product, 1, null, null, seller._id);
+        // ایجاد یک کپی از محصول با ID منحصر به فرد برای هر فروشنده
+        const productCopy = {
+            ...product,
+            _id: `${product._id}_${seller._id}`, // ID منحصر به فرد
+            originalId: product._id, // نگهداری ID اصلی محصول
+            title: `${product.title} (${seller.name})` // اضافه کردن نام فروشنده به عنوان محصول
+        };
+
+        // ایجاد آبجکت فروشنده برای ارسال به سبد خرید
+        const sellerObject = {
+            _id: seller._id,
+            name: seller.name
+        };
+
+        console.log('Adding to cart from MultiSeller:', {
+            productId: productCopy._id,
+            color: defaultColor,
+            seller: sellerObject
+        });
+
+        // استفاده از الگوی کامپوننت ProductDetail:
+        // محصول، تعداد، رنگ، سایز، فروشنده
+        addToCart(productCopy, 1, defaultColor, null, sellerObject);
     };
 
     // داده واقعی یا پیش‌فرض برای فروشندگان
