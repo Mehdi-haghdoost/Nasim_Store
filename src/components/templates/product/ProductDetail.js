@@ -32,7 +32,7 @@ function ProductDetail({ product }) {
     useEffect(() => {
         // اگر محصول و فروشندگان آن موجود باشند
         if (product && product.sellers && product.sellers.length > 0) {
-            // دریافت اطلاعات اولین فروشنده
+            // دریافت اطلاعات اولین فروشنده (می‌توانید این منطق را تغییر دهید)
             fetchSellerInfo(product.sellers[0]);
         }
     }, [product]);
@@ -40,12 +40,22 @@ function ProductDetail({ product }) {
     // تابع دریافت اطلاعات فروشنده
     const fetchSellerInfo = async (sellerId) => {
         try {
-            // برای نمونه از اطلاعات پیش‌فرض استفاده می‌کنیم
-            // در نسخه واقعی باید این اطلاعات را از API دریافت کنید
+            // در اینجا می‌توانید از API یا GraphQL برای دریافت اطلاعات فروشنده استفاده کنید
+            // برای مثال فرض می‌کنیم این اطلاعات از قبل موجود است
+            // می‌توانید این بخش را با منطق دریافت اطلاعات فروشنده از سرور خود جایگزین کنید
+            
+            // برای نمونه من یک مقدار پیش‌فرض قرار می‌دهم
             setSelectedSeller({
                 _id: sellerId,
-                name: "فروشگاه نسیم"
+                name: "فروشگاه نسیم" // این مقدار باید از سرور دریافت شود
             });
+            
+            // اگر به API برای دریافت اطلاعات فروشنده نیاز دارید، می‌توانید از کد زیر استفاده کنید
+            /*
+            const response = await fetch(`/api/sellers/${sellerId}`);
+            const data = await response.json();
+            setSelectedSeller(data);
+            */
         } catch (error) {
             console.error('خطا در دریافت اطلاعات فروشنده:', error);
         }
@@ -78,16 +88,23 @@ function ProductDetail({ product }) {
         // تنها نام رنگ را ارسال کنید، نه کل شیء رنگ
         const colorValue = selectedColor;
 
+        // ایجاد یک کپی از محصول و اضافه کردن selectedSeller به آن
+        // این کار باعث می‌شود که selectedSeller به عنوان بخشی از آبجکت product در سبد خرید ذخیره شود
+        const productWithSeller = {
+            ...product,
+            selectedSeller: selectedSeller
+        };
+
         console.log('Adding to cart:', {
-            productId: product._id,
+            productId: productWithSeller._id,
             color: colorValue,
             quantity,
-            selectedSeller: selectedSeller
+            selectedSeller: productWithSeller.selectedSeller
         });
 
-        // با توجه به ساختار تابع addToCart در useCart.js، sellerId را به عنوان پارامتر پنجم ارسال می‌کنیم
-        // addToCart(product, quantity = 1, color = null, size = null, sellerId = null)
-        addToCart(product, quantity, colorValue, null, selectedSeller ? selectedSeller._id : null);
+        // ارسال آبجکت محصول به همراه selectedSeller به سبد خرید
+        // با توجه به ساختار تابع addToCart در useCart.js، پارامترهای دیگر را هم ارسال می‌کنیم
+        addToCart(productWithSeller, quantity, colorValue, null, null);
     };
     
     // اگر اطلاعات محصول هنوز لود نشده‌اند
