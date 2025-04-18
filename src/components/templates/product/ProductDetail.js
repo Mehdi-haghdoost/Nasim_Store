@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './productDetail.module.css';
 import { useCart } from '@/Redux/hooks/useCart';
 
@@ -12,6 +12,8 @@ function ProductDetail({ product }) {
     // تعیین تعداد محصول
     const [quantity, setQuantity] = useState(1);
 
+    // اطلاعات فروشنده انتخاب شده
+    const [selectedSeller, setSelectedSeller] = useState(null);
 
     // تعیین رنگ انتخاب شده
     const [selectedColor, setSelectedColor] = useState(() => {
@@ -25,6 +27,29 @@ function ProductDetail({ product }) {
         }
         return null; // اگر هیچ رنگی موجود نباشد
     });
+
+    // دریافت اطلاعات فروشنده هنگام لود کامپوننت
+    useEffect(() => {
+        // اگر محصول و فروشندگان آن موجود باشند
+        if (product && product.sellers && product.sellers.length > 0) {
+            // دریافت اطلاعات اولین فروشنده
+            fetchSellerInfo(product.sellers[0]);
+        }
+    }, [product]);
+
+    // تابع دریافت اطلاعات فروشنده
+    const fetchSellerInfo = async (sellerId) => {
+        try {
+            // برای نمونه از اطلاعات پیش‌فرض استفاده می‌کنیم
+            // در نسخه واقعی باید این اطلاعات را از API دریافت کنید
+            setSelectedSeller({
+                _id: sellerId,
+                name: "فروشگاه نسیم"
+            });
+        } catch (error) {
+            console.error('خطا در دریافت اطلاعات فروشنده:', error);
+        }
+    };
 
     // افزایش تعداد محصول
     const increaseQuantity = () => {
@@ -56,12 +81,15 @@ function ProductDetail({ product }) {
         console.log('Adding to cart:', {
             productId: product._id,
             color: colorValue,
-            quantity
+            quantity,
+            selectedSeller: selectedSeller
         });
 
-        // افزودن محصول به سبد خرید
-        addToCart(product, quantity, colorValue, null);
+        // با توجه به ساختار تابع addToCart در useCart.js، sellerId را به عنوان پارامتر پنجم ارسال می‌کنیم
+        // addToCart(product, quantity = 1, color = null, size = null, sellerId = null)
+        addToCart(product, quantity, colorValue, null, selectedSeller ? selectedSeller._id : null);
     };
+    
     // اگر اطلاعات محصول هنوز لود نشده‌اند
     if (!product) {
         return <div>در حال بارگذاری...</div>;
@@ -152,6 +180,15 @@ function ProductDetail({ product }) {
                     )}
                 </div>
             </div>
+            {selectedSeller && (
+                <div className="product-meta-seller mt-3">
+                    <h5 className="font-16">فروشنده</h5>
+                    <div className="d-flex align-items-center mt-2">
+                        <i className="bi bi-shop ms-2"></i>
+                        <span>{selectedSeller.name}</span>
+                    </div>
+                </div>
+            )}
             <div className={`${styles.productmeta_count} text-muted`}>
                 <span>{product.stock || '0'} عدد در انبار</span>
             </div>
