@@ -37,29 +37,20 @@ function MultiSeller({ product, sellers }) {
             return;
         }
 
-        // ایجاد یک کپی از محصول با ID منحصر به فرد برای هر فروشنده
-        const productCopy = {
-            ...product,
-            _id: `${product._id}_${seller._id}`, // ID منحصر به فرد
-            originalId: product._id, // نگهداری ID اصلی محصول
-            title: `${product.title} (${seller.name})` // اضافه کردن نام فروشنده به عنوان محصول
-        };
-
-        // ایجاد آبجکت فروشنده برای ارسال به سبد خرید
+        // ایجاد یک آبجکت فروشنده مناسب با اطلاعات فروشنده انتخاب شده
         const sellerObject = {
             _id: seller._id,
-            name: seller.name
+            name: seller.name // استفاده از نام واقعی فروشنده
         };
 
         console.log('Adding to cart from MultiSeller:', {
-            productId: productCopy._id,
+            productId: product._id,
             color: defaultColor,
             seller: sellerObject
         });
 
-        // استفاده از الگوی کامپوننت ProductDetail:
-        // محصول، تعداد، رنگ، سایز، فروشنده
-        addToCart(productCopy, 1, defaultColor, null, sellerObject);
+        // ارسال آبجکت فروشنده کامل به addToCart
+        addToCart(product, 1, defaultColor, null, sellerObject);
     };
 
     // داده واقعی یا پیش‌فرض برای فروشندگان
