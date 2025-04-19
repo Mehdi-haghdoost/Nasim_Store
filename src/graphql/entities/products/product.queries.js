@@ -42,9 +42,20 @@ export const GET_PRODUCT = gql`
         user {
           username
         }
+          strengths
+          weaknesses
+          isReply
         rating
         commentText
         createdAt
+           replies {
+              _id
+               name
+                commentText
+        user {
+          username
+        }
+      }
       }
       customerSatisfaction
       salesCount
