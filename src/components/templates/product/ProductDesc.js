@@ -23,14 +23,6 @@ function ProductDesc({ product }) {
             console.error('اطلاعات محصول در دسترس نیست');
             return;
         }
-
-        // افزودن محصول به سبد خرید
-        console.log('Adding from ProductDesc:', {
-            productId: product._id,
-            color: null,
-            size: null,
-            sellerId: null
-        });
         
         addToCart(product, productCount, null, null);
     };
@@ -102,7 +94,7 @@ function ProductDesc({ product }) {
                                             {tab === "descriptions" && <Descriptions product={productData} />}
                                             {tab === "specifications" && <Specifications product={productData} />}
                                             {tab === "additional_informations" && <Informations product={productData} />}
-                                            {tab === "comments" && <Comments product={productData} />}
+                                            {tab === "comments" && <Comments product={product} />}
                                         </section>
                                     </div>
                                 </div>
