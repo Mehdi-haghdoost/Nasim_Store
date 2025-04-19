@@ -34,20 +34,20 @@ const CommentType = new GraphQLObjectType({
             commentText: { type: new GraphQLNonNull(GraphQLString) },
             strengths: { type: new GraphQLList(GraphQLString) },
             weaknesses: { type: new GraphQLList(GraphQLString) },
-            parent : {
-                type : CommentType,
-                resolve : async (comment) => {
-                    if(!comment.parent) return null ;
+            parent: {
+                type: CommentType,
+                resolve: async (comment) => {
+                    if (!comment.parent) return null;
                     return await CommentModel.findById(comment.parent).populate('user')
                 }
             },
-            replies : {
-                type : new GraphQLList(CommentType),
-                resolve : async (comment) => {
-                    return await CommentModel.find({parent : comment._id}).populate('user').sort({createdAt : 1});
+            replies: {
+                type: new GraphQLList(CommentType),
+                resolve: async (comment) => {
+                    return await CommentModel.find({ parent: comment._id }).populate('user').sort({ createdAt: 1 });
                 }
             },
-            isreply : {type : GraphQLBoolean},
+            isReply: { type: GraphQLBoolean },
             status: { type: CommentStatusEnum },
             createdAt: { type: new GraphQLNonNull(GraphQLString) },
             updatedAt: { type: new GraphQLNonNull(GraphQLString) },
