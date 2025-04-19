@@ -21,7 +21,6 @@ function ProductPage({ params }) {
         setIsClient(true);
         
         if (params.id && !hasFetched && !loading) {
-            console.log("Fetching product with ID:", params.id);
             getProduct(params.id)
                 .then(() => {
                     setHasFetched(true);
@@ -59,7 +58,6 @@ function ProductPage({ params }) {
     }
 
     if (error) {
-        console.log("Product fetch error:", error);
         return (
             <>
                 <Header />
@@ -83,7 +81,6 @@ function ProductPage({ params }) {
     }
 
     if (!product && hasFetched) {
-        console.log("No product data received");
         return (
             <>
                 <Header />
@@ -101,9 +98,6 @@ function ProductPage({ params }) {
     }
 
     const similarProducts = similarData?.similarProducts || [];
-
-    console.log("Product data:", product);
-    console.log("Sellers data:", product?.sellers);
 
     return (
         <>
