@@ -77,21 +77,27 @@ const ProductType = new GraphQLObjectType({
                 type: new GraphQLList(CommentType),
                 resolve: async (parent) => {
                     try {
-                        if (!parent.comment || parent.comment.length === 0) {
+                        if (!parent.comments || parent.comments.length === 0) {
                             return [];
                         }
 
-                        const comments = await CommentModel.find({ _id: { $in: parent.comments } });
-                        return comments;
+                        // Populate کردن user داخل هر کامنت
+                        const comments = await CommentModel
+                            .find({ _id: { $in: parent.comments } })
+                            .populate('user');
+
+                        // فیلتر کردن کامنت‌هایی که user معتبر ندارند
+                        return comments.filter(comment => comment.user && comment.user.username);
+
                     } catch (error) {
-                        console.log(`خطا در بازیبای کامنت ها ${error.message}`);
-                        throw new Error(`خطا در بازیبای کامنت ها ${error.message}`);
+                        console.log(`خطا در بازیابی کامنت‌ها: ${error.message}`);
+                        throw new Error(`خطا در بازیابی کامنت‌ها: ${error.message}`);
                     }
                 }
             },
-            sellers: { 
+            sellers: {
                 type: new GraphQLNonNull(new GraphQLList(SellerType)),
-                resolve : async (parent) => {
+                resolve: async (parent) => {
                     try {
                         const sellers = await SellerModel.find({ _id: { $in: parent.sellers } });
                         return sellers;
@@ -100,7 +106,7 @@ const ProductType = new GraphQLObjectType({
                         throw new Error(`خطا در بازیابی فروشندگان: ${error.message}`);
                     }
                 }
-             },
+            },
             customerSatisfaction: { type: GraphQLFloat },
             salesCount: { type: new GraphQLNonNull(GraphQLInt) },
             createdAt: { type: new GraphQLNonNull(GraphQLString) },
