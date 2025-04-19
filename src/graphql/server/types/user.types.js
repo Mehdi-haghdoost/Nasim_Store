@@ -5,12 +5,6 @@ const { CommentType } = require('./comment.types');
 const TicketModel = require('../../../../models/Ticket');
 
 
-// const {AddressType} = require('./address.types');
-// const {WishType} = require('./wish.types');
-// const {CartItemType} = require('./cartItem.types');
-// const {OrderType} = require('./order.types');
-// const {DiscountCouponsType} = require('./discountCoupons.types')
-
 const UserType = new GraphQLObjectType({
     name: "UserType",
     fields: () => {
