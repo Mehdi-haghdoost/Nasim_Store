@@ -2,6 +2,44 @@ const { GraphQLID, GraphQLNonNull, GraphQLList, GraphQLInt } = require("graphql"
 const { ProductType } = require("../types/product.types");
 const ProductModel = require("../../../../models/Product");
 
+// const product = {
+//     type: ProductType,
+//     args: {
+//         id: { type: new GraphQLNonNull(GraphQLID) }
+//     },
+//     resolve: async (_, { id }) => {
+//         try {
+//             console.log("Product resolver called with ID:", id);
+//             const product = await ProductModel.findById(id)
+//                 .populate({
+//                     path: 'sellers',
+//                     select: '_id name' // فقط فیلدهای مورد نیاز
+//                 })
+//                 .populate('category')
+//                 .populate({
+//                     path: 'comments',
+//                     populate: [
+//                         { path: 'user', select: 'username' },
+//                         {
+//                             path: 'replies',
+//                             populate: { path: 'user', select: 'username' }
+//                         }
+//                     ]
+//                 });
+
+//             if (!product) {
+//                 throw new Error(`محصول با شناسه ${id} پیدا نشد`);
+//             }
+
+//             return product;
+//         } catch (error) {
+//             console.error("Error in product resolver:", error);
+//             throw new Error(`خطا در دریافت محصول: ${error.message}`);
+//         }
+//     }
+// };
+
+
 const product = {
     type: ProductType,
     args: {
@@ -10,23 +48,34 @@ const product = {
     resolve: async (_, { id }) => {
         try {
             console.log("Product resolver called with ID:", id);
+
             const product = await ProductModel.findById(id)
                 .populate({
                     path: 'sellers',
-                    select: '_id name' // فقط فیلدهای مورد نیاز
+                    select: '_id name'
                 })
                 .populate('category')
                 .populate({
                     path: 'comments',
-                    populate: { path: 'user', select: 'username' }
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'username',
+                        },
+                        {
+                            path: 'replies',
+                            populate: {
+                                path: 'user',
+                                select: 'username',
+                            }
+                        }
+                    ]
                 });
-            console.log("Product found:", product ? "Yes" : "No");
-            console.log("Sellers populated:", product?.sellers); // لاگ برای دیباگ
-            
+
             if (!product) {
                 throw new Error(`محصول با شناسه ${id} پیدا نشد`);
             }
-            
+
             return product;
         } catch (error) {
             console.error("Error in product resolver:", error);
@@ -34,7 +83,6 @@ const product = {
         }
     }
 };
-
 const similarProducts = {
     type: new GraphQLList(ProductType),
     args: {
