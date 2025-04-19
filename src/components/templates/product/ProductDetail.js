@@ -30,9 +30,9 @@ function ProductDetail({ product }) {
 
     // دریافت اطلاعات فروشنده هنگام لود کامپوننت
     useEffect(() => {
-       
+        // اگر محصول و فروشندگان آن موجود باشند
         if (product && product.sellers && product.sellers.length > 0) {
-          
+            // دریافت اطلاعات اولین فروشنده (می‌توانید این منطق را تغییر دهید)
             fetchSellerInfo(product.sellers[0]);
         }
     }, [product]);
@@ -40,12 +40,12 @@ function ProductDetail({ product }) {
     // تابع دریافت اطلاعات فروشنده
     const fetchSellerInfo = async (sellerId) => {
         try {
-         
             setSelectedSeller({
                 _id: sellerId,
-                name: "فروشگاه نسیم" // این مقدار باید از سرور دریافت شود
+                name: "فروشگاه نسیم",
             });
-       
+
+
         } catch (error) {
             console.error('خطا در دریافت اطلاعات فروشنده:', error);
         }
@@ -75,24 +75,17 @@ function ProductDetail({ product }) {
             return;
         }
 
+        if (!selectedSeller) {
+            console.error('فروشنده‌ای انتخاب نشده است');
+            return;
+        }
+
         // تنها نام رنگ را ارسال کنید، نه کل شیء رنگ
         const colorValue = selectedColor;
 
-        console.log('Adding to cart:', {
-            productId: product._id,
-            color: colorValue,
-            quantity,
-            selectedSeller: selectedSeller
-        });
-
-        // بررسی تعریف تابع addToCart در useCart.js:
-        // const addToCart = (product, quantity = 1, color = null, size = null, sellerId = null)
-        
-        // مشکل اینجاست که sellerId باید یک آبجکت با ویژگی name باشد، نه فقط یک ID
-        // آبجکت selectedSeller را به عنوان sellerId ارسال می‌کنیم
-        addToCart(product, quantity, colorValue, null, selectedSeller);
+        addToCart(product, quantity, colorValue, null, selectedSeller._id);
     };
-    
+
     // اگر اطلاعات محصول هنوز لود نشده‌اند
     if (!product) {
         return <div>در حال بارگذاری...</div>;
@@ -112,7 +105,7 @@ function ProductDetail({ product }) {
                     </div>
                     <div className="col-lg-4">
                         <a href="" className="text-lg-start d-block">
-                            <img src={`/images/brand/${product.brandIcon}`} alt="" className="img-fluid" />
+                            <img src={`/images/${product.brandIcon}`} alt="" className="img-fluid" />
                         </a>
                     </div>
                 </div>
