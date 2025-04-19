@@ -119,22 +119,6 @@ const CartProductItem = ({ item }) => {
                                                         </div>
                                                     </div>
                                                 )}
-
-                                                {item.size && (
-                                                    <div className={`d-flex align-items-center ${styles.item}`}>
-                                                        <div className="icon">
-                                                            <i className="bi bi-bounding-box-circles"></i>
-                                                        </div>
-                                                        <div className="saller-name mx-2">سایز:</div>
-                                                        <div className="saller-name text-muted">
-                                                            <div className={`mt-0 ${styles.product_meta_color_items}`}>
-                                                                <label className='btn-light mb-0 px-2'>
-                                                                    {item.size}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                         <div className={`${styles.remove} danger-label`}>
