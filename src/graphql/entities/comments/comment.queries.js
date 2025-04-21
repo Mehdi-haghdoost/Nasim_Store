@@ -20,7 +20,7 @@ export const GET_PRODUCT_COMMENTS = gql`
         commentText
         name
         isReply
-        createdAt
+        createdAt  # مطمئن شوید این فیلد وجود دارد
         user {
           _id
           username
