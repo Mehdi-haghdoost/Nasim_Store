@@ -56,7 +56,7 @@ const addComment = {
                 commentText,
                 strengths: strengths || [],
                 weaknesses: weaknesses || [],
-                status: "pending"
+                status: "active" // تغییر به active به صورت پیش‌فرض
             })
 
             //    اضافه کردن آیدی کامنت به لیست comments کاربر
@@ -100,7 +100,7 @@ const replyToComment = {
     },
     resolve: async (_, { input }, { req }) => {
         try {
-            const { parentId, commentText, name, email, website } = input;
+            const { parentId, commentText, name, email, website, rating } = input;
 
             const user = await validateToken(req);
             if (!user) {
@@ -122,9 +122,10 @@ const replyToComment = {
                 throw new Error("کامنت مورد نظر برای پاسخ یافت نشد")
             }
 
-            if (!parentComment.status.includes("active")) {
-                throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
-            }
+            // حذف این شرط برای اجازه دادن به پاسخ کامنت‌های pending
+            // if (!parentComment.status.includes("active")) {
+            //     throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
+            // }
             
             // پیدا کردن محصول مربوطه
             const productDoc = await ProductModel.findById(parentComment.product);
@@ -139,13 +140,13 @@ const replyToComment = {
                 name: name || UserDoc.name,
                 email: email || UserDoc.email,
                 website: website || null,
-                rating: 1, // رتبه‌دهی برای پاسخ‌ها نیاز نیست
+                rating: rating || 5, // استفاده از امتیاز ارسالی یا مقدار پیش‌فرض
                 commentText,
                 strengths: [], // نقاط قوت برای پاسخ‌ها نیاز نیست
                 weaknesses: [], // نقاط ضعف برای پاسخ‌ها نیاز نیست
                 parent: parentId,
                 isReply: true,
-                status: user.role === "ADMIN" ? "active" : "pending" // اگر ادمین باشد، پاسخ مستقیماً تایید می‌شود
+                status: "active" // همیشه active باشد
             });
 
 
