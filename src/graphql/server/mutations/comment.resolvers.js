@@ -125,6 +125,13 @@ const replyToComment = {
             if (!parentComment.status.includes("active")) {
                 throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
             }
+            
+            // پیدا کردن محصول مربوطه
+            const productDoc = await ProductModel.findById(parentComment.product);
+            if (!productDoc) {
+                throw new Error("محصول مربوط به این کامنت یافت نشد");
+            }
+
             // ایجاد کامنت پاسخ
             const replyComment = await CommentModel.create({
                 user: user._id,
@@ -149,7 +156,10 @@ const replyToComment = {
             // اضافه کردن آیدی کامنت پاسخ به لیست comments کاربر
             UserDoc.comments.push(replyComment._id);
             await UserDoc.save();
-
+            
+            // اضافه کردن آیدی کامنت پاسخ به لیست comments محصول
+            productDoc.comments.push(replyComment._id);
+            await productDoc.save();
 
             return {
                 _id: replyComment._id,
