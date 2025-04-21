@@ -3,10 +3,13 @@ import styles from './Comments.module.css';
 import { useComment } from '@/Redux/hooks/useComment';
 import { useAuth } from '@/Redux/hooks/useAuth';
 import { showSwal } from '@/utils/helpers';
+import { FaRegStar } from 'react-icons/fa';
+import { GoStarFill } from 'react-icons/go';
 
 function ReplyForm({ parentId }) {
   const { submitReply, closeReplyForm, replyLoading, replyError, replySuccess, clearReplyStatus } = useComment();
   const { user } = useAuth();
+  const [rating, setRating] = useState(5); // امتیاز پیش‌فرض 5
   
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -14,11 +17,25 @@ function ReplyForm({ parentId }) {
     commentText: '',
   });
 
+  // بارگذاری اطلاعات ذخیره شده کاربر در هنگام مونت کامپوننت
+  useEffect(() => {
+    const savedName = localStorage.getItem('commentFormName');
+    const savedEmail = localStorage.getItem('commentFormEmail');
+    
+    if (savedName || savedEmail) {
+      setFormData(prev => ({
+        ...prev,
+        name: savedName || prev.name,
+        email: savedEmail || prev.email,
+      }));
+    }
+  }, []);
+
   // نمایش پیام موفقیت بعد از ثبت پاسخ
   useEffect(() => {
     if (replySuccess) {
       console.log("پاسخ با موفقیت ثبت شد، نمایش پیام موفقیت");
-      showSwal('پاسخ شما با موفقیت ثبت شد و پس از تأیید نمایش داده خواهد شد', 'success', 'تأیید');
+      showSwal('پاسخ شما با موفقیت ثبت شد و نمایش داده خواهد شد', 'success', 'تأیید');
       
       // پاک کردن فرم
       setFormData({
@@ -26,6 +43,7 @@ function ReplyForm({ parentId }) {
         email: user?.email || '',
         commentText: '',
       });
+      setRating(5); // بازگرداندن امتیاز به حالت پیش‌فرض
       
       // پاک کردن وضعیت پاسخ بعد از 3 ثانیه
       setTimeout(() => {
@@ -49,6 +67,11 @@ function ReplyForm({ parentId }) {
     });
   };
 
+  const submitScore = (score) => {
+    setRating(score);
+    showSwal('امتیاز مورد نظر شما با موفقیت ثبت شد', 'success', 'ادامه ثبت پاسخ');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.commentText.trim()) {
@@ -56,18 +79,24 @@ function ReplyForm({ parentId }) {
       return;
     }
 
+    // ذخیره اطلاعات در localStorage برای استفاده مجدد
+    localStorage.setItem('commentFormName', formData.name);
+    localStorage.setItem('commentFormEmail', formData.email);
+
     console.log("ارسال پاسخ با داده:", {
       parentId,
       commentText: formData.commentText,
       name: formData.name,
-      email: formData.email
+      email: formData.email,
+      rating
     });
     
     submitReply({
       parentId,
       commentText: formData.commentText,
       name: formData.name,
-      email: formData.email
+      email: formData.email,
+      rating // اضافه کردن امتیاز به اطلاعات ارسالی
     });
   };
 
@@ -81,48 +110,74 @@ function ReplyForm({ parentId }) {
       <h6 className="mb-3">ارسال پاسخ</h6>
       <form onSubmit={handleSubmit}>
         <div className="row">
-          {!user && (
-            <>
-              <div className="col-sm-6 mb-3">
-                <div className={styles.comment_item}>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="replyName"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label
-                    className={`form-label ${styles.comment_item_label}`}
-                    htmlFor="replyName"
-                  >
-                    نام خود را وارد کنید
-                  </label>
-                </div>
+          <div className="col-sm-6 mb-3">
+            <div className={styles.comment_item}>
+              <input
+                type="text"
+                className="form-control"
+                id="replyName"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <label
+                className={`form-label ${styles.comment_item_label}`}
+                htmlFor="replyName"
+              >
+                نام خود را وارد کنید
+              </label>
+            </div>
+          </div>
+          <div className="col-sm-6 mb-3">
+            <div className={styles.comment_item}>
+              <input
+                type="email"
+                className="form-control"
+                id="replyEmail"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <label
+                className={`form-label ${styles.comment_item_label}`}
+                htmlFor="replyEmail"
+              >
+                ایمیل خود را وارد کنید
+              </label>
+            </div>
+          </div>
+          
+          {/* اضافه کردن بخش امتیازدهی */}
+          <div className="col-12">
+            <div className="form-group mt-2 mb-3">
+              <label className="d-block mb-2">امتیاز شما</label>
+              <div className={styles.rate}>
+                <GoStarFill 
+                  onClick={() => submitScore(5)} 
+                  className={`cursor-pointer ${rating >= 5 ? 'text-warning' : 'text-muted'}`} 
+                />
+                <GoStarFill 
+                  onClick={() => submitScore(4)} 
+                  className={`cursor-pointer ${rating >= 4 ? 'text-warning' : 'text-muted'}`} 
+                />
+                <GoStarFill 
+                  onClick={() => submitScore(3)} 
+                  className={`cursor-pointer ${rating >= 3 ? 'text-warning' : 'text-muted'}`} 
+                />
+                <GoStarFill 
+                  onClick={() => submitScore(2)} 
+                  className={`cursor-pointer ${rating >= 2 ? 'text-warning' : 'text-muted'}`} 
+                />
+                <GoStarFill 
+                  onClick={() => submitScore(1)} 
+                  className={`cursor-pointer ${rating >= 1 ? 'text-warning' : 'text-muted'}`} 
+                />
               </div>
-              <div className="col-sm-6 mb-3">
-                <div className={styles.comment_item}>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="replyEmail"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label
-                    className={`form-label ${styles.comment_item_label}`}
-                    htmlFor="replyEmail"
-                  >
-                    ایمیل خود را وارد کنید
-                  </label>
-                </div>
-              </div>
-            </>
-          )}
+            </div>
+          </div>
+          
           <div className="col-12 mb-3">
             <div className={styles.comment_item}>
               <textarea
