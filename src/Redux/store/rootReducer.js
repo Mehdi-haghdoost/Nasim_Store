@@ -3,6 +3,7 @@ import authReducer from '../slices/authSlice';
 import cartReducer from '../slices/cartSlice';
 import productReducer from '../slices/productSlice';
 import toastReducer from '../slices/toastSlice';
+import commentReducer from '../slices/commentSlice';
 
 /**
  * Root reducer combining all slice reducers
@@ -13,4 +14,5 @@ export const rootReducer = combineReducers({
     cart: cartReducer,
     product: productReducer,
     toast: toastReducer,
+    comment: commentReducer,
 });
