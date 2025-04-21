@@ -5,9 +5,12 @@ import styles from './Comments.module.css';
 import { FaRegStar } from 'react-icons/fa';
 import { GoStarFill } from 'react-icons/go';
 import { showSwal } from '@/utils/helpers';
+import ReplyForm from './ReplyForm';
+import { useComment } from '@/Redux/hooks/useComment';
 
 function Comments({ product }) {
   const [score, setScore] = useState(5);
+  const { replyForm, openReplyForm } = useComment();
 
   const strengthsInputRef = useRef();
   const weaknessesInputRef = useRef();
@@ -85,6 +88,12 @@ function Comments({ product }) {
     });
     console.log(`Filtered replies for comment ${comment._id}:`, replies);
     return replies;
+  };
+
+  // هندل کردن کلیک روی دکمه پاسخ
+  const handleReplyClick = (e, commentId) => {
+    e.preventDefault();
+    openReplyForm(commentId);
   };
 
   // رندر یک کامنت (چه اصلی و چه پاسخ)
@@ -170,6 +179,7 @@ function Comments({ product }) {
                 <a
                   href=""
                   className="btn btn-sm rounded-pill main-color-two-bg px-4"
+                  onClick={(e) => handleReplyClick(e, comment._id)}
                 >
                   پاسخ
                 </a>
@@ -178,6 +188,12 @@ function Comments({ product }) {
           )}
         </div>
       </div>
+      
+      {/* نمایش فرم پاسخ اگر برای این کامنت باز شده باشد */}
+      {replyForm.isOpen && replyForm.parentId === comment._id && (
+        <ReplyForm parentId={comment._id} />
+      )}
+      
       {/* رندر پاسخ‌ها برای کامنت اصلی */}
       {getReplies(comment).length > 0 && (
         <div className={styles.replies_container}>
