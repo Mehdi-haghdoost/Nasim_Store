@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const GET_PRODUCT = gql`
-  query product($id: ID!) {
+  query GetProduct($id: ID!) {
     product(id: $id) {
       _id
+      image
       title
       originalName
-      image
       price
       discountedPrice
       hasDiscount
@@ -15,6 +15,8 @@ export const GET_PRODUCT = gql`
       specifications
       rating
       brandIcon
+      salesCount
+      customerSatisfaction
       features {
         key
         value
@@ -23,79 +25,136 @@ export const GET_PRODUCT = gql`
         color
         available
       }
-      sellers {
-        _id
-        name
-        performance     
-        satisfaction    
-        performanceStatus
-        isSelected      
-        logo            
-        rating          
+      highlights {
+        feature
       }
       category {
         _id
         name
+        icon
+      }
+      sellers {
+        _id
+        name
+        logo
       }
       comments {
         _id
-        user {
-          username
+        commentText
+        rating
+        name
+        email
+        website
+        createdAt
+        updatedAt
+        isReply
+        strengths
+        weaknesses
+        parent {
+          _id
         }
+        replies {
+          _id
+          commentText
+          rating
+          name
+          email
+          isReply
+          createdAt
           strengths
           weaknesses
-          isReply
-        rating
-        commentText
-        createdAt
-           replies {
-                 _id
-                name
-                commentText
-                createdAt
+          user {
+            _id
+            username
+          }
+        }
         user {
+          _id
           username
         }
       }
-      }
-      customerSatisfaction
-      salesCount
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const GET_SIMILAR_PRODUCTS = gql`
-  query similarProducts($categoryId: ID!, $limit: Int) {
-    similarProducts(categoryId: $categoryId, limit: $limit) {
-      _id
-      title
-      originalName
-      image  # اینجا هم image
-      price
-      discountedPrice
-      hasDiscount
-      stock
-      rating
-      brandIcon
     }
   }
 `;
 
-export const GET_BEST_SELLING_PRODUCTS = gql`
-  query bestSellingProducts($limit: Int) {
-    bestSellingProducts(limit: $limit) {
+export const GET_PRODUCTS = gql`
+  query GetProducts {
+    products {
       _id
+      image
       title
       originalName
-      image  # اینجا هم image
       price
       discountedPrice
       hasDiscount
       stock
       rating
-      brandIcon
-      salesCount
+      category {
+        _id
+        name
+        icon
+      }
+    }
+  }
+`;
+
+export const GET_SIMILAR_PRODUCTS = gql`
+  query GetSimilarProducts($categoryId: ID!, $limit: Int) {
+    similarProducts(categoryId: $categoryId, limit: $limit) {
+      _id
+      image
+      title
+      originalName
+      price
+      discountedPrice
+      hasDiscount
+      stock
+      rating
+      category {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_COMMENTS_BY_PRODUCT = gql`
+  query GetCommentsByProduct($productId: ID!) {
+    commentsByProduct(productId: $productId) {
+      _id
+      commentText
+      rating
+      name
+      email
+      website
+      createdAt
+      updatedAt
+      isReply
+      strengths
+      weaknesses
+      parent {
+        _id
+      }
+      replies {
+        _id
+        commentText
+        rating
+        name
+        email
+        createdAt
+        updatedAt
+        isReply
+        strengths
+        weaknesses
+        user {
+          _id
+          username
+        }
+      }
+      user {
+        _id
+        username
+      }
     }
   }
 `;
