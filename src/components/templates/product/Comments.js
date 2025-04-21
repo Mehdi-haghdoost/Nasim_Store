@@ -7,13 +7,23 @@ import { GoStarFill } from 'react-icons/go';
 import { showSwal } from '@/utils/helpers';
 import ReplyForm from './ReplyForm';
 import { useComment } from '@/Redux/hooks/useComment';
+import { useProduct } from '@/Redux/hooks/useProduct';
 
 function Comments({ product }) {
   const [score, setScore] = useState(5);
-  const { replyForm, openReplyForm } = useComment();
+  const { replyForm, openReplyForm, replySuccess } = useComment();
+  const { getProduct } = useProduct();
 
   const strengthsInputRef = useRef();
   const weaknessesInputRef = useRef();
+
+  // اگر ثبت پاسخ موفق بود، اطلاعات محصول را از سرور به‌روزرسانی کن
+  useEffect(() => {
+    if (replySuccess && product?._id) {
+      console.log("پاسخ با موفقیت ثبت شد، در حال به‌روزرسانی اطلاعات محصول...");
+      getProduct(product._id);
+    }
+  }, [replySuccess, product, getProduct]);
 
   useEffect(() => {
     new Tagify(strengthsInputRef.current, { placeholder: 'با کلید اینتر اضافه کنید' });
@@ -36,23 +46,50 @@ function Comments({ product }) {
   console.log('mainComments =====>', mainComments);
 
   // تبدیل تاریخ میلادی به شمسی
+  // تبدیل تاریخ میلادی به شمسی - نسخه اصلاح شده
   const formatDate = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) {
+      console.log("timestamp خالی است:", timestamp);
+      return '';
+    }
 
     try {
-      const date = new Date(parseInt(timestamp) || timestamp);
+      console.log("تلاش برای فرمت‌بندی تاریخ:", timestamp);
+
+      // تبدیل timestamp رشته‌ای به عدد
+      let numericTimestamp;
+      if (typeof timestamp === 'string') {
+        numericTimestamp = parseInt(timestamp, 10);
+      } else if (typeof timestamp === 'number') {
+        numericTimestamp = timestamp;
+      } else {
+        // اگر نوع دیگری باشد (مثلاً تاریخ)
+        return new Date(timestamp).toLocaleDateString('fa-IR');
+      }
+
+      // اگر timestamp میلی‌ثانیه‌ای است (13 رقمی)
+      const date = new Date(numericTimestamp);
+      console.log("تاریخ تبدیل شده:", date);
+
+      if (date.toString() === 'Invalid Date') {
+        console.error("تبدیل تاریخ ناموفق بود، مقدار خام:", timestamp);
+        return timestamp.toString().substring(0, 10); // نمایش بخشی از رشته خام
+      }
+
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         calendar: 'persian',
       };
+
       return new Intl.DateTimeFormat('fa-IR', options).format(date);
     } catch (error) {
-      console.error('خطا در تبدیل تاریخ:', error);
-      return '';
+      console.error('خطا در کل فرآیند تبدیل تاریخ:', error);
+      return 'تاریخ نامشخص';
     }
   };
+
 
   // رندر کردن ستاره‌ها بر اساس امتیاز
   const renderStars = (rating) => {
@@ -71,23 +108,25 @@ function Comments({ product }) {
     return stars;
   };
 
-  // یافتن پاسخ‌ها برای یک کامنت اصلی
+  // یافتن پاسخ‌ها برای یک کامنت اصلی - روش بهبود یافته
   const getReplies = (comment) => {
+    // اگر کامنت replies نداشته باشد یا آرایه خالی باشد
     if (!comment.replies || comment.replies.length === 0) {
-      console.log(`No replies for comment ${comment._id}:`, comment.replies);
       return [];
     }
-    console.log(`Raw replies for comment ${comment._id}:`, comment.replies);
-    const replies = allComments.filter((reply) => {
-      const match = comment.replies.some((r) => {
-        const isMatch = r._id === reply._id && reply.isReply;
-        console.log(`Comparing reply._id: ${reply._id} with r._id: ${r._id}, isReply: ${reply.isReply}, Match: ${isMatch}`);
-        return isMatch;
-      });
-      return match;
-    });
-    console.log(`Filtered replies for comment ${comment._id}:`, replies);
-    return replies;
+
+    // به جای فیلتر کردن، مستقیماً از replies استفاده می‌کنیم
+    // زیرا این فیلد در GraphQL resolver تکمیل می‌شود
+    return comment.replies;
+  };
+
+  // یا روش جایگزین: پیدا کردن پاسخ‌ها با استفاده از parent
+  const findRepliesByParent = (parentId) => {
+    return allComments.filter(comment =>
+      comment.isReply &&
+      comment.parent &&
+      (comment.parent._id === parentId || comment.parent === parentId)
+    );
   };
 
   // هندل کردن کلیک روی دکمه پاسخ
@@ -97,111 +136,125 @@ function Comments({ product }) {
   };
 
   // رندر یک کامنت (چه اصلی و چه پاسخ)
-  const renderComment = (comment, isReply = false) => (
-    <div
-      key={comment._id}
-      className={`bg-light shadow-inner mb-4 ${isReply ? styles.comment_response : styles.comment}`}
-    >
-      <div className={styles.title}>
-        <div className="row align-items-center">
-          <div className="col-sm-10">
-            <div className="d-flex align-items-center">
-              <div
-                className={`${styles.avatar} p-2 bg-white shadow-box rounded-circle`}
-              >
-                <img
-                  className="img-fluid rounded-circle"
-                  src="/images/user.png"
-                  alt=""
-                />
-              </div>
-              <div className="d-flex flex-wrap align-items-center me-2">
-                <h6 className="text-muted font-14">
-                  {comment.user?.username || comment.name || 'مهدی حق دوست'}
-                </h6>
-                <h6 className="text-muted font-14 me-2">
-                  {formatDate(comment.createdAt)}
-                </h6>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-2">
-            <div className="d-flex justify-content-end">
-              {renderStars(comment.rating)}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.comment_desc}>
-        <p className="font-14 text-muted">{comment.commentText}</p>
-      </div>
-      <div className={styles.comment_foot}>
-        <div className="row align-items-center">
-          <div className="col-md-8">
-            <div className={styles.comment_rates}>
-              {comment.strengths && comment.strengths.length > 0 && (
-                <div className={`${styles.comment_rates_positive} rounded-4`}>
-                  <div className="d-flex align-items-center">
-                    <h6 className="font-14 ms-3">نقاط قوت</h6>
-                    <nav className={`${styles.positive_nav} navbar flex-column`}>
-                      <ul className="navbar-nav flex-wrap">
-                        {comment.strengths.map((strength, idx) => (
-                          <li key={idx} className="nav-item">
-                            <span className="nav-link font-14">{strength}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              )}
-              {comment.weaknesses && comment.weaknesses.length > 0 && (
-                <div className={`${styles.comment_rates_negative} rounded-4 mt-3`}>
-                  <div className="d-flex align-items-center">
-                    <h6 className="font-14 ms-3">نقاط ضعف</h6>
-                    <nav className={`${styles.negative_nav} navbar flex-column`}>
-                      <ul className="navbar-nav flex-wrap">
-                        {comment.weaknesses.map((weakness, idx) => (
-                          <li key={idx} className="nav-item">
-                            <span className="nav-link font-14">{weakness}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          {!isReply && (
-            <div className="col-12">
-              <div className={styles.comment_replay}>
-                <a
-                  href=""
-                  className="btn btn-sm rounded-pill main-color-two-bg px-4"
-                  onClick={(e) => handleReplyClick(e, comment._id)}
+  const renderComment = (comment, isReply = false) => {
+    if (!comment || !comment._id) {
+      console.warn("کامنت نامعتبر یا بدون آیدی:", comment);
+      return null;
+    }
+    console.log(`کامنت ID: ${comment._id}, isReply: ${isReply}, createdAt: ${comment.createdAt}, نوع: ${typeof comment.createdAt}`);
+    // پیدا کردن پاسخ‌ها
+    const replies = comment.replies && comment.replies.length > 0
+      ? comment.replies
+      : findRepliesByParent(comment._id);
+
+    console.log(`پاسخ‌های کامنت ${comment._id}:`, replies);
+
+    return (
+      <div
+        key={comment._id}
+        className={`bg-light shadow-inner mb-4 ${isReply ? styles.comment_response : styles.comment}`}
+      >
+        <div className={styles.title}>
+          <div className="row align-items-center">
+            <div className="col-sm-10">
+              <div className="d-flex align-items-center">
+                <div
+                  className={`${styles.avatar} p-2 bg-white shadow-box rounded-circle`}
                 >
-                  پاسخ
-                </a>
+                  <img
+                    className="img-fluid rounded-circle"
+                    src="/images/user.png"
+                    alt=""
+                  />
+                </div>
+                <div className="d-flex flex-wrap align-items-center me-2">
+                  <h6 className="text-muted font-14">
+                    {comment.user?.username || comment.name || 'مهدی حق دوست'}
+                  </h6>
+                  <h6 className="text-muted font-14 me-2">
+                    {formatDate(comment.createdAt)}
+                  </h6>
+                </div>
               </div>
             </div>
-          )}
+            <div className="col-sm-2">
+              <div className="d-flex justify-content-end">
+                {renderStars(comment.rating)}
+              </div>
+            </div>
+          </div>
         </div>
+        <div className={styles.comment_desc}>
+          <p className="font-14 text-muted">{comment.commentText}</p>
+        </div>
+        <div className={styles.comment_foot}>
+          <div className="row align-items-center">
+            <div className="col-md-8">
+              <div className={styles.comment_rates}>
+                {comment.strengths && comment.strengths.length > 0 && (
+                  <div className={`${styles.comment_rates_positive} rounded-4`}>
+                    <div className="d-flex align-items-center">
+                      <h6 className="font-14 ms-3">نقاط قوت</h6>
+                      <nav className={`${styles.positive_nav} navbar flex-column`}>
+                        <ul className="navbar-nav flex-wrap">
+                          {comment.strengths.map((strength, idx) => (
+                            <li key={idx} className="nav-item">
+                              <span className="nav-link font-14">{strength}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                )}
+                {comment.weaknesses && comment.weaknesses.length > 0 && (
+                  <div className={`${styles.comment_rates_negative} rounded-4 mt-3`}>
+                    <div className="d-flex align-items-center">
+                      <h6 className="font-14 ms-3">نقاط ضعف</h6>
+                      <nav className={`${styles.negative_nav} navbar flex-column`}>
+                        <ul className="navbar-nav flex-wrap">
+                          {comment.weaknesses.map((weakness, idx) => (
+                            <li key={idx} className="nav-item">
+                              <span className="nav-link font-14">{weakness}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            {!isReply && (
+              <div className="col-12">
+                <div className={styles.comment_replay}>
+                  <a
+                    href=""
+                    className="btn btn-sm rounded-pill main-color-two-bg px-4"
+                    onClick={(e) => handleReplyClick(e, comment._id)}
+                  >
+                    پاسخ
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* نمایش فرم پاسخ اگر برای این کامنت باز شده باشد */}
+        {replyForm.isOpen && replyForm.parentId === comment._id && (
+          <ReplyForm parentId={comment._id} />
+        )}
+
+        {/* رندر پاسخ‌ها برای کامنت اصلی */}
+        {replies.length > 0 && (
+          <div className={styles.replies_container}>
+            {replies.map((reply) => renderComment(reply, true))}
+          </div>
+        )}
       </div>
-      
-      {/* نمایش فرم پاسخ اگر برای این کامنت باز شده باشد */}
-      {replyForm.isOpen && replyForm.parentId === comment._id && (
-        <ReplyForm parentId={comment._id} />
-      )}
-      
-      {/* رندر پاسخ‌ها برای کامنت اصلی */}
-      {getReplies(comment).length > 0 && (
-        <div className={styles.replies_container}>
-          {getReplies(comment).map((reply) => renderComment(reply, true))}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   return (
     <>
