@@ -49,9 +49,10 @@ export const GET_PRODUCT = gql`
         commentText
         createdAt
            replies {
-              _id
-               name
+                 _id
+                name
                 commentText
+                createdAt
         user {
           username
         }
