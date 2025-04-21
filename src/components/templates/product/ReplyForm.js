@@ -5,7 +5,7 @@ import { useAuth } from '@/Redux/hooks/useAuth';
 import { showSwal } from '@/utils/helpers';
 
 function ReplyForm({ parentId }) {
-  const { submitReply, closeReplyForm, replyLoading, replyError, replySuccess } = useComment();
+  const { submitReply, closeReplyForm, replyLoading, replyError, replySuccess, clearReplyStatus } = useComment();
   const { user } = useAuth();
   
   const [formData, setFormData] = useState({
@@ -14,14 +14,30 @@ function ReplyForm({ parentId }) {
     commentText: '',
   });
 
+  // نمایش پیام موفقیت بعد از ثبت پاسخ
   useEffect(() => {
     if (replySuccess) {
+      console.log("پاسخ با موفقیت ثبت شد، نمایش پیام موفقیت");
       showSwal('پاسخ شما با موفقیت ثبت شد و پس از تأیید نمایش داده خواهد شد', 'success', 'تأیید');
+      
+      // پاک کردن فرم
+      setFormData({
+        name: user?.name || '',
+        email: user?.email || '',
+        commentText: '',
+      });
+      
+      // پاک کردن وضعیت پاسخ بعد از 3 ثانیه
+      setTimeout(() => {
+        clearReplyStatus();
+      }, 3000);
     }
-  }, [replySuccess]);
+  }, [replySuccess, user, clearReplyStatus]);
 
+  // نمایش پیام خطا در صورت بروز مشکل
   useEffect(() => {
     if (replyError) {
+      console.log("خطا در ثبت پاسخ:", replyError);
       showSwal(replyError, 'error', 'تلاش مجدد');
     }
   }, [replyError]);
@@ -40,6 +56,13 @@ function ReplyForm({ parentId }) {
       return;
     }
 
+    console.log("ارسال پاسخ با داده:", {
+      parentId,
+      commentText: formData.commentText,
+      name: formData.name,
+      email: formData.email
+    });
+    
     submitReply({
       parentId,
       commentText: formData.commentText,
