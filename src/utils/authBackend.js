@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../../models/User");
+// اضافه کردن مدل RefreshToken
+const RefreshTokenModel = require("../../models/RefreshToken");
 
 // تابع کمکی برای ست کردن کوکی‌ها
 const setAuthCookies = function(res, accessToken, refreshToken) {
@@ -34,51 +36,6 @@ const setAuthCookies = function(res, accessToken, refreshToken) {
 const getUserById = (id) => {
     return UserModel.findOne({ _id: id });
 }
-
-// const validateToken = async (req) => {
-//     if (req) {
-//         let token;
-//         let refreshToken ;
-
-//         const authHeader = req.headers.authorization;
-//         if (authHeader) {
-//             token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
-
-//             if (!token && req.cookies && req.cookies.accessToken) {
-//                 token = req.cookies.accessToken
-//             }
-
-//             if (!token && req.cookies && req.cookies.refreshToken) {
-//                 refreshToken = req.cookies.accessToken
-//             }
-
-//             if (!token || token.trim() === "") {
-//                 if(refreshToken) {
-//                     return await refreshAndValidateToken(refreshToken, res);
-//                 }
-//                 throw new Error("توکنی یافت نشد !!")
-//             }
-
-//             const AccessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
-//             if (!AccessTokenSecretKey) {
-//                 throw new Error("کلید مخفی توکن در فایل .env تنظیم نشده است");
-//             }
-
-//             const { id } = jwt.verify(token, AccessTokenSecretKey);
-//             const user = await getUserById(id);
-
-//             if (!user) {
-//                 throw new Error("کاربر پیدا نشد");
-//             }
-//             return user;
-//         } else {
-//             throw new Error("احراز هویت نشده است !!");
-//         }
-
-//     } else {
-//         throw new Error("احراز هویت نشده است !!");
-//     }
-// }
 
 const validateToken = async (req, res) => {
     if (!req) {
@@ -167,11 +124,15 @@ const refreshAndValidateToken = async (refreshToken, res) => {
     });
 
     // ست کردن کوکی جدید برای accessToken
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 1000, // 1 ساعت
-    });
+    if (res && typeof res.cookie === 'function') {
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60 * 1000, // 1 ساعت
+            sameSite: 'lax',
+            path: '/',
+        });
+    }
 
     return user;
 };
