@@ -61,18 +61,41 @@ function ProductPage({ params }) {
         return (
             <>
                 <Header />
-                <div className="container py-5 text-center">
-                    <div className="alert alert-danger">
-                        <p>خطا در دریافت اطلاعات محصول: {error}</p>
-                        <button
-                            className="btn btn-outline-danger mt-3"
-                            onClick={() => {
-                                setHasFetched(false);
-                                getProduct(params.id);
-                            }}
-                        >
-                            تلاش مجدد
-                        </button>
+                <div className="container py-5">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="card border-0 shadow">
+                                <div className="card-body text-center p-5">
+                                    <div className="mb-4">
+                                        <i className="bi bi-exclamation-circle text-warning" style={{ fontSize: '3rem' }}></i>
+                                    </div>
+                                    <h4 className="mb-3">محصول مورد نظر موجود نیست</h4>
+                                    <p className="text-muted mb-4">متأسفانه در حال حاضر امکان نمایش این محصول وجود ندارد. لطفاً بعداً تلاش کنید.</p>
+                                    <div className="d-grid gap-2">
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={() => {
+                                                setHasFetched(false);
+                                                getProduct(params.id);
+                                            }}
+                                        >
+                                            <i className="bi bi-arrow-clockwise me-2"></i>
+                                            تلاش مجدد
+                                        </button>
+                                        <a href="/categories" className="btn btn-outline-secondary">
+                                            مشاهده سایر محصولات
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* لاگ خطا به صورت مخفی برای توسعه‌دهندگان */}
+                            {process.env.NODE_ENV === 'development' && (
+                                <div className="alert alert-danger mt-4 small">
+                                    <strong>خطای فنی (فقط در محیط توسعه):</strong> {error.toString()}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <Footer />
@@ -84,12 +107,22 @@ function ProductPage({ params }) {
         return (
             <>
                 <Header />
-                <div className="container py-5 text-center">
-                    <div className="alert alert-warning">
-                        <p>محصول مورد نظر یافت نشد.</p>
-                        <a href="/products" className="btn btn-primary mt-3">
-                            مشاهده سایر محصولات
-                        </a>
+                <div className="container py-5">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="card border-0 shadow">
+                                <div className="card-body text-center p-5">
+                                    <div className="mb-4">
+                                        <i className="bi bi-search text-primary" style={{ fontSize: '3rem' }}></i>
+                                    </div>
+                                    <h4 className="mb-3">محصول مورد نظر یافت نشد</h4>
+                                    <p className="text-muted mb-4">محصول مورد نظر شما در سیستم موجود نیست یا ممکن است حذف شده باشد.</p>
+                                    <a href="/categories" className="btn btn-primary">
+                                        مشاهده محصولات
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <Footer />
