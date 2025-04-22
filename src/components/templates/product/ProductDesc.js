@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './ProductDesc.module.css'
 import Descriptions from './Descriptions';
 import Specifications from './Specifications';
@@ -11,9 +11,36 @@ import { useCart } from '@/Redux/hooks/useCart';
 function ProductDesc({ product }) {
     const [tab, setTab] = useState('descriptions');
     const [productCount, setProductCount] = useState(1);
-
+    // اضافه کردن state برای مدیریت رنگ انتخاب شده
+    const [selectedColor, setSelectedColor] = useState(null);
+    
     // استفاده از هوک useCart برای دسترسی به عملکردهای سبد خرید
     const { addToCart, loading, error } = useCart();
+
+    // تنظیم رنگ پیش‌فرض هنگام لود کامپوننت
+    useEffect(() => {
+        if (product?.colors && product.colors.length > 0) {
+            // انتخاب اولین رنگ موجود
+            const firstAvailableColor = product.colors.find(color => color.available);
+            if (firstAvailableColor) {
+                setSelectedColor(firstAvailableColor.color);
+            }
+        }
+    }, [product]);
+
+    // افزایش تعداد محصول با بررسی موجودی
+    const increaseQuantity = () => {
+        if (product && product.stock > productCount) {
+            setProductCount(productCount + 1);
+        }
+    };
+
+    // کاهش تعداد محصول
+    const decreaseQuantity = () => {
+        if (productCount > 1) {
+            setProductCount(productCount - 1);
+        }
+    };
 
     // افزودن به سبد خرید
     const handleAddToCart = (e) => {
@@ -23,27 +50,41 @@ function ProductDesc({ product }) {
             console.error('اطلاعات محصول در دسترس نیست');
             return;
         }
+
+        // احتمال دارد سلر‌آیدی نیاز باشد
+        const sellerId = product?.sellers && product.sellers.length > 0 ? product.sellers[0]._id : null;
         
-        addToCart(product, productCount, null, null);
+        addToCart(product, productCount, selectedColor, null, sellerId);
     };
 
-    // داده پیش‌فرض محصول برای استفاده در صورتی که prop product موجود نباشد
-    const defaultProduct = {
-        _id: '1',
-        name: 'ساعت هوشمند سامسونگ مدل Galaxy Watch3 SM-R840 45mm بند چرمی',
-        price: 1200000,
-        originalPrice: 1500000,
-        images: ['/images/product/laptop-1.jpg'],
-        brand: 'شیائومی',
-        brandImage: '/images/brand1-1.png',
-        commentCount: 16,
-        ratingCount: 17,
-        rating: 4.5,
-        stock: 14
+    // تابع کمکی برای تبدیل نام رنگ به کد رنگ
+    const getColorCode = (colorName) => {
+        const colorMap = {
+            'قرمز': '#c00',
+            'مشکی': '#111',
+            'سبز': '#00cc5f',
+            'آبی': '#1b69f0',
+            'نارنجی': '#ff6600',
+            'بنفش': '#6a0dad'
+        };
+
+        return colorMap[colorName] || '#ccc';
     };
 
     // استفاده از داده‌های واقعی یا پیش‌فرض
-    const productData = product || defaultProduct;
+    const productData = product || {
+        _id: '1',
+        title: 'ساعت هوشمند سامسونگ مدل Galaxy Watch3 SM-R840 45mm بند چرمی',
+        originalName: 'Samsung Galaxy Watch3 SM-R840 45mm',
+        price: 1200000,
+        discountedPrice: 1000000,
+        hasDiscount: true,
+        image: '/images/product/laptop-1.jpg',
+        brandIcon: '/images/brand1-1.png',
+        comments: [],
+        rating: 4.5,
+        stock: 14
+    };
 
     return (
         <div className={`${styles.product_desc} py-20`}>
@@ -112,124 +153,99 @@ function ProductDesc({ product }) {
                                             </div>
                                         </div>
                                         <div className="col-8">
-                                            <a href="">
-                                                <div className={styles.product_float_title}>
-                                                    <h6 className='font-16'>
-                                                        {productData.name}
-                                                    </h6>
-                                                </div>
-                                            </a>
+                                            <div className={styles.product_float_title}>
+                                                <h6 className='font-16'>
+                                                    {productData.title || productData.originalName}
+                                                </h6>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="product-meta-color-items mt-3">
-                                    {productData.colors ? (
-                                        productData.colors.map((color, index) => (
-                                            <React.Fragment key={index}>
-                                                <input
-                                                    type="radio"
-                                                    className="btn-check"
-                                                    name="colorOptions"
-                                                    id={`colorFloatOption${index}`}
-                                                    autoComplete="off"
-                                                    defaultChecked={index === 0}
-                                                    disabled={!color.available}
-                                                />
-                                                <label className="btn" htmlFor={`colorFloatOption${index}`}>
-                                                    <span style={{ backgroundColor: color.code }}></span>
-                                                    {color.name}
-                                                </label>
-                                            </React.Fragment>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="options"
-                                                id="option11"
-                                                autoComplete="off"
-                                            />
-                                            <label className="btn" htmlFor="option11">
-                                                <span style={{ backgroundColor: '#c00' }}></span>
-                                                قرمز
-                                            </label>
 
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="options"
-                                                id="option21"
-                                                autoComplete="off"
-                                            />
-                                            <label className="btn" htmlFor="option21">
-                                                <span style={{ backgroundColor: '#111' }}></span>
-                                                مشکی
-                                            </label>
+                                {/* رنگ‌های محصول */}
+                                {productData.colors && productData.colors.length > 0 && (
+                                    <div className="product-meta-color mt-3">
+                                        <h6 className="font-14 mb-2">انتخاب رنگ کالا</h6>
+                                        <div className="product-meta-color-items">
+                                            {productData.colors.map((colorItem, index) => (
+                                                <React.Fragment key={index}>
+                                                    <input
+                                                        type="radio"
+                                                        className="btn-check"
+                                                        name="colorFloatOptions"
+                                                        id={`colorFloatOption${index}`}
+                                                        autoComplete="off"
+                                                        checked={selectedColor === colorItem.color}
+                                                        onChange={() => setSelectedColor(colorItem.color)}
+                                                        disabled={!colorItem.available}
+                                                    />
+                                                    <label className="btn" htmlFor={`colorFloatOption${index}`}>
+                                                        <span style={{ backgroundColor: getColorCode(colorItem.color) }}></span>
+                                                        {colorItem.color}
+                                                    </label>
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="options"
-                                                id="option31"
-                                                autoComplete="off"
-                                                disabled
-                                            />
-                                            <label className="btn" htmlFor="option31">
-                                                <span style={{ backgroundColor: '#00cc5f' }}></span>
-                                                سبز
-                                            </label>
-
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="options"
-                                                id="option41"
-                                                autoComplete="off"
-                                            />
-                                            <label className="btn" htmlFor="option41">
-                                                <span style={{ backgroundColor: '#1b69f0' }}></span>
-                                                آبی
-                                            </label>
-                                        </>
+                                {/* برند محصول */}
+                                <div className={`${styles.product_float_brand} my-3`}>
+                                    {productData.brandIcon && (
+                                        <div className="d-inline">
+                                            <img src={productData.brandIcon.startsWith('/') ? productData.brandIcon : `/images/${productData.brandIcon}`} 
+                                                className='img-fluid' alt="برند محصول" />
+                                        </div>
                                     )}
                                 </div>
-                                <div className={`${styles.product_float_brand} my-3`}>
-                                    <a href="" className='d-inline'>
-                                        <img src={productData.brandImage || "/images/brand1-1.png"} className='img-fluid' alt="" />
-                                        <p className='mb-0 mr-2 d-inline'>{productData.brand || 'شیائومی'}</p>
-                                    </a>
-                                </div>
+                                
+                                {/* امتیاز و نظرات */}
                                 <div className={styles.product_meta_rating}>
                                     <div className='d-flex align-items-center'>
                                         <div className={`text-muted ${styles.count_comment}`}>
-                                            {productData.commentCount || '16'} دیدگاه
+                                            {productData.comments ? productData.comments.length : '0'} دیدگاه
                                         </div>
                                         <div className={styles.count_rating}>
-                                            <span>({productData.ratingCount || '17'}) {productData.rating || '4.5'}</span>
+                                            <span>({productData.rating || '0'}) {productData.rating || '0'}</span>
                                             <GoStarFill />
                                         </div>
                                     </div>
                                 </div>
+                                
+                                {/* گارانتی */}
                                 <div className={`${styles.product_meta_garanty} justify-content-start`}>
                                     <i className='bi bi-shield-fill-check'></i>
                                     <span className='text-muted'>گارانتی اصالت و سلامت فیزیکی کالا</span>
                                 </div>
-                                <div className={`${styles.product_meta_price} p-0 bg-transparent shadow-none`} >
+                                
+                                {/* موجودی */}
+                                <div className={`${styles.productmeta_count} text-muted mt-2`}>
+                                    <span>{productData.stock || '0'} عدد در انبار</span>
+                                </div>
+                                
+                                {/* قیمت */}
+                                <div className={`${styles.product_meta_price} p-0 bg-transparent shadow-none mt-3`} >
                                     <div className='row gy-3'>
-                                        <div className="col-6 w-100-in-400">
-                                            <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center`}>
-                                                {productData.originalPrice ? `${productData.originalPrice.toLocaleString()} تومان` : '1,500,000 تومان'}
-                                            </p>
-                                        </div>
+                                        {productData.hasDiscount && (
+                                            <div className="col-6 w-100-in-400">
+                                                <p className={`mb-0 ${styles.old_price} font-16 text-lg-start text-center text-decoration-line-through`}>
+                                                    {productData.price ? `${productData.price.toLocaleString()} تومان` : '1,500,000 تومان'}
+                                                </p>
+                                            </div>
+                                        )}
                                         <div className="col-6 w-100-in-400">
                                             <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>
-                                                {productData.price ? `${productData.price.toLocaleString()} تومان` : '1,200,000 تومان'}
+                                                {productData.hasDiscount 
+                                                    ? (productData.discountedPrice ? `${productData.discountedPrice.toLocaleString()} تومان` : '1,200,000 تومان')
+                                                    : (productData.price ? `${productData.price.toLocaleString()} تومان` : '1,200,000 تومان')
+                                                }
                                             </h6>
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`${styles.product_meta_action} p-0 bg-transparent shadow-none`}>
+                                
+                                {/* کنترل تعداد و دکمه خرید */}
+                                <div className={`${styles.product_meta_action} p-0 bg-transparent shadow-none mt-3`}>
                                     <div className="row gy-3">
                                         <div className="col-12 w-100-in-400">
                                             <div className={styles.counter}>
@@ -238,7 +254,8 @@ function ProductDesc({ product }) {
                                                         <button
                                                             className="btn-counter waves-effect waves-light bootstrap-touchspin-down"
                                                             type="button"
-                                                            onClick={() => setProductCount(productCount > 1 ? productCount - 1 : 1)}
+                                                            onClick={decreaseQuantity}
+                                                            disabled={productCount <= 1 || loading}
                                                         >
                                                             -
                                                         </button>
@@ -254,7 +271,8 @@ function ProductDesc({ product }) {
                                                         <button
                                                             className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
                                                             type="button"
-                                                            onClick={() => setProductCount(productCount + 1)}
+                                                            onClick={increaseQuantity}
+                                                            disabled={(productData.stock && productData.stock <= productCount) || loading}
                                                         >
                                                             +
                                                         </button>
@@ -266,11 +284,11 @@ function ProductDesc({ product }) {
                                             <div className='d-flex justify-content-center'>
                                                 <button
                                                     onClick={handleAddToCart}
-                                                    disabled={loading}
+                                                    disabled={loading || (product && product.stock <= 0)}
                                                     className='btn border-0 main-color-three-bg w-100'
                                                 >
                                                     <i className='bi bi-basket text-white font-20 ms-1'></i>
-                                                    {loading ? 'در حال افزودن...' : 'خرید کالا'}
+                                                    {loading ? 'در حال افزودن...' : (productData.stock <= 0 ? 'ناموجود' : 'خرید کالا')}
                                                 </button>
                                             </div>
                                             {error && <div className="text-danger mt-2 text-center">{error}</div>}
