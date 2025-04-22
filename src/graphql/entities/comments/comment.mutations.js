@@ -23,6 +23,7 @@ export const REPLY_TO_COMMENT = gql`
     replyToComment(input: $input) {
       _id
       commentText
+      rating
       isReply
       status
       createdAt
