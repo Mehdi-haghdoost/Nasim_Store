@@ -1,6 +1,8 @@
 const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType, GraphQLBoolean } = require("graphql");
 const ProductModel = require('../../../../models/Product');
 const CommentModel = require("../../../../models/Comment")
+
+// تعریف میکنیم ولی دیگر استفاده نمیکنیم
 const CommentStatusEnum = new GraphQLEnumType({
     name: "CommentStatus",
     values: {
@@ -48,7 +50,7 @@ const CommentType = new GraphQLObjectType({
                 }
             },
             isReply: { type: GraphQLBoolean },
-            status: { type: CommentStatusEnum },
+            status: { type: CommentStatusEnum }, // همچنان نگه میداریم برای سازگاری با بقیه کدها
             createdAt: { type: new GraphQLNonNull(GraphQLString) },
             updatedAt: { type: new GraphQLNonNull(GraphQLString) },
         }
@@ -66,7 +68,7 @@ const CommentInputType = new GraphQLInputObjectType({
         commentText: { type: new GraphQLNonNull(GraphQLString) },
         strengths: { type: new GraphQLList(GraphQLString) },
         weaknesses: { type: new GraphQLList(GraphQLString) },
-        status: { type: CommentStatusEnum },
+        status: { type: GraphQLString }, // تغییر به GraphQLString برای حفظ سازگاری
     }),
 });
 
@@ -77,6 +79,7 @@ const ReplyCommentInputType = new GraphQLInputObjectType({
         commentText: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: GraphQLString }, // اختیاری - می‌تواند از کاربر گرفته شود
         email: { type: GraphQLString }, // اختیاری - می‌تواند از کاربر گرفته شود
+        rating: { type: GraphQLFloat }, // اضافه کردن امتیاز به ورودی پاسخ
     }),
 });
 
@@ -84,4 +87,5 @@ module.exports = {
     CommentInputType,
     CommentType,
     ReplyCommentInputType,
+    CommentStatusEnum, // برای سازگاری با کدهای دیگر صادر میکنیم
 };

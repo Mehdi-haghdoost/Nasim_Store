@@ -46,6 +46,7 @@ const addComment = {
             if (!emailRegex.test(email)) {
                 throw new Error("ایمیل معتبر وارد کنید");
             }
+
             const newComment = await CommentModel.create({
                 user: user._id,
                 product: existingProduct._id,
@@ -56,7 +57,7 @@ const addComment = {
                 commentText,
                 strengths: strengths || [],
                 weaknesses: weaknesses || [],
-                status: "active" // تغییر به active به صورت پیش‌فرض
+                status: "active" // نگه داشتن فیلد برای سازگاری
             })
 
             //    اضافه کردن آیدی کامنت به لیست comments کاربر
@@ -66,7 +67,6 @@ const addComment = {
             // اضافه کردن آیدی کامنت به لیست comments محصول
             existingProduct.comments.push(newComment._id);
             await existingProduct.save();
-
 
             return {
                 _id: newComment._id,
@@ -83,10 +83,11 @@ const addComment = {
                 commentText: newComment.commentText,
                 strengths: newComment.strengths,
                 weaknesses: newComment.weaknesses,
-                status: newComment.status,
+                status: "active", // برای سازگاری
                 createdAt: newComment.createdAt.toISOString(),
                 updatedAt: newComment.updatedAt.toISOString(),
             };
+
         } catch (error) {
             throw new Error(`خطا در ایجاد کامنت جدید ${error.message}`)
         }
@@ -122,11 +123,6 @@ const replyToComment = {
                 throw new Error("کامنت مورد نظر برای پاسخ یافت نشد")
             }
 
-            // حذف این شرط برای اجازه دادن به پاسخ کامنت‌های pending
-            // if (!parentComment.status.includes("active")) {
-            //     throw new Error("فقط به کامنت‌های تایید شده می‌توان پاسخ داد");
-            // }
-            
             // پیدا کردن محصول مربوطه
             const productDoc = await ProductModel.findById(parentComment.product);
             if (!productDoc) {
@@ -146,7 +142,7 @@ const replyToComment = {
                 weaknesses: [], // نقاط ضعف برای پاسخ‌ها نیاز نیست
                 parent: parentId,
                 isReply: true,
-                status: "active" // همیشه active باشد
+                status: "active" // نگه داشتن فیلد برای سازگاری
             });
 
 
@@ -157,7 +153,7 @@ const replyToComment = {
             // اضافه کردن آیدی کامنت پاسخ به لیست comments کاربر
             UserDoc.comments.push(replyComment._id);
             await UserDoc.save();
-            
+
             // اضافه کردن آیدی کامنت پاسخ به لیست comments محصول
             productDoc.comments.push(replyComment._id);
             await productDoc.save();
@@ -180,7 +176,7 @@ const replyToComment = {
                 parent: parentComment,
                 replies: [],
                 isReply: replyComment.isReply,
-                status: replyComment.status,
+                status: "active", // برای سازگاری
                 createdAt: replyComment.createdAt.toISOString(),
                 updatedAt: replyComment.updatedAt.toISOString(),
             };
