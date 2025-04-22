@@ -13,7 +13,7 @@ function ProductDesc({ product }) {
     const [productCount, setProductCount] = useState(1);
     // اضافه کردن state برای مدیریت رنگ انتخاب شده
     const [selectedColor, setSelectedColor] = useState(null);
-    
+
     // استفاده از هوک useCart برای دسترسی به عملکردهای سبد خرید
     const { addToCart, loading, error } = useCart();
 
@@ -53,7 +53,7 @@ function ProductDesc({ product }) {
 
         // احتمال دارد سلر‌آیدی نیاز باشد
         const sellerId = product?.sellers && product.sellers.length > 0 ? product.sellers[0]._id : null;
-        
+
         addToCart(product, productCount, selectedColor, null, sellerId);
     };
 
@@ -85,6 +85,8 @@ function ProductDesc({ product }) {
         rating: 4.5,
         stock: 14
     };
+    console.log('productData ===>', productData);
+    
 
     return (
         <div className={`${styles.product_desc} py-20`}>
@@ -149,12 +151,12 @@ function ProductDesc({ product }) {
                                     <div className="row align-items-center gy-2">
                                         <div className="col-4">
                                             <div className={styles.product_float_image}>
-                                                <img src={productData.image || "/images/product/laptop-1.jpg"} className='img-fluid' alt="" />
+                                                <img src={`/images/product/${productData.image }`} className='img-fluid' alt="" />
                                             </div>
                                         </div>
                                         <div className="col-8">
                                             <div className={styles.product_float_title}>
-                                                <h6 className='font-16'>
+                                                <h6 className='font-16 text-truncate' style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {productData.title || productData.originalName}
                                                 </h6>
                                             </div>
@@ -193,12 +195,12 @@ function ProductDesc({ product }) {
                                 <div className={`${styles.product_float_brand} my-3`}>
                                     {productData.brandIcon && (
                                         <div className="d-inline">
-                                            <img src={productData.brandIcon.startsWith('/') ? productData.brandIcon : `/images/${productData.brandIcon}`} 
+                                            <img src={productData.brandIcon.startsWith('/') ? productData.brandIcon : `/images/${productData.brandIcon}`}
                                                 className='img-fluid' alt="برند محصول" />
                                         </div>
                                     )}
                                 </div>
-                                
+
                                 {/* امتیاز و نظرات */}
                                 <div className={styles.product_meta_rating}>
                                     <div className='d-flex align-items-center'>
@@ -211,18 +213,18 @@ function ProductDesc({ product }) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {/* گارانتی */}
                                 <div className={`${styles.product_meta_garanty} justify-content-start`}>
                                     <i className='bi bi-shield-fill-check'></i>
                                     <span className='text-muted'>گارانتی اصالت و سلامت فیزیکی کالا</span>
                                 </div>
-                                
+
                                 {/* موجودی */}
                                 <div className={`${styles.productmeta_count} text-muted mt-2`}>
                                     <span>{productData.stock || '0'} عدد در انبار</span>
                                 </div>
-                                
+
                                 {/* قیمت */}
                                 <div className={`${styles.product_meta_price} p-0 bg-transparent shadow-none mt-3`} >
                                     <div className='row gy-3'>
@@ -235,7 +237,7 @@ function ProductDesc({ product }) {
                                         )}
                                         <div className="col-6 w-100-in-400">
                                             <h6 className={`font-16 ${styles.new_price} main-color-one-color`}>
-                                                {productData.hasDiscount 
+                                                {productData.hasDiscount
                                                     ? (productData.discountedPrice ? `${productData.discountedPrice.toLocaleString()} تومان` : '1,200,000 تومان')
                                                     : (productData.price ? `${productData.price.toLocaleString()} تومان` : '1,200,000 تومان')
                                                 }
@@ -243,7 +245,7 @@ function ProductDesc({ product }) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {/* کنترل تعداد و دکمه خرید */}
                                 <div className={`${styles.product_meta_action} p-0 bg-transparent shadow-none mt-3`}>
                                     <div className="row gy-3">
