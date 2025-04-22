@@ -12,6 +12,15 @@ const CartProductItem = ({ item }) => {
     if (!item || !item.product) {
         return null;
     }
+    
+    // لاگ برای اشکال‌زدایی
+    console.log("مشخصات محصول در سبد خرید:", {
+        id: item._id,
+        title: item.product.title,
+        image: item.product.image,
+        price: item.product.price,
+        quantity: item.quantity
+    });
 
     // افزایش تعداد محصول
     const increaseQuantity = () => {
@@ -73,7 +82,9 @@ const CartProductItem = ({ item }) => {
                                 <div className="col-2 w-100-in-400">
                                     <div className={styles.image}>
                                         <img
-                                            src={`/images/product/${item.product.image}`}
+                                            src={item.product.image && item.product.image.startsWith('/') 
+                                                ? item.product.image  // اگر مسیر کامل بود
+                                                : `/images/product/${item.product.image}`}  // اگر فقط نام فایل بود
                                             alt={item.product.title}
                                             className='img-fluid'
                                         />
