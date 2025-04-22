@@ -326,7 +326,6 @@ function Comments({ product }) {
       return null;
     }
 
-
     // بررسی ساختار کامل کامنت
     console.log(`ساختار کامل کامنت ${comment._id}:`, comment);
     console.log(`comment.name: ${comment.name}, comment.user?.username: ${comment.user?.username}`);
