@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './productDetail.module.css';
 import { useCart } from '@/Redux/hooks/useCart';
+import { toast } from 'react-toastify'; // اضافه کردن toast
 
 function ProductDetail({ product }) {
 
@@ -83,7 +84,37 @@ function ProductDetail({ product }) {
         // تنها نام رنگ را ارسال کنید، نه کل شیء رنگ
         const colorValue = selectedColor;
 
-        addToCart(product, quantity, colorValue, null, selectedSeller._id);
+        // آماده‌سازی داده‌های محصول برای انتقال به سبد خرید
+        const productData = {
+            ...product,
+            // اطمینان از وجود image به صورت مسیر کامل
+            image: product.image ? 
+                (product.image.startsWith('/') ? product.image : `/images/product/${product.image}`) : 
+                '/images/product/product-placeholder.jpg',
+        };
+
+        console.log('Adding product to cart with these data:', {
+            product: productData,
+            quantity,
+            color: colorValue,
+            seller: selectedSeller._id
+        });
+
+        // افزودن به سبد خرید با استفاده از addToCart
+        addToCart(productData, quantity, colorValue, null, selectedSeller._id)
+            .unwrap()
+            .then(() => {
+                // نمایش پیام موفقیت
+                toast.success(`${product.title} به سبد خرید اضافه شد`, {
+                    position: "bottom-right",
+                    autoClose: 3000
+                });
+            })
+            .catch((error) => {
+                console.error('Error adding to cart:', error);
+                // نمایش پیام خطا
+                toast.error('خطا در افزودن به سبد خرید: ' + (error.message || 'خطای ناشناخته'));
+            });
     };
 
     // اگر اطلاعات محصول هنوز لود نشده‌اند
