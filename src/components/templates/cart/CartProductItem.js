@@ -10,18 +10,10 @@ const CartProductItem = ({ item }) => {
 
     // اگر آیتم وجود نداشته باشد
     if (!item || !item.product) {
+        console.log("آیتم یا محصول وجود ندارد:", item);
         return null;
     }
     
-    // لاگ برای اشکال‌زدایی
-    console.log("مشخصات محصول در سبد خرید:", {
-        id: item._id,
-        title: item.product.title,
-        image: item.product.image,
-        price: item.product.price,
-        quantity: item.quantity
-    });
-
     // افزایش تعداد محصول
     const increaseQuantity = () => {
         if (item.product.stock > item.quantity) {
@@ -58,6 +50,32 @@ const CartProductItem = ({ item }) => {
         ? Math.round(((item.product.price - item.product.discountedPrice) / item.product.price) * 100)
         : 0;
 
+    // تعیین تصویر محصول
+    const getProductImage = () => {
+        // بررسی تمام حالت‌های ممکن برای تصویر محصول
+        if (item.product.image) {
+            // اگر مسیر شامل "/images/product/" باشد
+            if (item.product.image.includes('/images/product/')) {
+                return item.product.image;
+            }
+            // اگر فقط نام فایل باشد و نه مسیر کامل
+            return `/images/product/${item.product.image}`;
+        }
+        
+        // اگر آرایه تصاویر وجود داشته باشد
+        if (item.product.images && item.product.images.length > 0) {
+            // اگر مسیر تصویر اول شامل "/images/product/" باشد
+            if (item.product.images[0].includes('/images/product/')) {
+                return item.product.images[0];
+            }
+            // اگر فقط نام فایل باشد و نه مسیر کامل
+            return `/images/product/${item.product.images[0]}`;
+        }
+        
+        // اگر هیچ تصویری یافت نشد
+        return "/images/product/product-placeholder.jpg";
+    };
+
     // دریافت کد رنگ بر اساس نام رنگ
     const getColorCode = (colorName) => {
         const colorMap = {
@@ -80,13 +98,16 @@ const CartProductItem = ({ item }) => {
                         <div className={styles.item}>
                             <div className="row gy-2">
                                 <div className="col-2 w-100-in-400">
-                                    <div className={styles.image}>
+                                <div className={styles.image}>
                                         <img
-                                            src={item.product.image && item.product.image.startsWith('/') 
-                                                ? item.product.image  // اگر مسیر کامل بود
-                                                : `/images/product/${item.product.image}`}  // اگر فقط نام فایل بود
-                                            alt={item.product.title}
+                                            src={getProductImage()}
+                                            alt={item.product.title || "محصول"}
                                             className='img-fluid'
+                                            onError={(e) => {
+                                                console.log("خطا در بارگذاری تصویر:", getProductImage());
+                                                e.target.onerror = null;
+                                                e.target.src = "/images/product/product-placeholder.jpg";
+                                            }}
                                         />
                                     </div>
                                 </div>
