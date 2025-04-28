@@ -41,18 +41,8 @@ const addCategory = {
     }
 };
 
-const getCategories = {
-    type: new GraphQLList(CategoryType),
-    resolve: async () => {
-        try {
-            return await CategoryModel.find();
-        } catch (error) {
-            throw new Error(`خطا در گرفتن دسته‌بندی‌ها ${error.message}`)
-        }
-    }
-}
+
 
 module.exports = {
     addCategory,
-    getCategories,
 };
