@@ -1,3 +1,4 @@
+'use client'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../actions/categoryThunks';
 import { useEffect } from 'react';
