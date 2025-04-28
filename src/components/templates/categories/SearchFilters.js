@@ -1,20 +1,46 @@
 'use client'
-import React, { useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './SearchFilters.module.css';
 import PriceRangeSlider from './PriceRangeSlider';
 import { useCategory } from '../../../Redux/hooks/useCategory';
 import { useProduct } from '../../../Redux/hooks/useProduct';
+import { useFilter } from '../../../Redux/hooks/useFilter';
 
 const SearchFilters = () => {
     const { categories, loading: categoriesLoading } = useCategory();
     const { products, productsLoading } = useProduct();
-    
+    const {
+        categories: selectedCategoryIds,
+        priceRange,
+        selectedColor,
+        searchTerm,
+        updateCategories,
+        updatePriceRange,
+        updateSelectedColor,
+        updateSearchTerm,
+        applyFilters
+    } = useFilter();
+
+    // state‌های محلی برای نگهداری تغییرات موقت قبل از اعمال
+    const [localCategories, setLocalCategories] = useState(selectedCategoryIds);
+    const [localColor, setLocalColor] = useState(selectedColor);
+    const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+    const [localPriceRange, setLocalPriceRange] = useState(priceRange);
+
+    // همگام‌سازی state‌های محلی با redux state
+    useEffect(() => {
+        setLocalCategories(selectedCategoryIds);
+        setLocalColor(selectedColor);
+        setLocalSearchTerm(searchTerm);
+        setLocalPriceRange(priceRange);
+    }, [selectedCategoryIds, selectedColor, searchTerm, priceRange]);
+
     // استخراج رنگ‌های منحصر به فرد از محصولات
-    const uniqueColors = useMemo(() => {
+    const uniqueColors = React.useMemo(() => {
         if (!products || products.length === 0) return [];
-        
+
         const colorMap = new Map();
-        
+
         products.forEach(product => {
             if (product.colors && Array.isArray(product.colors)) {
                 product.colors.forEach(colorObj => {
@@ -24,7 +50,7 @@ const SearchFilters = () => {
                 });
             }
         });
-        
+
         return Array.from(colorMap.keys());
     }, [products]);
 
@@ -47,7 +73,7 @@ const SearchFilters = () => {
             'silver': 'نقره‌ای',
             // سایر رنگ‌ها را می‌توانید اضافه کنید
         };
-        
+
         return colorTranslations[colorName.toLowerCase()] || colorName;
     };
 
@@ -70,7 +96,7 @@ const SearchFilters = () => {
             'silver': '#c0c0c0',
             // سایر کدهای رنگ را می‌توانید اضافه کنید
         };
-        
+
         return colorCodes[colorName.toLowerCase()] || '#000000';
     };
 
@@ -89,8 +115,49 @@ const SearchFilters = () => {
             // می‌توانید آیکون‌های بیشتری اضافه کنید
             'default': 'bi-tag' // آیکون پیش‌فرض
         };
-        
+
         return iconMap[iconName] || iconMap.default;
+    };
+
+    // مدیریت تغییر در دسته‌بندی‌های انتخاب شده
+    const handleCategoryChange = (categoryId) => {
+        setLocalCategories(prev => {
+            if (prev.includes(categoryId)) {
+                return prev.filter(id => id !== categoryId);
+            } else {
+                return [...prev, categoryId];
+            }
+        });
+    };
+
+    // مدیریت تغییر در رنگ انتخاب شده
+    const handleColorChange = (color) => {
+        setLocalColor(prev => prev === color ? '' : color);
+    };
+
+    // مدیریت تغییر در عبارت جستجو
+    const handleSearchChange = (e) => {
+        setLocalSearchTerm(e.target.value);
+    };
+
+    // مدیریت تغییر در بازه قیمت (از PriceRangeSlider)
+    const handlePriceRangeChange = (newRange) => {
+        setLocalPriceRange(newRange);
+    };
+
+    // جستجوی فوری
+    const handleSearchNow = () => {
+        updateSearchTerm(localSearchTerm);
+    };
+
+    // اعمال همه فیلترها
+    const handleApplyFilters = (e) => {
+        e.preventDefault();
+
+        updateCategories(localCategories);
+        updatePriceRange(localPriceRange);
+        updateSelectedColor(localColor);
+        updateSearchTerm(localSearchTerm);
     };
 
     return (
@@ -102,8 +169,18 @@ const SearchFilters = () => {
                         <div className={styles.search_form}>
                             <form action="">
                                 <div className={styles.search_field}>
-                                    <input type="text" placeholder='جستجوی محصولات ...' className={`form-control ${styles.search_input}`} />
-                                    <button className={`btn main-color-one-bg rounded-pill ${styles.search_btn}`} type='submit'>
+                                    <input
+                                        type="text"
+                                        placeholder='جستجوی محصولات ...'
+                                        className={`form-control ${styles.search_input}`}
+                                        value={localSearchTerm}
+                                        onChange={handleSearchChange}
+                                    />
+                                    <button
+                                        className={`btn main-color-one-bg rounded-pill ${styles.search_btn}`}
+                                        type='button'
+                                        onClick={handleSearchNow}
+                                    >
                                         <i className="bi bi-search"></i>
                                     </button>
                                 </div>
@@ -125,10 +202,12 @@ const SearchFilters = () => {
                                 categories.map((category) => (
                                     <div key={category._id} className='d-flex align-items-center justify-content-between flex-wrap mb-3'>
                                         <div className='form-check d-flex'>
-                                            <input 
-                                                type="checkbox" 
-                                                id={`category-${category._id}`} 
-                                                className='form-check-input ms-2' 
+                                            <input
+                                                type="checkbox"
+                                                id={`category-${category._id}`}
+                                                className='form-check-input ms-2'
+                                                checked={localCategories.includes(category._id)}
+                                                onChange={() => handleCategoryChange(category._id)}
                                             />
                                             <label htmlFor={`category-${category._id}`} className='form-check-label'>
                                                 {category.name}
@@ -147,7 +226,7 @@ const SearchFilters = () => {
                     </div>
                 </div>
                 <div className={styles.filter_item}>
-                    <PriceRangeSlider />
+                    <PriceRangeSlider onRangeChange={handlePriceRangeChange} initialRange={localPriceRange} />
                 </div>
                 <div className={styles.filter_item}>
                     <h5 className={styles.filter_item_title}>رنگ محصول</h5>
@@ -162,13 +241,14 @@ const SearchFilters = () => {
                             ) : uniqueColors.length > 0 ? (
                                 uniqueColors.map((color, index) => (
                                     <React.Fragment key={color}>
-                                        <input 
-                                            type="radio" 
-                                            className='btn-check' 
-                                            name='options' 
+                                        <input
+                                            type="radio"
+                                            className='btn-check'
+                                            name='options'
                                             id={`option-${index + 1}`}
                                             autoComplete='off'
-                                            defaultChecked={index === 0} 
+                                            checked={localColor === color}
+                                            onChange={() => handleColorChange(color)}
                                         />
                                         <label htmlFor={`option-${index + 1}`} className='btn'>
                                             <span style={{ backgroundColor: getColorCode(color) }}></span>
@@ -231,7 +311,7 @@ const SearchFilters = () => {
                     </div>
                 </div>
                 <div className={`${styles.filter_item} text-center`}>
-                    <a href="" className={styles.btn_outline_site}>
+                    <a href="#" onClick={handleApplyFilters} className={styles.btn_outline_site}>
                         اعمال فیلتر
                     </a>
                 </div>
@@ -240,4 +320,4 @@ const SearchFilters = () => {
     )
 }
 
-export default SearchFilters
+export default SearchFilters;
