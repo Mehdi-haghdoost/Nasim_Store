@@ -1,71 +1,68 @@
 // src/Redux/actions/filterThunks.js
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setFilteredProducts } from "../slices/filterSlice";
-import { fetchProducts } from "./productThunks";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchProducts } from './productThunks';
 
 export const filterProducts = createAsyncThunk(
-    'filter/filterProducts',
-    async (_, { getState, dispatch }) => {
-        const { product, filter } = getState();
-        
-        // اگر محصولات هنوز بارگذاری نشده‌اند، بارگذاری کنید
-        if (!product.products || product.products.length === 0) {
-            console.log("بارگذاری محصولات قبل از فیلتر...");
-            await dispatch(fetchProducts()).unwrap();
+  'filter/filterProducts',
+  async (_, { getState, dispatch }) => {
+    const state = getState();
+    const { products } = state.product;
+    const { categories, priceRange, selectedColor, searchTerm } = state.filter;
+
+    console.log('شروع فیلتر کردن', products.length, 'محصول با فیلترهای:', {
+      'دسته‌بندی‌ها': categories,
+      قیمت: priceRange,
+      رنگ: selectedColor,
+      جستجو: searchTerm,
+    });
+
+    let result = [...products];
+
+    // Filter by categories
+    if (categories.length > 0) {
+      result = result.filter((product) => {
+        const productCategoryId = product.category._id.toString();
+        const matches = categories.some((catId) => catId.toString() === productCategoryId);
+        if (matches) {
+          console.log('محصول منطبق با دسته‌بندی:', product.title, '-', productCategoryId);
         }
-        
-        // دریافت state به‌روز شده
-        const state = getState();
-        const { products } = state.product;
-        const { categories, priceRange, selectedColor, searchTerm } = state.filter;
-        
-        if (!products || products.length === 0) {
-            console.log("هیچ محصولی برای فیلتر وجود ندارد");
-            dispatch(setFilteredProducts([]));
-            return;
-        }
-        
-        let result = [...products];
-        
-        // فیلتر بر اساس دسته‌بندی
-        if (categories && categories.length > 0) {
-            result = result.filter(product => {
-                if (!product.category || !product.category._id) return false;
-                
-                const productCategoryId = product.category._id.toString();
-                return categories.some(catId => catId.toString() === productCategoryId);
-            });
-        }
-        
-        // فیلتر بر اساس بازه قیمت
-        if (priceRange) {
-            result = result.filter(product => {
-                const price = product.hasDiscount ? product.discountedPrice : product.price;
-                return price >= priceRange.min && price <= priceRange.max;
-            });
-        }
-        
-        // فیلتر بر اساس رنگ
-        if (selectedColor) {
-            result = result.filter(product => {
-                if (!product.colors || !Array.isArray(product.colors)) return false;
-                
-                return product.colors.some(c => 
-                    c.color && c.color.toLowerCase() === selectedColor.toLowerCase() && c.available
-                );
-            });
-        }
-        
-        // فیلتر بر اساس عبارت جستجو
-        if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            result = result.filter(product => 
-                product.title.toLowerCase().includes(term) || 
-                (product.originalName && product.originalName.toLowerCase().includes(term))
-            );
-        }
-        
-        console.log(`${result.length} محصول پس از اعمال فیلترها یافت شد`);
-        dispatch(setFilteredProducts(result));
+        return matches;
+      });
+      console.log('فیلتر دسته‌بندی: از', products.length, 'به', result.length, 'محصول');
     }
+
+    // Filter by price range
+    result = result.filter((product) => {
+      const price = product.hasDiscount ? product.discountedPrice : product.price;
+      const matches = price >= priceRange.min && price <= priceRange.max;
+      return matches;
+    });
+    console.log('فیلتر قیمت: از', products.length, 'به', result.length, 'محصول');
+
+    // Filter by color (only if selectedColor is not empty)
+    if (selectedColor) {
+      result = result.filter((product) => {
+        const matches = product.colors.some((c) => c.color === selectedColor && c.available);
+        return matches;
+      });
+      console.log('فیلتر رنگ: از', products.length, 'به', result.length, 'محصول');
+    }
+
+    // Filter by search term
+    if (searchTerm) {
+      const searchTermLower = searchTerm.toLowerCase().trim();
+      result = result.filter((product) => {
+        return (
+          product.title.toLowerCase().includes(searchTermLower) ||
+          product.originalName.toLowerCase().includes(searchTermLower) ||
+          product.description.toLowerCase().includes(searchTermLower)
+        );
+      });
+      console.log('فیلتر جستجو: از', products.length, 'به', result.length, 'محصول');
+    }
+
+    console.log('محصولات فیلترشده نهایی:', result.map(p => p.title));
+    console.log(result.length, 'محصول پس از اعمال همه فیلترها یافت شد');
+    return result;
+  }
 );

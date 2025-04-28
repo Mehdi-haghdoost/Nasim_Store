@@ -1,5 +1,4 @@
-'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from '@/styles/categories.module.css';
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
 import Footer from '@/components/modules/footer/Footer'
@@ -9,23 +8,8 @@ import CategoryBrand from '@/components/templates/categories/CategoryBrand'
 import CategoryItems from '@/components/templates/categories/CategoryItems'
 import CategorySort from '@/components/templates/categories/CategorySort'
 import SearchFilters from '@/components/templates/categories/SearchFilters'
-import { useProduct } from '@/Redux/hooks/useProduct';
-import { useDispatch } from 'react-redux';
-import { setCategories } from '@/Redux/slices/filterSlice';
 
-const CategoriesPage = () => {
-    const { getProducts } = useProduct();
-    const dispatch = useDispatch();
-
-    // بارگذاری اولیه محصولات و تنظیم دسته‌بندی پیش‌فرض (لپتاپ)
-    useEffect(() => {
-        // بارگذاری محصولات
-        getProducts();
-        
-        // تنظیم دسته‌بندی پیش‌فرض (لپتاپ)
-        dispatch(setCategories(["67d81dc038f26307f0415442"]));
-    }, [dispatch, getProducts]);
-
+const page = () => {
     return (
         <>
             <Header />
@@ -45,8 +29,8 @@ const CategoriesPage = () => {
                             <i className="bi bi-funnel font-20 fw-bold text-white"></i>
                             <span className="d-block font-14 text-white">فیلتر</span>
                         </button>
-                        
-                        <div className='offcanvas offcanvas-end' tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+
+                        <div className='offcanvas offcanvas-end' tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                             <div className='offcanvas-header justify-content-between'>
                                 <h5 className='offcanvas-title' id="offcanvasRightLabel">
                                     فیلترها
@@ -58,9 +42,9 @@ const CategoriesPage = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* end filter mobile */}
-                    
+
                     <div className="row gy-3">
                         <div className="col-lg-3 d-lg-block d-none">
                             <SearchFilters />
@@ -78,4 +62,4 @@ const CategoriesPage = () => {
     )
 }
 
-export default CategoriesPage;
+export default page

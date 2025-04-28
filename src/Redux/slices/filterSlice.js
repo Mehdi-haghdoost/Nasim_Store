@@ -1,4 +1,6 @@
+// src/Redux/slices/filterSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { filterProducts } from '../actions/filterThunks';
 
 const initialState = {
     categories: [],
@@ -36,6 +38,19 @@ const filterSlice = createSlice({
             state.selectedColor = '';
             state.searchTerm = '';
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(filterProducts.pending, (state) => {
+                // Optional: Set loading state if needed
+            })
+            .addCase(filterProducts.fulfilled, (state, action) => {
+                state.filteredProducts = action.payload;
+            })
+            .addCase(filterProducts.rejected, (state, action) => {
+                state.filteredProducts = [];
+                // Optional: Handle error
+            });
     }
 });
 

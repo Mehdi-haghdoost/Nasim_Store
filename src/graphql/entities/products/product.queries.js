@@ -79,23 +79,21 @@ export const GET_PRODUCT = gql`
 
 export const GET_PRODUCTS = gql`
   query GetProducts {
-    products {
-      _id
-      image
-      title
-      originalName
-      price
-      discountedPrice
-      hasDiscount
-      stock
-      rating
-      category {
-        _id
-        name
-        icon
-      }
-    }
+  bestSellingProducts {
+    _id
+    image
+    title
+    originalName
+    price
+    discountedPrice
+    hasDiscount
+    stock
+    rating
+    comments { _id }
+    colors { color available }
+    category { _id name icon }
   }
+}
 `;
 
 export const GET_SIMILAR_PRODUCTS = gql`

@@ -1,24 +1,12 @@
 // src/Redux/hooks/useProduct.js
-'use client'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProduct, fetchProducts } from "../actions/productThunks";
-import { clearError, clearProduct } from "../slices/productSlice";
+import { clearError, clearProduct, clearProducts } from "../slices/productSlice";
 import { useEffect } from "react";
 
 export const useProduct = () => {
     const dispatch = useDispatch();
     const productState = useSelector(state => state.product);
-    
-    // محصولات را از استیت ریداکس می‌گیریم
-    const { product, products, loading, productsLoading, error } = productState;
-
-    useEffect(() => {
-        // اگر محصولات هنوز لود نشده باشند، درخواست کن
-        if (products && products.length === 0 && !productsLoading) {
-            console.log("درخواست بارگذاری محصولات...");
-            dispatch(fetchProducts());
-        }
-    }, [dispatch, products, productsLoading]);
 
     const getProduct = (id) => {
         dispatch(clearError()); // پاک کردن خطا قبل از درخواست
@@ -34,16 +22,29 @@ export const useProduct = () => {
         return dispatch(fetchProducts());
     };
 
+    const resetProducts = () => {
+        return dispatch(clearProducts());
+    };
+
+    // لود خودکار محصولات هنگام اولین استفاده از هوک (اختیاری)
+    useEffect(() => {
+        if (productState.products.length === 0 && !productState.productsLoading && !productState.productsError) {
+            getProducts();
+        }
+    }, []);
+
     return {
-        product,
-        products: products || [],
-        loading,
-        productsLoading,
-        error,
+        product: productState.product,
+        products: productState.products,
+        loading: productState.loading,
+        productsLoading: productState.productsLoading,
+        error: productState.error,
+        productsError: productState.productsError,
         getProduct,
         getProducts,
         clearError: () => dispatch(clearError()),
         resetProduct,
+        resetProducts,
     };
 };
 

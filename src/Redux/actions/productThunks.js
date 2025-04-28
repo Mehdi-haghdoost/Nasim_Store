@@ -32,21 +32,25 @@ export const fetchProducts = createAsyncThunk(
     'product/fetchProducts',
     async (_, { rejectWithValue }) => {
         try {
+            console.log("درخواست محصولات از سرور با bestSellingProducts...");
             const { data, errors } = await client.query({
                 query: GET_PRODUCTS,
                 fetchPolicy: 'network-only',
             });
             
             if (errors && Array.isArray(errors) && errors.length > 0) {
+                console.error("خطا در دریافت محصولات:", errors);
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
             
-            if (data?.products) {
-                return data.products;
+            if (data?.bestSellingProducts) {
+                console.log(`${data.bestSellingProducts.length} محصول دریافت شد`);
+                return data.bestSellingProducts;
             }
             
             return rejectWithValue('محصولات یافت نشد');
         } catch (error) {
+            console.error("خطا در درخواست GraphQL:", error);
             return rejectWithValue(error.message || 'خطا در دریافت محصولات');
         }
     }

@@ -1,58 +1,32 @@
-'use client'
-import React, { useEffect } from 'react'
-import styles from './CategoryItems.module.css';
+"use client";
+
+import React from 'react';
+import { useFilter } from '@/Redux/hooks/useFilter';
 import ProductBox from '@/components/modules/categories/ProductBox';
-import { useSelector, useDispatch } from 'react-redux';
-import { filterProducts } from '../../../Redux/actions/filterThunks';
-import { useProduct } from '../../../Redux/hooks/useProduct';
+import styles from './CategoryItems.module.css';
 
 const CategoryItems = () => {
-    const dispatch = useDispatch();
-    const { getProducts, products, productsLoading } = useProduct();
-    const { filteredProducts } = useSelector(state => state.filter);
+  const { filteredProducts, isLoading } = useFilter();
 
-    // بارگذاری محصولات و فیلتر اولیه
-    useEffect(() => {
-        if (!productsLoading && (!products || products.length === 0)) {
-            getProducts().then(() => {
-                dispatch(filterProducts());
-            });
-        } else if (!productsLoading && products.length > 0 && (!filteredProducts || filteredProducts.length === 0)) {
-            dispatch(filterProducts());
-        }
-    }, [dispatch, getProducts, products, productsLoading, filteredProducts]);
+  console.log('CategoryItems - isLoading:', isLoading);
+  console.log('CategoryItems - filteredProducts:', filteredProducts);
+  console.log('CategoryItems - filteredProducts length:', filteredProducts.length);
 
-    // انتخاب محصولات برای نمایش (فیلتر شده یا همه)
-    const displayProducts = filteredProducts && filteredProducts.length > 0 ? filteredProducts : products;
-
-    if (productsLoading) {
-        return (
-            <div className="d-flex justify-content-center my-5">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">در حال بارگذاری...</span>
-                </div>
-            </div>
-        );
-    }
-
-    if (!displayProducts || displayProducts.length === 0) {
-        return (
-            <div className="alert alert-info text-center my-5">
-                <i className="bi bi-exclamation-circle-fill me-2"></i>
-                محصولی با این مشخصات یافت نشد.
-            </div>
-        );
-    }
-
-    return (
-        <div className={styles.category_items}>
-            <div className="row g-3">
-                {displayProducts.map(product => (
-                    <ProductBox key={product._id} product={product} />
-                ))}
-            </div>
+  return (
+    <div className={styles.category_items}>
+      {isLoading ? (
+        <p>در حال بارگذاری محصولات...</p>
+      ) : filteredProducts.length === 0 ? (
+        <p>محصولی یافت نشد</p>
+      ) : (
+        <div className="row g-3">
+          {filteredProducts.map((product) => (
+            <ProductBox key={product._id} product={product} />
+          ))}
         </div>
-    );
-}
+      )}
+    </div>
+  );
+};
 
 export default CategoryItems;

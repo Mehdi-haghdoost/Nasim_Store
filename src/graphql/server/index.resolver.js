@@ -24,13 +24,14 @@ const { getUserCart } = require("./queries/cart.resolvers");
 const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
 const { product, similarProducts, bestSellingProducts } = require("./queries/product.resolvers");
-const { getCategories } = require("./queries/category.resolvers");
+const { getCategories, CategoryResolvers } = require("./queries/category.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     fields: {
         getCategories,
+        CategoryResolvers,
         getProductComments,
         getAllAddress,
         linkExistingAddresses,

@@ -771,6 +771,12 @@ tag.tagify__tag {
   transform: translate(-50%, -50%);
 }
 
+.product-meta-color-items .btn-check:checked+.btn {
+  border: 2px solid #ffa41b !important;
+  box-shadow: 0 5px 5px rgba(255, 164, 27, 0.2) !important;
+  background-color: white !important;
+}
+
 /* end productDtail */
 
 /* swiper */

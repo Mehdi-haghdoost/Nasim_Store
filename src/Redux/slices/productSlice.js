@@ -47,7 +47,7 @@ const productSlice = createSlice({
                 state.error = action.payload || 'خطا در دریافت محصول';
                 state.product = null;
             })
-            
+
             // مدیریت دریافت همه محصولات
             .addCase(fetchProducts.pending, (state) => {
                 state.productsLoading = true;
