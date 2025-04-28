@@ -9,7 +9,7 @@ const { registerUser,
     sendOtpForLogin,
     verifyOtpAndLogin, } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
-const { addCategory, getCategories } = require("./mutations/category.resolvers");
+const { addCategory } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
 const { addComment, replyToComment } = require("./mutations/comment.resolvers");
 const { getProductComments } = require("./queries/user.resolvers");
@@ -24,6 +24,7 @@ const { getUserCart } = require("./queries/cart.resolvers");
 const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
 const { product, similarProducts, bestSellingProducts } = require("./queries/product.resolvers");
+const { getCategories } = require("./queries/category.resolvers");
 
 
 const RootQuery = new GraphQLObjectType({
