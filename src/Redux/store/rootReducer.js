@@ -4,6 +4,7 @@ import cartReducer from '../slices/cartSlice';
 import productReducer from '../slices/productSlice';
 import toastReducer from '../slices/toastSlice';
 import commentReducer from '../slices/commentSlice';
+import categoryReducer from '../slices/categorySlice';
 
 /**
  * Root reducer combining all slice reducers
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
     product: productReducer,
     toast: toastReducer,
     comment: commentReducer,
+    category: categoryReducer,
 });
