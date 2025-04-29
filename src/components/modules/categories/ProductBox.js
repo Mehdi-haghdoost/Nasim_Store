@@ -74,7 +74,6 @@ const ProductBox = ({ product }) => {
                         </div>
                     </div>
                 </Link>
-                {/* قیمت و دکمه خرید */}
                 <div className={styles.product_action}>
                     <div className={styles.price}>
                         <p className={styles.new_price}>
@@ -85,12 +84,6 @@ const ProductBox = ({ product }) => {
                                 {price.toLocaleString('fa-IR')} تومان
                             </p>
                         )}
-                    </div>
-                    <div className={styles.link}>
-                        <Link href={productUrl} className="btn border-0 rounded-3 main-color-one-bg">
-                            <i className="bi bi-basket text-white"></i>
-                            <span className="text-white">خرید محصول</span>
-                        </Link>
                     </div>
                 </div>
             </div>
