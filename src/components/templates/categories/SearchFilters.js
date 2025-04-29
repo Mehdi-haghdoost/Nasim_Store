@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCategory } from '@/Redux/hooks/useCategory';
 import { useFilter } from '@/Redux/hooks/useFilter';
 import { filterProducts } from '@/Redux/actions/filterThunks';
@@ -13,6 +13,20 @@ const SearchFilters = () => {
   const { categories: filterCategories, updateCategories, updateSearchTerm, updateSelectedColor, priceRange, selectedColor } = useFilter();
   const { categories, loading, error } = useCategory();
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Auto-select first category when categories are loaded and no category is selected yet
+  useEffect(() => {
+    if (!loading && !error && categories.length > 0 && filterCategories.length === 0) {
+      // Select the first category automatically
+      const firstCategoryId = categories[0]._id;
+      updateCategories([firstCategoryId]);
+      
+      // Apply the filter after selecting the first category
+      setTimeout(() => {
+        dispatch(filterProducts());
+      }, 100);
+    }
+  }, [categories, loading, error, filterCategories, updateCategories, dispatch]);
 
   // Handle category checkbox changes
   const handleCategoryChange = (categoryId) => {
@@ -49,7 +63,7 @@ const SearchFilters = () => {
     // If there's an error or no categories, show the user-friendly message
     if (error || categories.length === 0) {
       return <div className="alert alert-danger py-2" role="alert">
-        <i className="bi bi-exclamation-triangle-fill ms-2"></i>
+        <i className="bi bi-exclamation-triangle-fill me-2"></i>
         لیست دسته‌بندی‌ها موجود نیست
       </div>;
     }
