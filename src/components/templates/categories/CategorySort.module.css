@@ -13,12 +13,36 @@
     color: #81858b !important;
     font-size: 12px;
     margin-left: 2.5rem;
+    transition: all 0.3s ease;
 }
+
 .spanItem:last-child {
     margin: 0;
 }
 
-
+/* حالت انتخاب شده با رادیو باتن */
 .radio:checked+.spanItem {
     color: var(--main-color-one) !important;
+    font-weight: 700;
+}
+
+/* افزودن استایل‌های hover برای راحتی کاربر */
+.spanItem:hover {
+    color: var(--main-color-one) !important;
+}
+
+/* استایل برای کانتینر اصلی */
+.category_sort {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* پاسخگویی برای موبایل */
+@media (max-width: 768px) {
+    .spanItem {
+        margin-left: 1rem;
+        font-size: 11px;
+    }
 }

@@ -1,4 +1,3 @@
-// src/Redux/actions/filterThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchProducts } from './productThunks';
 
@@ -7,13 +6,14 @@ export const filterProducts = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const state = getState();
     const { products } = state.product;
-    const { categories, priceRange, selectedColor, searchTerm } = state.filter;
+    const { categories, priceRange, selectedColor, searchTerm, sortOption } = state.filter;
 
     console.log('شروع فیلتر کردن', products.length, 'محصول با فیلترهای:', {
       'دسته‌بندی‌ها': categories,
       قیمت: priceRange,
       رنگ: selectedColor,
       جستجو: searchTerm,
+      'نوع مرتب‌سازی': sortOption,
     });
 
     let result = [...products];
@@ -42,6 +42,10 @@ export const filterProducts = createAsyncThunk(
     // Filter by color (only if selectedColor is not empty)
     if (selectedColor) {
       result = result.filter((product) => {
+        // بررسی اینکه آیا رنگ‌ها وجود دارد
+        if (!product.colors || !Array.isArray(product.colors)) {
+          return false;
+        }
         const matches = product.colors.some((c) => c.color === selectedColor && c.available);
         return matches;
       });
@@ -54,11 +58,56 @@ export const filterProducts = createAsyncThunk(
       result = result.filter((product) => {
         return (
           product.title.toLowerCase().includes(searchTermLower) ||
-          product.originalName.toLowerCase().includes(searchTermLower) ||
-          product.description.toLowerCase().includes(searchTermLower)
+          (product.originalName && product.originalName.toLowerCase().includes(searchTermLower)) ||
+          (product.description && product.description.toLowerCase().includes(searchTermLower))
         );
       });
       console.log('فیلتر جستجو: از', products.length, 'به', result.length, 'محصول');
+    }
+
+    // اعمال مرتب‌سازی بر اساس گزینه انتخاب شده
+    if (sortOption && sortOption !== 'default') {
+      console.log('اعمال مرتب‌سازی:', sortOption);
+      
+      switch (sortOption) {
+        case 'rating-desc': // محبوب‌ترین
+          result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+          break;
+          
+        case 'sales-desc': // پرفروش‌ترین
+          result.sort((a, b) => (b.sales || 0) - (a.sales || 0));
+          break;
+          
+        case 'createdAt-desc': // جدیدترین
+          result.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return dateB - dateA;
+          });
+          break;
+          
+        case 'price-asc': // ارزان‌ترین
+          result.sort((a, b) => {
+            const priceA = a.hasDiscount ? a.discountedPrice : a.price;
+            const priceB = b.hasDiscount ? b.discountedPrice : b.price;
+            return priceA - priceB;
+          });
+          break;
+          
+        case 'price-desc': // گران‌ترین
+          result.sort((a, b) => {
+            const priceA = a.hasDiscount ? a.discountedPrice : a.price;
+            const priceB = b.hasDiscount ? b.discountedPrice : b.price;
+            return priceB - priceA;
+          });
+          break;
+          
+        default:
+          // پیش‌فرض - بدون تغییر
+          break;
+      }
+      
+      console.log('محصولات پس از مرتب‌سازی:', result.map(p => p.title));
     }
 
     console.log('محصولات فیلترشده نهایی:', result.map(p => p.title));

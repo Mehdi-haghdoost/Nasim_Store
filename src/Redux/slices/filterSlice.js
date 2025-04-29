@@ -1,4 +1,3 @@
-// src/Redux/slices/filterSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { filterProducts } from '../actions/filterThunks';
 
@@ -7,6 +6,7 @@ const initialState = {
     priceRange: { min: 0, max: 50000000 },
     selectedColor: '',
     searchTerm: '',
+    sortOption: 'default', // اضافه کردن گزینه مرتب‌سازی پیش‌فرض
     filteredProducts: []
 };
 
@@ -26,6 +26,9 @@ const filterSlice = createSlice({
         setSearchTerm: (state, action) => {
             state.searchTerm = action.payload;
         },
+        setSortOption: (state, action) => {
+            state.sortOption = action.payload;
+        },
         setFilters: (state, action) => {
             return { ...state, ...action.payload };
         },
@@ -37,6 +40,7 @@ const filterSlice = createSlice({
             state.priceRange = { min: 0, max: 50000000 };
             state.selectedColor = '';
             state.searchTerm = '';
+            state.sortOption = 'default';
         }
     },
     extraReducers: (builder) => {
@@ -59,6 +63,7 @@ export const {
     setPriceRange,
     setSelectedColor,
     setSearchTerm,
+    setSortOption,
     setFilters,
     setFilteredProducts,
     resetFilters
