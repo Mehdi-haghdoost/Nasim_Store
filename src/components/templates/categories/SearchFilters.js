@@ -40,6 +40,54 @@ const SearchFilters = () => {
     dispatch(filterProducts());
   };
 
+  // Function to render categories content based on loading and error states
+  const renderCategoriesContent = () => {
+    if (loading) {
+      return <p>در حال بارگذاری دسته‌بندی‌ها...</p>;
+    }
+
+    // If there's an error or no categories, show the user-friendly message
+    if (error || categories.length === 0) {
+      return <p>لیست دسته‌بندی‌ها موجود نیست</p>;
+    }
+
+    // If we have categories, render them
+    return (
+      <form>
+        {categories.map((category) => (
+          <div
+            key={category._id}
+            className="d-flex align-items-center justify-content-between flex-wrap mb-3"
+          >
+            <div className="form-check d-flex">
+              <input
+                type="checkbox"
+                id={`category-${category._id}`}
+                className="form-check-input ms-2"
+                checked={filterCategories.includes(category._id)}
+                onChange={() => handleCategoryChange(category._id)}
+              />
+              <label
+                htmlFor={`category-${category._id}`}
+                className="form-check-label"
+              >
+                {category.name}
+                {category.icon && (
+                  <i className={`bi bi-${category.icon} ms-1`}></i>
+                )}
+              </label>
+            </div>
+            <div>
+              <span className="fw-bold font-14">
+                ({category.products ? category.products.length : 0})
+              </span>
+            </div>
+          </div>
+        ))}
+      </form>
+    );
+  };
+
   return (
     <div className={`${styles.filter_items} position-sticky top-0`}>
       <div className="container-fluid">
@@ -74,46 +122,7 @@ const SearchFilters = () => {
         <div className={styles.filter_item}>
           <h5 className={styles.filter_item_title}>دسته‌بندی‌ها</h5>
           <div className={styles.filter_item_content}>
-            {loading ? (
-              <p>در حال بارگذاری دسته‌بندی‌ها...</p>
-            ) : error ? (
-              <p className="text-danger">خطا در بارگذاری دسته‌بندی‌ها: {error}</p>
-            ) : categories.length === 0 ? (
-              <p>دسته‌بندی‌ای یافت نشد</p>
-            ) : (
-              <form>
-                {categories.map((category) => (
-                  <div
-                    key={category._id}
-                    className="d-flex align-items-center justify-content-between flex-wrap mb-3"
-                  >
-                    <div className="form-check d-flex">
-                      <input
-                        type="checkbox"
-                        id={`category-${category._id}`}
-                        className="form-check-input ms-2"
-                        checked={filterCategories.includes(category._id)}
-                        onChange={() => handleCategoryChange(category._id)}
-                      />
-                      <label
-                        htmlFor={`category-${category._id}`}
-                        className="form-check-label"
-                      >
-                        {category.name}
-                        {category.icon && (
-                          <i className={`bi bi-${category.icon} ms-1`}></i>
-                        )}
-                      </label>
-                    </div>
-                    <div>
-                      <span className="fw-bold font-14">
-                        ({category.products ? category.products.length : 0})
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </form>
-            )}
+            {renderCategoriesContent()}
           </div>
         </div>
 
