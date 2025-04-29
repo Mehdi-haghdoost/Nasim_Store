@@ -43,14 +43,17 @@ const SearchFilters = () => {
   // Function to render categories content based on loading and error states
   const renderCategoriesContent = () => {
     if (loading) {
-      return <p>در حال بارگذاری دسته‌بندی‌ها...</p>;
+      return <p className="text-info"><i className="bi bi-hourglass-split me-2"></i>در حال بارگذاری دسته‌بندی‌ها...</p>;
     }
-
+    
     // If there's an error or no categories, show the user-friendly message
     if (error || categories.length === 0) {
-      return <p>لیست دسته‌بندی‌ها موجود نیست</p>;
+      return <div className="alert alert-danger py-2" role="alert">
+        <i className="bi bi-exclamation-triangle-fill ms-2"></i>
+        لیست دسته‌بندی‌ها موجود نیست
+      </div>;
     }
-
+    
     // If we have categories, render them
     return (
       <form>
