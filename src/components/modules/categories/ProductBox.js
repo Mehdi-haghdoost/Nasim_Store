@@ -1,4 +1,3 @@
-// src/components/modules/categories/ProductBox.js
 "use client";
 
 import React from 'react';
@@ -6,13 +5,18 @@ import Link from 'next/link';
 import styles from './ProductBox.module.css';
 
 const ProductBox = ({ product }) => {
+    // اگر محصول وجود نداشت چیزی نمایش نده
     if (!product) return null;
 
     const { _id, image, title, originalName, price, discountedPrice, hasDiscount, rating } = product;
+    
+    // ساخت آدرس URL محصول
+    const productUrl = `/product/${_id}`;
 
     return (
         <div className="col-lg-4">
             <div className={styles.product_box}>
+                {/* نمایش برچسب تخفیف اگر محصول تخفیف داشته باشد */}
                 {hasDiscount && (
                     <div className={styles.product_timer}>
                         <div className={styles.timer_label}>
@@ -40,30 +44,37 @@ const ProductBox = ({ product }) => {
                         </div>
                     </div>
                 )}
-                <div className={styles.product_image}>
-                    <img
-                        src={`/images/product/${product.image}`}
-                        loading="lazy"
-                        alt={title}
-                        className={`img-fluid ${styles.one_image}`}
-                    />
-                </div>
-                <div className={styles.product_title}>
-                    <div className={styles.title}>
-                        <p className="text-overflow-1">{title}</p>
-                        <span className="text-muted text-overflow-1">{originalName}</span>
+                {/* تصویر محصول - با لینک به صفحه محصول */}
+                <Link href={productUrl}>
+                    <div className={styles.product_image}>
+                        <img
+                            src={`/images/product/${product.image}`}
+                            loading="lazy"
+                            alt={title}
+                            className={`img-fluid ${styles.one_image}`}
+                        />
                     </div>
-                    <div className={styles.rating}>
-                        <div className={styles.number}>
-                            <span className="text-muted font-12">
-                                (0+) {rating || 0}
-                            </span>
+                </Link>
+                {/* عنوان و مشخصات محصول - با لینک به صفحه محصول */}
+                <Link href={productUrl} className="text-decoration-none text-dark">
+                    <div className={styles.product_title}>
+                        <div className={styles.title}>
+                            <p className="text-overflow-1">{title}</p>
+                            <span className="text-muted text-overflow-1">{originalName}</span>
                         </div>
-                        <div className={styles.icon}>
-                            <i className="bi bi-star-fill"></i>
+                        <div className={styles.rating}>
+                            <div className={styles.number}>
+                                <span className="text-muted font-12">
+                                    (0+) {rating || 0}
+                                </span>
+                            </div>
+                            <div className={styles.icon}>
+                                <i className="bi bi-star-fill"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </Link>
+                {/* قیمت و دکمه خرید */}
                 <div className={styles.product_action}>
                     <div className={styles.price}>
                         <p className={styles.new_price}>
@@ -76,7 +87,7 @@ const ProductBox = ({ product }) => {
                         )}
                     </div>
                     <div className={styles.link}>
-                        <Link href={`/product/${_id}`} className="btn border-0 rounded-3 main-color-one-bg">
+                        <Link href={productUrl} className="btn border-0 rounded-3 main-color-one-bg">
                             <i className="bi bi-basket text-white"></i>
                             <span className="text-white">خرید محصول</span>
                         </Link>
