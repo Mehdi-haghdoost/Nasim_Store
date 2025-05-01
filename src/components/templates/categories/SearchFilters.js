@@ -34,6 +34,14 @@ const SearchFilters = () => {
     updateSearchTerm('');
     setSearchTerm('');
   }, [dispatch]);
+  
+  // اعمال فیلتر بعد از دریافت محصولات
+  useEffect(() => {
+    if (products.length > 0) {
+      console.log('محصولات دریافت شدند، اعمال فیلتر برای نمایش تمام محصولات');
+      dispatch(filterProducts());
+    }
+  }, [products, dispatch]);
 
   useEffect(() => {
     console.log('products sample:', products.slice(0, 5));
