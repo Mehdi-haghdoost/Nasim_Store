@@ -1,5 +1,6 @@
 // src/Redux/actions/filterThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { simpleSearch } from '@/utils/simpleSearch'; // اضافه کردن این import
 
 export const filterProducts = createAsyncThunk(
   'filter/filterProducts',
@@ -78,18 +79,27 @@ export const filterProducts = createAsyncThunk(
       console.log('فیلتر رنگ: از', products.length, 'به', result.length, 'محصول');
     }
 
-    // فیلتر کردن بر اساس عبارت جستجو
+    // فیلتر کردن بر اساس عبارت جستجو - بخش اصلاح شده با جستجوی ساده
     if (searchTerm && searchTerm.trim() !== '') {
-      const searchTermLower = searchTerm.toLowerCase().trim();
+      const searchTermTrimmed = searchTerm.trim();
+      
       result = result.filter((product) => {
-        const matches = (
-          (product.title && product.title.toLowerCase().includes(searchTermLower)) ||
-          (product.originalName && product.originalName.toLowerCase().includes(searchTermLower)) ||
-          (product.description && product.description.toLowerCase().includes(searchTermLower))
-        );
-        if (!matches) {
-          console.log('محصول غیرمنطبق با جستجو:', product.title);
+        // بررسی عنوان محصول
+        const titleMatch = product.title && simpleSearch(product.title, searchTermTrimmed);
+        
+        // بررسی نام اصلی محصول
+        const originalNameMatch = product.originalName && simpleSearch(product.originalName, searchTermTrimmed);
+        
+        // بررسی در توضیحات محصول - فقط اگر عنوان و نام اصلی پیدا نشد
+        const descriptionMatch = !titleMatch && !originalNameMatch && 
+                                product.description && simpleSearch(product.description, searchTermTrimmed);
+        
+        const matches = titleMatch || originalNameMatch || descriptionMatch;
+        
+        if (matches) {
+          console.log(`محصول "${product.title}" با "${searchTerm}" مطابقت دارد`);
         }
+        
         return matches;
       });
       console.log('فیلتر جستجو: از', products.length, 'به', result.length, 'محصول');
