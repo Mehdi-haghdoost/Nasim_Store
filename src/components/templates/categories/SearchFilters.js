@@ -26,7 +26,7 @@ const SearchFilters = () => {
   const { categories, loading, error } = useCategory();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 🆕 دریافت محصولات هنگام لود کامپوننت
+  // دریافت محصولات هنگام لود کامپوننت
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -62,9 +62,53 @@ const SearchFilters = () => {
     dispatch(filterProducts());
   };
 
+  // تابع جدید برای پیدا کردن دسته‌بندی‌های مرتبط با جستجو
+  const findRelatedCategories = (searchValue) => {
+    if (!searchValue || !searchValue.trim() || products.length === 0) {
+      return [];
+    }
+
+    const searchTermLower = searchValue.toLowerCase().trim();
+    
+    // پیدا کردن محصولات مطابق با جستجو
+    const matchingProducts = products.filter(product => 
+      (product.title && product.title.toLowerCase().includes(searchTermLower)) ||
+      (product.originalName && product.originalName.toLowerCase().includes(searchTermLower)) ||
+      (product.description && product.description.toLowerCase().includes(searchTermLower))
+    );
+    
+    console.log('محصولات مطابق با جستجو:', matchingProducts.map(p => p.title));
+    
+    // استخراج دسته‌بندی‌های منحصر به فرد
+    const relatedCategoryIds = [...new Set(matchingProducts.map(product => {
+      if (typeof product.category === 'object' && product.category?._id) {
+        return product.category._id;
+      } else if (product.category) {
+        return product.category.toString();
+      }
+      return null;
+    }).filter(id => id !== null))];
+    
+    console.log('دسته‌بندی‌های مرتبط با جستجو:', relatedCategoryIds);
+    return relatedCategoryIds;
+  };
+
   const handleApplyFilter = (e) => {
     e.preventDefault();
+    
+    // اعمال جستجو
     updateSearchTerm(searchTerm);
+    
+    // پیدا کردن دسته‌بندی‌های مرتبط با جستجو
+    const relatedCategoryIds = findRelatedCategories(searchTerm);
+    
+    // اگر جستجو خالی نباشد و دسته‌بندی‌های مرتبطی پیدا شود
+    if (searchTerm.trim() !== '' && relatedCategoryIds.length > 0) {
+      // انتخاب دسته‌بندی‌های مرتبط
+      updateCategories(relatedCategoryIds);
+    }
+    
+    // اعمال فیلتر
     dispatch(filterProducts());
   };
 
