@@ -26,9 +26,13 @@ const SearchFilters = () => {
   const { categories, loading, error } = useCategory();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // دریافت محصولات هنگام لود کامپوننت
+  // دریافت محصولات هنگام لود کامپوننت و ریست کردن فیلترها
   useEffect(() => {
     dispatch(fetchProducts());
+    // ریست کردن فیلترها در ابتدای لود کامپوننت
+    updateCategories([]);
+    updateSearchTerm('');
+    setSearchTerm('');
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,11 +49,26 @@ const SearchFilters = () => {
       ? filterCategories.filter((id) => id !== categoryId)
       : [...filterCategories, categoryId];
     updateCategories(updatedCategories);
+    
+    // اگر دسته‌بندی حذف شد و دیگر هیچ دسته‌بندی انتخاب نشده، متن جستجو را هم ریست کنیم
+    if (updatedCategories.length === 0 && filterCategories.includes(categoryId)) {
+      setSearchTerm('');
+      updateSearchTerm('');
+    }
+    
     dispatch(filterProducts());
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+    
+    // اگر فیلد جستجو خالی شد، تمام فیلترها را ریست کنیم
+    if (e.target.value === '') {
+      updateSearchTerm('');
+      // اگر فیلتر جستجو خالی شد، دسته‌بندی‌ها را هم پاک کنیم
+      updateCategories([]);
+      dispatch(filterProducts());
+    }
   };
 
   const handleColorChange = (color) => {
