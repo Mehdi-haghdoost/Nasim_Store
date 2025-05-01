@@ -8,6 +8,7 @@ import { fetchProducts } from '@/Redux/actions/productThunks';
 import { useDispatch } from 'react-redux';
 import styles from './SearchFilters.module.css';
 import PriceRangeSlider from './PriceRangeSlider';
+import { simpleSearch, areWordsSimilar } from '@/utils/simpleSearch';
 
 const SearchFilters = () => {
   const dispatch = useDispatch();
@@ -89,20 +90,37 @@ const SearchFilters = () => {
     dispatch(filterProducts());
   };
 
+// تابع برای نرمال‌سازی متن فارسی (حذف فاصله‌ها، نیم‌فاصله‌ها و کاراکترهای خاص)
+  const normalizeText = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/\u200c/g, '') // حذف نیم‌فاصله
+      .replace(/\s+/g, '')    // حذف تمام فاصله‌ها
+      .replace(/‌/g, '')      // حذف کاراکتر ZWNJ
+      .toLowerCase();
+  };
+
   // تابع جدید برای پیدا کردن دسته‌بندی‌های مرتبط با جستجو
   const findRelatedCategories = (searchValue) => {
     if (!searchValue || !searchValue.trim() || products.length === 0) {
       return [];
     }
 
-    const searchTermLower = searchValue.toLowerCase().trim();
+    const normalizedSearchTerm = normalizeText(searchValue.trim());
+    console.log('عبارت جستجوی نرمال‌شده:', normalizedSearchTerm);
     
     // پیدا کردن محصولات مطابق با جستجو
-    const matchingProducts = products.filter(product => 
-      (product.title && product.title.toLowerCase().includes(searchTermLower)) ||
-      (product.originalName && product.originalName.toLowerCase().includes(searchTermLower)) ||
-      (product.description && product.description.toLowerCase().includes(searchTermLower))
-    );
+    const matchingProducts = products.filter(product => {
+      const normalizedTitle = normalizeText(product.title || '');
+      const normalizedOriginalName = normalizeText(product.originalName || '');
+      const normalizedDescription = normalizeText(product.description || '');
+      
+      return (
+        normalizedTitle.includes(normalizedSearchTerm) ||
+        normalizedOriginalName.includes(normalizedSearchTerm) ||
+        normalizedDescription.includes(normalizedSearchTerm)
+      );
+    });
     
     console.log('محصولات مطابق با جستجو:', matchingProducts.map(p => p.title));
     
@@ -123,16 +141,23 @@ const SearchFilters = () => {
   const handleApplyFilter = (e) => {
     e.preventDefault();
     
-    // اعمال جستجو
-    updateSearchTerm(searchTerm);
-    
-    // پیدا کردن دسته‌بندی‌های مرتبط با جستجو
-    const relatedCategoryIds = findRelatedCategories(searchTerm);
-    
-    // اگر جستجو خالی نباشد و دسته‌بندی‌های مرتبطی پیدا شود
-    if (searchTerm.trim() !== '' && relatedCategoryIds.length > 0) {
-      // انتخاب دسته‌بندی‌های مرتبط
-      updateCategories(relatedCategoryIds);
+    // اعمال جستجو و ذخیره در state
+    // اگر متن جستجو وجود دارد، آن را در Redux ذخیره کنیم
+    if (searchTerm.trim() !== '') {
+      // متن جستجو را به Redux منتقل می‌کنیم (از نرمال‌سازی استفاده نمی‌کنیم چون می‌خواهیم متن اصلی حفظ شود)
+      updateSearchTerm(searchTerm);
+      
+      // پیدا کردن دسته‌بندی‌های مرتبط با جستجو
+      const relatedCategoryIds = findRelatedCategories(searchTerm);
+      
+      // اگر دسته‌بندی‌های مرتبطی پیدا شوند
+      if (relatedCategoryIds.length > 0) {
+        // انتخاب دسته‌بندی‌های مرتبط
+        updateCategories(relatedCategoryIds);
+      }
+    } else {
+      // اگر متن جستجو خالی است، آن را در Redux هم خالی کنیم
+      updateSearchTerm('');
     }
     
     // اعمال فیلتر
