@@ -10,7 +10,7 @@ const DiscountModal = () => {
                 کنید
             </div>
             <div className={styles.discount_modal}>
-                <div className="modal fade" id='discountModal' tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                <div className="modal fade" id='discountModal' tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                     <div className='modal-dialog modal-md modal-dialog-centered'>
                         <div className="modal-content">
                             <div className="modal-header justify-content-between">

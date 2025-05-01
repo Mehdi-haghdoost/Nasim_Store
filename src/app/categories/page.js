@@ -1,4 +1,9 @@
-import React from 'react'
+'use client';
+
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchProducts } from '@/Redux/actions/productThunks';
+
 import styles from '@/styles/categories.module.css';
 import BreadCroumb from '@/components/modules/breadCroumb/BreadCroumb'
 import Footer from '@/components/modules/footer/Footer'
@@ -10,6 +15,13 @@ import CategorySort from '@/components/templates/categories/CategorySort'
 import SearchFilters from '@/components/templates/categories/SearchFilters'
 
 const page = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    
+    }, [dispatch]);
+
     return (
         <>
             <Header />
@@ -30,7 +42,7 @@ const page = () => {
                             <span className="d-block font-14 text-white">فیلتر</span>
                         </button>
 
-                        <div className='offcanvas offcanvas-end' tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                        <div className='offcanvas offcanvas-end' tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                             <div className='offcanvas-header justify-content-between'>
                                 <h5 className='offcanvas-title' id="offcanvasRightLabel">
                                     فیلترها

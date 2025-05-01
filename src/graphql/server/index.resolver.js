@@ -24,7 +24,7 @@ const { addToCart, updateCartItem, removeFromCart, clearCart } = require("./muta
 const { getUserCart } = require("./queries/cart.resolvers");
 const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
-const { product, similarProducts, bestSellingProducts } = require("./queries/product.resolvers");
+const { product, similarProducts, bestSellingProducts, products } = require("./queries/product.resolvers");
 const { getCategories, CategoryResolvers } = require("./queries/category.resolvers");
  
 // تعریف RootQuery فقط با queryهای واقعی (بدون resolvers)
@@ -45,7 +45,8 @@ const RootQuery = new GraphQLObjectType({
         getContactById,
         product,
         similarProducts,
-        bestSellingProducts
+        bestSellingProducts,
+        products,
     }
 })
 

@@ -1,14 +1,32 @@
+// src/components/templates/categories/CategoryItems.js
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useFilter } from '@/Redux/hooks/useFilter';
+import { fetchProducts } from '@/Redux/actions/productThunks';
 import ProductBox from '@/components/modules/categories/ProductBox';
 import styles from './CategoryItems.module.css';
 
 const CategoryItems = () => {
+  const dispatch = useDispatch();
   const { filteredProducts, isLoading } = useFilter();
 
-  // Loading state with improved UI
+  console.log('CategoryItems mounted'); // لاگ جدید
+
+  useEffect(() => {
+    console.log('Dispatching fetchProducts...');
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  console.log('CategoryItems - isLoading:', isLoading);
+  console.log('CategoryItems - filteredProducts:', filteredProducts.map(p => ({
+    title: p.title,
+    _id: p._id,
+    category: p.category?._id
+  })));
+  console.log('CategoryItems - filteredProducts length:', filteredProducts.length);
+
   if (isLoading) {
     return (
       <div className={`${styles.category_items} ${styles.status_container}`}>
@@ -23,11 +41,10 @@ const CategoryItems = () => {
     );
   }
 
-  // No products found state with improved UI
   if (filteredProducts.length === 0) {
     return (
       <div className={`${styles.category_items} ${styles.status_container}`}>
-        <div className="text-center p-5 my-4  rounded-3 shadow-sm">
+        <div className="text-center p-5 my-4 rounded-3 shadow-sm">
           <i className="bi bi-search text-muted" style={{ fontSize: "3rem" }}></i>
           <h4 className="mt-3">محصولی یافت نشد</h4>
           <p className="text-muted">متأسفانه محصولی مطابق با معیارهای جستجوی شما پیدا نشد.</p>
@@ -43,7 +60,6 @@ const CategoryItems = () => {
     );
   }
 
-  // Products found - regular display
   return (
     <div className={styles.category_items}>
       <div className="row g-3">

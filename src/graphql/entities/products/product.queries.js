@@ -79,21 +79,30 @@ export const GET_PRODUCT = gql`
 
 export const GET_PRODUCTS = gql`
   query GetProducts {
-  bestSellingProducts {
-    _id
-    image
-    title
-    originalName
-    price
-    discountedPrice
-    hasDiscount
-    stock
-    rating
-    comments { _id }
-    colors { color available }
-    category { _id name icon }
+    bestSellingProducts {
+      _id
+      image
+      title
+      originalName
+      price
+      discountedPrice
+      hasDiscount
+      stock
+      rating
+      comments {
+        _id
+      }
+      colors {
+        color
+        available
+      }
+      category {
+        _id
+        name
+        icon
+      }
+    }
   }
-}
 `;
 
 export const GET_SIMILAR_PRODUCTS = gql`
@@ -153,6 +162,47 @@ export const GET_COMMENTS_BY_PRODUCT = gql`
         _id
         username
       }
+    }
+  }
+`;
+
+export const GET_ALL_PRODUCTS = gql`
+  query {
+    products {
+      _id
+      title
+      image
+      price
+      discountedPrice
+      hasDiscount
+      rating
+      category {
+        _id
+        name
+      }
+      colors {
+        color
+        available
+      }
+      stock
+      brandIcon
+      originalName
+      description
+      specifications
+      comments {
+        _id
+        commentText
+        rating
+      }
+      sellers {
+        _id
+        name
+        logo
+      }
+      customerSatisfaction
+      salesCount
+      createdAt
+      updatedAt
     }
   }
 `;

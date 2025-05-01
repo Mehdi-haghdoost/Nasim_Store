@@ -1,5 +1,5 @@
+// src/Redux/actions/filterThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchProducts } from './productThunks';
 
 export const filterProducts = createAsyncThunk(
   'filter/filterProducts',
@@ -14,103 +14,124 @@ export const filterProducts = createAsyncThunk(
       رنگ: selectedColor,
       جستجو: searchTerm,
       'نوع مرتب‌سازی': sortOption,
+      'محصولات اولیه': products.map(p => ({ title: p.title, category: p.category?._id || p.category })),
     });
 
     let result = [...products];
 
-    // Filter by categories
+    // فیلتر کردن بر اساس دسته‌بندی
     if (categories.length > 0) {
       result = result.filter((product) => {
-        const productCategoryId = product.category._id.toString();
-        const matches = categories.some((catId) => catId.toString() === productCategoryId);
-        if (matches) {
-          console.log('محصول منطبق با دسته‌بندی:', product.title, '-', productCategoryId);
+        if (!product.category) {
+          console.log('محصول بدون دسته‌بندی:', product.title);
+          return false;
         }
+
+        let productCategoryId;
+        if (typeof product.category === 'object' && product.category._id) {
+          productCategoryId = product.category._id.toString();
+        } else {
+          productCategoryId = product.category.toString();
+        }
+
+        const matches = categories.some((catId) => catId.toString() === productCategoryId);
+        console.log('محصول:', product.title, 'دسته‌بندی:', productCategoryId, 'منطبق:', matches);
         return matches;
       });
       console.log('فیلتر دسته‌بندی: از', products.length, 'به', result.length, 'محصول');
+    } else {
+      console.log('هیچ دسته‌بندی‌ای انتخاب نشده، همه محصولات نگه داشته می‌شوند');
     }
 
-    // Filter by price range
-    result = result.filter((product) => {
-      const price = product.hasDiscount ? product.discountedPrice : product.price;
-      const matches = price >= priceRange.min && price <= priceRange.max;
-      return matches;
-    });
-    console.log('فیلتر قیمت: از', products.length, 'به', result.length, 'محصول');
-
-    // Filter by color (only if selectedColor is not empty)
-    if (selectedColor) {
+    // فیلتر کردن بر اساس محدوده قیمت
+    if (priceRange && (priceRange.min > 0 || priceRange.max < 50000000)) {
       result = result.filter((product) => {
-        // بررسی اینکه آیا رنگ‌ها وجود دارد
+        const price = product.hasDiscount ? product.discountedPrice : product.price;
+        const matches = price >= priceRange.min && price <= priceRange.max;
+        if (!matches) {
+          console.log('محصول خارج از رنج قیمت:', product.title, '-', price);
+        }
+        return matches;
+      });
+      console.log('فیلتر قیمت: از', products.length, 'به', result.length, 'محصول');
+    }
+
+    // فیلتر کردن بر اساس رنگ
+    if (selectedColor && selectedColor.trim() !== '') {
+      result = result.filter((product) => {
         if (!product.colors || !Array.isArray(product.colors)) {
+          console.log('محصول بدون آرایه رنگ‌ها:', product.title);
           return false;
         }
-        const matches = product.colors.some((c) => c.color === selectedColor && c.available);
+
+        const matches = product.colors.some((colorObj) => {
+          if (typeof colorObj !== 'object') return false;
+          const colorMatches = colorObj.color === selectedColor;
+          const isAvailable = colorObj.available === undefined || colorObj.available === true;
+          if (colorMatches) {
+            console.log(`محصول "${product.title}" - رنگ ${colorObj.color} - در دسترس: ${isAvailable}`);
+          }
+          return colorMatches && isAvailable;
+        });
         return matches;
       });
       console.log('فیلتر رنگ: از', products.length, 'به', result.length, 'محصول');
     }
 
-    // Filter by search term
-    if (searchTerm) {
+    // فیلتر کردن بر اساس عبارت جستجو
+    if (searchTerm && searchTerm.trim() !== '') {
       const searchTermLower = searchTerm.toLowerCase().trim();
       result = result.filter((product) => {
-        return (
-          product.title.toLowerCase().includes(searchTermLower) ||
+        const matches = (
+          (product.title && product.title.toLowerCase().includes(searchTermLower)) ||
           (product.originalName && product.originalName.toLowerCase().includes(searchTermLower)) ||
           (product.description && product.description.toLowerCase().includes(searchTermLower))
         );
+        if (!matches) {
+          console.log('محصول غیرمنطبق با جستجو:', product.title);
+        }
+        return matches;
       });
       console.log('فیلتر جستجو: از', products.length, 'به', result.length, 'محصول');
     }
 
-    // اعمال مرتب‌سازی بر اساس گزینه انتخاب شده
+    // اعمال مرتب‌سازی
     if (sortOption && sortOption !== 'default') {
       console.log('اعمال مرتب‌سازی:', sortOption);
-      
       switch (sortOption) {
-        case 'rating-desc': // محبوب‌ترین
+        case 'rating-desc':
           result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
           break;
-          
-        case 'sales-desc': // پرفروش‌ترین
-          result.sort((a, b) => (b.sales || 0) - (a.sales || 0));
+        case 'sales-desc':
+          result.sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0));
           break;
-          
-        case 'createdAt-desc': // جدیدترین
+        case 'createdAt-desc':
           result.sort((a, b) => {
             const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
             const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
             return dateB - dateA;
           });
           break;
-          
-        case 'price-asc': // ارزان‌ترین
+        case 'price-asc':
           result.sort((a, b) => {
             const priceA = a.hasDiscount ? a.discountedPrice : a.price;
             const priceB = b.hasDiscount ? b.discountedPrice : b.price;
             return priceA - priceB;
           });
           break;
-          
-        case 'price-desc': // گران‌ترین
+        case 'price-desc':
           result.sort((a, b) => {
             const priceA = a.hasDiscount ? a.discountedPrice : a.price;
             const priceB = b.hasDiscount ? b.discountedPrice : b.price;
             return priceB - priceA;
           });
           break;
-          
         default:
-          // پیش‌فرض - بدون تغییر
           break;
       }
-      
-      console.log('محصولات پس از مرتب‌سازی:', result.map(p => p.title));
     }
 
-    console.log('محصولات فیلترشده نهایی:', result.map(p => p.title));
+    console.log('محصولات فیلترشده نهایی:', result.map(p => ({ title: p.title, category: p.category?._id || p.category })));
     console.log(result.length, 'محصول پس از اعمال همه فیلترها یافت شد');
     return result;
   }

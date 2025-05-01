@@ -31,9 +31,9 @@ const schema = new mongoose.Schema({
 
     // ویژگی‌های کلی کالا
     features: {
-        type : [featureSchema],
-        required : false,
-        default : [],
+        type: [featureSchema],
+        required: false,
+        default: [],
     },
 
     rating: {
@@ -79,10 +79,12 @@ const schema = new mongoose.Schema({
             },
         ],
         default: [
-            { color: "رمز", available: true },
+            { color: "قرمز", available: true },
             { color: "مشکی", available: true },
-            { color: "آبی", available: true },
-            { color: "سبز", available: false },
+            { color: "سبز", available: true },
+            { color: "آبی", available: false },
+            { color: "بنفش", available: false },
+            { color: "نارنجی", available: false },
         ]
     },
 
