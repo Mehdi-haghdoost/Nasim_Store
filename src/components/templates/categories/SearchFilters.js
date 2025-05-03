@@ -26,7 +26,6 @@ const SearchFilters = () => {
   } = useFilter();
   const { categories, loading, error } = useCategory();
   const [searchTerm, setSearchTerm] = useState('');
-  const [initialCategorySet, setInitialCategorySet] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -38,16 +37,19 @@ const SearchFilters = () => {
     if (error) console.error('خطا در لود دسته‌بندی‌ها:', error);
   }, [categories, filterCategories, products, selectedColor, searchTerm, priceRange, loading, error]);
 
-  // گرفتن categoryId از URL و تیک‌دار کردن دسته‌بندی فقط در لود اولیه
+  // همگام‌سازی دسته‌بندی با categoryId از URL
   useEffect(() => {
     const categoryId = searchParams.get('categoryId');
-    if (categoryId && !initialCategorySet) {
-      console.log('تیک‌دار کردن دسته‌بندی از URL:', categoryId);
+    if (categoryId && !filterCategories.includes(categoryId)) {
+      console.log('همگام‌سازی دسته‌بندی با URL:', categoryId);
       updateCategories([categoryId]);
       dispatch(filterProducts());
-      setInitialCategorySet(true);
+    } else if (!categoryId && filterCategories.length > 0) {
+      console.log('حذف دسته‌بندی‌های انتخاب‌شده چون categoryId در URL نیست');
+      updateCategories([]);
+      dispatch(filterProducts());
     }
-  }, [searchParams, initialCategorySet, updateCategories, dispatch]);
+  }, [searchParams, filterCategories, updateCategories, dispatch]);
 
   // لود محصولات
   useEffect(() => {
