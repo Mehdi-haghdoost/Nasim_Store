@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useCategory } from '@/Redux/hooks/useCategory';
 import { useFilter } from '@/Redux/hooks/useFilter';
 import { filterProducts } from '@/Redux/actions/filterThunks';
@@ -8,11 +8,12 @@ import { fetchProducts } from '@/Redux/actions/productThunks';
 import { useDispatch } from 'react-redux';
 import styles from './SearchFilters.module.css';
 import PriceRangeSlider from './PriceRangeSlider';
-import { simpleSearch, areWordsSimilar } from '@/utils/simpleSearch';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const SearchFilters = () => {
   const dispatch = useDispatch();
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const {
     categories: filterCategories,
     updateCategories,
@@ -23,59 +24,82 @@ const SearchFilters = () => {
     selectedColor,
     products,
   } = useFilter();
-
   const { categories, loading, error } = useCategory();
   const [searchTerm, setSearchTerm] = useState('');
-
-  // دریافت محصولات هنگام لود کامپوننت و ریست کردن فیلترها
-  useEffect(() => {
-    dispatch(fetchProducts());
-    // ریست کردن فیلترها در ابتدای لود کامپوننت
-    updateCategories([]);
-    updateSearchTerm('');
-    setSearchTerm('');
-  }, [dispatch]);
-  
-  // اعمال فیلتر بعد از دریافت محصولات
-  useEffect(() => {
-    if (products.length > 0) {
-      console.log('محصولات دریافت شدند، اعمال فیلتر برای نمایش تمام محصولات');
-      dispatch(filterProducts());
-    }
-  }, [products, dispatch]);
-
-  useEffect(() => {
-    console.log('products sample:', products.slice(0, 5));
-  }, [products]);
+  const [initialCategorySet, setInitialCategorySet] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     console.log('دسته‌بندی‌های لودشده:', categories.map(c => ({ _id: c._id, name: c.name })));
     console.log('دسته‌بندی‌های انتخاب‌شده:', filterCategories);
-  }, [categories, filterCategories]);
+    console.log('نمونه محصولات:', products.slice(0, 5));
+    console.log('وضعیت فیلترها:', { دسته‌بندی: filterCategories, رنگ: selectedColor, جستجو: searchTerm, قیمت: priceRange });
+    if (loading) console.log('در حال لود دسته‌بندی‌ها...');
+    if (error) console.error('خطا در لود دسته‌بندی‌ها:', error);
+  }, [categories, filterCategories, products, selectedColor, searchTerm, priceRange, loading, error]);
+
+  // گرفتن categoryId از URL و تیک‌دار کردن دسته‌بندی فقط در لود اولیه
+  useEffect(() => {
+    const categoryId = searchParams.get('categoryId');
+    if (categoryId && !initialCategorySet) {
+      console.log('تیک‌دار کردن دسته‌بندی از URL:', categoryId);
+      updateCategories([categoryId]);
+      dispatch(filterProducts());
+      setInitialCategorySet(true);
+    }
+  }, [searchParams, initialCategorySet, updateCategories, dispatch]);
+
+  // لود محصولات
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  // اعمال فیلتر بعد از دریافت محصولات
+  useEffect(() => {
+    if (products.length > 0) {
+      console.log('محصولات دریافت شدند، اعمال فیلتر');
+      dispatch(filterProducts());
+    }
+  }, [products, dispatch]);
+
+  // حفظ موقعیت اسکرول
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollRef.current = window.scrollY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleCategoryChange = (categoryId) => {
+    const currentScroll = scrollRef.current || window.scrollY;
     const updatedCategories = filterCategories.includes(categoryId)
       ? filterCategories.filter((id) => id !== categoryId)
-      : [...filterCategories, categoryId];
+      : [categoryId]; // فقط یه دسته‌بندی می‌تونه انتخاب بشه
     updateCategories(updatedCategories);
-    
-    // اگر دسته‌بندی حذف شد و دیگر هیچ دسته‌بندی انتخاب نشده، متن جستجو را هم ریست کنیم
-    if (updatedCategories.length === 0 && filterCategories.includes(categoryId)) {
-      setSearchTerm('');
-      updateSearchTerm('');
+    console.log('دسته‌بندی‌های به‌روز شده:', updatedCategories);
+
+    // آپدیت URL بدون پرش اسکرول
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (updatedCategories.length > 0) {
+      newSearchParams.set('categoryId', updatedCategories[0]);
+    } else {
+      newSearchParams.delete('categoryId');
     }
-    
+    router.push(`/categories?${newSearchParams.toString()}`, { scroll: false });
+
     dispatch(filterProducts());
+
+    // بازیابی موقعیت اسکرول
+    setTimeout(() => {
+      window.scrollTo(0, currentScroll);
+    }, 0);
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    
-    // اگر فیلد جستجو خالی شد، تمام فیلترها را ریست کنیم
     if (e.target.value === '') {
       updateSearchTerm('');
-      // اگر فیلتر جستجو خالی شد، دسته‌بندی‌ها را هم پاک کنیم
-      updateCategories([]);
       dispatch(filterProducts());
     }
   };
@@ -90,106 +114,36 @@ const SearchFilters = () => {
     dispatch(filterProducts());
   };
 
-// تابع برای نرمال‌سازی متن فارسی (حذف فاصله‌ها، نیم‌فاصله‌ها و کاراکترهای خاص)
-  const normalizeText = (text) => {
-    if (!text) return '';
-    return text
-      .replace(/\u200c/g, '') // حذف نیم‌فاصله
-      .replace(/\s+/g, '')    // حذف تمام فاصله‌ها
-      .replace(/‌/g, '')      // حذف کاراکتر ZWNJ
-      .toLowerCase();
-  };
-
-  // تابع جدید برای پیدا کردن دسته‌بندی‌های مرتبط با جستجو
-  const findRelatedCategories = (searchValue) => {
-    if (!searchValue || !searchValue.trim() || products.length === 0) {
-      return [];
-    }
-
-    const normalizedSearchTerm = normalizeText(searchValue.trim());
-    console.log('عبارت جستجوی نرمال‌شده:', normalizedSearchTerm);
-    
-    // پیدا کردن محصولات مطابق با جستجو
-    const matchingProducts = products.filter(product => {
-      const normalizedTitle = normalizeText(product.title || '');
-      const normalizedOriginalName = normalizeText(product.originalName || '');
-      const normalizedDescription = normalizeText(product.description || '');
-      
-      return (
-        normalizedTitle.includes(normalizedSearchTerm) ||
-        normalizedOriginalName.includes(normalizedSearchTerm) ||
-        normalizedDescription.includes(normalizedSearchTerm)
-      );
-    });
-    
-    console.log('محصولات مطابق با جستجو:', matchingProducts.map(p => p.title));
-    
-    // استخراج دسته‌بندی‌های منحصر به فرد
-    const relatedCategoryIds = [...new Set(matchingProducts.map(product => {
-      if (typeof product.category === 'object' && product.category?._id) {
-        return product.category._id;
-      } else if (product.category) {
-        return product.category.toString();
-      }
-      return null;
-    }).filter(id => id !== null))];
-    
-    console.log('دسته‌بندی‌های مرتبط با جستجو:', relatedCategoryIds);
-    return relatedCategoryIds;
-  };
-
   const handleApplyFilter = (e) => {
     e.preventDefault();
-    
-    // اعمال جستجو و ذخیره در state
-    // اگر متن جستجو وجود دارد، آن را در Redux ذخیره کنیم
-    if (searchTerm.trim() !== '') {
-      // متن جستجو را به Redux منتقل می‌کنیم (از نرمال‌سازی استفاده نمی‌کنیم چون می‌خواهیم متن اصلی حفظ شود)
-      updateSearchTerm(searchTerm);
-      
-      // پیدا کردن دسته‌بندی‌های مرتبط با جستجو
-      const relatedCategoryIds = findRelatedCategories(searchTerm);
-      
-      // اگر دسته‌بندی‌های مرتبطی پیدا شوند
-      if (relatedCategoryIds.length > 0) {
-        // انتخاب دسته‌بندی‌های مرتبط
-        updateCategories(relatedCategoryIds);
-      }
-    } else {
-      // اگر متن جستجو خالی است، آن را در Redux هم خالی کنیم
-      updateSearchTerm('');
-    }
-    
-    // اعمال فیلتر
+    updateSearchTerm(searchTerm);
     dispatch(filterProducts());
   };
 
-  useEffect(() => {
-    console.log('وضعیت فیلترها:', {
-      دسته‌بندی: filterCategories,
-      رنگ: selectedColor,
-      جستجو: searchTerm,
-      قیمت: priceRange
-    });
-  }, [filterCategories, selectedColor, searchTerm, priceRange]);
-
   const renderCategoriesContent = () => {
     if (loading) {
-      return <p className="text-info"><i className="bi bi-hourglass-split me-2"></i>در حال بارگذاری دسته‌بندی‌ها...</p>;
+      return (
+        <p className="text-info">
+          <i className="bi bi-hourglass-split me-2"></i>در حال بارگذاری دسته‌بندی‌ها...
+        </p>
+      );
     }
 
     if (error || categories.length === 0) {
-      return <div className="alert alert-danger py-2" role="alert">
-        <i className="bi bi-exclamation-triangle-fill me-2"></i>
-        لیست دسته‌بندی‌ها موجود نیست
-      </div>;
+      return (
+        <div className="alert alert-danger py-2" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          لیست دسته‌بندی‌ها موجود نیست
+        </div>
+      );
     }
 
     return (
       <form>
         {categories.map((category) => {
-          const productCount = products.filter(p => p.category?._id === category._id || p.category === category._id).length;
-          console.log('دسته:', category.name, ' - category._id:', category._id)
+          const productCount = products.filter(
+            (p) => p.category?._id === category._id || p.category === category._id
+          ).length;
           return (
             <div
               key={category._id}
@@ -209,17 +163,13 @@ const SearchFilters = () => {
                 >
                   <span>
                     {category.name}
-                    {category.icon && (
-                      <i className={`bi bi-${category.icon} ms-1`}></i>
-                    )}
+                    {category.icon && <i className={`bi bi-${category.icon} ms-1`}></i>}
                   </span>
                   <span className="text-muted small ms-2">({productCount})</span>
                 </label>
               </div>
               <div>
-                <span className="fw-bold font-14">
-                  ({productCount})
-                </span>
+                <span className="fw-bold font-14">({productCount})</span>
               </div>
             </div>
           );
@@ -259,9 +209,7 @@ const SearchFilters = () => {
 
         <div className={styles.filter_item}>
           <h5 className={styles.filter_item_title}>دسته‌بندی‌ها</h5>
-          <div className={styles.filter_item_content}>
-            {renderCategoriesContent()}
-          </div>
+          <div className={styles.filter_item_content}>{renderCategoriesContent()}</div>
         </div>
 
         <div className={styles.filter_item}>
@@ -278,7 +226,8 @@ const SearchFilters = () => {
           <h5 className={styles.filter_item_title}>رنگ محصول</h5>
           <div className={styles.filter_item_content}>
             <div className="product-meta-color-items">
-              {[{ id: 'option11', color: 'قرمز', hex: '#c00' },
+              {[
+                { id: 'option11', color: 'قرمز', hex: '#c00' },
                 { id: 'option22', color: 'مشکی', hex: '#111' },
                 { id: 'option33', color: 'سبز', hex: '#00cc5f' },
                 { id: 'option44', color: 'آبی', hex: '#1b69f0' },
@@ -320,10 +269,7 @@ const SearchFilters = () => {
         </div>
 
         <div className={`${styles.filter_item} text-center`}>
-          <button
-            className={styles.btn_outline_site}
-            onClick={handleApplyFilter}
-          >
+          <button className={styles.btn_outline_site} onClick={handleApplyFilter}>
             اعمال فیلتر
           </button>
         </div>
