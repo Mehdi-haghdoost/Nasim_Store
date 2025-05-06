@@ -7,8 +7,6 @@ import Modal from './Modal';
 const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
 
-
-
     const hideModal = () => setShowModal(false);
 
     return (
@@ -41,10 +39,8 @@ const UserProfile = () => {
                 </div>
             </main>
                 
-                    <div className={`${styles.overlay} ${showModal ? styles.show : ""}`} onClick={hideModal}></div>
-                    <Modal hideModal={hideModal} showModal={showModal} />
-                
-
+            <div className={`${styles.overlay} ${showModal ? styles.show : ""}`} onClick={hideModal}></div>
+            <Modal hideModal={hideModal} showModal={showModal} />
         </>
     )
 }
