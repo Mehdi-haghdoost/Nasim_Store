@@ -855,6 +855,10 @@ tag.tagify__tag {
   text-align: center;
 }
 
+.modal-dialog {
+  width: 100% !important;
+}
+
 .swal-modal {
   background: #ffffff !important;
   border: 1px solid #ef394e;

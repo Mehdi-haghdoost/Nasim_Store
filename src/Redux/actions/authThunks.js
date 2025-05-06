@@ -193,7 +193,7 @@ export const logoutUser = createAsyncThunk(
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             }
-            
+
             // پاک کردن سبد خرید کاربر (تبدیل به سبد خرید مهمان)
             // این کار را با dispatch کردن اکشن clearCartState انجام می‌دهیم
             dispatch({ type: 'cart/clearCartState' });
@@ -275,6 +275,7 @@ export const sendOtpForLogin = createAsyncThunk(
 /**
  * Update user profile async thunk
  */
+
 export const updateUserProfile = createAsyncThunk(
     'auth/updateUserProfile',
     async (input, { rejectWithValue }) => {
@@ -283,8 +284,6 @@ export const updateUserProfile = createAsyncThunk(
                 mutation: UPDATE_USER_PROFILE,
                 variables: { input }
             });
-
-            console.log("Update profile response:", { data, errors });
 
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');

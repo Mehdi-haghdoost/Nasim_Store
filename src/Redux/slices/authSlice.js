@@ -150,7 +150,7 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateUserProfile.fulfilled, (state, action) => {
-                state.user = { ...state.user, ...action.payload };
+                state.user = { ...state.user, ...action.payload }; // بروزرسانی اطلاعات جدید کاربر
                 state.loading = false;
                 state.error = null;
             })
