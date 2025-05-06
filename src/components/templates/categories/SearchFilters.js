@@ -28,24 +28,15 @@ const SearchFilters = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const scrollRef = useRef(null);
 
-  useEffect(() => {
-    console.log('دسته‌بندی‌های لودشده:', categories.map(c => ({ _id: c._id, name: c.name })));
-    console.log('دسته‌بندی‌های انتخاب‌شده:', filterCategories);
-    console.log('نمونه محصولات:', products.slice(0, 5));
-    console.log('وضعیت فیلترها:', { دسته‌بندی: filterCategories, رنگ: selectedColor, جستجو: searchTerm, قیمت: priceRange });
-    if (loading) console.log('در حال لود دسته‌بندی‌ها...');
-    if (error) console.error('خطا در لود دسته‌بندی‌ها:', error);
-  }, [categories, filterCategories, products, selectedColor, searchTerm, priceRange, loading, error]);
 
   // همگام‌سازی دسته‌بندی با categoryId از URL
   useEffect(() => {
     const categoryId = searchParams.get('categoryId');
     if (categoryId && !filterCategories.includes(categoryId)) {
-      console.log('همگام‌سازی دسته‌بندی با URL:', categoryId);
+
       updateCategories([categoryId]);
       dispatch(filterProducts());
     } else if (!categoryId && filterCategories.length > 0) {
-      console.log('حذف دسته‌بندی‌های انتخاب‌شده چون categoryId در URL نیست');
       updateCategories([]);
       dispatch(filterProducts());
     }
