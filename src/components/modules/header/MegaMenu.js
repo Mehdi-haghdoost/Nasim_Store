@@ -22,11 +22,7 @@ function MegaMenu() {
     return () => window.removeEventListener('scroll', fixedNavbarToTop);
   }, []);
 
-  useEffect(() => {
-    console.log('دسته‌بندی‌های لودشده:', categories.map(c => ({ _id: c._id, name: c.name })));
-    if (loading) console.log('در حال لود دسته‌بندی‌ها...');
-    if (error) console.error('خطا در لود دسته‌بندی‌ها:', error);
-  }, [categories, loading, error]);
+
 
   // نقشه‌برداری نام دسته‌بندی‌ها به _id
   const categoryMap = categories.reduce((acc, category) => {
