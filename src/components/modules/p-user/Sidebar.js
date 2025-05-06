@@ -49,7 +49,7 @@ function Sidebar() {
                     <div className={styles.profile_box}>
                         <nav className={`navbar ${styles.profile_box_nav}`}>
                             <ul className='navbar-nav flex-column'>
-                                <ActiveLink href="/p-user" exact>
+                                <ActiveLink href="/p-user" exact={true}>
                                     <i className='bi bi-house-door'></i>
                                     داشبورد
                                 </ActiveLink>
