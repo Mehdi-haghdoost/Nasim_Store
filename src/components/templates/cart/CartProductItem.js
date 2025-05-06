@@ -10,7 +10,7 @@ const CartProductItem = ({ item }) => {
 
     // اگر آیتم وجود نداشته باشد
     if (!item || !item.product) {
-        console.log("آیتم یا محصول وجود ندارد:", item);
+       
         return null;
     }
     
@@ -104,7 +104,7 @@ const CartProductItem = ({ item }) => {
                                             alt={item.product.title || "محصول"}
                                             className='img-fluid'
                                             onError={(e) => {
-                                                console.log("خطا در بارگذاری تصویر:", getProductImage());
+                                
                                                 e.target.onerror = null;
                                                 e.target.src = "/images/product/product-placeholder.jpg";
                                             }}
