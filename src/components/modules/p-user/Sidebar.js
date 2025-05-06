@@ -1,19 +1,18 @@
 "use client";
 
-import React from 'react'
-import styles from '@/components/modules/p-user/Sidebar.module.css';
-import { usePathname } from 'next/navigation';
-import Link from "next/link";
+import React from 'react';
+import styles from './Sidebar.module.css';
 import ActiveLink from '@/utils/ActiveLink';
-import swal from "sweetalert";
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '@/Redux/actions/authThunks';
 import { useRouter } from 'next/navigation';
-
+import swal from 'sweetalert'; // اگر از sweetalert استفاده می‌کنید، مطمئن شوید import شده باشد
 
 function Sidebar() {
-
-    const path = usePathname();
+    const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
     const router = useRouter();
-    
+
     const logoutHandler = () => {
         swal({
             title: "آیا از خروج اطمینان دارید ؟",
@@ -21,10 +20,12 @@ function Sidebar() {
             buttons: ["نه", "آره"]
         }).then((result) => {
             if (result) {
-                router.push("/");
+                dispatch(logoutUser()).then(() => {
+                    router.push("/");
+                });
             }
-        })
-    }
+        });
+    };
 
     return (
         <div className={styles.panel_side}>
@@ -40,7 +41,7 @@ function Sidebar() {
                                     حساب کاربری من
                                 </h6>
                                 <h6 className='font-14'>
-                                    مهدی حق دوست
+                                    {user?.username || 'مهدی حق دوست'}
                                 </h6>
                             </div>
                         </div>
@@ -48,76 +49,43 @@ function Sidebar() {
                     <div className={styles.profile_box}>
                         <nav className={`navbar ${styles.profile_box_nav}`}>
                             <ul className='navbar-nav flex-column'>
-                                {path.includes("/p-user") ? (
-                                    <>
-                                        <ActiveLink href="/p-user/profile"  >
-                                            <i className='bi bi-house-door'></i>
-                                            پروفایل
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/orders">
-                                            <i className='bi bi-cart-check'></i>
-                                            سفارش های من
-                                            <span className={`badge rounded-pill ${styles.badge_spn}`}>5</span>
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/address">
-                                            <i className='bi bi-pin-map'></i>
-                                            آدرس های من
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/notifications">
-                                            <i className='bi bi-bell'></i>
-                                            پیام ها و اطلاعیه ها
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/comments">
-                                            <i className='bi bi-chat-dots'></i>
-                                            نظرات من
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/tickets">
-                                            <i className='bi bi-question-circle'></i>
-                                            درخواست پشتیبانی
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/wishlists">
-                                            <i className='bi bi-heart'></i>
-                                            محصولات مورد علاقه
-                                        </ActiveLink>
-                                        <ActiveLink href="/p-user/discountcodes">
-                                            <i className='bi bi-gift'></i>
-                                            کدهای تخفیف من
-                                        </ActiveLink>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Link href={"/p-admin"} className={`nav-item ${styles.sidbar_link_active}`} >
-                                            <i className='bi bi-house ms-2'></i>
-                                            پروفایل
-                                            <small className='badge rounded-pill bg-danger'>5</small>
-                                        </Link>
-
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i className='bi bi-lightbulb ms-2'></i>
-                                            آموزش
-                                        </Link>
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i className='bi bi-cart-check ms-2'></i>
-                                            سفارشات
-                                        </Link>
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i className='bi bi-tags ms-2'></i>
-                                            تخفیفات
-                                        </Link>
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i class="bi bi-people ms-2"></i>
-                                            کاربران
-                                        </Link>
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i className='bi bi-chat-dots ms-2'></i>
-                                            کامنت ها
-                                        </Link>
-                                        <Link href={"/p-admin"} className='nav-item' >
-                                            <i class="bi bi bi-ticket ms-2"></i>
-                                            تیکت ها
-                                        </Link>
-                                    </>
-                                )}
+                                <ActiveLink href="/p-user" exact>
+                                    <i className='bi bi-house-door'></i>
+                                    داشبورد
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/profile">
+                                    <i className='bi bi-person'></i>
+                                    پروفایل
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/orders">
+                                    <i className='bi bi-cart-check'></i>
+                                    سفارش های من
+                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>5</span>
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/address">
+                                    <i className='bi bi-pin-map'></i>
+                                    آدرس های من
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/notifications">
+                                    <i className='bi bi-bell'></i>
+                                    پیام ها و اطلاعیه ها
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/comments">
+                                    <i className='bi bi-chat-dots'></i>
+                                    نظرات من
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/tickets">
+                                    <i className='bi bi-question-circle'></i>
+                                    درخواست پشتیبانی
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/wishlists">
+                                    <i className='bi bi-heart'></i>
+                                    محصولات مورد علاقه
+                                </ActiveLink>
+                                <ActiveLink href="/p-user/discountcodes">
+                                    <i className='bi bi-gift'></i>
+                                    کدهای تخفیف من
+                                </ActiveLink>
                             </ul>
                             <div className={styles.profile_box_logout}
                                 onClick={logoutHandler}
@@ -130,7 +98,7 @@ function Sidebar() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Sidebar;
