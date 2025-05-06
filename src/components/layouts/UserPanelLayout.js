@@ -1,19 +1,22 @@
 "use client";
 
-
-import React, { Children } from 'react'
+import React from 'react';
 import styles from '@/components/layouts/UserPanelLayout.module.css';
 import Header from '../modules/header/Header';
 import Footer from '../modules/footer/Footer';
 import BreadCroumb from '../modules/breadCroumb/BreadCroumb';
 import Sidebar from '../modules/p-user/Sidebar';
 import ActiveLink from '@/utils/ActiveLink';
-import { useRouter,usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '@/Redux/actions/authThunks';
+import swal from 'sweetalert'; // اگر از sweetalert استفاده می‌کنید، مطمئن شوید import شده باشد
 
 function Layout({ children }) {
-
     const path = usePathname();
     const router = useRouter();
+    const dispatch = useDispatch();
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
 
     const logoutHandler = () => {
         swal({
@@ -22,10 +25,12 @@ function Layout({ children }) {
             buttons: ["نه", "آره"]
         }).then((result) => {
             if (result) {
-                router.push("/");
+                dispatch(logoutUser()).then(() => {
+                    router.push("/");
+                });
             }
-        })
-    }
+        });
+    };
 
     return (
         <>
@@ -65,7 +70,7 @@ function Layout({ children }) {
                                                             حساب کاربری من
                                                         </h6>
                                                         <h6 className='font-14'>
-                                                            مهدی حق دوست
+                                                            {user?.username || 'کاربر'}
                                                         </h6>
                                                     </div>
                                                 </div>
@@ -82,7 +87,9 @@ function Layout({ children }) {
                                                                 <ActiveLink href="/p-user/orders">
                                                                     <i className='bi bi-cart-check'></i>
                                                                     سفارش های من
-                                                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>5</span>
+                                                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>
+                                                                        {user?.orders?.length || 0}
+                                                                    </span>
                                                                 </ActiveLink>
                                                                 <ActiveLink href="/p-user/address">
                                                                     <i className='bi bi-pin-map'></i>
@@ -95,6 +102,9 @@ function Layout({ children }) {
                                                                 <ActiveLink href="/p-user/comments">
                                                                     <i className='bi bi-chat-dots'></i>
                                                                     نظرات من
+                                                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>
+                                                                        {user?.comments?.length || 0}
+                                                                    </span>
                                                                 </ActiveLink>
                                                                 <ActiveLink href="/p-user/tickets">
                                                                     <i className='bi bi-question-circle'></i>
@@ -103,6 +113,9 @@ function Layout({ children }) {
                                                                 <ActiveLink href="/p-user/wishlists">
                                                                     <i className='bi bi-heart'></i>
                                                                     محصولات مورد علاقه
+                                                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>
+                                                                        {user?.wishlist?.length || 0}
+                                                                    </span>
                                                                 </ActiveLink>
                                                                 <ActiveLink href="/p-user/discountcodes">
                                                                     <i className='bi bi-gift'></i>
@@ -130,7 +143,7 @@ function Layout({ children }) {
                                                                     تخفیفات
                                                                 </Link>
                                                                 <Link href={"/p-admin"} className='nav-item' >
-                                                                    <i class="bi bi-people ms-2"></i>
+                                                                    <i className="bi bi-people ms-2"></i>
                                                                     کاربران
                                                                 </Link>
                                                                 <Link href={"/p-admin"} className='nav-item' >
@@ -138,7 +151,7 @@ function Layout({ children }) {
                                                                     کامنت ها
                                                                 </Link>
                                                                 <Link href={"/p-admin"} className='nav-item' >
-                                                                    <i class="bi bi bi-ticket ms-2"></i>
+                                                                    <i className="bi bi bi-ticket ms-2"></i>
                                                                     تیکت ها
                                                                 </Link>
                                                             </>
@@ -172,7 +185,7 @@ function Layout({ children }) {
             </div>
             <Footer />
         </>
-    )
+    );
 }
 
 export default Layout;
