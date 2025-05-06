@@ -165,7 +165,7 @@ export const refreshToken = createAsyncThunk(
             }
 
             if (data?.refreshTokenMutation) {
-                console.log("Refresh token successful, relying on cookies for tokens");
+
                 return data.refreshTokenMutation;
             }
 
