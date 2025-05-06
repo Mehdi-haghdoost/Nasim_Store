@@ -59,7 +59,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Register User
+            // Register User
             .addCase(registerUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -76,7 +76,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Send OTP
+            // Send OTP
             .addCase(sendOtp.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -93,7 +93,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Send OTP for Login
+            // Send OTP for Login
             .addCase(sendOtpForLogin.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -110,7 +110,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Confirm OTP and Register
+            // Confirm OTP and Register
             .addCase(confirmOtpAndRegister.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -127,7 +127,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Verify OTP and Login
+            // Verify OTP and Login
             .addCase(verifyOtpAndLogin.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -144,7 +144,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Update User Profile
+            // Update User Profile
             .addCase(updateUserProfile.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -159,22 +159,29 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
 
-        // Refresh Token
+            // Refresh Token
             .addCase(refreshToken.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(refreshToken.fulfilled, (state, action) => {
-                state.user = action.payload.user;
+                if (action.payload.user) {
+                    state.isAuthenticated = true;
+                    state.user = action.payload.user;
+                } else {
+                    state.isAuthenticated = false;
+                }
                 state.loading = false;
                 state.error = null;
             })
             .addCase(refreshToken.rejected, (state, action) => {
+                state.isAuthenticated = false;
+                state.user = null;
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || 'خطا در تجدید توکن';
             })
 
-        // Logout User
+            // Logout User
             .addCase(logoutUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -188,7 +195,7 @@ const authSlice = createSlice({
                 state.registrationType = 'standard';
                 state.loading = false;
                 state.error = null;
-                   // سبد خرید کاربر لاگین شده در localStorage باقی می‌ماند
+                // سبد خرید کاربر لاگین شده در localStorage باقی می‌ماند
                 // اما کلید آن را عوض می‌کنیم تا به سبد خرید مهمان تبدیل شود
                 // این کار در cartThunks انجام می‌شود
             })
