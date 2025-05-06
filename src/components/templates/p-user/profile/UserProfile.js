@@ -5,12 +5,12 @@ import DataTable from './DataTable';
 import Modal from './Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from '@/Redux/actions/authThunks';
-import { showSwal } from '@/utils/helpers'; // برای نمایش swal
+import { showSwal } from '@/utils/helpers';
 
 const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth); // داده‌های کاربر از Redux
+    const { user } = useSelector((state) => state.auth);
     const [formData, setFormData] = useState({
         username: '',
         phone: '',
@@ -18,6 +18,7 @@ const UserProfile = () => {
         email: '',
         postalCode: '',
         bio: ''
+        // آدرس را از اینجا حذف می‌کنیم چون در UserProfileInput تعریف نشده است
     });
 
     useEffect(() => {
@@ -29,14 +30,18 @@ const UserProfile = () => {
                 email: user?.email || '',
                 postalCode: user?.postalCode || '',
                 bio: user?.bio || ''
+                // آدرس را از اینجا حذف می‌کنیم
             });
         }
-    }, [user]); // زمانی که user تغییر کند، اطلاعات را بروزرسانی می‌کند
+    }, [user]);
 
     const hideModal = () => setShowModal(false);
 
     const onInputChange = (e) => {
         const { name, value } = e.target;
+        // اگر نام فیلد "address" است، آن را نادیده بگیریم
+        if (name === 'address') return;
+
         setFormData((prev) => ({
             ...prev,
             [name]: value
@@ -45,15 +50,23 @@ const UserProfile = () => {
 
     const onSubmit = async () => {
         try {
-            // درخواست برای ویرایش اطلاعات
-            const response = await dispatch(updateUserProfile(formData));
+            // کپی از formData ایجاد می‌کنیم و فیلد address را از آن حذف می‌کنیم
+            const dataToSubmit = { ...formData };
+            delete dataToSubmit.address;
+            
+            console.log("Submitting form data (without address):", dataToSubmit);
+            
+            const response = await dispatch(updateUserProfile(dataToSubmit));
+            console.log("Update profile response:", response);
 
-            // پس از موفقیت‌آمیز بودن ویرایش
             if (response?.payload) {
                 showSwal("اطلاعات شما با موفقیت ویرایش شد", "success", "باشه");
-                setShowModal(false); // بستن مدال پس از ویرایش
+                setShowModal(false);
+            } else {
+                showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
             }
         } catch (error) {
+            console.error("Error updating profile:", error);
             showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
         }
     };
