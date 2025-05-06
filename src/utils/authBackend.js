@@ -22,7 +22,7 @@ const setAuthCookies = function(res, accessToken, refreshToken) {
             sameSite: 'lax',
             path : '/',
         });
-        console.log("Cookies set successfully");
+
     } else {
         console.error("Invalid res object, cannot set cookies");
     }
