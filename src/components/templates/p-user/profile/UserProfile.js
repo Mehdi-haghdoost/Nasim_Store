@@ -17,20 +17,24 @@ const UserProfile = () => {
         nationalId: '',
         email: '',
         postalCode: '',
-        bio: ''
-        // آدرس را از اینجا حذف می‌کنیم چون در UserProfileInput تعریف نشده است
+        bio: '',
+        address: '' // اضافه کردن فیلد آدرس به فرم برای نمایش
     });
 
     useEffect(() => {
         if (user) {
+            // پیدا کردن آدرس پیش‌فرض یا آدرس اول
+            const defaultAddress = user?.addresses?.find(addr => addr?.isDefault) || user?.addresses?.[0];
+            
             setFormData({
                 username: user?.username || '',
                 phone: user?.phone || '',
                 nationalId: user?.nationalId || '',
                 email: user?.email || '',
                 postalCode: user?.postalCode || '',
-                bio: user?.bio || ''
-                // آدرس را از اینجا حذف می‌کنیم
+                bio: user?.bio || '',
+                // آدرس پیش‌فرض را در فرم قرار می‌دهیم
+                address: defaultAddress?.fullAddress || 'تهران-شهریار-شهرک اندیشه-فاز 3-خیابان ولیعصر-بن بست شجاعت.مجتمع اسکان'
             });
         }
     }, [user]);
@@ -39,9 +43,6 @@ const UserProfile = () => {
 
     const onInputChange = (e) => {
         const { name, value } = e.target;
-        // اگر نام فیلد "address" است، آن را نادیده بگیریم
-        if (name === 'address') return;
-
         setFormData((prev) => ({
             ...prev,
             [name]: value
