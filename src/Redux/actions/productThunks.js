@@ -37,19 +37,13 @@ export const fetchProducts = createAsyncThunk(
                 query: GET_ALL_PRODUCTS,
                 fetchPolicy: 'network-only',
             });
-
-            console.log("پاسخ سرور:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 console.error("خطا در دریافت محصولات:", errors);
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
 
             if (data?.products) {
-                console.log(`${data.products.length} محصول دریافت شد`, data.products.map(p => ({
-                    title: p.title,
-                    category: p.category?._id || p.category
-                })));
+               
                 return data.products;
             }
 
