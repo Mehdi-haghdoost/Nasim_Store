@@ -12,20 +12,12 @@ const CategoryItems = () => {
   const dispatch = useDispatch();
   const { filteredProducts, isLoading } = useFilter();
 
-  console.log('CategoryItems mounted'); // لاگ جدید
+
 
   useEffect(() => {
-    console.log('Dispatching fetchProducts...');
+
     dispatch(fetchProducts());
   }, [dispatch]);
-
-  console.log('CategoryItems - isLoading:', isLoading);
-  console.log('CategoryItems - filteredProducts:', filteredProducts.map(p => ({
-    title: p.title,
-    _id: p._id,
-    category: p.category?._id
-  })));
-  console.log('CategoryItems - filteredProducts length:', filteredProducts.length);
 
   if (isLoading) {
     return (
