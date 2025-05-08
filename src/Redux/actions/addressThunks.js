@@ -1,4 +1,3 @@
-// src/Redux/actions/addressThunks.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     ADD_ADDRESS,
@@ -105,38 +104,6 @@ export const deleteAddress = createAsyncThunk(
 );
 
 /**
- * Update address async thunk
- * در صورت نیاز به استفاده از mutation واقعی UPDATE_ADDRESS
- */
-export const updateAddress = createAsyncThunk(
-    'auth/updateAddress',
-    async (addressData, { dispatch, rejectWithValue }) => {
-        try {
-            const { id, ...updateData } = addressData;
-            console.log("Update address data:", { id, updateData });
-            
-            // استراتژی حذف و سپس اضافه به عنوان روش جایگزین
-            // 1. حذف آدرس قدیمی
-            const deleteResponse = await dispatch(deleteAddress(id));
-            if (!deleteResponse.payload) {
-                return rejectWithValue('خطا در حذف آدرس قدیمی');
-            }
-            
-            // 2. اضافه کردن آدرس جدید
-            const addResponse = await dispatch(addAddress(updateData));
-            if (addResponse.payload) {
-                return addResponse.payload;
-            }
-            
-            return rejectWithValue('خطا در اضافه کردن آدرس جدید');
-        } catch (error) {
-            console.error("Update address error:", error);
-            return rejectWithValue(error.message || 'خطا در به‌روزرسانی آدرس');
-        }
-    }
-);
-
-/**
  * Get all addresses async thunk
  */
 export const getAllAddresses = createAsyncThunk(
@@ -144,7 +111,8 @@ export const getAllAddresses = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const { data, errors } = await client.query({
-                query: GET_ALL_ADDRESSES
+                query: GET_ALL_ADDRESSES,
+                fetchPolicy: 'network-only' // اجبار به دریافت داده‌های تازه از سرور
             });
 
             console.log("Get all addresses response:", { data, errors });
@@ -161,6 +129,43 @@ export const getAllAddresses = createAsyncThunk(
         } catch (error) {
             console.error("Get all addresses error:", error);
             return rejectWithValue(error.message || 'خطا در دریافت آدرس‌ها');
+        }
+    }
+);
+
+/**
+ * Update address async thunk
+ */
+export const updateAddress = createAsyncThunk(
+    'auth/updateAddress',
+    async (addressData, { rejectWithValue }) => {
+        try {
+            const { id, ...input } = addressData;
+            
+            console.log("Updating address with data:", { id, input });
+            
+            const { data, errors } = await client.mutate({
+                mutation: UPDATE_ADDRESS,
+                variables: { 
+                    id: id,
+                    input: input
+                }
+            });
+
+            console.log("Update address response:", { data, errors });
+
+            if (errors && Array.isArray(errors) && errors.length > 0) {
+                return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
+            }
+
+            if (data?.updateAddress) {
+                return data.updateAddress;
+            }
+
+            return rejectWithValue('خطا در به‌روزرسانی آدرس');
+        } catch (error) {
+            console.error("Update address error:", error);
+            return rejectWithValue(error.message || 'خطا در به‌روزرسانی آدرس');
         }
     }
 );
