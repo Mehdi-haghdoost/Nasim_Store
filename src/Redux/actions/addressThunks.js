@@ -1,9 +1,11 @@
+// src/Redux/actions/addressThunks.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     ADD_ADDRESS,
     DELETE_ADDRESS,
     UPDATE_ADDRESS_DEFAULT,
-    GET_ALL_ADDRESSES
+    GET_ALL_ADDRESSES,
+    UPDATE_ADDRESS
 } from '@/graphql/entities/address/address.mutations';
 import client from "@/graphql/client";
 
@@ -98,6 +100,38 @@ export const deleteAddress = createAsyncThunk(
         } catch (error) {
             console.error("Delete address error:", error);
             return rejectWithValue(error.message || 'خطا در حذف آدرس');
+        }
+    }
+);
+
+/**
+ * Update address async thunk
+ * در صورت نیاز به استفاده از mutation واقعی UPDATE_ADDRESS
+ */
+export const updateAddress = createAsyncThunk(
+    'auth/updateAddress',
+    async (addressData, { dispatch, rejectWithValue }) => {
+        try {
+            const { id, ...updateData } = addressData;
+            console.log("Update address data:", { id, updateData });
+            
+            // استراتژی حذف و سپس اضافه به عنوان روش جایگزین
+            // 1. حذف آدرس قدیمی
+            const deleteResponse = await dispatch(deleteAddress(id));
+            if (!deleteResponse.payload) {
+                return rejectWithValue('خطا در حذف آدرس قدیمی');
+            }
+            
+            // 2. اضافه کردن آدرس جدید
+            const addResponse = await dispatch(addAddress(updateData));
+            if (addResponse.payload) {
+                return addResponse.payload;
+            }
+            
+            return rejectWithValue('خطا در اضافه کردن آدرس جدید');
+        } catch (error) {
+            console.error("Update address error:", error);
+            return rejectWithValue(error.message || 'خطا در به‌روزرسانی آدرس');
         }
     }
 );

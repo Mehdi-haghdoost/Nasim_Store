@@ -1,11 +1,11 @@
+// src/components/templates/p-user/editAddress/EditAddress.js
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../newAddress/NewAddress.module.css'; // استفاده از همان استایل ثبت آدرس
+import styles from '../newAddress/NewAddress.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateAddress } from '@/Redux/actions/addressThunks';
+import { updateAddress, deleteAddress, addAddress, getAllAddresses } from '@/Redux/actions/addressThunks';
 import { showSwal } from '@/utils/helpers';
-// وارد کردن لیست استان‌ها و شهرها
 import { provinces, cities } from '@/data/provincesCities';
 
 const EditAddress = ({ addressId }) => {
@@ -13,67 +13,68 @@ const EditAddress = ({ addressId }) => {
     const dispatch = useDispatch();
     const { user, cachedAddresses, loading } = useSelector(state => state.auth);
 
-    // استیت‌های فرم برای ویرایش آدرس
     const [formData, setFormData] = useState({
         id: addressId,
         street: '',
-        province: '',
-        city: '',
+        province: 'تهران',
+        city: 'تهران',
         fullAddress: '',
         isDefault: false,
         country: 'ایران'
     });
 
-    // لیست شهرهای استان انتخاب شده
     const [availableCities, setAvailableCities] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // دریافت اطلاعات آدرس مورد نظر
+    // دریافت تمام آدرس‌ها در ابتدای لود کامپوننت
     useEffect(() => {
-        // بررسی آیا آدرس در localStorage وجود دارد
-        let foundAddress = null;
-
-        if (typeof window !== 'undefined') {
-            const savedAddress = localStorage.getItem('editAddress');
-            if (savedAddress) {
-                try {
-                    foundAddress = JSON.parse(savedAddress);
-                    localStorage.removeItem('editAddress'); // پاک کردن بعد از استفاده
-                } catch (error) {
-                    console.error('Error parsing saved address:', error);
-                }
+        const fetchAddresses = async () => {
+            try {
+                setIsLoading(true);
+                await dispatch(getAllAddresses());
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Error fetching addresses:", error);
+                setIsLoading(false);
             }
-        }
+        };
 
-        // اگر در localStorage پیدا نشد، از state کاربر جستجو کنیم
-        if (!foundAddress) {
-            const addresses = user?.addresses || cachedAddresses || [];
-            foundAddress = addresses.find(addr => addr._id === addressId);
-        }
+        fetchAddresses();
+    }, [dispatch]);
 
-        // تنظیم فرم با مقادیر آدرس یافت شده
+    // تنظیم فرم با مقادیر آدرس یافت شده
+    useEffect(() => {
+        if (isLoading) return;
+
+        const addresses = user?.addresses || cachedAddresses || [];
+        const foundAddress = addresses.find(addr => addr._id === addressId);
+
+        console.log("Found address for editing:", foundAddress);
+        console.log("All addresses:", addresses);
+
         if (foundAddress) {
             setFormData({
                 id: addressId,
                 street: foundAddress.street || '',
-                province: foundAddress.province || '',
-                city: foundAddress.city || '',
+                province: foundAddress.province || 'تهران',
+                city: foundAddress.city || 'تهران',
                 fullAddress: foundAddress.fullAddress || '',
                 isDefault: foundAddress.isDefault || false,
                 country: foundAddress.country || 'ایران'
             });
-        } else {
-            // اگر آدرس پیدا نشد، به صفحه آدرس‌ها برگردیم
-            showSwal('آدرس مورد نظر یافت نشد', 'error', 'باشه');
-            router.push('/p-user/address');
-        }
-    }, [addressId, user, cachedAddresses, router]);
 
-    // وقتی استان تغییر می‌کند، لیست شهرها را به‌روزرسانی می‌کنیم
+            if (foundAddress.province) {
+                setAvailableCities(cities[foundAddress.province] || []);
+            }
+        } else {
+            console.log("Address not found in state, using default values");
+        }
+    }, [addressId, user, cachedAddresses, isLoading]);
+
     useEffect(() => {
         if (formData.province) {
             setAvailableCities(cities[formData.province] || []);
 
-            // اگر شهر انتخابی جزو شهرهای استان جدید نباشد، اولین شهر را انتخاب می‌کنیم
             if (!cities[formData.province]?.includes(formData.city) && cities[formData.province]?.length > 0) {
                 setFormData(prev => ({
                     ...prev,
@@ -83,7 +84,6 @@ const EditAddress = ({ addressId }) => {
         }
     }, [formData.province]);
 
-    // تغییر مقادیر فرم
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -92,7 +92,6 @@ const EditAddress = ({ addressId }) => {
         });
     };
 
-    // ارسال فرم
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -101,21 +100,44 @@ const EditAddress = ({ addressId }) => {
             return;
         }
 
-        // ارسال درخواست به سرور
         try {
-            const response = await dispatch(updateAddress(formData));
+            console.log("Submitting address data:", formData);
 
-            if (response?.payload) {
+            // استفاده از mutation واقعی UPDATE_ADDRESS به جای استراتژی حذف و اضافه
+            const updateResponse = await dispatch(updateAddress(formData));
+
+            if (updateResponse?.payload) {
                 showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
                 router.push('/p-user/address');
             } else {
-                showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
+                // اگر mutation واقعی شکست خورد، از استراتژی حذف و اضافه استفاده کنیم
+                const deleteResponse = await dispatch(deleteAddress(addressId));
+
+                if (!deleteResponse?.payload) {
+                    showSwal('خطا در حذف آدرس قبلی', 'error', 'باشه');
+                    return;
+                }
+
+                const { id, ...newAddressData } = formData;
+
+                const addResponse = await dispatch(addAddress(newAddressData));
+
+                if (addResponse?.payload) {
+                    showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
+                    router.push('/p-user/address');
+                } else {
+                    showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
+                }
             }
         } catch (error) {
             console.error('Error updating address:', error);
             showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
         }
     };
+
+    if (isLoading) {
+        return <div className="text-center py-5">در حال بارگذاری...</div>;
+    }
 
     return (
         <div className="ui-boxs">

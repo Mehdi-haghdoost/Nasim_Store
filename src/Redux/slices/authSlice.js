@@ -17,7 +17,8 @@ import {
     addAddress,
     deleteAddress,
     setDefaultAddress,
-    getAllAddresses
+    getAllAddresses,
+    updateAddress
 } from "../actions/addressThunks";
 
 const initialState = {
@@ -360,6 +361,21 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(getAllAddresses.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Update Address
+            .addCase(updateAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateAddress.fulfilled, (state, action) => {
+                const updatedAddress = action.payload;
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateAddress.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

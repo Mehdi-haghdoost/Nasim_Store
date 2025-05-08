@@ -45,3 +45,17 @@ export const GET_ALL_ADDRESSES = gql`
     }
   }
 `;
+
+export const UPDATE_ADDRESS = gql`
+  mutation UpdateAddress($id: ID!, $input: AddressInput!) {
+    updateAddress(id: $id, input: $input) {
+      _id
+      street
+      province
+      city
+      fullAddress
+      isDefault
+      country
+    }
+  }
+`;
