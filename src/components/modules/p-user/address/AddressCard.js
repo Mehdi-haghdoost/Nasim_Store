@@ -42,15 +42,12 @@ const AddressCard = ({ address, user, title }) => {
             });
     };
 
-    // تابع برای ویرایش آدرس
-    const handleEdit = (e) => {
-        e.preventDefault();
-        // ذخیره آدرس در localStorage برای استفاده در صفحه ویرایش
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('editAddress', JSON.stringify(address));
-        }
-        router.push(`/p-user/address/edit/${address._id}`);
-    };
+// تابع برای ویرایش آدرس
+const handleEdit = (e) => {
+    e.preventDefault();
+    
+    router.push(`/p-user/address/edit/${address._id}`);
+};
 
     // تابع برای تنظیم به عنوان آدرس پیش‌فرض
     const handleSetDefault = async (e) => {
