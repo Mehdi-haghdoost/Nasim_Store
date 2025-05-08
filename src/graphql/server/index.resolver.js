@@ -15,7 +15,7 @@ const { addSeller } = require("./mutations/seller.resolvers");
 const { addComment, replyToComment } = require("./mutations/comment.resolvers");
 const { getProductComments, getUserProfile } = require("./queries/user.resolvers");
 const { getAllAddress, linkExistingAddresses } = require("./queries/address.resolvers");
-const { addNewAddress, deleteAddress, updateAddressDefault } = require("./mutations/address.resolvers");
+const { addNewAddress, deleteAddress, updateAddressDefault, updateAddress } = require("./mutations/address.resolvers");
 const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/ticket.resolver");
 const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
 const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.resolvers");
@@ -68,6 +68,7 @@ const RootMutation = new GraphQLObjectType({
         addNewAddress,
         deleteAddress,
         updateAddressDefault,
+        updateAddress,
         linkExistingAddresses,
         createTicket,
         addMessageToTicket,
