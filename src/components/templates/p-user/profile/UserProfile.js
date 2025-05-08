@@ -11,30 +11,25 @@ const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
+
     const [formData, setFormData] = useState({
         username: '',
         phone: '',
         nationalId: '',
         email: '',
         postalCode: '',
-        bio: '',
-        address: '' // اضافه کردن فیلد آدرس به فرم برای نمایش
+        bio: '' // اضافه کردن بیو به صورت صحیح
     });
 
     useEffect(() => {
         if (user) {
-            // پیدا کردن آدرس پیش‌فرض یا آدرس اول
-            const defaultAddress = user?.addresses?.find(addr => addr?.isDefault) || user?.addresses?.[0];
-            
             setFormData({
                 username: user?.username || '',
                 phone: user?.phone || '',
                 nationalId: user?.nationalId || '',
                 email: user?.email || '',
                 postalCode: user?.postalCode || '',
-                bio: user?.bio || '',
-                // آدرس پیش‌فرض را در فرم قرار می‌دهیم
-                address: defaultAddress?.fullAddress || 'تهران-شهریار-شهرک اندیشه-فاز 3-خیابان ولیعصر-بن بست شجاعت.مجتمع اسکان'
+                bio: user?.bio || '' // بیو به درستی مقداردهی شود
             });
         }
     }, [user]);
@@ -51,13 +46,9 @@ const UserProfile = () => {
 
     const onSubmit = async () => {
         try {
-            // کپی از formData ایجاد می‌کنیم و فیلد address را از آن حذف می‌کنیم
-            const dataToSubmit = { ...formData };
-            delete dataToSubmit.address;
+            console.log("Submitting form data:", formData);
             
-            console.log("Submitting form data (without address):", dataToSubmit);
-            
-            const response = await dispatch(updateUserProfile(dataToSubmit));
+            const response = await dispatch(updateUserProfile(formData));
             console.log("Update profile response:", response);
 
             if (response?.payload) {
