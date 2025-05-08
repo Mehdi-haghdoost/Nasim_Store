@@ -1,13 +1,27 @@
+// C:\Users\LENOVO\Desktop\Nassim_Store\src\components\templates\p-user\profile\DataTable.js
 import React from 'react';
 import styles from './DataTable.module.css';
 import { useSelector } from 'react-redux';
 
 const DataTable = () => {
-    const { user } = useSelector((state) => state.auth);
+    const { user, loading } = useSelector((state) => state.auth);
     console.log('user ===>', user);
 
     // آدرس پیش‌فرض ثابت
     const defaultAddressText = 'تهران-شهریار-شهرک اندیشه-فاز 3-خیابان ولیعصر-بن بست شجاعت.مجتمع اسکان';
+
+    // اگر داده‌ها در حال بارگذاری هستند، نشانگر بارگذاری نمایش داده شود
+    if (loading) {
+        return (
+            <main className={styles.dataTable}>
+                <div className="text-center p-3">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">در حال بارگذاری...</span>
+                    </div>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className={styles.dataTable}>
@@ -16,21 +30,21 @@ const DataTable = () => {
                     <tr>
                         <td className="text-end p-3">
                             <h6>نام و نام خانوادگی</h6>
-                            <p className="mt-2">{user?.username || 'مهدی حق دوست'}</p>
+                            <p className="mt-2">{user?.username || ''}</p>
                         </td>
                         <td className="text-end p-3">
                             <h6>شماره تلفن</h6>
-                            <p className="mt-2">{user?.phone || '09211367465'}</p>
+                            <p className="mt-2">{user?.phone || ''}</p>
                         </td>
                     </tr>
                     <tr>
                         <td className="text-end p-3">
                             <h6>پست الکترونیک</h6>
-                            <p className="mt-2">{user?.email || 'mahdi.leo2014@gmail.com'}</p>
+                            <p className="mt-2">{user?.email || ''}</p>
                         </td>
                         <td className="text-end p-3">
                             <h6>کد ملی</h6>
-                            <p className="mt-2">{user?.nationalId || '00146564664664'}</p>
+                            <p className="mt-2">{user?.nationalId || ''}</p>
                         </td>
                     </tr>
                     <tr>
@@ -40,13 +54,12 @@ const DataTable = () => {
                         </td>
                         <td className="text-end p-3">
                             <h6>کد پستی</h6>
-                            <p className="mt-2">{user?.postalCode || '3321546987'}</p>
+                            <p className="mt-2">{user?.postalCode || ''}</p>
                         </td>
                     </tr>
                     <tr>
                         <td className="text-end p-3" colSpan="2">
                             <h6>آدرس</h6>
-                            {/* همیشه آدرس پیش‌فرض را نمایش می‌دهیم */}
                             <p className="mt-2">{defaultAddressText}</p>
                         </td>
                     </tr>
