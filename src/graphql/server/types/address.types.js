@@ -9,6 +9,7 @@ const AddressType = new GraphQLObjectType({
         city: { type: new GraphQLNonNull(GraphQLString) },
         fullAddress: { type: GraphQLString },
         isDefault: { type: new GraphQLNonNull(GraphQLBoolean) },
+        country: { type: GraphQLString, defaultValue: 'ایران' } // اضافه کردن فیلد country
     }
 });
 
@@ -20,6 +21,7 @@ const AddressInputType = new GraphQLInputObjectType({
         city: { type: new GraphQLNonNull(GraphQLString) },
         fullAddress: { type: new GraphQLNonNull(GraphQLString) },
         isDefault: { type: GraphQLBoolean },
+        country: { type: GraphQLString, defaultValue: 'ایران' } // اضافه کردن فیلد country
     }
 });
 
@@ -35,4 +37,4 @@ module.exports = {
     AddressType,
     AddressInputType,
     UpdateAddressDefaultInputType,
-}
+};
