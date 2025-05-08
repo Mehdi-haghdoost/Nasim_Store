@@ -18,7 +18,7 @@ import {
     deleteAddress,
     setDefaultAddress,
     getAllAddresses,
-    updateAddress
+    updateAddress // اضافه کردن updateAddress
 } from "../actions/addressThunks";
 
 const initialState = {
@@ -364,14 +364,40 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-
-            // Update Address
+            
+            // Update Address - افزودن قسمت جدید
             .addCase(updateAddress.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(updateAddress.fulfilled, (state, action) => {
                 const updatedAddress = action.payload;
+                
+                // اگر آدرس پیش‌فرض باشد، بقیه آدرس‌ها را غیرپیش‌فرض کنیم
+                if (updatedAddress.isDefault) {
+                    if (state.user?.addresses) {
+                        state.user.addresses = state.user.addresses.map(addr => 
+                            addr._id !== updatedAddress._id ? { ...addr, isDefault: false } : addr);
+                    }
+                    
+                    if (state.cachedAddresses?.length > 0) {
+                        state.cachedAddresses = state.cachedAddresses.map(addr => 
+                            addr._id !== updatedAddress._id ? { ...addr, isDefault: false } : addr);
+                    }
+                }
+                
+                // به‌روزرسانی آدرس در کاربر
+                if (state.user?.addresses) {
+                    state.user.addresses = state.user.addresses.map(addr => 
+                        addr._id === updatedAddress._id ? updatedAddress : addr);
+                }
+                
+                // به‌روزرسانی آدرس در کش
+                if (state.cachedAddresses?.length > 0) {
+                    state.cachedAddresses = state.cachedAddresses.map(addr => 
+                        addr._id === updatedAddress._id ? updatedAddress : addr);
+                }
+                
                 state.loading = false;
                 state.error = null;
             })
