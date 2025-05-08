@@ -6,9 +6,9 @@ import styles from './AddressCard.module.css';
 import { useDispatch } from 'react-redux';
 import { deleteAddress, setDefaultAddress } from '@/Redux/actions/addressThunks';
 import { showSwal } from '@/utils/helpers';
-import swal from 'sweetalert'; // وارد کردن مستقیم کتابخانه sweetalert
+import swal from 'sweetalert';
 
-const AddressCard = ({ address, title }) => {
+const AddressCard = ({ address, user, title }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -93,7 +93,17 @@ const AddressCard = ({ address, title }) => {
                             <p className="text-overflow-2 address-line">
                                 {address.fullAddress}
                             </p>
-                            <p className="mb-0 text-black btn-group-sm font-weight-bold">
+                            <div className="mt-3">
+                                <div className="d-flex mb-2 align-items-center">
+                                    <i className="bi bi-phone me-2"></i>
+                                    <span>شماره همراه: {user?.phone || 'شماره همراهی ثبت نشده'}</span>
+                                </div>
+                                <div className="d-flex mb-2 align-items-center">
+                                    <i className="bi bi-person me-2"></i>
+                                    <span>نام تحویل گیرنده: {user?.username || 'نامی ثبت نشده'}</span>
+                                </div>
+                            </div>
+                            <p className="mb-0 text-black btn-group-sm font-weight-bold mt-3">
                                 <div className={styles.tooltip}>
                                     <a href="#" className="btn btn-primary btn-sm ms-2" onClick={handleEdit} data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="ویرایش آدرس">
                                         <i className="bi bi-pencil text-white"></i>
