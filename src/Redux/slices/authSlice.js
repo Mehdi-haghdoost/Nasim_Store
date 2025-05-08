@@ -24,6 +24,7 @@ const initialState = {
     otpVerified: false,
     otpMessage: null,
     registrationType: 'standard', // 'standard', 'otp'
+    cachedAddresses: [] // آرایه‌ای برای ذخیره موقت آدرس‌ها
 };
 
 const authSlice = createSlice({
@@ -49,6 +50,10 @@ const authSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
                 state.user = action.payload.user;
+                // اگر در داده‌های کاربر آدرس وجود داشت، آن را کش می‌کنیم
+                if (action.payload.user.addresses && action.payload.user.addresses.length > 0) {
+                    state.cachedAddresses = action.payload.user.addresses;
+                }
                 state.loading = false;
                 state.error = null;
                 state.otpVerified = false;
@@ -67,6 +72,10 @@ const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
                 state.user = action.payload.user;
+                // اگر در داده‌های کاربر آدرس وجود داشت، آن را کش می‌کنیم
+                if (action.payload.user.addresses && action.payload.user.addresses.length > 0) {
+                    state.cachedAddresses = action.payload.user.addresses;
+                }
                 state.loading = false;
                 state.error = null;
                 state.registrationType = 'standard';
@@ -118,6 +127,10 @@ const authSlice = createSlice({
             .addCase(confirmOtpAndRegister.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
                 state.user = action.payload.user;
+                // اگر در داده‌های کاربر آدرس وجود داشت، آن را کش می‌کنیم
+                if (action.payload.user.addresses && action.payload.user.addresses.length > 0) {
+                    state.cachedAddresses = action.payload.user.addresses;
+                }
                 state.loading = false;
                 state.error = null;
                 state.otpVerified = true;
@@ -135,6 +148,10 @@ const authSlice = createSlice({
             .addCase(verifyOtpAndLogin.fulfilled, (state, action) => {
                 state.isAuthenticated = true;
                 state.user = action.payload.user;
+                // اگر در داده‌های کاربر آدرس وجود داشت، آن را کش می‌کنیم
+                if (action.payload.user.addresses && action.payload.user.addresses.length > 0) {
+                    state.cachedAddresses = action.payload.user.addresses;
+                }
                 state.loading = false;
                 state.error = null;
                 state.otpVerified = true;
@@ -150,7 +167,12 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateUserProfile.fulfilled, (state, action) => {
-                state.user = { ...state.user, ...action.payload }; // بروزرسانی اطلاعات جدید کاربر
+                // بروزرسانی اطلاعات کاربر با حفظ آدرس‌های کش شده
+                state.user = { 
+                    ...state.user, 
+                    ...action.payload,
+                    addresses: state.user.addresses || state.cachedAddresses 
+                };
                 state.loading = false;
                 state.error = null;
             })
@@ -168,6 +190,10 @@ const authSlice = createSlice({
                 if (action.payload.user) {
                     state.isAuthenticated = true;
                     state.user = action.payload.user;
+                    // اگر در داده‌های کاربر آدرس وجود داشت، آن را کش می‌کنیم
+                    if (action.payload.user.addresses && action.payload.user.addresses.length > 0) {
+                        state.cachedAddresses = action.payload.user.addresses;
+                    }
                 } else {
                     state.isAuthenticated = false;
                 }
@@ -195,6 +221,7 @@ const authSlice = createSlice({
                 state.registrationType = 'standard';
                 state.loading = false;
                 state.error = null;
+                state.cachedAddresses = []; // پاک کردن آدرس‌های کش شده
                 // سبد خرید کاربر لاگین شده در localStorage باقی می‌ماند
                 // اما کلید آن را عوض می‌کنیم تا به سبد خرید مهمان تبدیل شود
                 // این کار در cartThunks انجام می‌شود
