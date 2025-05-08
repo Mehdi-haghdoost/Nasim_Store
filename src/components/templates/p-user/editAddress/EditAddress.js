@@ -5,12 +5,14 @@ import styles from '../newAddress/NewAddress.module.css'; // استفاده از
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAddress } from '@/Redux/actions/addressThunks';
 import { showSwal } from '@/utils/helpers';
+// وارد کردن لیست استان‌ها و شهرها
+import { provinces, cities } from '@/data/provincesCities';
 
 const EditAddress = ({ addressId }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { user, cachedAddresses, loading } = useSelector(state => state.auth);
-    
+
     // استیت‌های فرم برای ویرایش آدرس
     const [formData, setFormData] = useState({
         id: addressId,
@@ -19,18 +21,17 @@ const EditAddress = ({ addressId }) => {
         city: '',
         fullAddress: '',
         isDefault: false,
-        country: 'ایران',
-        postalCode: '',
-        phoneNumber: '',
-        mobileNumber: '',
-        recipientName: ''
+        country: 'ایران'
     });
+
+    // لیست شهرهای استان انتخاب شده
+    const [availableCities, setAvailableCities] = useState([]);
 
     // دریافت اطلاعات آدرس مورد نظر
     useEffect(() => {
         // بررسی آیا آدرس در localStorage وجود دارد
         let foundAddress = null;
-        
+
         if (typeof window !== 'undefined') {
             const savedAddress = localStorage.getItem('editAddress');
             if (savedAddress) {
@@ -42,13 +43,13 @@ const EditAddress = ({ addressId }) => {
                 }
             }
         }
-        
+
         // اگر در localStorage پیدا نشد، از state کاربر جستجو کنیم
         if (!foundAddress) {
             const addresses = user?.addresses || cachedAddresses || [];
             foundAddress = addresses.find(addr => addr._id === addressId);
         }
-        
+
         // تنظیم فرم با مقادیر آدرس یافت شده
         if (foundAddress) {
             setFormData({
@@ -58,11 +59,7 @@ const EditAddress = ({ addressId }) => {
                 city: foundAddress.city || '',
                 fullAddress: foundAddress.fullAddress || '',
                 isDefault: foundAddress.isDefault || false,
-                country: foundAddress.country || 'ایران',
-                postalCode: foundAddress.postalCode || '',
-                phoneNumber: foundAddress.phoneNumber || '',
-                mobileNumber: foundAddress.mobileNumber || '',
-                recipientName: foundAddress.recipientName || ''
+                country: foundAddress.country || 'ایران'
             });
         } else {
             // اگر آدرس پیدا نشد، به صفحه آدرس‌ها برگردیم
@@ -70,6 +67,21 @@ const EditAddress = ({ addressId }) => {
             router.push('/p-user/address');
         }
     }, [addressId, user, cachedAddresses, router]);
+
+    // وقتی استان تغییر می‌کند، لیست شهرها را به‌روزرسانی می‌کنیم
+    useEffect(() => {
+        if (formData.province) {
+            setAvailableCities(cities[formData.province] || []);
+
+            // اگر شهر انتخابی جزو شهرهای استان جدید نباشد، اولین شهر را انتخاب می‌کنیم
+            if (!cities[formData.province]?.includes(formData.city) && cities[formData.province]?.length > 0) {
+                setFormData(prev => ({
+                    ...prev,
+                    city: cities[formData.province][0]
+                }));
+            }
+        }
+    }, [formData.province]);
 
     // تغییر مقادیر فرم
     const handleChange = (e) => {
@@ -92,7 +104,7 @@ const EditAddress = ({ addressId }) => {
         // ارسال درخواست به سرور
         try {
             const response = await dispatch(updateAddress(formData));
-            
+
             if (response?.payload) {
                 showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
                 router.push('/p-user/address');
@@ -121,14 +133,14 @@ const EditAddress = ({ addressId }) => {
                             <div className="row g-3">
                                 <div className="col-12">
                                     <div className={`${styles.comment_item} mb-3`}>
-                                        <input 
-                                            type="text" 
-                                            className='form-control' 
-                                            id='floatingInputStreet' 
+                                        <input
+                                            type="text"
+                                            className='form-control'
+                                            id='floatingInputStreet'
                                             name='street'
                                             value={formData.street}
                                             onChange={handleChange}
-                                            placeholder="خیابان، کوچه، پلاک..." 
+                                            placeholder="خیابان، کوچه، پلاک..."
                                             required
                                         />
                                         <label htmlFor="floatingInputStreet" className='form-lable label-float fw-bold'>
@@ -142,19 +154,19 @@ const EditAddress = ({ addressId }) => {
                                             استان
                                             <span className="text-danger">*</span>
                                         </label>
-                                        <select 
-                                            name="province" 
-                                            id="floatingInputOstan" 
+                                        <select
+                                            name="province"
+                                            id="floatingInputOstan"
                                             className='form-select'
                                             value={formData.province}
                                             onChange={handleChange}
                                             required
                                         >
-                                            <option value="تهران">تهران</option>
-                                            <option value="اصفهان">اصفهان</option>
-                                            <option value="خراسان رضوی">خراسان رضوی</option>
-                                            <option value="فارس">فارس</option>
-                                            <option value="اذربایجان شرقی">اذربایجان شرقی</option>
+                                            {provinces.map(province => (
+                                                <option key={province} value={province}>
+                                                    {province}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
@@ -164,93 +176,29 @@ const EditAddress = ({ addressId }) => {
                                             شهر
                                             <span className="text-danger">*</span>
                                         </label>
-                                        <select 
-                                            name="city" 
-                                            id="floatingInputCity" 
+                                        <select
+                                            name="city"
+                                            id="floatingInputCity"
                                             className='form-select'
                                             value={formData.city}
                                             onChange={handleChange}
                                             required
                                         >
-                                            <option value="اندیشه">اندیشه</option>
-                                            <option value="نطنز">نطنز</option>
-                                            <option value="مشهد">مشهد</option>
-                                            <option value="شیراز">شیراز</option>
-                                            <option value="تبریز">تبریز</option>
+                                            {availableCities.map(city => (
+                                                <option key={city} value={city}>
+                                                    {city}
+                                                </option>
+                                            ))}
                                         </select>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className={`${styles.comment_item} mb-3`}>
-                                        <input 
-                                            type="text" 
-                                            className='form-control' 
-                                            id='floatingInputPostalCode' 
-                                            name='postalCode'
-                                            value={formData.postalCode}
-                                            onChange={handleChange}
-                                            placeholder="کد پستی..." 
-                                        />
-                                        <label htmlFor="floatingInputPostalCode" className='form-lable label-float fw-bold'>
-                                            کد پستی
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className={`${styles.comment_item} mb-3`}>
-                                        <input 
-                                            type="text" 
-                                            className='form-control' 
-                                            id='floatingInputRecipientName' 
-                                            name='recipientName'
-                                            value={formData.recipientName}
-                                            onChange={handleChange}
-                                            placeholder="نام گیرنده..." 
-                                        />
-                                        <label htmlFor="floatingInputRecipientName" className='form-lable label-float fw-bold'>
-                                            نام گیرنده
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className={`${styles.comment_item} mb-3`}>
-                                        <input 
-                                            type="text" 
-                                            className='form-control' 
-                                            id='floatingInputPhoneNumber' 
-                                            name='phoneNumber'
-                                            value={formData.phoneNumber}
-                                            onChange={handleChange}
-                                            placeholder="تلفن ثابت..." 
-                                        />
-                                        <label htmlFor="floatingInputPhoneNumber" className='form-lable label-float fw-bold'>
-                                            تلفن ثابت
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className={`${styles.comment_item} mb-3`}>
-                                        <input 
-                                            type="text" 
-                                            className='form-control' 
-                                            id='floatingInputMobileNumber' 
-                                            name='mobileNumber'
-                                            value={formData.mobileNumber}
-                                            onChange={handleChange}
-                                            placeholder="تلفن همراه..." 
-                                        />
-                                        <label htmlFor="floatingInputMobileNumber" className='form-lable label-float fw-bold'>
-                                            تلفن همراه
-                                        </label>
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className={styles.comment_item}>
-                                        <textarea 
-                                            name="fullAddress" 
-                                            id="floatingInputDesc" 
-                                            className='form-control py-3' 
-                                            rows="5" 
+                                        <textarea
+                                            name="fullAddress"
+                                            id="floatingInputDesc"
+                                            className='form-control py-3'
+                                            rows="5"
                                             value={formData.fullAddress}
                                             onChange={handleChange}
                                             placeholder="آدرس کامل خود را وارد کنید (شامل جزئیات مانند پلاک، طبقه، واحد و ...)"
@@ -263,9 +211,9 @@ const EditAddress = ({ addressId }) => {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-check">
-                                        <input 
-                                            className="form-check-input" 
-                                            type="checkbox" 
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
                                             id="defaultAddressCheck"
                                             name="isDefault"
                                             checked={formData.isDefault}
@@ -277,8 +225,8 @@ const EditAddress = ({ addressId }) => {
                                     </div>
                                 </div>
                                 <div className="col-12">
-                                    <button 
-                                        type='submit' 
+                                    <button
+                                        type='submit'
                                         className='btn main-color-one-bg my-3 border-0 px-5 py-3'
                                         disabled={loading}
                                     >
