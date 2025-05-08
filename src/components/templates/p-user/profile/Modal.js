@@ -77,17 +77,7 @@ const Modal = ({ hideModal, showModal, formData, onInputChange, onSubmit }) => {
                                     placeholder="توضیحاتی در مورد خودتان"
                                 ></textarea>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="address" className="form-label">آدرس</label>
-                                <input
-                                    type="text"
-                                    id="address"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={onInputChange}
-                                    className="form-control rounded-pill"
-                                />
-                            </div>
+                            {/* فیلد آدرس حذف شد */}
                         </form>
                     </div>
                     <div className="modal-footer justify-content-center">
