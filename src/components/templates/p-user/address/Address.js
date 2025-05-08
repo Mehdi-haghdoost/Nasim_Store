@@ -1,3 +1,4 @@
+// src/components/templates/p-user/address/Address.js
 "use client";
 import React, { useEffect } from 'react';
 import styles from './address.module.css';
@@ -5,8 +6,6 @@ import Link from 'next/link';
 import AddressCard from '@/components/modules/p-user/address/AddressCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '@/Redux/actions/authThunks';
-
-// بقیه کد همانند قبل
 
 const Address = () => {
     const dispatch = useDispatch();
@@ -88,25 +87,25 @@ const Address = () => {
                                                             <i className="bi bi-pin-map ms-3">
                                                             </i>
                                                             <h6 className="mb-0 font-15 fw-normal">آدرس :</h6>
-                                                            <p className="me-2 font-16 mb-0">{`${address.province}، ${address.city}، ${address.street}`}</p>
+                                                            <p className="me-2 font-16 mb-0">{`${address.province}، ${address.city}`}</p>
                                                         </div>
                                                         <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
                                                             <i className="bi bi-envelope ms-3">
                                                             </i>
                                                             <h6 className="mb-0 font-15 fw-normal">شماره تلفن :</h6>
-                                                            <p className="me-2 font-16 mb-0">{address.phoneNumber || '-'}</p>
+                                                            <p className="me-2 font-16 mb-0">{address.phoneNumber || 'شماره ایی ثبت نشده'}</p>
                                                         </div>
                                                         <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
                                                             <i className="bi bi-phone ms-3">
                                                             </i>
                                                             <h6 className="mb-0 font-15 fw-normal">شماره همراه :</h6>
-                                                            <p className="me-2 font-16 mb-0">{address.mobileNumber || '-'}</p>
+                                                            <p className="me-2 font-16 mb-0">{user?.phone || 'شماره همراهی ثبت نشده'}</p>
                                                         </div>
                                                         <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
                                                             <i className="bi bi-person ms-3">
                                                             </i>
                                                             <h6 className="mb-0 font-15 fw-normal">نام تحویل گیرنده :</h6>
-                                                            <p className="me-2 font-16 mb-0">{address.recipientName || '-'}</p>
+                                                            <p className="me-2 font-16 mb-0">{user?.username || 'نامی ثبت نشده'}</p>
                                                         </div>
                                                     </div>
                                                     <img src="/images/map.jpg" alt="map" height="150" width="150" className='img-thumbnail' style={{ pointerEvents: "none" }} />
@@ -138,6 +137,7 @@ const Address = () => {
                             <AddressCard
                                 key={address._id}
                                 address={address}
+                                user={user}
                                 title={address.isDefault ? "آدرس پیشفرض" : ""}
                             />
                         ))}
