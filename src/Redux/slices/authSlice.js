@@ -13,6 +13,13 @@ import {
     logoutUser
 } from "../actions/authThunks";
 
+import {
+    addAddress,
+    deleteAddress,
+    setDefaultAddress,
+    getAllAddresses
+} from "../actions/addressThunks";
+
 const initialState = {
     isAuthenticated: false,
     token: null, // دیگر ذخیره نمی‌کنیم چون از کوکی‌ها استفاده می‌شه
@@ -168,10 +175,10 @@ const authSlice = createSlice({
             })
             .addCase(updateUserProfile.fulfilled, (state, action) => {
                 // بروزرسانی اطلاعات کاربر با حفظ آدرس‌های کش شده
-                state.user = { 
-                    ...state.user, 
+                state.user = {
+                    ...state.user,
                     ...action.payload,
-                    addresses: state.user.addresses || state.cachedAddresses 
+                    addresses: state.user.addresses || state.cachedAddresses
                 };
                 state.loading = false;
                 state.error = null;
@@ -229,7 +236,133 @@ const authSlice = createSlice({
             .addCase(logoutUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+
+            // Add Address
+            .addCase(addAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addAddress.fulfilled, (state, action) => {
+                // اضافه کردن آدرس جدید به آرایه آدرس‌های کاربر
+                const newAddress = action.payload;
+
+                // اگر آدرس پیش‌فرض باشد، بقیه آدرس‌ها را غیرپیش‌فرض کنیم
+                if (newAddress.isDefault) {
+                    if (state.user?.addresses) {
+                        state.user.addresses = state.user.addresses.map(addr => ({
+                            ...addr,
+                            isDefault: false
+                        }));
+                    }
+
+                    if (state.cachedAddresses) {
+                        state.cachedAddresses = state.cachedAddresses.map(addr => ({
+                            ...addr,
+                            isDefault: false
+                        }));
+                    }
+                }
+
+                // اضافه کردن آدرس جدید
+                if (state.user?.addresses) {
+                    state.user.addresses = [...state.user.addresses, newAddress];
+                } else if (state.user) {
+                    state.user.addresses = [newAddress];
+                }
+
+                // به‌روزرسانی آدرس‌های کش شده
+                state.cachedAddresses = state.user?.addresses || [newAddress];
+
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(addAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Delete Address
+            .addCase(deleteAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteAddress.fulfilled, (state, action) => {
+                const deletedAddressId = action.payload;
+
+                // حذف آدرس از آرایه آدرس‌های کاربر
+                if (state.user?.addresses) {
+                    state.user.addresses = state.user.addresses.filter(addr => addr._id !== deletedAddressId);
+                }
+
+                // حذف آدرس از آدرس‌های کش شده
+                if (state.cachedAddresses?.length) {
+                    state.cachedAddresses = state.cachedAddresses.filter(addr => addr._id !== deletedAddressId);
+                }
+
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(deleteAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Set Default Address
+            .addCase(setDefaultAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(setDefaultAddress.fulfilled, (state, action) => {
+                const defaultAddress = action.payload;
+
+                // تنظیم آدرس پیش‌فرض در آرایه آدرس‌های کاربر
+                if (state.user?.addresses) {
+                    state.user.addresses = state.user.addresses.map(addr => ({
+                        ...addr,
+                        isDefault: addr._id === defaultAddress._id
+                    }));
+                }
+
+                // تنظیم آدرس پیش‌فرض در آدرس‌های کش شده
+                if (state.cachedAddresses?.length) {
+                    state.cachedAddresses = state.cachedAddresses.map(addr => ({
+                        ...addr,
+                        isDefault: addr._id === defaultAddress._id
+                    }));
+                }
+
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(setDefaultAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Get All Addresses
+            .addCase(getAllAddresses.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllAddresses.fulfilled, (state, action) => {
+                const addresses = action.payload;
+
+                // به‌روزرسانی آرایه آدرس‌های کاربر
+                if (state.user) {
+                    state.user.addresses = addresses;
+                }
+
+                // به‌روزرسانی آدرس‌های کش شده
+                state.cachedAddresses = addresses;
+
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(getAllAddresses.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     },
 });
 
