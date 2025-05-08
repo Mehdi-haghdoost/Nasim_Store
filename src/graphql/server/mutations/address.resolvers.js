@@ -144,9 +144,94 @@ const updateAddressDefault = {
     },
 };
 
+// افزودن resolver برای به‌روزرسانی آدرس
+const updateAddress = {
+    type: AddressType,
+    args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        input: { type: new GraphQLNonNull(AddressInputType) }
+    },
+    resolve: async (_, { id, input }, { req }) => {
+        try {
+            console.log("Update address resolver called with:", { id, input });
+
+            const user = await validateToken(req);
+            if (!user) throw new Error('کاربر احراز هویت نشده است');
+
+            const { street, province, city, fullAddress, isDefault, country } = input;
+
+            // اعتبارسنجی province و city
+            if (!provinces.includes(province)) {
+                throw new Error('استان نامعتبر است');
+            }
+            if (!cities[province].includes(city)) {
+                throw new Error('شهر نامعتبر است');
+            }
+
+            // بررسی وجود آدرس و دسترسی کاربر
+            const address = await AddressModel.findOne({ _id: id, user: user._id });
+            if (!address) throw new Error('آدرس مورد نظر یافت نشد یا شما مجاز به تغییر آن نیستید');
+
+            console.log("Found address in DB:", address);
+
+            // اگر isDefault تغییر کرده و true شده است
+            if (isDefault && !address.isDefault) {
+                await AddressModel.updateMany(
+                    { user: user._id, _id: { $ne: id } },
+                    { $set: { isDefault: false } }
+                );
+            }
+            // اگر isDefault تغییر کرده و false شده است
+            else if (!isDefault && address.isDefault) {
+                const defaultAddressesCount = await AddressModel.countDocuments({
+                    user: user._id,
+                    isDefault: true,
+                    _id: { $ne: id },
+                });
+
+                if (defaultAddressesCount === 0) {
+                    const otherAddress = await AddressModel.findOne({
+                        user: user._id,
+                        _id: { $ne: id },
+                    });
+
+                    if (otherAddress) {
+                        otherAddress.isDefault = true;
+                        await otherAddress.save();
+                    } else {
+                        throw new Error('نمی‌توانید تنها آدرس خود را غیر پیش‌فرض کنید');
+                    }
+                }
+            }
+
+            // به‌روزرسانی آدرس
+            const updatedAddress = await AddressModel.findByIdAndUpdate(
+                id,
+                {
+                    street,
+                    province,
+                    city,
+                    fullAddress,
+                    isDefault,
+                    country: country || 'ایران',
+                    updatedAt: new Date().toISOString()
+                },
+                { new: true }
+            );
+
+            console.log("Updated address:", updatedAddress);
+
+            return updatedAddress;
+        } catch (error) {
+            console.error("Error in updateAddress resolver:", error);
+            throw new Error(`خطا در به‌روزرسانی آدرس: ${error.message}`);
+        }
+    }
+};
 
 module.exports = {
     addNewAddress,
     deleteAddress,
     updateAddressDefault,
+    updateAddress,
 };
