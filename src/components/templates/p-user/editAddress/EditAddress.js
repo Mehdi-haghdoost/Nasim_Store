@@ -1,80 +1,91 @@
-// src/components/templates/p-user/editAddress/EditAddress.js
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../newAddress/NewAddress.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateAddress, deleteAddress, addAddress, getAllAddresses } from '@/Redux/actions/addressThunks';
 import { showSwal } from '@/utils/helpers';
+// استفاده از هوک ریداکس
+import { useDispatch, useSelector } from 'react-redux';
+// استفاده از thunk برای به‌روزرسانی آدرس
+import { updateAddress, getAllAddresses } from '@/Redux/actions/addressThunks';
+// وارد کردن لیست استان‌ها و شهرها
 import { provinces, cities } from '@/data/provincesCities';
 
 const EditAddress = ({ addressId }) => {
     const router = useRouter();
     const dispatch = useDispatch();
+    // دریافت اطلاعات کاربر و آدرس‌ها از ریداکس
     const { user, cachedAddresses, loading } = useSelector(state => state.auth);
 
+    // استیت‌های فرم برای ویرایش آدرس
     const [formData, setFormData] = useState({
         id: addressId,
         street: '',
-        province: 'تهران',
-        city: 'تهران',
+        province: '',
+        city: '',
         fullAddress: '',
         isDefault: false,
         country: 'ایران'
     });
 
+    // لیست شهرهای استان انتخاب شده
     const [availableCities, setAvailableCities] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    // دریافت تمام آدرس‌ها در ابتدای لود کامپوننت
+    // دریافت اطلاعات آدرس از ریداکس یا بارگذاری مجدد آدرس‌ها اگر وجود نداشت
     useEffect(() => {
-        const fetchAddresses = async () => {
-            try {
-                setIsLoading(true);
-                await dispatch(getAllAddresses());
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Error fetching addresses:", error);
-                setIsLoading(false);
-            }
-        };
-
-        fetchAddresses();
-    }, [dispatch]);
-
-    // تنظیم فرم با مقادیر آدرس یافت شده
-    useEffect(() => {
-        if (isLoading) return;
-
+        // ابتدا آدرس‌ها را در حافظه کش جستجو می‌کنیم
         const addresses = user?.addresses || cachedAddresses || [];
-        const foundAddress = addresses.find(addr => addr._id === addressId);
-
-        console.log("Found address for editing:", foundAddress);
-        console.log("All addresses:", addresses);
-
+        let foundAddress = addresses.find(addr => addr._id === addressId);
+        
         if (foundAddress) {
+            console.log("Found address from Redux:", foundAddress);
             setFormData({
                 id: addressId,
                 street: foundAddress.street || '',
-                province: foundAddress.province || 'تهران',
-                city: foundAddress.city || 'تهران',
+                province: foundAddress.province || '',
+                city: foundAddress.city || '',
                 fullAddress: foundAddress.fullAddress || '',
                 isDefault: foundAddress.isDefault || false,
                 country: foundAddress.country || 'ایران'
             });
-
-            if (foundAddress.province) {
-                setAvailableCities(cities[foundAddress.province] || []);
-            }
         } else {
-            console.log("Address not found in state, using default values");
+            // اگر آدرس در کش نبود، آدرس‌ها را از سرور می‌گیریم
+            console.log("Address not found in Redux, fetching from server...");
+            dispatch(getAllAddresses())
+                .then(response => {
+                    if (response.payload) {
+                        const newFoundAddress = response.payload.find(addr => addr._id === addressId);
+                        if (newFoundAddress) {
+                            console.log("Found address after fetching:", newFoundAddress);
+                            setFormData({
+                                id: addressId,
+                                street: newFoundAddress.street || '',
+                                province: newFoundAddress.province || '',
+                                city: newFoundAddress.city || '',
+                                fullAddress: newFoundAddress.fullAddress || '',
+                                isDefault: newFoundAddress.isDefault || false,
+                                country: newFoundAddress.country || 'ایران'
+                            });
+                        } else {
+                            // اگر بعد از بارگذاری مجدد هم پیدا نشد، به صفحه آدرس‌ها برمی‌گردیم
+                            showSwal('آدرس مورد نظر یافت نشد', 'error', 'باشه');
+                            router.push('/p-user/address');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching addresses:", error);
+                    showSwal('خطا در دریافت اطلاعات آدرس', 'error', 'باشه');
+                    router.push('/p-user/address');
+                });
         }
-    }, [addressId, user, cachedAddresses, isLoading]);
+    }, [addressId, user, cachedAddresses, dispatch, router]);
 
+    // وقتی استان تغییر می‌کند، لیست شهرها را به‌روزرسانی می‌کنیم
     useEffect(() => {
         if (formData.province) {
             setAvailableCities(cities[formData.province] || []);
 
+            // اگر شهر انتخابی جزو شهرهای استان جدید نباشد، اولین شهر را انتخاب می‌کنیم
             if (!cities[formData.province]?.includes(formData.city) && cities[formData.province]?.length > 0) {
                 setFormData(prev => ({
                     ...prev,
@@ -84,6 +95,7 @@ const EditAddress = ({ addressId }) => {
         }
     }, [formData.province]);
 
+    // تغییر مقادیر فرم
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -92,6 +104,7 @@ const EditAddress = ({ addressId }) => {
         });
     };
 
+    // ارسال فرم
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -100,44 +113,23 @@ const EditAddress = ({ addressId }) => {
             return;
         }
 
+        console.log("Submitting address data:", formData);
+        
+        // ارسال درخواست به سرور با استفاده از thunk
         try {
-            console.log("Submitting address data:", formData);
-
-            // استفاده از mutation واقعی UPDATE_ADDRESS به جای استراتژی حذف و اضافه
-            const updateResponse = await dispatch(updateAddress(formData));
-
-            if (updateResponse?.payload) {
+            const result = await dispatch(updateAddress(formData));
+            
+            if (result.payload) {
                 showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
                 router.push('/p-user/address');
             } else {
-                // اگر mutation واقعی شکست خورد، از استراتژی حذف و اضافه استفاده کنیم
-                const deleteResponse = await dispatch(deleteAddress(addressId));
-
-                if (!deleteResponse?.payload) {
-                    showSwal('خطا در حذف آدرس قبلی', 'error', 'باشه');
-                    return;
-                }
-
-                const { id, ...newAddressData } = formData;
-
-                const addResponse = await dispatch(addAddress(newAddressData));
-
-                if (addResponse?.payload) {
-                    showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
-                    router.push('/p-user/address');
-                } else {
-                    showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
-                }
+                showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
             }
         } catch (error) {
             console.error('Error updating address:', error);
             showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
         }
     };
-
-    if (isLoading) {
-        return <div className="text-center py-5">در حال بارگذاری...</div>;
-    }
 
     return (
         <div className="ui-boxs">
@@ -184,6 +176,7 @@ const EditAddress = ({ addressId }) => {
                                             onChange={handleChange}
                                             required
                                         >
+                                            {!formData.province && <option value="">انتخاب استان</option>}
                                             {provinces.map(province => (
                                                 <option key={province} value={province}>
                                                     {province}
@@ -206,6 +199,7 @@ const EditAddress = ({ addressId }) => {
                                             onChange={handleChange}
                                             required
                                         >
+                                            {!formData.city && <option value="">انتخاب شهر</option>}
                                             {availableCities.map(city => (
                                                 <option key={city} value={city}>
                                                     {city}
