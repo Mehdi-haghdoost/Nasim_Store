@@ -1,9 +1,26 @@
-import React from 'react'
+"use client";
+import React, { useEffect } from 'react';
 import styles from './address.module.css';
 import Link from 'next/link';
 import AddressCard from '@/components/modules/p-user/address/AddressCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { refreshToken } from '@/Redux/actions/authThunks';
+
+// بقیه کد همانند قبل
 
 const Address = () => {
+    const dispatch = useDispatch();
+    const { user, cachedAddresses, loading } = useSelector(state => state.auth);
+
+    // استفاده از آدرس‌های موجود در state یا آدرس‌های کش شده
+    const addresses = user?.addresses || cachedAddresses || [];
+
+    // دریافت اطلاعات کاربر در هنگام بارگذاری صفحه
+    useEffect(() => {
+        if (!user?.addresses && !cachedAddresses?.length) {
+            dispatch(refreshToken());
+        }
+    }, [dispatch, user, cachedAddresses]);
 
     return (
         <main>
@@ -22,69 +39,83 @@ const Address = () => {
                             </div>
                         </div>
                         <div className="ui-box-item-desc">
-                            <div className={styles.address}>
-                                <div className={styles.address_item}>
-                                    <div className={`flex-nowrap ${styles.address_item_status}`}>
-                                        <div className={styles.address_item_status_item}>
-                                            <p className='fw-bold'>
-                                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است
-                                            </p>
-                                        </div>
-                                        <div className={styles.address_item_status_item}>
-                                            <div className="dropdown">
-                                                <a href="" className='' role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i className='bi bi-three-dots-vertical text-dark fs-5'></i>
-                                                </a>
-                                                <ul className="dropdown-menu flex-column" aria-labelledby="dropdownMenuLink">
-                                                    <li>
-                                                        <a href="" className="dropdown-item ">
-                                                            <i className='bi bi-pencil ms-2'></i>
-                                                            ویرایش
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="" className="dropdown-item ">
-                                                            <i className='bi bi-trash text-danger ms-2'></i>
-                                                            حذف
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={`border-0 ${styles.address_item_detail}`}>
-                                        <div className="d-flex justify-content-between align-items-center flex-wrap">
-                                            <div className="d-flex flex-column">
-                                                <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
-                                                    <i className="bi bi-pin-map ms-3">
-                                                    </i>
-                                                    <h6 className="mb-0 font-15 fw-normal">آدرس :</h6>
-                                                    <p className="me-2 font-16 mb-0">فردیس کرج</p>
-                                                </div>
-                                                <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
-                                                    <i className="bi bi-envelope ms-3">
-                                                    </i>
-                                                    <h6 className="mb-0 font-15 fw-normal">شماره تلفن :</h6>
-                                                    <p className="me-2 font-16 mb-0">02165556759</p>
-                                                </div>
-                                                <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
-                                                    <i className="bi bi-phone ms-3">
-                                                    </i>
-                                                    <h6 className="mb-0 font-15 fw-normal">شماره همراه :</h6>
-                                                    <p className="me-2 font-16 mb-0">09211367465</p>
-                                                </div>
-                                                <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
-                                                    <i className="bi bi-person ms-3">
-                                                    </i>
-                                                    <h6 className="mb-0 font-15 fw-normal">نام تحویل گیرنده :</h6>
-                                                    <p className="me-2 font-16 mb-0">مهدی حق دوست</p>
-                                                </div>
-                                            </div>
-                                            <img src="/images/map.jpg" alt="map" height="150" width="150" className='img-thumbnail' style={{ pointerEvents: "none" }} />
-                                        </div>
+                            {loading ? (
+                                <div className="text-center p-5">
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">در حال بارگذاری...</span>
                                     </div>
                                 </div>
-                            </div>
+                            ) : addresses.length === 0 ? (
+                                <div className="text-center p-5">
+                                    <p>هیچ آدرسی ثبت نشده است. لطفاً یک آدرس جدید اضافه کنید.</p>
+                                </div>
+                            ) : (
+                                <div className={styles.address}>
+                                    {addresses.map((address) => (
+                                        <div key={address._id} className={styles.address_item}>
+                                            <div className={`flex-nowrap ${styles.address_item_status}`}>
+                                                <div className={styles.address_item_status_item}>
+                                                    <p className='fw-bold'>
+                                                        {address.fullAddress}
+                                                    </p>
+                                                </div>
+                                                <div className={styles.address_item_status_item}>
+                                                    <div className="dropdown">
+                                                        <a href="" className='' role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i className='bi bi-three-dots-vertical text-dark fs-5'></i>
+                                                        </a>
+                                                        <ul className="dropdown-menu flex-column" aria-labelledby="dropdownMenuLink">
+                                                            <li>
+                                                                <a href="" className="dropdown-item ">
+                                                                    <i className='bi bi-pencil ms-2'></i>
+                                                                    ویرایش
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" className="dropdown-item ">
+                                                                    <i className='bi bi-trash text-danger ms-2'></i>
+                                                                    حذف
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className={`border-0 ${styles.address_item_detail}`}>
+                                                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                                                    <div className="d-flex flex-column">
+                                                        <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
+                                                            <i className="bi bi-pin-map ms-3">
+                                                            </i>
+                                                            <h6 className="mb-0 font-15 fw-normal">آدرس :</h6>
+                                                            <p className="me-2 font-16 mb-0">{`${address.province}، ${address.city}، ${address.street}`}</p>
+                                                        </div>
+                                                        <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
+                                                            <i className="bi bi-envelope ms-3">
+                                                            </i>
+                                                            <h6 className="mb-0 font-15 fw-normal">شماره تلفن :</h6>
+                                                            <p className="me-2 font-16 mb-0">{address.phoneNumber || '-'}</p>
+                                                        </div>
+                                                        <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
+                                                            <i className="bi bi-phone ms-3">
+                                                            </i>
+                                                            <h6 className="mb-0 font-15 fw-normal">شماره همراه :</h6>
+                                                            <p className="me-2 font-16 mb-0">{address.mobileNumber || '-'}</p>
+                                                        </div>
+                                                        <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
+                                                            <i className="bi bi-person ms-3">
+                                                            </i>
+                                                            <h6 className="mb-0 font-15 fw-normal">نام تحویل گیرنده :</h6>
+                                                            <p className="me-2 font-16 mb-0">{address.recipientName || '-'}</p>
+                                                        </div>
+                                                    </div>
+                                                    <img src="/images/map.jpg" alt="map" height="150" width="150" className='img-thumbnail' style={{ pointerEvents: "none" }} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -103,14 +134,18 @@ const Address = () => {
             <div className="content-box">
                 <div className="container-fluid">
                     <div className="row">
-                        <AddressCard />
-                        <AddressCard />
-                        <AddressCard title="آدرس پیشفرض" />
+                        {addresses.map((address) => (
+                            <AddressCard
+                                key={address._id}
+                                address={address}
+                                title={address.isDefault ? "آدرس پیشفرض" : ""}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
         </main>
-    )
-}
+    );
+};
 
-export default Address
+export default Address;
