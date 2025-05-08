@@ -37,14 +37,16 @@ export const GET_ALL_ADDRESSES = gql`
   query GetAllAddress {
     getAllAddress {
       _id
-      street
+      street       # اضافه شده
+      fullAddress
       province
       city
-      fullAddress
       isDefault
+      country  
     }
   }
 `;
+
 
 export const UPDATE_ADDRESS = gql`
   mutation UpdateAddress($id: ID!, $input: AddressInput!) {
