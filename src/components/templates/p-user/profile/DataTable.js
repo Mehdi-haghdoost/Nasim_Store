@@ -1,16 +1,19 @@
-// C:\Users\LENOVO\Desktop\Nassim_Store\src\components\templates\p-user\profile\DataTable.js
 import React from 'react';
 import styles from './DataTable.module.css';
 import { useSelector } from 'react-redux';
 
 const DataTable = () => {
-    const { user, loading } = useSelector((state) => state.auth);
+    const { user, loading, cachedAddresses } = useSelector((state) => state.auth);
     console.log('user ===>', user);
+    console.log('cachedAddresses ===>', cachedAddresses);
 
-    // آدرس پیش‌فرض ثابت
-    const defaultAddressText = 'تهران-شهریار-شهرک اندیشه-فاز 3-خیابان ولیعصر-بن بست شجاعت.مجتمع اسکان';
-
-    // اگر داده‌ها در حال بارگذاری هستند، نشانگر بارگذاری نمایش داده شود
+    // استفاده از آدرس‌های کاربر یا آدرس‌های کش شده
+    const addresses = user?.addresses || cachedAddresses;
+    
+    // پیدا کردن آدرس پیش‌فرض یا اولین آدرس
+    const defaultAddress = addresses?.find(addr => addr?.isDefault) || addresses?.[0];
+    
+    // نمایش اسپینر در زمان بارگذاری
     if (loading) {
         return (
             <main className={styles.dataTable}>
@@ -60,7 +63,12 @@ const DataTable = () => {
                     <tr>
                         <td className="text-end p-3" colSpan="2">
                             <h6>آدرس</h6>
-                            <p className="mt-2">{defaultAddressText}</p>
+                            <p className="mt-2">
+                                {defaultAddress 
+                                    ? `${defaultAddress.fullAddress}، ${defaultAddress.city}، ${defaultAddress.province}`
+                                    : 'آدرسی ثبت نشده است'
+                                }
+                            </p>
                         </td>
                     </tr>
                 </tbody>
