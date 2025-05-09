@@ -9,10 +9,10 @@ const DataTable = () => {
 
     // استفاده از آدرس‌های کاربر یا آدرس‌های کش شده
     const addresses = user?.addresses || cachedAddresses;
-    
+
     // پیدا کردن آدرس پیش‌فرض یا اولین آدرس
     const defaultAddress = addresses?.find(addr => addr?.isDefault) || addresses?.[0];
-    
+
     // نمایش اسپینر در زمان بارگذاری
     if (loading) {
         return (
@@ -64,8 +64,8 @@ const DataTable = () => {
                         <td className="text-end p-3" colSpan="2">
                             <h6>آدرس</h6>
                             <p className="mt-2">
-                                {defaultAddress 
-                                    ? `${defaultAddress.fullAddress}، ${defaultAddress.city}، ${defaultAddress.province}`
+                                {defaultAddress
+                                    ? `${defaultAddress.fullAddress}`
                                     : 'آدرسی ثبت نشده است'
                                 }
                             </p>

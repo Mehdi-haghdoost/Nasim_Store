@@ -1,4 +1,3 @@
-// src/components/templates/p-user/address/Address.js
 "use client";
 import React, { useEffect } from 'react';
 import styles from './address.module.css';
@@ -6,9 +5,14 @@ import Link from 'next/link';
 import AddressCard from '@/components/modules/p-user/address/AddressCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '@/Redux/actions/authThunks';
+import { deleteAddress } from '@/Redux/actions/addressThunks';
+import { useRouter } from 'next/navigation';
+import { showSwal } from '@/utils/helpers';
+import swal from 'sweetalert';
 
 const Address = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { user, cachedAddresses, loading } = useSelector(state => state.auth);
 
     // استفاده از آدرس‌های موجود در state یا آدرس‌های کش شده
@@ -20,6 +24,39 @@ const Address = () => {
             dispatch(refreshToken());
         }
     }, [dispatch, user, cachedAddresses]);
+
+    // مدیریت ویرایش آدرس
+    const handleEdit = (addressId) => {
+        router.push(`/p-user/address/edit/${addressId}`);
+    };
+
+    // مدیریت حذف آدرس - با همان منطق کامپوننت AddressCard
+    const handleDelete = async (addressId) => {
+        // استفاده مستقیم از swal
+        swal({
+            title: "آیا از حذف این آدرس اطمینان دارید؟",
+            text: "این عملیات غیرقابل بازگشت است",
+            icon: "warning",
+            buttons: ["انصراف", "بله، حذف شود"],
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        const response = await dispatch(deleteAddress(addressId));
+
+                        if (response?.payload) {
+                            showSwal("آدرس با موفقیت حذف شد", "success", "باشه");
+                        } else {
+                            showSwal("خطا در حذف آدرس", "error", "باشه");
+                        }
+                    } catch (error) {
+                        console.error('Error deleting address:', error);
+                        showSwal("خطا در حذف آدرس", "error", "باشه");
+                    }
+                }
+            });
+    };
 
     return (
         <main>
@@ -60,18 +97,32 @@ const Address = () => {
                                                 </div>
                                                 <div className={styles.address_item_status_item}>
                                                     <div className="dropdown">
-                                                        <a href="" className='' role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <a href="#" className='' role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i className='bi bi-three-dots-vertical text-dark fs-5'></i>
                                                         </a>
                                                         <ul className="dropdown-menu flex-column" aria-labelledby="dropdownMenuLink">
                                                             <li>
-                                                                <a href="" className="dropdown-item ">
+                                                                <a 
+                                                                    href="#" 
+                                                                    className="dropdown-item"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        handleEdit(address._id);
+                                                                    }}
+                                                                >
                                                                     <i className='bi bi-pencil ms-2'></i>
                                                                     ویرایش
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="" className="dropdown-item ">
+                                                                <a 
+                                                                    href="#" 
+                                                                    className="dropdown-item text-danger"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        handleDelete(address._id);
+                                                                    }}
+                                                                >
                                                                     <i className='bi bi-trash text-danger ms-2'></i>
                                                                     حذف
                                                                 </a>
@@ -89,6 +140,14 @@ const Address = () => {
                                                             <h6 className="mb-0 font-15 fw-normal">آدرس :</h6>
                                                             <p className="me-2 font-16 mb-0">{`${address.province}، ${address.city}`}</p>
                                                         </div>
+                                                        {address.street && (
+                                                            <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
+                                                                <i className="bi bi-geo-alt ms-3">
+                                                                </i>
+                                                                <h6 className="mb-0 font-15 fw-normal">خیابان :</h6>
+                                                                <p className="me-2 font-16 mb-0">{address.street}</p>
+                                                            </div>
+                                                        )}
                                                         <div className="text-muted mb-4 d-flex align-items-baseline mb-2">
                                                             <i className="bi bi-envelope ms-3">
                                                             </i>
@@ -139,6 +198,8 @@ const Address = () => {
                                 address={address}
                                 user={user}
                                 title={address.isDefault ? "آدرس پیشفرض" : ""}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
                             />
                         ))}
                     </div>

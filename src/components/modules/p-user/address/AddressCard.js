@@ -1,4 +1,3 @@
-// src/components/modules/p-user/address/AddressCard.js
 "use client";
 import React from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,7 +7,7 @@ import { deleteAddress, setDefaultAddress } from '@/Redux/actions/addressThunks'
 import { showSwal } from '@/utils/helpers';
 import swal from 'sweetalert';
 
-const AddressCard = ({ address, user, title }) => {
+const AddressCard = ({ address, user, title, onEdit, onDelete }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -31,6 +30,8 @@ const AddressCard = ({ address, user, title }) => {
 
                         if (response?.payload) {
                             showSwal("آدرس با موفقیت حذف شد", "success", "باشه");
+                            // اگر onDelete پاس داده شده باشد، آن را فراخوانی کن
+                            if (onDelete) onDelete(address._id);
                         } else {
                             showSwal("خطا در حذف آدرس", "error", "باشه");
                         }
@@ -42,12 +43,15 @@ const AddressCard = ({ address, user, title }) => {
             });
     };
 
-// تابع برای ویرایش آدرس
-const handleEdit = (e) => {
-    e.preventDefault();
-    
-    router.push(`/p-user/address/edit/${address._id}`);
-};
+    // تابع برای ویرایش آدرس
+    const handleEdit = (e) => {
+        e.preventDefault();
+        
+        router.push(`/p-user/address/edit/${address._id}`);
+        
+        // اگر onEdit پاس داده شده باشد، آن را فراخوانی کن
+        if (onEdit) onEdit(address._id);
+    };
 
     // تابع برای تنظیم به عنوان آدرس پیش‌فرض
     const handleSetDefault = async (e) => {
