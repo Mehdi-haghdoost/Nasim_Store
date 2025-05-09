@@ -1,4 +1,3 @@
-// src/graphql/entities/address/address.mutations.js
 import { gql } from '@apollo/client';
 
 export const ADD_ADDRESS = gql`
@@ -33,21 +32,6 @@ export const UPDATE_ADDRESS_DEFAULT = gql`
   }
 `;
 
-export const GET_ALL_ADDRESSES = gql`
-  query GetAllAddress {
-    getAllAddress {
-      _id
-      street       # اضافه شده
-      fullAddress
-      province
-      city
-      isDefault
-      country  
-    }
-  }
-`;
-
-
 export const UPDATE_ADDRESS = gql`
   mutation UpdateAddress($id: ID!, $input: AddressInput!) {
     updateAddress(id: $id, input: $input) {
@@ -57,7 +41,6 @@ export const UPDATE_ADDRESS = gql`
       city
       fullAddress
       isDefault
-      country
     }
   }
 `;
