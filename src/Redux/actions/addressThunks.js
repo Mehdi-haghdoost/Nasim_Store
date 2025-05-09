@@ -3,9 +3,11 @@ import {
     ADD_ADDRESS,
     DELETE_ADDRESS,
     UPDATE_ADDRESS_DEFAULT,
-    GET_ALL_ADDRESSES,
     UPDATE_ADDRESS
 } from '@/graphql/entities/address/address.mutations';
+import { 
+    GET_ALL_ADDRESSES 
+} from '@/graphql/entities/address/address.queries';
 import client from "@/graphql/client";
 
 /**
