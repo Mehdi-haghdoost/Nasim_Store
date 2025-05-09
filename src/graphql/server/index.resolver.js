@@ -13,7 +13,7 @@ const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
 const { addComment, replyToComment } = require("./mutations/comment.resolvers");
-const { getProductComments, getUserProfile } = require("./queries/user.resolvers");
+const { getProductComments, getUserProfile, me } = require("./queries/user.resolvers");
 const { getAllAddress, linkExistingAddresses } = require("./queries/address.resolvers");
 const { addNewAddress, deleteAddress, updateAddressDefault, updateAddress } = require("./mutations/address.resolvers");
 const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/ticket.resolver");
@@ -48,6 +48,7 @@ const RootQuery = new GraphQLObjectType({
         similarProducts,
         bestSellingProducts,
         products,
+        me,
     }
 })
 
