@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ADD_COMMENT, REPLY_TO_COMMENT } from "@/graphql/entities/comments/comment.mutations";
+import { ADD_COMMENT, REPLY_TO_COMMENT, DELETE_COMMENT } from "@/graphql/entities/comments/comment.mutations";
 import { GET_USER_COMMENTS } from "@/graphql/entities/comments/comment.queries";
 import client from "@/graphql/client";
 import { fetchProduct } from "./productThunks";
@@ -25,18 +25,18 @@ export const addComment = createAsyncThunk(
       });
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
-        return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
+        return rejectWithValue(errors[0].message || 'مشکلی در ثبت کامنت رخ داد.');
       }
 
       if (data?.addComment) {
-        // بعد از ثبت موفق کامنت، محصول را دوباره دریافت می‌کنیم 
         dispatch(fetchProduct(product));
         return data.addComment;
       }
 
-      return rejectWithValue('خطا در ثبت کامنت');
+      return rejectWithValue('مشکلی در ثبت کامنت رخ داد.');
     } catch (error) {
-      return rejectWithValue(error.message || 'خطا در ثبت کامنت');
+      console.error('Error in addComment:', error);
+      return rejectWithValue('مشکلی در ارتباط با سرور رخ داد. لطفاً دوباره تلاش کنید.');
     }
   }
 );
@@ -45,7 +45,6 @@ export const replyToComment = createAsyncThunk(
   'comment/replyToComment',
   async ({ parentId, commentText, name, email, rating }, { rejectWithValue, dispatch, getState }) => {
     try {
-      // تست console.log برای اطمینان از ارسال درست پارامترها
       console.log("ارسال درخواست پاسخ به کامنت با پارامترها:", {
         parentId, commentText, name, email, rating
       });
@@ -65,11 +64,10 @@ export const replyToComment = createAsyncThunk(
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         console.error("خطا در پاسخ GraphQL:", errors);
-        return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
+        return rejectWithValue(errors[0].message || 'مشکلی در ثبت پاسخ رخ داد.');
       }
 
       if (data?.replyToComment) {
-        // بعد از ثبت موفق پاسخ، محصول را دوباره دریافت می‌کنیم تا اطلاعات کامنت‌ها به‌روز شود
         const { product } = getState().product;
         if (product && product._id) {
           dispatch(fetchProduct(product._id));
@@ -78,10 +76,10 @@ export const replyToComment = createAsyncThunk(
       }
 
       console.error("داده‌ای از سرور دریافت نشد.");
-      return rejectWithValue('خطا در ثبت پاسخ');
+      return rejectWithValue('مشکلی در ثبت پاسخ رخ داد.');
     } catch (error) {
       console.error("خطای ارتباط با سرور:", error);
-      return rejectWithValue(error.message || 'خطا در ثبت پاسخ');
+      return rejectWithValue('مشکلی در ارتباط با سرور رخ داد. لطفاً دوباره تلاش کنید.');
     }
   }
 );
@@ -104,7 +102,7 @@ export const getUserComments = createAsyncThunk(
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         console.error("GraphQL errors:", errors);
-        return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
+        return rejectWithValue(errors[0].message || 'مشکلی در دریافت کامنت‌ها رخ داد.');
       }
 
       if (data?.getUserComments) {
@@ -113,11 +111,51 @@ export const getUserComments = createAsyncThunk(
       }
 
       console.error('No data returned from getUserComments query');
-      return rejectWithValue('خطا در دریافت کامنت‌های کاربر');
+      return rejectWithValue('مشکلی در دریافت کامنت‌ها رخ داد.');
     } catch (error) {
       console.error("Error fetching user comments:", error);
       console.error("Error stack:", error.stack);
-      return rejectWithValue(error.message || 'خطا در دریافت کامنت‌های کاربر');
+      return rejectWithValue('مشکلی در ارتباط با سرور رخ داد. لطفاً دوباره تلاش کنید.');
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  'comment/deleteComment',
+  async (commentId, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const { comment } = getState();
+      const currentPage = comment.currentPage || 1;
+      const limit = 10;
+
+      console.log('Deleting comment with ID:', commentId, 'and refetching page:', currentPage);
+
+      const { data, errors } = await client.mutate({
+        mutation: DELETE_COMMENT,
+        variables: { commentId },
+        refetchQueries: [{
+          query: GET_USER_COMMENTS,
+          variables: { page: currentPage, limit },
+          fetchPolicy: 'network-only',
+        }],
+      });
+
+      console.log('Delete comment response:', { data, errors });
+
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        console.error('GraphQL errors in deleteComment:', errors);
+        return rejectWithValue(errors[0].message || 'مشکلی در حذف دیدگاه رخ داد.');
+      }
+
+      if (data?.deleteComment && data.deleteComment.success) {
+        console.log('Comment deleted successfully:', data.deleteComment);
+        return data.deleteComment;
+      }
+
+      return rejectWithValue('مشکلی در حذف دیدگاه رخ داد.');
+    } catch (error) {
+      console.error('Error in deleteComment:', error);
+      return rejectWithValue('مشکلی در ارتباط با سرور رخ داد. لطفاً دوباره تلاش کنید.');
     }
   }
 );
