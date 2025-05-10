@@ -1,4 +1,4 @@
-const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType, GraphQLBoolean } = require("graphql");
+const { GraphQLEnumType, GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInputObjectType, GraphQLBoolean, GraphQLInt } = require("graphql");
 const ProductModel = require('../../../../models/Product');
 const CommentModel = require("../../../../models/Comment")
 
@@ -18,7 +18,6 @@ const CommentType = new GraphQLObjectType({
     fields: () => {
         const { UserType } = require("./user.types");
         const { ProductType } = require("./product.types");
-
 
         return {
             _id: { type: GraphQLID },
@@ -83,9 +82,20 @@ const ReplyCommentInputType = new GraphQLInputObjectType({
     }),
 });
 
+const UserCommentsResponseType = new GraphQLObjectType({
+    name: "UserCommentsResponse",
+    fields: {
+        comments: { type: new GraphQLList(CommentType) },
+        totalPages: { type: GraphQLInt },
+        currentPage: { type: GraphQLInt },
+        totalComments: { type: GraphQLInt }
+    }
+});
+
 module.exports = {
     CommentInputType,
     CommentType,
     ReplyCommentInputType,
-    CommentStatusEnum, // برای سازگاری با کدهای دیگر صادر میکنیم
+    CommentStatusEnum,
+    UserCommentsResponseType,
 };
