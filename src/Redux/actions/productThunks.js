@@ -32,7 +32,6 @@ export const fetchProducts = createAsyncThunk(
     'product/fetchProducts',
     async (_, { rejectWithValue }) => {
         try {
-            console.log("شروع درخواست محصولات از سرور...");
             const { data, errors } = await client.query({
                 query: GET_ALL_PRODUCTS,
                 fetchPolicy: 'network-only',
