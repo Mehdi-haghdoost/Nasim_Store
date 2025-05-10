@@ -34,3 +34,12 @@ export const REPLY_TO_COMMENT = gql`
     }
   }
 `;
+
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($commentId: ID!) {
+    deleteComment(commentId: $commentId) {
+      success
+      message
+    }
+  }
+`;

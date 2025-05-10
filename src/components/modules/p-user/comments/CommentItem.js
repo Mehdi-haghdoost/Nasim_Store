@@ -6,7 +6,7 @@ import { formatDate } from '@/utils/helpers';
 import { useComment } from '@/Redux/hooks/useComment';
 import swal from 'sweetalert';
 
-const CommentItem = ({ comment }) => {
+const CommentItem = ({ comment, onDeleteSuccess }) => {
   const { deleteComment, deleteLoading } = useComment();
 
   if (!comment) return null;
@@ -80,6 +80,10 @@ const CommentItem = ({ comment }) => {
           icon: "success",
           timer: 2000,
         });
+        // اینجا فانکشن onDeleteSuccess را صدا می‌زنیم
+        if (onDeleteSuccess) {
+          onDeleteSuccess();
+        }
       } catch (error) {
         console.error('خطا در حذف کامنت:', error);
         await swal({

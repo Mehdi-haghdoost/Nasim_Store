@@ -57,12 +57,3 @@ export const GET_USER_COMMENTS = gql`
     }
   }
 `;
-
-export const DELETE_COMMENT = gql`
-  mutation DeleteComment($commentId: ID!) {
-    deleteComment(commentId: $commentId) {
-      success
-      message
-    }
-  }
-`;
