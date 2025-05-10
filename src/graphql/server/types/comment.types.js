@@ -82,6 +82,7 @@ const ReplyCommentInputType = new GraphQLInputObjectType({
     }),
 });
 
+// اضافه کردن UserCommentsResponseType که در فایل شما موجود نیست
 const UserCommentsResponseType = new GraphQLObjectType({
     name: "UserCommentsResponse",
     fields: {
@@ -92,10 +93,19 @@ const UserCommentsResponseType = new GraphQLObjectType({
     }
 });
 
+const DeleteCommentResponseType = new GraphQLObjectType({
+    name: "DeleteCommentResponse",
+    fields: {
+        success: { type: GraphQLBoolean },
+        message: { type: GraphQLString }
+    }
+});
+
 module.exports = {
     CommentInputType,
     CommentType,
     ReplyCommentInputType,
     CommentStatusEnum,
     UserCommentsResponseType,
+    DeleteCommentResponseType,
 };
