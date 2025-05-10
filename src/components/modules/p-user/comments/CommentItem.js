@@ -3,18 +3,20 @@ import styles from './CommentItem.module.css';
 import { GoStarFill } from "react-icons/go";
 import { FaRegStar } from 'react-icons/fa';
 import { formatDate } from '@/utils/helpers';
+import { useComment } from '@/Redux/hooks/useComment';
+import swal from 'sweetalert';
 
 const CommentItem = ({ comment }) => {
+  const { deleteComment, deleteLoading } = useComment();
+
   if (!comment) return null;
 
-  // تاریخ فارسی
   const persianDate = formatDate(comment.createdAt);
 
-  // رندر ستاره‌ها بر اساس امتیاز
   const renderStars = () => {
     const stars = [];
     const rating = comment.rating || 0;
-    
+
     for (let i = 0; i < 5; i++) {
       if (i < rating) {
         stars.push(<GoStarFill key={i} />);
@@ -22,11 +24,10 @@ const CommentItem = ({ comment }) => {
         stars.push(<FaRegStar key={i} />);
       }
     }
-    
+
     return stars;
   };
 
-  // وضعیت کامنت
   const getStatusClass = () => {
     switch (comment.status) {
       case 'APPROVED':
@@ -59,33 +60,64 @@ const CommentItem = ({ comment }) => {
     }
   };
 
+  const handleDeleteComment = async (e) => {
+    e.preventDefault();
+
+    const willDelete = await swal({
+      title: "آیا از حذف این دیدگاه اطمینان دارید؟",
+      text: "با حذف این دیدگاه، امکان بازیابی آن وجود نخواهد داشت!",
+      icon: "warning",
+      buttons: ["انصراف", "حذف کن"],
+      dangerMode: true,
+    });
+
+    if (willDelete) {
+      try {
+        await deleteComment(comment._id);
+        await swal({
+          title: "موفقیت‌آمیز!",
+          text: "دیدگاه شما با موفقیت حذف شد.",
+          icon: "success",
+          timer: 2000,
+        });
+      } catch (error) {
+        console.error('خطا در حذف کامنت:', error);
+        await swal({
+          title: "خطا!",
+          text: "مشکلی در حذف دیدگاه رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+        });
+      }
+    }
+  };
+
   return (
     <div className={styles.comment_item}>
       <div className={styles.comment_item_status}>
         <div className={styles.comment_item_status_item}>
-          {/* تصویر محصول */}
-          <img 
-            src={comment.product?.image ? `/images/product/${comment.product.image}` : "/images/product/product-image1.jpg"} 
-            width="80" 
-            alt="productImage" 
+          <img
+            src={comment.product?.image ? `/images/product/${comment.product.image}` : "/images/product/product-image1.jpg"}
+            width="80"
+            alt="productImage"
           />
         </div>
         <div className={`dropd-status ${styles.comment_item_status_item}`}>
           <div className="dropdown">
             <span className={`${getStatusClass()} badge`}>{getStatusText()}</span>
-            <a href="#" role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false" >
+            <a href="#" role='button' id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
               <i className="bi bi-three-dots-vertical text-dark fs-5"></i>
             </a>
 
-            <ul className="dropdown-menu flex-column" aria-labelledby="dropdownMenuLink" >
+            <ul className="dropdown-menu flex-column" aria-labelledby="dropdownMenuLink">
               <li>
-                <a href="#" className="dropdown-item" onClick={(e) => e.preventDefault()}>
-                  <i className="bi bi-pencil"></i>
-                  ویرایش
-                </a>
-                <a href="#" className="dropdown-item" onClick={(e) => e.preventDefault()}>
+                <a
+                  href="#"
+                  className="dropdown-item"
+                  onClick={handleDeleteComment}
+                  disabled={deleteLoading}
+                >
                   <i className="bi bi-trash text-danger"></i>
-                  حذف
+                  {deleteLoading ? 'در حال حذف...' : 'حذف'}
                 </a>
               </li>
             </ul>
@@ -114,8 +146,7 @@ const CommentItem = ({ comment }) => {
             <div className={styles.comment_content_text}>
               {comment.commentText}
             </div>
-            
-            {/* نمایش نقاط قوت و ضعف */}
+
             {comment.strengths && comment.strengths.length > 0 && (
               <div className="mt-2">
                 <strong className="text-success">نقاط قوت: </strong>
@@ -124,7 +155,7 @@ const CommentItem = ({ comment }) => {
                 ))}
               </div>
             )}
-            
+
             {comment.weaknesses && comment.weaknesses.length > 0 && (
               <div className="mt-2">
                 <strong className="text-danger">نقاط ضعف: </strong>
