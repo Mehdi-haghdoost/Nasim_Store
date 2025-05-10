@@ -19,22 +19,11 @@ const Page = () => {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
   
-  console.log('Comments page rendered with:', {
-    userComments,
-    apiTotalPages,
-    apiCurrentPage,
-    userCommentsLoading,
-    userCommentsError
-  });
-  
-  // پیجینیشن سمت کلاینت برای مواقعی که API پیجینیشن ندارد
   const getPaginatedComments = () => {
-    // اگر API پیجینیشن داشته باشد، همان داده‌ها را برمی‌گرداند
     if (apiTotalPages > 0) {
       return userComments;
     }
     
-    // در غیر این صورت، پیجینیشن سمت کلاینت انجام می‌دهیم
     if (!userComments || !userComments.length) return [];
     
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -42,48 +31,32 @@ const Page = () => {
   };
   
   const getTotalPages = () => {
-    // اگر API پیجینیشن داشته باشد، همان مقدار را برمی‌گرداند
     if (apiTotalPages > 0) {
       return apiTotalPages;
     }
     
-    // در غیر این صورت، محاسبه می‌کنیم
     if (!userComments || !userComments.length) return 0;
     return Math.ceil(userComments.length / ITEMS_PER_PAGE);
   };
 
   useEffect(() => {
-    console.log('Fetching user comments on mount');
-    // دریافت کامنت‌های کاربر در زمان لود صفحه
-    fetchUserComments(page, ITEMS_PER_PAGE)
-      .then(result => {
-        console.log('Fetched comments result:', result);
-      })
-      .catch(error => {
-        console.error('Error in fetchUserComments:', error);
-      });
+    fetchUserComments(page, ITEMS_PER_PAGE);
   }, []);
 
-  // مدیریت تغییر صفحه
+  const handleDeleteSuccess = () => {
+    fetchUserComments(page, ITEMS_PER_PAGE);
+  };
+
   const handlePageChange = (newPage) => {
-    console.log('Page changed to:', newPage);
     setPage(newPage);
     
-    // اگر API پیجینیشن دارد، دوباره درخواست می‌فرستیم
     if (apiTotalPages > 0) {
       fetchUserComments(newPage, ITEMS_PER_PAGE);
     }
   };
 
-  // کامنت‌های صفحه فعلی
   const currentComments = getPaginatedComments();
   const totalPages = getTotalPages();
-  
-  console.log('Pagination info:', {
-    currentComments,
-    totalPages,
-    page
-  });
 
   return (
     <Layout>
@@ -109,7 +82,6 @@ const Page = () => {
                     <button 
                       className="btn btn-sm btn-primary mt-2"
                       onClick={() => {
-                        console.log('Retry button clicked');
                         fetchUserComments(page, ITEMS_PER_PAGE);
                       }}
                     >
@@ -124,7 +96,11 @@ const Page = () => {
               ) : (
                 <div className={styles.comments}>
                   {currentComments.map(comment => (
-                    <CommentItem key={comment._id} comment={comment} />
+                    <CommentItem 
+                      key={comment._id} 
+                      comment={comment} 
+                      onDeleteSuccess={handleDeleteSuccess} 
+                    />
                   ))}
                 </div>
               )}
