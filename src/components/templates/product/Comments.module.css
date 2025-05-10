@@ -26,6 +26,20 @@
     padding: 5px;
 }
 
+.comment_item_checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    margin-right: 10px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+}
+
 .comment_tags {
     border-radius: 30px;
     background: #f8f8f8;

@@ -27,7 +27,7 @@ function Comments({ product }) {
 
   // state برای نگهداری داده‌های فرم کامنت اصلی
   const [commentForm, setCommentForm] = useState({
-    name: user?.name || '',
+    name: user?.username || '',
     email: user?.email || '',
     website: '',
     commentText: '',
@@ -40,6 +40,26 @@ function Comments({ product }) {
 
   const strengthsInputRef = useRef();
   const weaknessesInputRef = useRef();
+  const successAlertShown = useRef(false);
+
+  // بروزرسانی state برای تغییرات در user
+  useEffect(() => {
+    if (user) {
+      setCommentForm(prev => {
+        if (
+          prev.name === user.username &&
+          prev.email === user.email
+        ) {
+          return prev;
+        }
+        return {
+          ...prev,
+          name: user.username || prev.name,
+          email: user.email || prev.email,
+        };
+      });
+    }
+  }, [user]);
 
   // اگر ثبت پاسخ موفق بود، اطلاعات محصول را از سرور به‌روزرسانی کن
   useEffect(() => {
@@ -50,12 +70,13 @@ function Comments({ product }) {
 
   // اگر ثبت کامنت اصلی موفق بود، اطلاعات محصول را از سرور به‌روزرسانی کن
   useEffect(() => {
-    if (addSuccess && product?._id) {
-      showSwal('نظر شما با موفقیت ثبت شد و پس از تأیید نمایش داده خواهد شد', 'success', 'تأیید');
+    if (addSuccess && product?._id && !successAlertShown.current) {
+      successAlertShown.current = true;
 
-      // پاک کردن فرم
+      showSwal('نظر شما با موفقیت ثبت شد', 'success', 'تأیید');
+
       setCommentForm({
-        name: user?.name || '',
+        name: user?.username || '',
         email: user?.email || '',
         website: '',
         commentText: '',
@@ -65,7 +86,6 @@ function Comments({ product }) {
       setStrengths([]);
       setWeaknesses([]);
 
-      // ریست تگ‌های نقاط قوت و ضعف
       if (strengthsInputRef.current && strengthsInputRef.current._tagify) {
         strengthsInputRef.current._tagify.removeAllTags();
       }
@@ -74,12 +94,11 @@ function Comments({ product }) {
         weaknessesInputRef.current._tagify.removeAllTags();
       }
 
-      // به‌روزرسانی محصول
       getProduct(product._id);
 
-      // پاک کردن وضعیت پس از 3 ثانیه
       setTimeout(() => {
         clearAddStatus();
+        successAlertShown.current = false;
       }, 3000);
     }
   }, [addSuccess, product, getProduct, user, clearAddStatus, commentForm.rememberMe]);
@@ -92,12 +111,30 @@ function Comments({ product }) {
     }
   }, [addError]);
 
+  // بارگذاری اطلاعات ذخیره‌شده از localStorage
   useEffect(() => {
-    // تنظیم Tagify برای نقاط قوت
-    if (strengthsInputRef.current) {
+    const savedName = localStorage.getItem('commentFormName');
+    const savedEmail = localStorage.getItem('commentFormEmail');
+    const savedWebsite = localStorage.getItem('commentFormWebsite');
+    const savedRememberMe = localStorage.getItem('commentFormRememberMe') === 'true';
+
+    setCommentForm((prev) => {
+      const newForm = {
+        ...prev,
+        name: savedRememberMe ? savedName || prev.name : prev.name,
+        email: savedRememberMe ? savedEmail || prev.email : prev.email,
+        website: savedRememberMe ? savedWebsite || prev.website : prev.website,
+        rememberMe: savedRememberMe,
+      };
+      return newForm;
+    });
+  }, []);
+
+  // تنظیم Tagify برای نقاط قوت و ضعف
+  useEffect(() => {
+    if (strengthsInputRef.current && !strengthsInputRef.current._tagify) {
       const strengthsTagify = new Tagify(strengthsInputRef.current, {
         placeholder: 'با کلید اینتر اضافه کنید',
-        // اتصال به event برای دریافت تغییرات تگ‌ها
         callbacks: {
           add: onStrengthsChange,
           remove: onStrengthsChange,
@@ -106,11 +143,9 @@ function Comments({ product }) {
       });
     }
 
-    // تنظیم Tagify برای نقاط ضعف
-    if (weaknessesInputRef.current) {
+    if (weaknessesInputRef.current && !weaknessesInputRef.current._tagify) {
       const weaknessesTagify = new Tagify(weaknessesInputRef.current, {
         placeholder: 'با کلید اینتر اضافه کنید',
-        // اتصال به event برای دریافت تغییرات تگ‌ها
         callbacks: {
           add: onWeaknessesChange,
           remove: onWeaknessesChange,
@@ -119,13 +154,10 @@ function Comments({ product }) {
       });
     }
 
-    // تابع cleanup
     return () => {
-      // پاک کردن Tagify در صورت unmount شدن کامپوننت
       if (strengthsInputRef.current && strengthsInputRef.current._tagify) {
         strengthsInputRef.current._tagify.destroy();
       }
-
       if (weaknessesInputRef.current && weaknessesInputRef.current._tagify) {
         weaknessesInputRef.current._tagify.destroy();
       }
@@ -138,7 +170,6 @@ function Comments({ product }) {
       const tagifyEl = e.detail.tagify;
       if (tagifyEl && tagifyEl.value) {
         const tagValues = tagifyEl.value.map(tag => tag.value);
-
         setStrengths(tagValues);
       }
     } catch (error) {
@@ -164,72 +195,93 @@ function Comments({ product }) {
     showSwal('امتیاز مورد نظر شما با موفقیت ثبت شد', 'success', 'ادامه ثبت کامنت');
   };
 
+  // مدیریت تغییرات فرم
   const handleCommentFormChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setCommentForm({
-      ...commentForm,
-      [name]: type === 'checkbox' ? checked : value
+
+    setCommentForm((prev) => {
+      const newValue = type === 'checkbox' ? checked : value;
+      if (prev[name] === newValue) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [name]: newValue,
+      };
     });
   };
 
-  const handleSubmitComment = (e) => {
+  // تابع برای تغییر وضعیت rememberMe
+  const toggleRememberMe = () => {
+    setCommentForm(prev => {
+      const newRememberMe = !prev.rememberMe;
+
+      // ذخیره یا حذف داده‌ها بر اساس وضعیت جدید
+      if (newRememberMe) {
+
+        localStorage.setItem('commentFormName', prev.name);
+        localStorage.setItem('commentFormEmail', prev.email);
+        localStorage.setItem('commentFormWebsite', prev.website || '');
+        localStorage.setItem('commentFormRememberMe', 'true');
+      } else {
+        localStorage.removeItem('commentFormName');
+        localStorage.removeItem('commentFormEmail');
+        localStorage.removeItem('commentFormWebsite');
+        localStorage.setItem('commentFormRememberMe', 'false');
+      }
+
+      return {
+        ...prev,
+        rememberMe: newRememberMe
+      };
+    });
+  };
+
+  const handleSubmitComment = async (e) => {
     e.preventDefault();
 
-    if (!commentForm.commentText.trim()) {
-      showSwal('لطفاً متن نظر را وارد کنید', 'error', 'تلاش مجدد');
-      return;
-    }
-
-    // استخراج مجدد تگ‌های نقاط قوت و ضعف از Tagify (برای اطمینان)
-    let currentStrengths = [...strengths];
-    let currentWeaknesses = [...weaknesses];
-
-    // روش پشتیبان برای دریافت تگ‌ها اگر state خالی باشد
-    if (currentStrengths.length === 0 && strengthsInputRef.current && strengthsInputRef.current._tagify) {
-      try {
-        const strengthTags = strengthsInputRef.current._tagify.value;
-        if (Array.isArray(strengthTags)) {
-          currentStrengths = strengthTags.map(tag => tag.value);
-        }
-      } catch (error) {
-        console.error("خطا در دریافت نقاط قوت:", error);
+    try {
+      if (!commentForm.commentText.trim()) {
+        showSwal('لطفاً متن نظر را وارد کنید', 'error', 'تلاش مجدد');
+        return;
       }
-    }
 
-    if (currentWeaknesses.length === 0 && weaknessesInputRef.current && weaknessesInputRef.current._tagify) {
-      try {
-        const weaknessTags = weaknessesInputRef.current._tagify.value;
-        if (Array.isArray(weaknessTags)) {
-          currentWeaknesses = weaknessTags.map(tag => tag.value);
-        }
-      } catch (error) {
-        console.error("خطا در دریافت نقاط ضعف:", error);
+      if (!product || !product._id) {
+        console.error("شناسه محصول یافت نشد:", product);
+        showSwal('خطا در شناسایی محصول', 'error', 'تلاش مجدد');
+        return;
       }
-    }
 
-    // ذخیره اطلاعات در localStorage اگر گزینه "به خاطر سپردن" فعال است
-    if (commentForm.rememberMe) {
-      localStorage.setItem('commentFormName', commentForm.name);
-      localStorage.setItem('commentFormEmail', commentForm.email);
-      localStorage.setItem('commentFormWebsite', commentForm.website || '');
-    }
+      let currentStrengths = [...strengths];
+      let currentWeaknesses = [...weaknesses];
 
-    submitComment({
-      product: product._id,
-      commentText: commentForm.commentText,
-      rating: score,
-      name: commentForm.name,
-      email: commentForm.email,
-      website: commentForm.website || null,
-      strengths: currentStrengths,
-      weaknesses: currentWeaknesses
-    });
+      if (commentForm.rememberMe) {
+        localStorage.setItem('commentFormName', commentForm.name);
+        localStorage.setItem('commentFormEmail', commentForm.email);
+        localStorage.setItem('commentFormWebsite', commentForm.website || '');
+        localStorage.setItem('commentFormRememberMe', 'true');
+      }
+
+      const commentData = {
+        product: product._id,
+        commentText: commentForm.commentText,
+        rating: score,
+        name: commentForm.name || user?.username || 'کاربر',
+        email: commentForm.email || user?.email || '',
+        website: commentForm.website || null,
+        strengths: currentStrengths,
+        weaknesses: currentWeaknesses
+      };
+    } catch (error) {
+      showSwal('خطا در ارسال کامنت: ' + (error.message || 'خطای ناشناخته'), 'error', 'تلاش مجدد');
+    }
   };
 
   // دریافت همه کامنت‌ها
   const allComments = product?.comments || [];
 
-  // فیلتر کردن کامنت‌های اصلی (isReply: false و parent: null)
+  // فیلتر کردن کامنت‌های اصلی
   const mainComments = allComments.filter(
     (comment) => !comment.isReply && !comment.parent
   );
@@ -241,24 +293,19 @@ function Comments({ product }) {
     }
 
     try {
-
-      // تبدیل timestamp رشته‌ای به عدد
       let numericTimestamp;
       if (typeof timestamp === 'string') {
         numericTimestamp = parseInt(timestamp, 10);
       } else if (typeof timestamp === 'number') {
         numericTimestamp = timestamp;
       } else {
-        // اگر نوع دیگری باشد (مثلاً تاریخ)
         return new Date(timestamp).toLocaleDateString('fa-IR');
       }
 
-      // اگر timestamp میلی‌ثانیه‌ای است (13 رقمی)
       const date = new Date(numericTimestamp);
-
       if (date.toString() === 'Invalid Date') {
         console.error("تبدیل تاریخ ناموفق بود، مقدار خام:", timestamp);
-        return timestamp.toString().substring(0, 10); // نمایش بخشی از رشته خام
+        return timestamp.toString().substring(0, 10);
       }
 
       const options = {
@@ -275,7 +322,7 @@ function Comments({ product }) {
     }
   };
 
-  // رندر کردن ستاره‌ها بر اساس امتیاز
+  // رندر ستاره‌ها
   const renderStars = (rating) => {
     const numericRating = parseFloat(rating) || 0;
     const fullStars = Math.floor(numericRating);
@@ -292,19 +339,14 @@ function Comments({ product }) {
     return stars;
   };
 
-  // یافتن پاسخ‌ها برای یک کامنت اصلی - روش بهبود یافته
+  // یافتن پاسخ‌ها
   const getReplies = (comment) => {
-    // اگر کامنت replies نداشته باشد یا آرایه خالی باشد
     if (!comment.replies || comment.replies.length === 0) {
       return [];
     }
-
-    // به جای فیلتر کردن، مستقیماً از replies استفاده می‌کنیم
-    // زیرا این فیلد در GraphQL resolver تکمیل می‌شود
     return comment.replies;
   };
 
-  // یا روش جایگزین: پیدا کردن پاسخ‌ها با استفاده از parent
   const findRepliesByParent = (parentId) => {
     return allComments.filter(comment =>
       comment.isReply &&
@@ -319,22 +361,16 @@ function Comments({ product }) {
     openReplyForm(commentId);
   };
 
-  // رندر یک کامنت (چه اصلی و چه پاسخ)
+  // رندر یک کامنت
   const renderComment = (comment, isReply = false) => {
     if (!comment || !comment._id) {
       console.warn("کامنت نامعتبر یا بدون آیدی:", comment);
       return null;
     }
 
-    // بررسی ساختار کامل کامنت
-    console.log(`ساختار کامل کامنت ${comment._id}:`, comment);
-    console.log(`comment.name: ${comment.name}, comment.user?.username: ${comment.user?.username}`);
-
-    // پیدا کردن پاسخ‌ها
     const replies = comment.replies && comment.replies.length > 0
       ? comment.replies
       : findRepliesByParent(comment._id);
-
 
     return (
       <div
@@ -356,9 +392,7 @@ function Comments({ product }) {
                 </div>
                 <div className="d-flex flex-wrap align-items-center me-2">
                   <h6 className="text-muted font-14">
-                    {/* نمایش نام از فیلد name کامنت */}
                     {comment.name || comment.user?.username || 'کاربر'}
-                    {console.log('comment.name:', comment.name, 'comment.user?.username:', comment.user?.username)}
                   </h6>
                   <h6 className="text-muted font-14 me-2">
                     {formatDate(comment.createdAt)}
@@ -418,7 +452,7 @@ function Comments({ product }) {
               <div className="col-12">
                 <div className={styles.comment_replay}>
                   <a
-                    href=""
+                    href="#"
                     className="btn btn-sm rounded-pill main-color-two-bg px-4"
                     onClick={(e) => handleReplyClick(e, comment._id)}
                   >
@@ -430,12 +464,10 @@ function Comments({ product }) {
           </div>
         </div>
 
-        {/* نمایش فرم پاسخ اگر برای این کامنت باز شده باشد */}
         {replyForm.isOpen && replyForm.parentId === comment._id && (
           <ReplyForm parentId={comment._id} />
         )}
 
-        {/* رندر پاسخ‌ها برای کامنت اصلی */}
         {replies.length > 0 && (
           <div className={styles.replies_container}>
             {replies.map((reply) => renderComment(reply, true))}
@@ -445,25 +477,19 @@ function Comments({ product }) {
     );
   };
 
-  // بارگذاری اطلاعات ذخیره شده کاربر در هنگام مونت کامپوننت
-  useEffect(() => {
-    const savedName = localStorage.getItem('commentFormName');
-    const savedEmail = localStorage.getItem('commentFormEmail');
-    const savedWebsite = localStorage.getItem('commentFormWebsite');
-
-    if (savedName || savedEmail || savedWebsite) {
-      setCommentForm(prev => ({
-        ...prev,
-        name: savedName || prev.name,
-        email: savedEmail || prev.email,
-        website: savedWebsite || prev.website,
-        rememberMe: true
-      }));
-    }
-  }, []);
-
   return (
     <>
+      {addLoading && (
+        <div className="alert alert-info mt-2 mb-4">
+          <div className="d-flex align-items-center">
+            <div className="spinner-border spinner-border-sm me-2" role="status">
+              <span className="visually-hidden">در حال بارگذاری...</span>
+            </div>
+            <span>در حال ثبت نظر شما...</span>
+          </div>
+        </div>
+      )}
+
       <h6 className={styles.product_desc_tab_title}>نظرت در مورد این محصول چیه؟</h6>
       <p className="font-14 text-muted mt-2">
         برای ثبت نظر، از طریق دکمه افزودن دیدگاه جدید نمایید. اگر این محصول را قبلا
@@ -511,27 +537,27 @@ function Comments({ product }) {
                   </label>
                 </div>
               </div>
+
+              {/* جایگزین کردن چک‌باکس استاندارد با چک‌باکس سفارشی */}
               <div className="col-12">
                 <div
-                  className={`${styles.comment_item} d-flex align-items-center mb-3`}
+                  className="d-flex align-items-center mb-3"
+                  style={{ cursor: 'pointer' }}
+                  onClick={toggleRememberMe}
                 >
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="rememberComment"
-                    name="rememberMe"
-                    checked={commentForm.rememberMe}
-                    onChange={handleCommentFormChange}
-                  />
-                  <label
-                    className="form-check-label d-block"
-                    htmlFor="rememberComment"
+                  <div
+                    className={styles.comment_item_checkbox}
+                    style={{ backgroundColor: commentForm.rememberMe ? '#007bff' : 'white', }}
                   >
+                    {commentForm.rememberMe && '✓'}
+                  </div>
+                  <span className="form-check-label">
                     ذخیره نام، ایمیل و وبسایت من در مرورگر برای زمانی که دوباره دیدگاهی
                     می‌نویسم.
-                  </label>
+                  </span>
                 </div>
               </div>
+
               <div className="col-12">
                 <div className="form-group mt-3">
                   <label>امتیاز شما</label>
@@ -608,8 +634,9 @@ function Comments({ product }) {
               </div>
               <div className="col-12">
                 <button
-                  type="submit"
+                  type="button"
                   className={`btn border-0 main-color-one-bg my-3 mx-auto btn-lg waves-effect waves-light ${styles.btn_comment}`}
+                  onClick={handleSubmitComment}
                   disabled={addLoading}
                 >
                   {addLoading ? 'در حال ثبت...' : 'ثبت نظر'}
@@ -620,7 +647,6 @@ function Comments({ product }) {
         </div>
       </div>
 
-      {/* نمایش کامنت‌های اصلی */}
       {mainComments.length > 0 ? (
         mainComments.map((comment) => renderComment(comment))
       ) : (
