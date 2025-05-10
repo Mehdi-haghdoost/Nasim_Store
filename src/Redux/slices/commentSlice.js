@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { replyToComment, addComment } from "../actions/commentThunks";
+import { replyToComment, addComment, getUserComments } from "../actions/commentThunks";
 
 const initialState = {
   replyForm: {
@@ -9,11 +9,19 @@ const initialState = {
   replyLoading: false,
   replyError: null,
   replySuccess: false,
-  
+
   // اضافه کردن وضعیت برای کامنت اصلی
   addLoading: false,
   addError: null,
   addSuccess: false,
+
+
+  userComments: [],
+  totalPages: 0,
+  currentPage: 1,
+  totalComments: 0,
+  userCommentsLoading: false,
+  userCommentsError: null,
 };
 
 const commentSlice = createSlice({
@@ -62,7 +70,7 @@ const commentSlice = createSlice({
         state.replyError = action.payload || 'خطا در ثبت پاسخ';
         state.replySuccess = false;
       })
-      
+
       // وضعیت‌های افزودن کامنت اصلی
       .addCase(addComment.pending, (state) => {
         state.addLoading = true;
@@ -78,6 +86,24 @@ const commentSlice = createSlice({
         state.addLoading = false;
         state.addError = action.payload || 'خطا در ثبت کامنت';
         state.addSuccess = false;
+      })
+
+      // دریافت کامنت‌های کاربر
+      .addCase(getUserComments.pending, (state) => {
+        state.userCommentsLoading = true;
+        state.userCommentsError = null;
+      })
+      .addCase(getUserComments.fulfilled, (state, action) => {
+        state.userCommentsLoading = false;
+        state.userComments = action.payload.comments;
+        state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
+        state.totalComments = action.payload.totalComments;
+        state.userCommentsError = null;
+      })
+      .addCase(getUserComments.rejected, (state, action) => {
+        state.userCommentsLoading = false;
+        state.userCommentsError = action.payload || 'خطا در دریافت کامنت‌های کاربر';
       });
   },
 });
