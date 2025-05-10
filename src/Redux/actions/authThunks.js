@@ -44,7 +44,6 @@ export const checkAuth = createAsyncThunk(
         fetchPolicy: "network-only",
       });
 
-      console.log("Check auth response:", { data, errors });
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
@@ -56,7 +55,6 @@ export const checkAuth = createAsyncThunk(
 
       return rejectWithValue("کاربر احراز هویت نشده است");
     } catch (error) {
-      console.error("Check auth error:", error);
       return rejectWithValue(error.message || "خطا در بررسی احراز هویت");
     }
   }
@@ -74,20 +72,17 @@ export const loginUser = createAsyncThunk(
         variables: { phoneOrEmail, password },
       });
 
-      console.log("Login response:", { data, errors });
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
 
       if (data?.loginUser) {
-        console.log("Login successful, relying on cookies for tokens");
         return data.loginUser;
       }
 
       return rejectWithValue("خطا در ورود به سیستم");
     } catch (error) {
-      console.error("Login error:", error);
       return rejectWithValue(error.message || "خطا در ورود به سیستم");
     }
   }
@@ -108,20 +103,16 @@ export const registerUser = createAsyncThunk(
         variables,
       });
 
-      console.log("Register response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
 
       if (data?.registerUser) {
-        console.log("Register successful, relying on cookies for tokens");
         return data.registerUser;
       }
 
       return rejectWithValue("پاسخ سرور نامعتبر است");
     } catch (error) {
-      console.error("Register error:", error);
       return rejectWithValue(error.message || "خطا در ثبت‌نام");
     }
   }
@@ -139,20 +130,16 @@ export const confirmOtpAndRegister = createAsyncThunk(
         variables: { phone, code },
       });
 
-      console.log("Confirm OTP response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
 
       if (data?.confirmOtpAndRegister) {
-        console.log("Confirm OTP successful, relying on cookies for tokens");
         return data.confirmOtpAndRegister;
       }
 
       return rejectWithValue("خطا در کد تایید و ثبت نام");
     } catch (error) {
-      console.error("Confirm OTP error:", error);
       return rejectWithValue(error.message || "خطا در تایید کد و ثبت‌نام");
     }
   }
@@ -170,20 +157,16 @@ export const verifyOtpAndLogin = createAsyncThunk(
         variables: { phone, code },
       });
 
-      console.log("Verify OTP response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
 
       if (data?.verifyOtpAndLogin) {
-        console.log("Verify OTP successful, relying on cookies for tokens");
         return data.verifyOtpAndLogin;
       }
 
       return rejectWithValue("خطا در تایید کد و ورود");
     } catch (error) {
-      console.error("Verify OTP error:", error);
       return rejectWithValue(error.message || "خطا در تایید کد و ورود");
     }
   }
@@ -200,8 +183,6 @@ export const refreshToken = createAsyncThunk(
         mutation: REFRESH_TOKEN,
       });
 
-      console.log("Refresh token response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
@@ -212,7 +193,6 @@ export const refreshToken = createAsyncThunk(
 
       return rejectWithValue("خطا در تجدید توکن");
     } catch (error) {
-      console.error("Refresh token error:", error);
       return rejectWithValue(error.message || "خطا در تجدید توکن");
     }
   }
@@ -240,7 +220,6 @@ export const logoutUser = createAsyncThunk(
 
       return true;
     } catch (error) {
-      console.error("Logout error:", error);
       return rejectWithValue(error.message || "خطا در خروج از سیستم");
     }
   }
@@ -258,8 +237,6 @@ export const sendOtp = createAsyncThunk(
         variables: { phone },
       });
 
-      console.log("Send OTP response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
@@ -273,7 +250,6 @@ export const sendOtp = createAsyncThunk(
 
       return rejectWithValue("خطا در ارسال کد تایید");
     } catch (error) {
-      console.error("Send OTP error:", error);
       return rejectWithValue(error.message || "خطا در ارسال کد تایید");
     }
   }
@@ -291,8 +267,6 @@ export const sendOtpForLogin = createAsyncThunk(
         variables: { phone },
       });
 
-      console.log("Send OTP for login response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
@@ -306,7 +280,6 @@ export const sendOtpForLogin = createAsyncThunk(
 
       return rejectWithValue("خطا در ارسال کد تایید ورود");
     } catch (error) {
-      console.error("Send OTP for login error:", error);
       return rejectWithValue(error.message || "خطا در ارسال کد تایید ورود");
     }
   }
@@ -324,8 +297,6 @@ export const updateUserProfile = createAsyncThunk(
         variables: { input },
       });
 
-      console.log("Update profile response:", { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
       }
@@ -336,7 +307,6 @@ export const updateUserProfile = createAsyncThunk(
 
       return rejectWithValue("خطا در به‌روزرسانی پروفایل");
     } catch (error) {
-      console.error("Update profile error:", error);
       return rejectWithValue(error.message || "خطا در به‌روزرسانی پروفایل");
     }
   }
