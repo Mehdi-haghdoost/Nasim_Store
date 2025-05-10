@@ -12,7 +12,7 @@ const { registerUser,
 const { addProduct } = require("./mutations/product.resolvers");
 const { addCategory } = require("./mutations/category.resolvers");
 const { addSeller } = require("./mutations/seller.resolvers");
-const { addComment, replyToComment } = require("./mutations/comment.resolvers");
+const { addComment, replyToComment, deleteComment } = require("./mutations/comment.resolvers");
 const { getProductComments, getUserProfile, me, getUserComments } = require("./queries/user.resolvers");
 const { getAllAddress, linkExistingAddresses } = require("./queries/address.resolvers");
 const { addNewAddress, deleteAddress, updateAddressDefault, updateAddress } = require("./mutations/address.resolvers");
@@ -65,6 +65,7 @@ const RootMutation = new GraphQLObjectType({
         refreshTokenMutation,
         addComment,
         replyToComment,
+        deleteComment,
         loginUser,
         updateUserProfile,
         addNewAddress,
