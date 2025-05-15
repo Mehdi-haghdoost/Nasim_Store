@@ -6,6 +6,7 @@ import toastReducer from '../slices/toastSlice';
 import commentReducer from '../slices/commentSlice';
 import categoryReducer from '../slices/categorySlice';
 import filterReducer from '../slices/filterSlice';
+import ticketReducer from '../slices/ticketSlice';
 
 /**
  * Root reducer combining all slice reducers
@@ -19,4 +20,5 @@ export const rootReducer = combineReducers({
     comment: commentReducer,
     category: categoryReducer,
     filter: filterReducer,
+    ticket: ticketReducer,
 });
