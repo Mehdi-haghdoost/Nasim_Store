@@ -20,15 +20,19 @@ const UserProfile = () => {
         postalCode: '',
         bio: ''
     });
+
     useEffect(() => {
         if (user) {
+            console.log("User data from Redux:", user);
+            const savedBio = localStorage.getItem('userBio') || '';
+
             setFormData({
                 username: user?.username || '',
                 phone: user?.phone || '',
                 nationalId: user?.nationalId || '',
                 email: user?.email || '',
                 postalCode: user?.postalCode || '',
-                bio: user?.bio || ''
+                bio: user?.bio || savedBio
             });
         }
     }, [user]);
@@ -43,26 +47,30 @@ const UserProfile = () => {
         }));
     };
 
-
     const onSubmit = async () => {
-        try {
-            console.log("Submitting form data:", formData);
+    try {
+        console.log("Submitting form data:", formData);
 
-            // به جای ارسال مستقیم formData، آن را در یک آبجکت با کلید input قرار دهید
-            const response = await dispatch(updateUserProfile({ input: formData }));
-            console.log("Update profile response:", response);
+        const response = await dispatch(updateUserProfile({ input: formData }));
+        console.log("Update profile response:", response);
 
-            if (response?.payload) {
-                showSwal("اطلاعات شما با موفقیت ویرایش شد", "success", "باشه");
-                setShowModal(false);
-            } else {
-                showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
-            }
-        } catch (error) {
-            console.error("Error updating profile:", error);
+        if (response?.payload) {
+            // ذخیره بیو در localStorage
+            localStorage.setItem('userBio', formData.bio || '');
+            
+            showSwal("اطلاعات شما با موفقیت ویرایش شد", "success", "باشه");
+            setShowModal(false);
+            
+            // بعد از موفقیت، اطلاعات کاربر را دوباره بارگذاری کنید
+            await dispatch(checkAuth());
+        } else {
             showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
         }
-    };
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
+    }
+};
 
     return (
         <>
