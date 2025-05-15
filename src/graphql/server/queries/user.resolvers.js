@@ -64,6 +64,9 @@ const me = {
         email: userData.email,
         phone: userData.phone,
         role: userData.role,
+        bio: userData.bio,
+        nationalId: userData.nationalId,
+        postalCode: userData.postalCode,
         addresses: userData.addresses,
       };
     } catch (error) {
@@ -85,24 +88,24 @@ const getUserComments = {
       if (!user) {
         throw new Error("کاربر احراز هویت نشده است");
       }
-      
+
       const skip = (page - 1) * limit;
-      
+
       // تعداد کل کامنت‌های کاربر
       const totalComments = await CommentModel.countDocuments({ user: user._id });
-      
+
       // محاسبه تعداد صفحات
       const totalPages = Math.ceil(totalComments / limit);
-      
+
       // دریافت کامنت‌های کاربر با پیجینیشن
       const comments = await CommentModel.find({ user: user._id })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .populate('product'); // populate محصول
-      
+
       console.log("getUserComments - comments found:", comments.length);
-      
+
       return {
         comments,
         totalPages: totalPages || 0,
@@ -121,5 +124,5 @@ module.exports = {
   getProductComments,
   getUserProfile,
   me,
-  getUserComments, 
+  getUserComments,
 };
