@@ -67,6 +67,17 @@ const Modal = ({ hideModal, showModal, formData, onInputChange, onSubmit }) => {
                                 />
                             </div>
                             <div className="form-group">
+                                <label htmlFor="nationalId" className="form-label">کد ملی</label>
+                                <input
+                                    type="text"
+                                    id="nationalId"
+                                    name="nationalId"
+                                    value={formData.nationalId}
+                                    onChange={onInputChange}
+                                    className="form-control rounded-pill"
+                                />
+                            </div>
+                            <div className="form-group">
                                 <label htmlFor="bio" className="form-label">بیو</label>
                                 <textarea
                                     id="bio"
@@ -77,7 +88,6 @@ const Modal = ({ hideModal, showModal, formData, onInputChange, onSubmit }) => {
                                     placeholder="توضیحاتی در مورد خودتان"
                                 ></textarea>
                             </div>
-                            {/* فیلد آدرس حذف شد */}
                         </form>
                     </div>
                     <div className="modal-footer justify-content-center">
