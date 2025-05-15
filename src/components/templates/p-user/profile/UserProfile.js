@@ -18,9 +18,8 @@ const UserProfile = () => {
         nationalId: '',
         email: '',
         postalCode: '',
-        bio: '' // اضافه کردن بیو به صورت صحیح
+        bio: ''
     });
-
     useEffect(() => {
         if (user) {
             setFormData({
@@ -29,7 +28,7 @@ const UserProfile = () => {
                 nationalId: user?.nationalId || '',
                 email: user?.email || '',
                 postalCode: user?.postalCode || '',
-                bio: user?.bio || '' // بیو به درستی مقداردهی شود
+                bio: user?.bio || ''
             });
         }
     }, [user]);
@@ -44,11 +43,13 @@ const UserProfile = () => {
         }));
     };
 
+
     const onSubmit = async () => {
         try {
             console.log("Submitting form data:", formData);
-            
-            const response = await dispatch(updateUserProfile(formData));
+
+            // به جای ارسال مستقیم formData، آن را در یک آبجکت با کلید input قرار دهید
+            const response = await dispatch(updateUserProfile({ input: formData }));
             console.log("Update profile response:", response);
 
             if (response?.payload) {
