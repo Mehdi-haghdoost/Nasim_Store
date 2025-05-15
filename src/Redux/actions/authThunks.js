@@ -1,4 +1,3 @@
-// # اکشن‌های غیرهمزمان برای احراز هویت با استفاده از createAsyncThunk
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   LOGIN_USER,
@@ -11,8 +10,8 @@ import {
   UPDATE_USER_PROFILE,
   REFRESH_TOKEN,
 } from "@/graphql/entities/users/user.mutations";
+import { ME_QUERY } from "@/graphql/entities/users/user.queries";
 import client from "@/graphql/client";
-import { gql } from "@apollo/client";
 
 /**
  * Check auth async thunk
@@ -23,24 +22,7 @@ export const checkAuth = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data, errors } = await client.query({
-        query: gql`
-          query Me {
-            me {
-              _id
-              username
-              email
-              phone
-              role
-              addresses {
-                _id
-                fullAddress
-                city
-                province
-                isDefault
-              }
-            }
-          }
-        `,
+        query: ME_QUERY,
         fetchPolicy: "network-only",
       });
 
@@ -320,7 +302,7 @@ export const updateUserProfile = createAsyncThunk(
     try {
       // params حاوی یک آبجکت با کلید input است
       const { input } = params;
-      
+
       const { data, errors } = await client.mutate({
         mutation: UPDATE_USER_PROFILE,
         variables: { input },
