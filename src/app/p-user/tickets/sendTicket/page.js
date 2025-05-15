@@ -6,10 +6,9 @@ import SendTicket from '@/components/templates/p-user/tickets/SendTicket';
 const page = () => {
     return (
         <Layout>
-            
             <SendTicket />
         </Layout>
     )
 }
 
-export default page
+export default page;
