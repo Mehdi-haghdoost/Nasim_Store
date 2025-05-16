@@ -1,17 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Card.module.css';
 import { useCart } from '@/Redux/hooks/useCart';
-import { toast } from 'react-toastify'; // اضافه کردن toast اگر از آن استفاده نمی‌شود
+import { useWishlist } from '@/Redux/hooks/useWishlist';
+import { toast } from 'react-toastify';
 
 function Card({ img, productData: propProductData }) {
     // استفاده از هوک useCart برای دسترسی به عملکردهای سبد خرید
     const { addToCart, loading, error } = useCart();
+    // استفاده از هوک useWishlist برای دسترسی به عملکردهای لیست علاقه‌مندی‌ها
+    const { 
+        addProductToWishlist, 
+        removeProductFromWishlist, 
+        checkProductInWishlist,
+        isProductInWishlist 
+    } = useWishlist();
 
     // اطلاعات استاتیک محصول - استفاده از props اگر ارسال شده باشد
     const productData = propProductData ? {
-        _id: Math.random().toString(), // یک آیدی تصادفی
+        _id: propProductData._id || `product-${Math.floor(Math.random() * 10000)}`, // استفاده از ID واقعی اگر موجود باشد یا ساخت یک ID موقت
         ...propProductData,
         rating: propProductData.rating || 4.8,
         ratingCount: propProductData.ratingCount || 15,
@@ -19,7 +27,7 @@ function Card({ img, productData: propProductData }) {
         images: [img, img], // آرایه تصاویر
         stock: propProductData.stock || 10
     } : {
-        _id: Math.random().toString(), // یک آیدی تصادفی
+        _id: `product-${Math.floor(Math.random() * 10000)}`,
         title: 'ساعت هوشمند شیائومی',
         originalName: 'Mibro Lite XPAW004 Smartwatch',
         price: 3175000,
@@ -32,6 +40,13 @@ function Card({ img, productData: propProductData }) {
         images: [img, img], // آرایه تصاویر
         stock: 10
     };
+
+    // بررسی وضعیت محصول در لیست علاقه‌مندی‌ها
+    useEffect(() => {
+        if (productData._id) {
+            checkProductInWishlist(productData._id);
+        }
+    }, [productData._id, checkProductInWishlist]);
 
     // افزودن به سبد خرید
     const handleAddToCart = (e) => {
@@ -55,6 +70,22 @@ function Card({ img, productData: propProductData }) {
             });
     };
 
+    // تغییر وضعیت علاقه‌مندی
+    const handleWishlistToggle = (e) => {
+        e.preventDefault();
+        
+        if (isProductInWishlist(productData._id)) {
+            // حذف از لیست علاقه‌مندی‌ها
+            removeProductFromWishlist(productData._id);
+        } else {
+            // افزودن به لیست علاقه‌مندی‌ها
+            addProductToWishlist(productData._id, productData);
+        }
+    };
+
+    // وضعیت علاقه‌مندی محصول
+    const isInWishlist = isProductInWishlist(productData._id);
+
     return (
         <div className={`${styles.swiper_slide}`}>
             <div className={`${styles.product_box}`}>
@@ -67,8 +98,17 @@ function Card({ img, productData: propProductData }) {
                     <div className={`${styles.product_header_btn} d-flex`}>
                         <a href="" className="" data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-title="مقایسه"><i className="bi bi-shuffle"></i></a>
-                        <a href="" className="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="افزودن به علاقه مندی ها"><i className="bi bi-heart"></i></a>
+                        
+                        {/* تغییر دکمه علاقه‌مندی‌ها */}
+                        <a href="" 
+                           onClick={handleWishlistToggle}
+                           className="" 
+                           data-bs-toggle="tooltip" 
+                           data-bs-placement="top"
+                           data-bs-title="افزودن به علاقه مندی ها">
+                            <i className={`bi ${isInWishlist ? 'bi-heart-fill text-danger' : 'bi-heart'}`}></i>
+                        </a>
+                        
                         <a href="" className="" data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-title="مشاهده سریع"><i className="bi bi-eye"></i></a>
                     </div>
