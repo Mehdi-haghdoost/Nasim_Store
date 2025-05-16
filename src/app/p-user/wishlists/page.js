@@ -1,39 +1,3 @@
-// import React from 'react'
-// import styles from '@/styles/p-user/wishlists.module.css';
-// import Layout from '@/components/layouts/UserPanelLayout';
-// import Card from '@/components/modules/p-user/wishlists/Product'
-// import Pagination from '@/components/modules/p-user/pagination/Pagination';
-
-// const page = () => {
-//     return (
-//         <Layout>
-//             <div className="ui-boxs">
-//                 <div className="ui-box">
-//                     <div className="ui-box-item ui-box-white">
-//                         <div className="ui-box-item-title">
-//                             <div className="d-flex justify-content-between align-items-center">
-//                                 <h4 className="fw-bold">
-//                                     علاقه مندی ها
-//                                 </h4>
-//                             </div>
-//                         </div>
-//                         <div className="ui-box-item-desc">
-//                             <section>
-//                                 <Card />
-//                                 <Card />
-//                                 <Card />
-//                             </section>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//             <Pagination />
-//         </Layout>
-//     )
-// }
-
-// export default page;
-
 'use client';
 import React, { useEffect } from 'react';
 import styles from '@/styles/p-user/wishlists.module.css';
@@ -71,8 +35,15 @@ const page = () => {
                                         <p className="mt-2">در حال بارگذاری لیست علاقه‌مندی‌ها...</p>
                                     </div>
                                 ) : error ? (
-                                    <div className="alert alert-danger">
-                                        خطا در بارگذاری لیست علاقه‌مندی‌ها: {error}
+                                    <div className="text-center py-4">
+                                        <i className="bi bi-exclamation-triangle-fill fs-1 text-warning"></i>
+                                        <p className="mt-3">متأسفانه در دریافت لیست علاقه‌مندی‌ها مشکلی پیش آمده است.</p>
+                                        <button 
+                                            className="btn btn-primary mt-2"
+                                            onClick={() => getWishlist()}
+                                        >
+                                            <i className="bi bi-arrow-clockwise me-1"></i> تلاش مجدد
+                                        </button>
                                     </div>
                                 ) : wishlistItems.length === 0 ? (
                                     <div className="text-center py-4">
