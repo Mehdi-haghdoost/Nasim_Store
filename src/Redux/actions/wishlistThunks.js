@@ -7,7 +7,6 @@ export const getUserWishlist = createAsyncThunk(
   'wishlist/getUserWishlist',
   async (_, { rejectWithValue }) => {
     try {
-      // اضافه کردن لاگ قبل از اجرای query
       console.log('Fetching wishlist with query:', GET_USER_WISHLIST);
       
       const { data, errors } = await client.query({
@@ -15,12 +14,13 @@ export const getUserWishlist = createAsyncThunk(
         fetchPolicy: 'network-only'
       });
       
-      // اضافه کردن لاگ کامل پاسخ
       console.log('Wishlist response:', { data, errors });
       
       if (errors && errors.length > 0) {
         console.error('GraphQL errors:', errors);
-        return rejectWithValue(errors[0].message || 'خطا در دریافت اطلاعات');
+        // هنگام خطا آرایه خالی برمی‌گردانیم به جای rejectWithValue
+        // این باعث می‌شود صفحه به جای نمایش خطا، صفحه خالی نمایش دهد
+        return [];
       }
       
       if (!data || !data.getUserWishlist) {
@@ -28,10 +28,14 @@ export const getUserWishlist = createAsyncThunk(
         return [];
       }
       
+      // اضافه کردن لاگ اطلاعات محصولات
+      console.log('Wishlist products received:', data.getUserWishlist.length, 'items');
+      
       return data.getUserWishlist;
     } catch (error) {
       console.error('Error fetching wishlist:', error);
-      return rejectWithValue('خطا در دریافت اطلاعات');
+      // هنگام خطا آرایه خالی برمی‌گردانیم به جای rejectWithValue
+      return [];
     }
   }
 );
