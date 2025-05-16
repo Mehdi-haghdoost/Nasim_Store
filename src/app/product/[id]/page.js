@@ -19,7 +19,7 @@ function ProductPage({ params }) {
 
     useEffect(() => {
         setIsClient(true);
-        
+
         if (params.id && !hasFetched && !loading) {
             getProduct(params.id)
                 .then(() => {
@@ -31,16 +31,6 @@ function ProductPage({ params }) {
                 });
         }
     }, [params.id, getProduct, hasFetched, loading]);
-
-    // دریافت محصولات مشابه
-    const categoryId = product?.category?._id;
-    const { loading: similarLoading, error: similarError, data: similarData } = useQuery(GET_SIMILAR_PRODUCTS, {
-        variables: { 
-            categoryId: categoryId,
-            limit: 5 
-        },
-        skip: !categoryId,
-    });
 
     if (!isClient || (loading && !hasFetched)) {
         return (
@@ -88,7 +78,7 @@ function ProductPage({ params }) {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* لاگ خطا به صورت مخفی برای توسعه‌دهندگان */}
                             {process.env.NODE_ENV === 'development' && (
                                 <div className="alert alert-danger mt-4 small">
@@ -130,8 +120,6 @@ function ProductPage({ params }) {
         );
     }
 
-    const similarProducts = similarData?.similarProducts || [];
-
     return (
         <>
             <Header />
@@ -139,7 +127,7 @@ function ProductPage({ params }) {
             <Details product={product} />
             <MultiSeller product={product} sellers={product?.sellers || []} />
             <ProductDesc product={product} />
-            <SimilarProducts products={similarProducts} />
+            <SimilarProducts />
             <Footer />
         </>
     );
