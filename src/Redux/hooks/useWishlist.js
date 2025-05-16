@@ -21,12 +21,16 @@ export const useWishlist = () => {
     isInWishlistLoading
   } = useSelector(state => state.wishlist);
   
-  // دریافت لیست علاقه‌مندی‌ها
   const getWishlist = useCallback(() => {
-    return dispatch(getUserWishlist());
+    return dispatch(getUserWishlist())
+      .unwrap()
+      .catch(error => {
+        console.error('Error in getWishlist:', error);
+        // خطا را به صورت مناسب مدیریت می‌کنیم تا promise رد نشود
+        return [];
+      });
   }, [dispatch]);
   
-  // افزودن به لیست علاقه‌مندی‌ها با نمایش toast
   const addProductToWishlist = useCallback((productId, product) => {
     return dispatch(addToWishlist({ productId, product }))
       .unwrap()
@@ -40,7 +44,6 @@ export const useWishlist = () => {
       });
   }, [dispatch]);
   
-  // حذف از لیست علاقه‌مندی‌ها با نمایش toast
   const removeProductFromWishlist = useCallback((productId) => {
     return dispatch(removeFromWishlist(productId))
       .unwrap()
@@ -54,27 +57,27 @@ export const useWishlist = () => {
       });
   }, [dispatch]);
   
-  // بررسی وضعیت علاقه‌مندی محصول
   const checkProductInWishlist = useCallback((productId) => {
-    return dispatch(checkIsInWishlist({ productId }));
+    return dispatch(checkIsInWishlist({ productId }))
+      .unwrap()
+      .catch(() => {
+        // در صورت خطا فرض می‌کنیم محصول در لیست علاقه‌مندی‌ها نیست
+        return false;
+      });
   }, [dispatch]);
   
-  // پاک کردن خطا
   const clearError = useCallback(() => {
     dispatch(clearWishlistError());
   }, [dispatch]);
   
-  // بازنشانی وضعیت
   const resetWishlistState = useCallback(() => {
     dispatch(resetWishlist());
   }, [dispatch]);
   
-  // بررسی وضعیت علاقه‌مندی یک محصول خاص
   const isProductInWishlist = useCallback((productId) => {
     return isInWishlistStatus[productId] || false;
   }, [isInWishlistStatus]);
   
-  // بررسی وضعیت بارگذاری برای یک محصول خاص
   const isLoadingForProduct = useCallback((productId) => {
     return isInWishlistLoading[productId] || false;
   }, [isInWishlistLoading]);
