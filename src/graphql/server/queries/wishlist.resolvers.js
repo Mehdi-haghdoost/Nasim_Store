@@ -2,6 +2,7 @@ const { GraphQLList, GraphQLBoolean, GraphQLNonNull, GraphQLID } = require("grap
 const { ProductType } = require("../types/product.types");
 const { validateToken } = require("../../../utils/authBackend");
 const UserModel = require("../../../../models/User");
+const ProductModel = require("../../../../models/Product");
 
 // دریافت لیست علاقه‌مندی‌های کاربر
 const getUserWishlist = {
@@ -13,17 +14,30 @@ const getUserWishlist = {
                 throw new Error("کاربر احراز هویت نشده است");
             }
 
-            // دریافت اطلاعات کاربر با populate کردن محصولات لیست علاقه‌مندی‌ها
-            const userWithWishlist = await UserModel.findById(user._id)
-                .populate('wishlist')
-                .exec();
-
-            if (!userWithWishlist) {
+            // دریافت اطلاعات کاربر
+            const userDoc = await UserModel.findById(user._id);
+            if (!userDoc) {
                 throw new Error("کاربر پیدا نشد");
             }
 
-            return userWithWishlist.wishlist || [];
+            // اگر wishlist خالی باشد، آرایه خالی برگرداند
+            if (!userDoc.wishlist || userDoc.wishlist.length === 0) {
+                console.log('Wishlist is empty for user:', user._id);
+                return [];
+            }
+
+            // به صورت دستی محصولات را بر اساس آیدی‌های ذخیره شده در wishlist بازیابی می‌کنیم
+            const productIds = userDoc.wishlist;
+            console.log('Product IDs in wishlist:', productIds);
+            
+            const products = await ProductModel.find({ 
+                _id: { $in: productIds } 
+            });
+            
+            console.log('Products fetched:', products.length);
+            return products;
         } catch (error) {
+            console.error('Error in getUserWishlist resolver:', error);
             throw new Error(`خطا در دریافت لیست علاقه‌مندی‌ها: ${error.message}`);
         }
     }
@@ -48,14 +62,14 @@ const isInWishlist = {
             }
 
             return userDoc.wishlist && userDoc.wishlist.includes(productId);
-
         } catch (error) {
+            console.error('Error in isInWishlist resolver:', error);
             throw new Error(`خطا در بررسی وضعیت لیست علاقه‌مندی‌ها: ${error.message}`);
         }
     }
-}
+};
 
 module.exports = {
     getUserWishlist,
     isInWishlist,
-}
+};
