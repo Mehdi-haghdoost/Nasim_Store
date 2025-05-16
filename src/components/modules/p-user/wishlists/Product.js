@@ -3,45 +3,13 @@ import React from 'react';
 import styles from './Product.module.css';
 import Link from 'next/link';
 import { useWishlist } from '@/Redux/hooks/useWishlist';
-import { useCart } from '@/Redux/hooks/useCart';
-import { toast } from 'react-toastify';
 
 const Card = ({ product }) => {
     const { removeProductFromWishlist } = useWishlist();
-    const { addToCart } = useCart();
 
     const handleRemoveFromWishlist = () => {
         if (!product?._id) return;
         removeProductFromWishlist(product._id);
-    };
-
-    const handleAddToCart = () => {
-        if (!product?._id) return;
-        
-        // برای محافظت، یک نسخه تمیز از محصول با فیلدهای مورد نیاز برای سبد خرید ایجاد می‌کنیم
-        const cartProduct = {
-            _id: product._id,
-            title: product.title || 'محصول بدون نام',
-            originalName: product.originalName || '',
-            price: product.price || 0,
-            discountedPrice: product.discountedPrice || product.price || 0,
-            hasDiscount: product.hasDiscount || false,
-            image: product.image || '',
-            stock: product.stock || 0
-        };
-        
-        addToCart(cartProduct, 1, null, null)
-            .unwrap()
-            .then(() => {
-                toast.success(`${product.title || 'محصول'} به سبد خرید اضافه شد`, {
-                    position: "bottom-right",
-                    autoClose: 3000
-                });
-            })
-            .catch((error) => {
-                console.error('Error adding to cart:', error);
-                toast.error('خطا در افزودن به سبد خرید');
-            });
     };
 
     // اگر محصولی وجود نداشت، نمایش پیام خالی بودن
@@ -85,12 +53,7 @@ const Card = ({ product }) => {
                             </button>
                             <span className={styles.tooltipText}>حذف محصول</span>
                         </div>
-                        <div className={styles.tooltip}>
-                            <button onClick={handleAddToCart} className="btn main-color-one-bg btn-sm">
-                                <i className="bi bi-cart-plus text-white"></i>
-                            </button>
-                            <span className={styles.tooltipText}>افزودن به سبد خرید</span>
-                        </div>
+                        {/* دکمه "افزودن به سبد خرید" حذف شد */}
                     </div>
                 </div>
             </div>
