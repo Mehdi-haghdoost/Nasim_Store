@@ -111,7 +111,7 @@ const products = {
             }
           ]
         });
-      console.log("All products found:", allProducts.length);
+      
       return allProducts;
     } catch (error) {
       console.error("Error in products resolver:", error);
