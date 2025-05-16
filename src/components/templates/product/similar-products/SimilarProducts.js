@@ -14,7 +14,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import styles from './SimilarProducts.module.css'
 import Card from './Card'
 
-function SimilarProducts() {
+function SimilarProducts({ products = [] }) {
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
 
@@ -31,6 +31,7 @@ function SimilarProducts() {
   // تعریف داده‌های مختلف برای هر محصول
   const productVariants = [
     {
+      _id: "product-1", // اضافه کردن _id واقعی برای هر محصول
       title: 'ساعت هوشمند شیائومی',
       originalName: 'Mibro Lite XPAW004 Smartwatch',
       price: 3175000,
@@ -39,6 +40,7 @@ function SimilarProducts() {
       discountPercentage: 40
     },
     {
+      _id: "product-2",
       title: 'تلویزیون LED سامسونگ',
       originalName: 'Samsung 55" 4K UHD Smart TV',
       price: 28500000,
@@ -47,6 +49,7 @@ function SimilarProducts() {
       discountPercentage: 10
     },
     {
+      _id: "product-3",
       title: 'هدفون بی‌سیم سونی',
       originalName: 'Sony WH-1000XM4 Wireless Headphones',
       price: 12500000,
@@ -55,6 +58,7 @@ function SimilarProducts() {
       discountPercentage: 10
     },
     {
+      _id: "product-4",
       title: 'لپ‌تاپ گیمینگ ایسوس',
       originalName: 'ASUS ROG Strix G15 Gaming Laptop',
       price: 52000000,
@@ -63,6 +67,7 @@ function SimilarProducts() {
       discountPercentage: 5
     },
     {
+      _id: "product-5",
       title: 'دوربین دیجیتال کانن',
       originalName: 'Canon EOS 90D DSLR Camera',
       price: 45000000,
@@ -71,6 +76,7 @@ function SimilarProducts() {
       discountPercentage: 0
     },
     {
+      _id: "product-6",
       title: 'اسپیکر بلوتوثی JBL',
       originalName: 'JBL Charge 5 Portable Bluetooth Speaker',
       price: 7800000,
@@ -79,6 +85,7 @@ function SimilarProducts() {
       discountPercentage: 20
     },
     {
+      _id: "product-7",
       title: 'گوشی موبایل سامسونگ',
       originalName: 'Samsung Galaxy S23 Ultra',
       price: 68000000,
@@ -87,6 +94,9 @@ function SimilarProducts() {
       discountPercentage: 10
     }
   ];
+
+  // استفاده از محصولات واقعی پاس داده شده یا داده‌های مثال
+  const displayProducts = products.length > 0 ? products : productVariants;
 
   return (
     <div className={`${styles.site_slider} py-20`}>
@@ -144,11 +154,11 @@ function SimilarProducts() {
                 }}
                 className="mySwiper"
               >
-                {images.map((img, index) => (
-                  <SwiperSlide key={index} className={`${styles.mySlide}`}>
+                {displayProducts.map((product, index) => (
+                  <SwiperSlide key={product._id || index} className={`${styles.mySlide}`}>
                     <Card 
-                      img={img}
-                      productData={productVariants[index % productVariants.length]} 
+                      img={images[index % images.length]}
+                      productData={product} 
                     />
                   </SwiperSlide>
                 ))}
