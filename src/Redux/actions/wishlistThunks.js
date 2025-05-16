@@ -7,26 +7,35 @@ export const getUserWishlist = createAsyncThunk(
   'wishlist/getUserWishlist',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await client.query({
+      // اضافه کردن لاگ قبل از اجرای query
+      console.log('Fetching wishlist with query:', GET_USER_WISHLIST);
+      
+      const { data, errors } = await client.query({
         query: GET_USER_WISHLIST,
         fetchPolicy: 'network-only'
       });
       
-      // اضافه کردن لاگ برای عیب‌یابی
-      console.log('Wishlist data received:', data);
+      // اضافه کردن لاگ کامل پاسخ
+      console.log('Wishlist response:', { data, errors });
+      
+      if (errors && errors.length > 0) {
+        console.error('GraphQL errors:', errors);
+        return rejectWithValue(errors[0].message || 'خطا در دریافت اطلاعات');
+      }
       
       if (!data || !data.getUserWishlist) {
+        console.log('No wishlist data found or empty array returned');
         return [];
       }
       
       return data.getUserWishlist;
     } catch (error) {
       console.error('Error fetching wishlist:', error);
-      // از پیام خطای بهتری استفاده می‌کنیم که به کاربر نمایش داده نشود
       return rejectWithValue('خطا در دریافت اطلاعات');
     }
   }
 );
+
 
 export const addToWishlist = createAsyncThunk(
   'wishlist/addToWishlist',
