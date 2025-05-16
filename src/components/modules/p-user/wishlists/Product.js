@@ -18,7 +18,19 @@ const Card = ({ product }) => {
     const handleAddToCart = () => {
         if (!product?._id) return;
         
-        addToCart(product, 1, null, null)
+        // برای محافظت، یک نسخه تمیز از محصول با فیلدهای مورد نیاز برای سبد خرید ایجاد می‌کنیم
+        const cartProduct = {
+            _id: product._id,
+            title: product.title || 'محصول بدون نام',
+            originalName: product.originalName || '',
+            price: product.price || 0,
+            discountedPrice: product.discountedPrice || product.price || 0,
+            hasDiscount: product.hasDiscount || false,
+            image: product.image || '',
+            stock: product.stock || 0
+        };
+        
+        addToCart(cartProduct, 1, null, null)
             .unwrap()
             .then(() => {
                 toast.success(`${product.title || 'محصول'} به سبد خرید اضافه شد`, {
@@ -41,7 +53,13 @@ const Card = ({ product }) => {
     const productImage = product.image ? `/images/product/${product.image}` : '/images/product/product-image1.jpg';
     const productLink = `/product/${product._id}`;
     const productTitle = product.title || 'نام محصول موجود نیست';
-    const productPrice = product.price ? `${product.price.toLocaleString()} تومان` : 'قیمت موجود نیست';
+    
+    // نمایش قیمت با تخفیف اگر وجود داشته باشد
+    const productPrice = product.hasDiscount && product.discountedPrice ? 
+        `${product.discountedPrice.toLocaleString()} تومان` : 
+        product.price ? 
+        `${product.price.toLocaleString()} تومان` : 
+        'قیمت موجود نیست';
 
     return (
         <div className='product-list-row'>
