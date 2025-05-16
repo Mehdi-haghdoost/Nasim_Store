@@ -10,10 +10,6 @@ export const GET_USER_WISHLIST = gql`
       image
       discountedPrice
       hasDiscount
-      discountPercentage
-      brand {
-        name
-      }
       category {
         name
       }
