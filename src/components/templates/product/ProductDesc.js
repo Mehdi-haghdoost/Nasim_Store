@@ -43,6 +43,20 @@ function ProductDesc({ product }) {
     };
 
     // افزودن به سبد خرید
+    // const handleAddToCart = (e) => {
+    //     e.preventDefault();
+
+    //     if (!product) {
+    //         console.error('اطلاعات محصول در دسترس نیست');
+    //         return;
+    //     }
+
+    //     // احتمال دارد سلر‌آیدی نیاز باشد
+    //     const sellerId = product?.sellers && product.sellers.length > 0 ? product.sellers[0]._id : null;
+
+    //     addToCart(product, productCount, selectedColor, null, sellerId);
+    // };
+
     const handleAddToCart = (e) => {
         e.preventDefault();
 
@@ -51,8 +65,13 @@ function ProductDesc({ product }) {
             return;
         }
 
-        // احتمال دارد سلر‌آیدی نیاز باشد
         const sellerId = product?.sellers && product.sellers.length > 0 ? product.sellers[0]._id : null;
+
+        console.log('🟡 handleAddToCart called');
+        console.log('product ID:', product._id);
+        console.log('count:', productCount);
+        console.log('selectedColor:', selectedColor);
+        console.log('sellerId:', sellerId);
 
         addToCart(product, productCount, selectedColor, null, sellerId);
     };
@@ -86,7 +105,7 @@ function ProductDesc({ product }) {
         stock: 14
     };
     console.log('productData ===>', productData);
-    
+
 
     return (
         <div className={`${styles.product_desc} py-20`}>
@@ -151,7 +170,7 @@ function ProductDesc({ product }) {
                                     <div className="row align-items-center gy-2">
                                         <div className="col-4">
                                             <div className={styles.product_float_image}>
-                                                <img src={`/images/product/${productData.image }`} className='img-fluid' alt="" />
+                                                <img src={`/images/product/${productData.image}`} className='img-fluid' alt="" />
                                             </div>
                                         </div>
                                         <div className="col-8">

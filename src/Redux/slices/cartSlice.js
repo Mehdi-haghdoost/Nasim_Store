@@ -1,10 +1,10 @@
 // # اسلایس مربوط به سبد خرید با ذخیره‌سازی در localStorage
 
 import { createSlice } from "@reduxjs/toolkit";
-import { 
-  addToCartThunk, 
-  updateCartItemThunk, 
-  removeFromCartThunk, 
+import {
+  addToCartThunk,
+  updateCartItemThunk,
+  removeFromCartThunk,
   clearCartThunk,
   syncCartFromLocalStorage
 } from "../actions/cartThunks";
@@ -14,7 +14,7 @@ const loadInitialState = () => {
   if (typeof window === 'undefined') {
     return { items: [], totalPrice: 0, totalDiscount: 0, finalPrice: 0 };
   }
-  
+
   try {
     const cartData = localStorage.getItem('nassim_store_cart');
     if (cartData) {
@@ -29,7 +29,7 @@ const loadInitialState = () => {
   } catch (error) {
     console.error('خطا در خواندن سبد خرید از localStorage:', error);
   }
-  
+
   return { items: [], totalPrice: 0, totalDiscount: 0, finalPrice: 0 };
 };
 
@@ -49,11 +49,11 @@ const cartSlice = createSlice({
     calculateCartTotals: (state) => {
       let totalPrice = 0;
       let totalDiscount = 0;
-      
+
       state.items.forEach(item => {
         const product = item.product;
         const quantity = item.quantity;
-        
+
         if (product.hasDiscount) {
           totalPrice += product.price * quantity;
           totalDiscount += (product.price - product.discountedPrice) * quantity;
@@ -61,11 +61,11 @@ const cartSlice = createSlice({
           totalPrice += product.price * quantity;
         }
       });
-      
+
       state.totalPrice = totalPrice;
       state.totalDiscount = totalDiscount;
       state.finalPrice = totalPrice - totalDiscount;
-      
+
       // ذخیره در localStorage
       if (typeof window !== 'undefined') {
         try {
@@ -87,7 +87,7 @@ const cartSlice = createSlice({
       state.finalPrice = 0;
       state.loading = false;
       state.error = null;
-      
+
       // پاک کردن از localStorage
       if (typeof window !== 'undefined') {
         try {
@@ -99,34 +99,43 @@ const cartSlice = createSlice({
     },
     mergeGuestCartWithUserCart: (state, action) => {
       const { guestCartItems } = action.payload;
-      
+
       if (!guestCartItems || guestCartItems.length === 0) return;
-      
+
+      // ایجاد کپی از آرایه items موجود
+      const newItems = [...state.items];
+
       // ترکیب سبد خرید مهمان با سبد خرید کاربر لاگین شده
       guestCartItems.forEach(guestItem => {
-        const existingItemIndex = state.items.findIndex(item => 
-          item.product._id === guestItem.product._id && 
-          item.color === guestItem.color && 
+        const existingItemIndex = newItems.findIndex(item =>
+          item.product._id === guestItem.product._id &&
+          item.color === guestItem.color &&
           item.size === guestItem.size
         );
-        
+
         if (existingItemIndex !== -1) {
-          // افزایش تعداد اگر محصول از قبل در سبد وجود دارد
-          state.items[existingItemIndex].quantity += guestItem.quantity;
+          // به جای تغییر مستقیم، یک آیتم جدید ایجاد کرده و جایگزین می‌کنیم
+          newItems[existingItemIndex] = {
+            ...newItems[existingItemIndex],
+            quantity: newItems[existingItemIndex].quantity + guestItem.quantity
+          };
         } else {
           // افزودن محصول جدید به سبد
-          state.items.push(guestItem);
+          newItems.push(guestItem);
         }
       });
-      
+
+      // جایگزینی items با آرایه جدید
+      state.items = newItems;
+
       // محاسبه مجدد مجموع قیمت‌ها
       let totalPrice = 0;
       let totalDiscount = 0;
-      
+
       state.items.forEach(item => {
         const product = item.product;
         const quantity = item.quantity;
-        
+
         if (product.hasDiscount) {
           totalPrice += product.price * quantity;
           totalDiscount += (product.price - product.discountedPrice) * quantity;
@@ -134,11 +143,11 @@ const cartSlice = createSlice({
           totalPrice += product.price * quantity;
         }
       });
-      
+
       state.totalPrice = totalPrice;
       state.totalDiscount = totalDiscount;
       state.finalPrice = totalPrice - totalDiscount;
-      
+
       // ذخیره در localStorage
       if (typeof window !== 'undefined') {
         try {
@@ -174,8 +183,8 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-    // Update Cart Item
+
+      // Update Cart Item
       .addCase(updateCartItemThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -193,8 +202,8 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-    // Remove from Cart
+
+      // Remove from Cart
       .addCase(removeFromCartThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -212,8 +221,8 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-    // Clear Cart
+
+      // Clear Cart
       .addCase(clearCartThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -230,8 +239,8 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-    // Sync Cart from LocalStorage
+
+      // Sync Cart from LocalStorage
       .addCase(syncCartFromLocalStorage.fulfilled, (state, action) => {
         if (action.payload) {
           const { items, totalPrice, totalDiscount, finalPrice } = action.payload;
@@ -244,9 +253,9 @@ const cartSlice = createSlice({
   },
 });
 
-export const { 
-  clearCartError, 
-  calculateCartTotals, 
+export const {
+  clearCartError,
+  calculateCartTotals,
   clearCartState,
   mergeGuestCartWithUserCart
 } = cartSlice.actions;

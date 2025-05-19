@@ -1,15 +1,9 @@
-// src/Redux/actions/cartThunks.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from 'react-toastify'; // اضافه کردن این خط
+import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 
-// کلید ذخیره‌سازی سبد خرید در localStorage
 const CART_STORAGE_KEY = 'nassim_store_cart';
 
-/**
- * محاسبه مجموع قیمت‌های سبد خرید
- * @param {Array} items آیتم‌های سبد خرید
- * @returns {Object} اطلاعات محاسبه شده سبد خرید
- */
 const calculateCartInfo = (items) => {
   let totalPrice = 0;
   let totalDiscount = 0;
@@ -34,176 +28,99 @@ const calculateCartInfo = (items) => {
   };
 };
 
-/**
- * ذخیره سبد خرید در localStorage
- * @param {Object} cartInfo اطلاعات سبد خرید
- */
 const saveCartToLocalStorage = (cartInfo) => {
   if (typeof window === 'undefined') return;
 
   try {
+    console.log('Saving to localStorage:', cartInfo);
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartInfo));
+    console.log('Saved to localStorage successfully');
   } catch (error) {
-    console.error('خطا در ذخیره سبد خرید در localStorage:', error);
+    console.error('Error saving to localStorage:', error);
   }
 };
 
-/**
- * خواندن سبد خرید از localStorage
- * @returns {Object|null} اطلاعات سبد خرید یا null در صورت خطا
- */
 const getCartFromLocalStorage = () => {
   if (typeof window === 'undefined') return null;
 
   try {
     const cartData = localStorage.getItem(CART_STORAGE_KEY);
-    return cartData ? JSON.parse(cartData) : null;
+    const parsedData = cartData ? JSON.parse(cartData) : null;
+    console.log('Loaded from localStorage:', parsedData);
+    return parsedData;
   } catch (error) {
-    console.error('خطا در خواندن سبد خرید از localStorage:', error);
+    console.error('Error loading from localStorage:', error);
     return null;
   }
 };
 
-/**
- * تبدیل داده‌های فروشنده به یک ساختار استاندارد
- * @param {Object|String} sellerData شناسه فروشنده یا آبجکت فروشنده
- * @returns {Object|null} آبجکت فروشنده با ساختار یکسان یا null
- */
 const normalizeSellerData = (sellerData) => {
   if (!sellerData) return null;
 
-  // اگر sellerData یک شیء باشد و شامل _id و name باشد
   if (typeof sellerData === 'object' && sellerData._id) {
     return {
       _id: sellerData._id,
       name: sellerData.name || "فروشنده نامشخص"
     };
   }
-  
-  // اگر sellerData فقط یک ID باشد
+
   if (typeof sellerData === 'string') {
     return {
       _id: sellerData,
-      name: "فروشگاه نسیم" // نام پیش‌فرض
+      name: "فروشگاه نسیم"
     };
   }
-  
+
   return null;
 };
 
-/**
- * Thunk برای افزودن محصول به سبد خرید
- */
 export const addToCartThunk = createAsyncThunk(
   'cart/addToCart',
   async ({ product, quantity = 1, color = null, size = null, sellerId = null }, { rejectWithValue }) => {
     try {
-      // دریافت سبد خرید فعلی
-      const cartData = getCartFromLocalStorage() || { items: [] };
-      const items = cartData.items || [];
+      console.log('addToCartThunk called:', { productId: product._id, quantity, color, sellerId });
 
-      // بررسی موجودی محصول
+      const cartData = getCartFromLocalStorage() || { items: [] };
+      let items = cartData.items || [];
+
+      items = items.filter(item => item._id && item.product && item.product._id);
+      console.log('Filtered valid cart items:', items);
+
       if (product.stock < quantity) {
         toast.error('موجودی محصول کافی نیست');
         return rejectWithValue('موجودی محصول کافی نیست');
       }
 
-      // نرمال‌سازی اطلاعات فروشنده
       const normalizedSeller = normalizeSellerData(sellerId);
 
-      console.log('Adding to cart (normalized):', {
-        product: product._id,
-        color,
-        size,
-        quantity,
-        sellerId: normalizedSeller
-      });
-
-      // بررسی آیا محصول قبلاً در سبد خرید وجود دارد
       const existingItemIndex = items.findIndex(item => {
-        // بررسی آیدی محصول (با حذف پسوند فروشنده اگر وجود داشته باشد)
         let itemProductId = String(item.product._id);
         let currentProductId = String(product._id);
-        
-        // حذف پسوند فروشنده از آیدی محصول اگر وجود داشته باشد
+
         if (itemProductId.includes('_')) {
           itemProductId = itemProductId.split('_')[0];
         }
         if (currentProductId.includes('_')) {
           currentProductId = currentProductId.split('_')[0];
         }
-        
+
         const productIdMatch = itemProductId === currentProductId;
+        let colorMatch = (item.color === null && color === null) || String(item.color) === String(color);
+        let sizeMatch = (item.size === null && size === null) || String(item.size) === String(size);
+        let sellerMatch = (item.selectedSeller === null && normalizedSeller === null) ||
+          (normalizedSeller && item.selectedSeller && String(item.selectedSeller._id) === String(normalizedSeller._id));
 
-        // برابری رنگ - این فیلد حتماً مقایسه شود
-        let colorMatch = false; // پیش‌فرض: عدم تطابق
-        if (color !== null && item.color !== null) {
-          colorMatch = String(item.color) === String(color);
-        } else {
-          // اگر هر دو null باشند، تطابق دارند
-          colorMatch = (item.color === null && color === null);
-        }
+        console.log('Checking item match:', { itemId: item.product._id, productId: product._id, productIdMatch, colorMatch, sizeMatch, sellerMatch });
 
-        // برابری سایز
-        let sizeMatch = true;
-        if (size !== null && item.size !== null) {
-          sizeMatch = String(item.size) === String(size);
-        } else {
-          // اگر یکی null و دیگری مقداری داشته باشد، تطابق ندارند
-          sizeMatch = (item.size === null && size === null);
-        }
-
-        // برابری فروشنده - این فیلد حتماً مقایسه شود
-        let sellerMatch = false; // پیش‌فرض: عدم تطابق
-        
-        if (normalizedSeller && item.selectedSeller) {
-          // مقایسه بر اساس آیدی فروشنده
-          const itemSellerId = item.selectedSeller._id || item.selectedSeller;
-          const currentSellerId = normalizedSeller._id;
-          
-          sellerMatch = String(itemSellerId) === String(currentSellerId);
-          
-          console.log('Seller comparison:', {
-            itemSellerId,
-            currentSellerId,
-            match: sellerMatch
-          });
-        } else {
-          // اگر هر دو null باشند، تطابق دارند
-          sellerMatch = (item.selectedSeller === null && normalizedSeller === null);
-        }
-
-        console.log('Comparing item:', {
-          itemId: item.product._id,
-          currentId: product._id,
-          itemProductId,
-          currentProductId,
-          itemColor: item.color,
-          currentColor: color,
-          itemSize: item.size,
-          currentSize: size,
-          itemSeller: item.selectedSeller,
-          currentSeller: normalizedSeller,
-          matches: {
-            productId: productIdMatch,
-            color: colorMatch,
-            size: sizeMatch,
-            seller: sellerMatch
-          }
-        });
-
-        // فقط در صورتی که تمام مشخصات یکسان باشند، آیتم تکراری شناخته می‌شود
         return productIdMatch && colorMatch && sizeMatch && sellerMatch;
       });
 
-      console.log('Existing item index:', existingItemIndex);
+      console.log('Existing item index:', existingItemIndex, 'Quantity:', quantity);
 
       if (existingItemIndex > -1) {
-        // اگر محصول موجود است، تعداد آن را افزایش می‌دهیم
         console.log(`Updating quantity from ${items[existingItemIndex].quantity} to ${items[existingItemIndex].quantity + quantity}`);
         items[existingItemIndex].quantity += quantity;
       } else {
-        // در غیر این صورت، یک آیتم جدید اضافه می‌کنیم
         console.log('Adding new item with quantity:', quantity);
         items.push({
           product,
@@ -211,177 +128,266 @@ export const addToCartThunk = createAsyncThunk(
           color,
           size,
           selectedSeller: normalizedSeller,
-          _id: Math.random().toString(36).substr(2, 9) // یک شناسه موقت برای آیتم سبد خرید
+          _id: uuidv4()
         });
       }
 
-      // محاسبه مجدد اطلاعات سبد خرید
       const cartInfo = calculateCartInfo(items);
-
-      // ذخیره در localStorage
       saveCartToLocalStorage(cartInfo);
 
-      // نمایش توست موفقیت آمیز
+      console.log('Updated cart info:', cartInfo);
       toast.success('کالای مورد نظر با موفقیت به سبد خرید افزوده شد');
-
       return cartInfo;
     } catch (error) {
-      console.error('خطا در افزودن به سبد خرید:', error);
+      console.error('Error in addToCartThunk:', error);
       toast.error(error.message || 'خطا در افزودن به سبد خرید');
       return rejectWithValue(error.message || 'خطا در افزودن به سبد خرید');
     }
   }
 );
 
-/**
- * Thunk برای به‌روزرسانی تعداد محصول در سبد خرید
- */
+
 export const updateCartItemThunk = createAsyncThunk(
   'cart/updateCartItem',
   async ({ itemId, quantity }, { rejectWithValue }) => {
     try {
-      // دریافت سبد خرید فعلی
+      console.log('updateCartItemThunk called:', { itemId, quantity });
       const cartData = getCartFromLocalStorage() || { items: [] };
-      let items = cartData.items || [];
+      let items = JSON.parse(JSON.stringify(cartData.items || [])); // کپی عمیق
+      console.log('Current cart items:', items.map(i => ({ _id: i._id, productId: i.product._id })));
 
-      // پیدا کردن آیتم مورد نظر
       const itemIndex = items.findIndex(item => item._id === itemId);
+      console.log('Item index:', itemIndex, 'Item ID:', itemId);
 
       if (itemIndex === -1) {
-        toast.error('آیتم موردنظر در سبد خرید یافت نشد'); // اضافه کردن توست برای خطا
+        console.error('Item not found in cart:', { itemId, availableIds: items.map(i => i._id) });
+        toast.error('آیتم موردنظر در سبد خرید یافت نشد');
         return rejectWithValue('آیتم موردنظر در سبد خرید یافت نشد');
       }
 
       const item = items[itemIndex];
 
-      // بررسی موجودی محصول
       if (item.product.stock < quantity) {
-        toast.error('موجودی محصول کافی نیست'); // اضافه کردن توست برای خطا
+        toast.error('موجودی محصول کافی نیست');
         return rejectWithValue('موجودی محصول کافی نیست');
       }
 
       if (quantity <= 0) {
-        // حذف آیتم اگر تعداد 0 یا کمتر باشد
+        console.log('Removing item with ID:', itemId);
         items = items.filter(item => item._id !== itemId);
-        toast.info('کالا از سبد خرید حذف شد'); // اضافه کردن توست برای حذف آیتم
+        toast.info('کالا از سبد خرید حذف شد');
       } else {
-        // به‌روزرسانی تعداد
-        items[itemIndex].quantity = quantity;
-        toast.success('تعداد کالا با موفقیت تغییر کرد'); // اضافه کردن توست برای به‌روزرسانی
+        console.log('Updating item quantity to:', quantity);
+        items[itemIndex] = { ...items[itemIndex], quantity }; // ایجاد یک شیء جدید
+        toast.success('تعداد کالا با موفقیت تغییر کرد');
       }
 
-      // محاسبه مجدد اطلاعات سبد خرید
       const cartInfo = calculateCartInfo(items);
-
-      // ذخیره در localStorage
       saveCartToLocalStorage(cartInfo);
 
+      console.log('Updated cart info:', cartInfo);
       return cartInfo;
     } catch (error) {
-      console.error('خطا در به‌روزرسانی سبد خرید:', error);
-      toast.error(error.message || 'خطا در به‌روزرسانی سبد خرید'); // اضافه کردن توست برای خطا
+      console.error('Error in updateCartItemThunk:', error);
+      toast.error(error.message || 'خطا در به‌روزرسانی سبد خرید');
       return rejectWithValue(error.message || 'خطا در به‌روزرسانی سبد خرید');
     }
   }
 );
 
-/**
- * Thunk برای حذف یک آیتم از سبد خرید
- */
 export const removeFromCartThunk = createAsyncThunk(
   'cart/removeFromCart',
   async (itemId, { rejectWithValue }) => {
     try {
-      // دریافت سبد خرید فعلی
+      console.log('removeFromCartThunk called:', { itemId });
       const cartData = getCartFromLocalStorage() || { items: [] };
-      const items = (cartData.items || []).filter(item => item._id !== itemId);
+      let items = cartData.items || [];
+      console.log('Current cart items:', items.map(i => ({ _id: i._id, productId: i.product._id })));
 
-      // محاسبه مجدد اطلاعات سبد خرید
+      const itemIndex = items.findIndex(item => item._id === itemId);
+      if (itemIndex === -1) {
+        console.error('Item not found in cart:', { itemId, availableIds: items.map(i => i._id) });
+        toast.error('آیتم موردنظر در سبد خرید یافت نشد');
+        return rejectWithValue('آیتم موردنظر در سبد خرید یافت نشد');
+      }
+
+      items = items.filter(item => item._id !== itemId);
+      console.log('Filtered items:', items.map(i => ({ _id: i._id, productId: i.product._id })));
+
       const cartInfo = calculateCartInfo(items);
-
-      // ذخیره در localStorage
       saveCartToLocalStorage(cartInfo);
 
-      // نمایش توست موفقیت آمیز
+      console.log('Updated cart info:', cartInfo);
       toast.success('کالا با موفقیت از سبد خرید حذف شد');
-
       return cartInfo;
     } catch (error) {
-      console.error('خطا در حذف از سبد خرید:', error);
-      toast.error(error.message || 'خطا در حذف از سبد خرید'); // اضافه کردن توست برای خطا
+      console.error('Error in removeFromCartThunk:', error);
+      toast.error(error.message || 'خطا در حذف از سبد خرید');
       return rejectWithValue(error.message || 'خطا در حذف از سبد خرید');
     }
   }
 );
 
-/**
- * Thunk برای پاک کردن کامل سبد خرید
- */
 export const clearCartThunk = createAsyncThunk(
   'cart/clearCart',
   async (_, { rejectWithValue }) => {
     try {
+      console.log('clearCartThunk called');
       if (typeof window !== 'undefined') {
         localStorage.removeItem(CART_STORAGE_KEY);
+        console.log('localStorage cleared');
       }
-
-      // نمایش توست موفقیت آمیز
       toast.success('سبد خرید با موفقیت خالی شد');
-
       return { items: [], totalPrice: 0, totalDiscount: 0, finalPrice: 0 };
     } catch (error) {
-      console.error('خطا در پاک کردن سبد خرید:', error);
-      toast.error(error.message || 'خطا در پاک کردن سبد خرید'); // اضافه کردن توست برای خطا
+      console.error('Error in clearCartThunk:', error);
+      toast.error(error.message || 'خطا در پاک کردن سبد خرید');
       return rejectWithValue(error.message || 'خطا در پاک کردن سبد خرید');
     }
   }
 );
 
-/**
- * Thunk برای همگام‌سازی سبد خرید از localStorage
- */
 export const syncCartFromLocalStorage = createAsyncThunk(
   'cart/syncFromLocalStorage',
   async () => {
-    return getCartFromLocalStorage();
-  }
-);
-
-/**
- * Thunk برای ادغام سبد خرید مهمان با سبد خرید کاربر لاگین شده
- */
-export const mergeGuestCartWithUserCartThunk = createAsyncThunk(
-  'cart/mergeGuestCart',
-  async (userId, { dispatch, getState }) => {
     try {
-      // این تابع تنها زمانی که کاربر لاگین کرده باشد اجرا می‌شود
-      if (!userId) return;
-
-      // دریافت سبد خرید مهمان
-      const guestCartData = getCartFromLocalStorage() || { items: [] };
-
-      // اگر سبد خرید مهمان خالی است، کاری انجام نمی‌دهیم
-      if (!guestCartData.items || guestCartData.items.length === 0) return;
-
-      // ارسال اکشن برای ادغام سبد خرید مهمان با سبد خرید کاربر
-      dispatch({
-        type: 'cart/mergeGuestCartWithUserCart',
-        payload: { guestCartItems: guestCartData.items }
-      });
-
-      // پاک کردن سبد خرید مهمان
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem(CART_STORAGE_KEY);
-      }
-
-      // نمایش توست موفقیت آمیز
-      toast.success('سبد خرید شما با حساب کاربری همگام‌سازی شد');
-
-      return true;
+      const cartData = getCartFromLocalStorage();
+      // یک کپی تازه برای جلوگیری از مشکل read-only
+      const freshCartData = cartData ? JSON.parse(JSON.stringify(cartData)) : { items: [], totalPrice: 0, totalDiscount: 0, finalPrice: 0 };
+      console.log('syncCartFromLocalStorage loaded:', freshCartData);
+      return freshCartData;
     } catch (error) {
-      console.error('خطا در ادغام سبد خرید مهمان:', error);
-      toast.error(error.message || 'خطا در همگام‌سازی سبد خرید'); // اضافه کردن توست برای خطا
-      return false;
+      console.error('Error in syncCartFromLocalStorage:', error);
+      // در صورت خطا، یک سبد خرید خالی برگردانید
+      return { items: [], totalPrice: 0, totalDiscount: 0, finalPrice: 0 };
     }
   }
 );
+
+
+
+// export const mergeGuestCartWithUserCartThunk = createAsyncThunk(
+
+//   'cart/mergeGuestCart',
+//   async (userId, { dispatch, getState }) => {
+//     try {
+//       if (!userId) {
+//         console.log('No userId provided, skipping merge');
+//         return false;
+//       }
+//       const guestCartData = getCartFromLocalStorage() || { items: [] };
+//       console.log('Guest cart data:', guestCartData);
+//       if (!guestCartData.items || guestCartData.items.length === 0) {
+//         console.log('No guest cart items to merge');
+//         return false;
+//       }
+
+//       // ادغام آیتم‌های سبد خرید مهمان با سبد خرید کاربر
+//       const currentCart = getState().cart;
+//       let mergedItems = [...(currentCart.items || [])];
+
+//       guestCartData.items.forEach(guestItem => {
+//         const existingItemIndex = mergedItems.findIndex(item =>
+//           item.product._id === guestItem.product._id &&
+//           item.color === guestItem.color &&
+//           item.size === guestItem.size &&
+//           item.selectedSeller?._id === guestItem.selectedSeller?._id
+//         );
+
+//         if (existingItemIndex > -1) {
+//           mergedItems[existingItemIndex].quantity += guestItem.quantity;
+//         } else {
+//           mergedItems.push({
+//             ...guestItem,
+//             _id: uuidv4() // تخصیص یک ID جدید برای جلوگیری از تداخل
+//           });
+//         }
+//       });
+
+//       const mergedCartInfo = calculateCartInfo(mergedItems);
+//       dispatch({
+//         type: 'cart/mergeGuestCartWithUserCart',
+//         payload: { guestCartItems: mergedItems }
+//       });
+
+//       // ذخیره سبد خرید ادغام‌شده در localStorage
+//       console.log('Saving merged cart to localStorage:', mergedCartInfo);
+//       saveCartToLocalStorage(mergedCartInfo);
+
+//       toast.success('سبد خرید شما با حساب کاربری همگام‌سازی شد');
+//       return true;
+//     } catch (error) {
+//       console.error('Error in mergeGuestCartWithUserCartThunk:', error);
+//       toast.error(error.message || 'خطا در همگام‌سازی سبد خرید');
+//       return false;
+//     }
+//   }
+// );
+
+
+mergeGuestCartWithUserCart: (state, action) => {
+  const { guestCartItems } = action.payload;
+  
+  if (!guestCartItems || guestCartItems.length === 0) return;
+  
+  // ایجاد کپی از آرایه items موجود
+  const newItems = [...state.items];
+  
+  // ترکیب سبد خرید مهمان با سبد خرید کاربر لاگین شده
+  guestCartItems.forEach(guestItem => {
+    const existingItemIndex = newItems.findIndex(item => 
+      item.product._id === guestItem.product._id && 
+      item.color === guestItem.color && 
+      item.size === guestItem.size
+    );
+    
+    if (existingItemIndex !== -1) {
+      // به جای تغییر مستقیم، یک آیتم جدید ایجاد کرده و جایگزین می‌کنیم
+      newItems[existingItemIndex] = {
+        ...newItems[existingItemIndex],
+        quantity: newItems[existingItemIndex].quantity + guestItem.quantity
+      };
+    } else {
+      // افزودن محصول جدید به سبد
+      newItems.push(guestItem);
+    }
+  });
+  
+  // جایگزینی items با آرایه جدید
+  state.items = newItems;
+  
+  // محاسبه مجدد مجموع قیمت‌ها
+  let totalPrice = 0;
+  let totalDiscount = 0;
+  
+  state.items.forEach(item => {
+    const product = item.product;
+    const quantity = item.quantity;
+    
+    if (product.hasDiscount) {
+      totalPrice += product.price * quantity;
+      totalDiscount += (product.price - product.discountedPrice) * quantity;
+    } else {
+      totalPrice += product.price * quantity;
+    }
+  });
+  
+  state.totalPrice = totalPrice;
+  state.totalDiscount = totalDiscount;
+  state.finalPrice = totalPrice - totalDiscount;
+  
+  // ذخیره در localStorage
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('nassim_store_cart', JSON.stringify({
+        items: state.items,
+        totalPrice: state.totalPrice,
+        totalDiscount: state.totalDiscount,
+        finalPrice: state.finalPrice,
+      }));
+    } catch (error) {
+      console.error('خطا در ذخیره سبد خرید در localStorage:', error);
+    }
+  }
+}
+

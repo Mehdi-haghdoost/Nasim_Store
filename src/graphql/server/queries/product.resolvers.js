@@ -73,7 +73,7 @@ const bestSellingProducts = {
   },
   resolve: async (_, { limit = 50 }) => {
     try {
-      console.log("Best selling products resolver called");
+     
       const products = await ProductModel.find()
         .populate('sellers')
         .populate('category')
