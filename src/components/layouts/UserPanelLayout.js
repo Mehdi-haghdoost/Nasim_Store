@@ -7,12 +7,14 @@ import Footer from '../modules/footer/Footer';
 import BreadCroumb from '../modules/breadCroumb/BreadCroumb';
 import Sidebar from '../modules/p-user/Sidebar';
 import ActiveLink from '@/utils/ActiveLink';
+import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '@/Redux/actions/authThunks';
-import swal from 'sweetalert'; // اگر از sweetalert استفاده می‌کنید، مطمئن شوید import شده باشد
+import swal from 'sweetalert';
 
 function Layout({ children }) {
+
     const path = usePathname();
     const router = useRouter();
     const dispatch = useDispatch();
