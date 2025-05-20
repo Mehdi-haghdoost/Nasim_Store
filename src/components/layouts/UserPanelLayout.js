@@ -1,3 +1,4 @@
+// src/components/layouts/UserPanelLayout.js
 "use client";
 
 import React from 'react';
@@ -8,18 +9,18 @@ import BreadCroumb from '../modules/breadCroumb/BreadCroumb';
 import Sidebar from '../modules/p-user/Sidebar';
 import ActiveLink from '@/utils/ActiveLink';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '@/Redux/actions/authThunks';
 import swal from 'sweetalert';
 
 function Layout({ children }) {
-
     const path = usePathname();
     const router = useRouter();
     const dispatch = useDispatch();
-    const { user, isAuthenticated } = useSelector((state) => state.auth);
-
+    const { user } = useSelector((state) => state.auth);
+    
     const logoutHandler = () => {
         swal({
             title: "آیا از خروج اطمینان دارید ؟",
@@ -34,6 +35,7 @@ function Layout({ children }) {
         });
     };
 
+    // ساده‌ترین لایوت ممکن - بدون منطق احراز هویت
     return (
         <>
             <Header />
@@ -131,7 +133,6 @@ function Layout({ children }) {
                                                                     پروفایل
                                                                     <small className='badge rounded-pill bg-danger'>5</small>
                                                                 </Link>
-
                                                                 <Link href={"/p-admin"} className='nav-item' >
                                                                     <i className='bi bi-lightbulb ms-2'></i>
                                                                     آموزش
