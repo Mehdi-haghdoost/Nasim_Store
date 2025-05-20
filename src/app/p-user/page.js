@@ -85,7 +85,7 @@ function Page() {
         </div>
       </main>
     </Layout>
-  )
+  );
 }
 
 export default Page;
