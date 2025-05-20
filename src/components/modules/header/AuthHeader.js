@@ -1,26 +1,17 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { refreshToken } from '@/Redux/actions/authThunks';
 import Link from 'next/link';
 import styles from './AuthHeader.module.css';
 
 function AuthHeader({ showBascket }) {
-    const dispatch = useDispatch();
     const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        // تلاش برای رفرش توکن تنها اگر کوکی وجود داشته باشد
-        if (!user && !loading && document.cookie.includes('refreshToken')) {
-            dispatch(refreshToken());
-        }
-    }, [dispatch, user, loading]);
 
     return (
         <div className="col-lg-4 order-lg-3 d-lg-block d-none" style={{ minHeight: '50px' }}>
             <div className="d-flex align-items-center justify-content-end">
-                {loading && document.cookie.includes('refreshToken') ? (
+                {loading ? (
                     <span className="text-muted">در حال بارگذاری...</span>
                 ) : isAuthenticated && user ? (
                     <div className={`btn-group rounded-pill shadow-sm ${styles.header_btn_group}`}>
