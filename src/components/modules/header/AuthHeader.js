@@ -11,8 +11,8 @@ function AuthHeader({ showBascket }) {
     const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        // تنها یک بار هنگام لود کامپوننت اجرا شود
-        if (!user && !loading) {
+        // تلاش برای رفرش توکن تنها اگر کوکی وجود داشته باشد
+        if (!user && !loading && document.cookie.includes('refreshToken')) {
             dispatch(refreshToken());
         }
     }, [dispatch, user, loading]);
@@ -20,7 +20,7 @@ function AuthHeader({ showBascket }) {
     return (
         <div className="col-lg-4 order-lg-3 d-lg-block d-none" style={{ minHeight: '50px' }}>
             <div className="d-flex align-items-center justify-content-end">
-                {loading ? (
+                {loading && document.cookie.includes('refreshToken') ? (
                     <span className="text-muted">در حال بارگذاری...</span>
                 ) : isAuthenticated && user ? (
                     <div className={`btn-group rounded-pill shadow-sm ${styles.header_btn_group}`}>
@@ -48,7 +48,9 @@ function AuthHeader({ showBascket }) {
                 >
                     <Link href="">
                         <i className="bi bi-shop font-20 text-muted me-1"></i>
-                        <span className={`main-color-one-bg ${styles.header_counter} rounded-pill`}>5</span>
+                        <span className={`main-color-one-bg ${styles.header_counter} rounded-pill`}>
+                            {user?.cart?.length || 0}
+                        </span>
                     </Link>
                 </div>
             </div>
