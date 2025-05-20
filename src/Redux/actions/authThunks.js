@@ -267,33 +267,6 @@ export const sendOtpForLogin = createAsyncThunk(
   }
 );
 
-/**
- * Update user profile async thunk
- */
-// export const updateUserProfile = createAsyncThunk(
-
-//   "auth/updateUserProfile",
-//   async (input, { rejectWithValue }) => {
-//     try {
-//       const { data, errors } = await client.mutate({
-//         mutation: UPDATE_USER_PROFILE,
-//         variables: { input },
-//       });
-
-//       if (errors && Array.isArray(errors) && errors.length > 0) {
-//         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
-//       }
-
-//       if (data?.updateUserProfile) {
-//         return data.updateUserProfile;
-//       }
-
-//       return rejectWithValue("خطا در به‌روزرسانی پروفایل");
-//     } catch (error) {
-//       return rejectWithValue(error.message || "خطا در به‌روزرسانی پروفایل");
-//     }
-//   }
-// );
 
 
 export const updateUserProfile = createAsyncThunk(
