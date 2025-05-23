@@ -8,11 +8,9 @@ const CartProductItem = ({ item }) => {
   const { updateCartItem, removeFromCart, loading } = useCart();
 
   if (!item || !item.product) {
-    console.log('Invalid item received:', item);
     return null;
   }
 
-  console.log('Rendering CartProductItem:', { itemId: item._id, quantity: item.quantity, productId: item.product._id });
 
   const increaseQuantity = () => {
     console.log('increaseQuantity called:', { itemId: item._id, currentQuantity: item.quantity });
