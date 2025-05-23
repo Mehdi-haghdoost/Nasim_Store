@@ -47,8 +47,9 @@
 
 .header_counter {
     display: block;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     line-height: 30px;
     text-align: center;
+    vertical-align: middle;
 }
