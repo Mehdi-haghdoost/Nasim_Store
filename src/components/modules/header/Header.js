@@ -12,12 +12,13 @@ import ShoppingCart from '../CartOffcanvas/ShoppingCart';
 function Header() {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { items: cartItems, totalQuantity } = useSelector((state) => state.cart); // اضافه شده
   const [activeHamburger, setActiveHamburger] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState({});
   const [isShowBascket, setIsShowBascket] = useState(false);
+  
 
   useEffect(() => {
-
     // تنها یک بار هنگام لود کامپوننت اجرا شود و اگر کاربر در حافظه نباشد
     if (!user) {
       dispatch(refreshToken());
@@ -169,35 +170,42 @@ function Header() {
                   }`}
                 >
                   <li>
-                    <Link href="/profile" className={styles.avatar_dropdown_item}>
+                    <Link href="/p-user" className={styles.avatar_dropdown_item}>
                       <i className="bi bi-house-door"></i>پروفایل
                     </Link>
                   </li>
                   <li>
-                    <Link href="/orders" className={styles.avatar_dropdown_item}>
+                    <Link href="/p-user/orders" className={styles.avatar_dropdown_item}>
                       <i className="bi bi-cart-check"></i>سفارش‌های من
                     </Link>
                   </li>
                   <li>
-                    <Link href="/wishlist" className={styles.avatar_dropdown_item}>
+                    <Link href="/p-user/wishlists" className={styles.avatar_dropdown_item}>
                       <i className="bi bi-heart"></i>محصولات مورد علاقه
                     </Link>
                   </li>
                   <li>
-                    <Link href="/logout" className={styles.avatar_dropdown_item}>
+                    <button onClick={() => {
+                      // اینجا logout function رو صدا کنید
+                      handleItemCheck(15); // بستن منو
+                    }} className={styles.avatar_dropdown_item}>
                       <i className="bi bi-arrow-right-square"></i>خروج از حساب کاربری
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
               <button
                 onClick={(e) => showBascket(e)}
                 className={`btn btn-light shadow-sm ${styles.action_link}`}
+                style={{ position: 'relative' }}
               >
                 <i className="bi bi-basket font-30"></i>
-                <span className={`${styles.header_cart_counter} main-color-one-bg rounded-pill`}>
-                  5
-                </span>
+                {/* نمایش تعداد واقعی محصولات */}
+                {totalQuantity > 0 && (
+                  <span className={`${styles.header_cart_counter} main-color-one-bg rounded-pill`}>
+                    {totalQuantity}
+                  </span>
+                )}
               </button>
             </div>
           </div>
