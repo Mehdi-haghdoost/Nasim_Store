@@ -110,7 +110,10 @@ const CheckoutSide = ({ formData }) => {
         const orderDetails = {
             customerInfo: formData,
             items: items,
-            deliveryDay: selectDay,
+            deliveryDay: {
+                ...selectDay,
+                persianDate: selectDay?.persianDate || selectDay?.date || 'انتخاب شده'
+            },
             shippingMethod: {
                 type: shippingMethod,
                 name: shippingMethods[shippingMethod].name,
@@ -131,17 +134,35 @@ const CheckoutSide = ({ formData }) => {
         try {
             localStorage.setItem('order_details', JSON.stringify(orderDetails));
             
-            // هدایت به صفحه پرداخت
+            // هدایت بر اساس نوع پرداخت
             if (paymentMethod === 'DirectBankPayment') {
-                showSwal("به صفحه پرداخت منتقل می‌شوید", "success", "ادامه");
+                // برای پرداخت آنلاین - شبیه‌سازی درگاه پرداخت
+                showSwal("به درگاه پرداخت منتقل می‌شوید", "info", "ادامه");
+                
+                // شبیه‌سازی پردازش پرداخت (2 ثانیه انتظار)
                 setTimeout(() => {
-                    router.push('/success-payment');
+                    // شبیه‌سازی موفقیت پرداخت (در پروژه واقعی از API برمی‌گردد)
+                    const paymentSuccess = Math.random() > 0.1; // 90% احتمال موفقیت
+                    
+                    if (paymentSuccess) {
+                        showSwal("پرداخت با موفقیت انجام شد", "success", "عالی");
+                        setTimeout(() => {
+                            router.push('/success-payment');
+                        }, 1500);
+                    } else {
+                        showSwal("پرداخت ناموفق بود", "error", "تلاش مجدد");
+                        setTimeout(() => {
+                            router.push('/fail-payment');
+                        }, 1500);
+                    }
                 }, 2000);
+                
             } else {
+                // برای پرداخت در محل - مستقیم موفق
                 showSwal("سفارش شما با موفقیت ثبت شد", "success", "تایید");
                 setTimeout(() => {
                     router.push('/success-payment');
-                }, 2000);
+                }, 1500);
             }
         } catch (error) {
             console.error('Error saving order details:', error);
@@ -324,7 +345,7 @@ const CheckoutSide = ({ formData }) => {
 
                         {/* جمع کل تخفیفات (محصولات + کد تخفیف) */}
                         {(totalDiscount > 0 || appliedDiscount) && (
-                            <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-light text-white d-flex align-items-center justify-content-between mb-2`}>
+                            <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-success text-white d-flex align-items-center justify-content-between mb-2`}>
                                 <p className="mb-0 fw-bold">
                                     جمع تخفیفات
                                     {appliedDiscount && ` (شامل ${appliedDiscount.percent}% کد تخفیف)`}:
@@ -340,7 +361,7 @@ const CheckoutSide = ({ formData }) => {
                         </div>
 
                         {/* جمع کل نهایی */}
-                        <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-light text-white d-flex align-items-center justify-content-between mb-3`}>
+                        <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-primary text-white d-flex align-items-center justify-content-between mb-3`}>
                             <p className="mb-0 fw-bold">جمع کل نهایی:</p>
                             <p className="mb-0 fw-bold">{finalPriceWithShipping.toLocaleString()} تومان</p>
                         </div>
