@@ -17,18 +17,21 @@ const PaymentConfirmation = () => {
     const [orderNumber, setOrderNumber] = useState('');
     const [transactionCode, setTransactionCode] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [hasValidOrder, setHasValidOrder] = useState(false); // اضافه شده
 
     useEffect(() => {
         setIsMounted(true);
         
         // تابع بررسی و بارگذاری داده‌ها
         const loadOrderData = () => {
+            // اول سعی کن order_details رو پیدا کنی (سفارش جدید)
             const savedOrderData = localStorage.getItem('order_details');
             
             if (savedOrderData) {
                 try {
                     const parsedData = JSON.parse(savedOrderData);
                     setOrderData(parsedData);
+                    setHasValidOrder(true);
                     
                     // تولید شماره سفارش و کد تراکنش منحصر به فرد
                     const orderNum = `NS${Date.now().toString().slice(-8)}`;
@@ -52,7 +55,7 @@ const PaymentConfirmation = () => {
                     orderHistory.push(finalOrder);
                     localStorage.setItem('order_history', JSON.stringify(orderHistory));
                     
-                    // پاک کردن سبد خرید و اطلاعات موقت بلافاصله
+                    // پاک کردن سبد خرید و اطلاعات موقت
                     clearCart();
                     localStorage.removeItem('order_details');
                     localStorage.removeItem('checkout_data');
@@ -62,9 +65,33 @@ const PaymentConfirmation = () => {
                     return true;
                 } catch (error) {
                     console.error('Error parsing order data:', error);
-                    return false;
                 }
             }
+            
+            // اگر order_details نبود، آخرین سفارش رو از order_history بخون
+            try {
+                const orderHistory = JSON.parse(localStorage.getItem('order_history') || '[]');
+                
+                if (orderHistory.length > 0) {
+                    // آخرین سفارش رو بگیر
+                    const lastOrder = orderHistory[orderHistory.length - 1];
+                    setOrderData(lastOrder);
+                    setHasValidOrder(true);
+                    
+                    // اطلاعات موجود رو استفاده کن
+                    setOrderNumber(lastOrder.orderNumber || 'N/A');
+                    setTransactionCode(lastOrder.transactionCode || 'N/A');
+                    
+                    setIsLoading(false);
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error parsing order history:', error);
+            }
+            
+            // اگر هیچ سفارشی نبود
+            setHasValidOrder(false);
+            setIsLoading(false);
             return false;
         };
 
@@ -77,10 +104,10 @@ const PaymentConfirmation = () => {
                 const retryLoaded = loadOrderData();
                 
                 if (!retryLoaded) {
-                    // اگر بعد از 1 ثانیه هم داده‌ها نبود، فقط loading رو false کن
-                    // ولی کاربر رو به صفحه اصلی نفرست
+                    // اگر بعد از 1 ثانیه هم داده‌ها نبود، سفارش معتبری نداریم
+                    setHasValidOrder(false);
                     setIsLoading(false);
-                    console.log("Order data not found, but staying on success page");
+                    console.log("No valid order found");
                 }
             }, 1000);
 
@@ -111,6 +138,7 @@ const PaymentConfirmation = () => {
             : 'پرداخت در محل';
     };
 
+    // Loading state
     if (!isMounted || isLoading) {
         return (
             <div className="container-fluid py-5 text-center">
@@ -122,6 +150,67 @@ const PaymentConfirmation = () => {
         );
     }
 
+    // اگر سفارش معتبری نداریم
+    if (!hasValidOrder) {
+        return (
+            <>
+                <div className={styles.payment_status}>
+                    <div className={styles.icon}>
+                        <i className="bi bi-exclamation-triangle-fill text-warning"></i>
+                    </div>
+                    <div className={styles.title}>
+                        <h3>هیچ سفارشی یافت نشد</h3>
+                        <p>اطلاعات سفارش شما موجود نیست</p>
+                    </div>
+
+                    <div className={styles.pay_table}>
+                        <div className={styles.pay_table_title}>
+                            <h5 className="font-18">وضعیت</h5>
+                        </div>
+                        <div className={styles.pay_table_item}>
+                            <h6 className="font-16">وضعیت سفارش</h6>
+                            <p className="mb-0 text-warning">سفارشی ثبت نشده است</p>
+                        </div>
+                        <div className={styles.pay_table_item}>
+                            <h6 className="font-16">علت</h6>
+                            <p className="mb-0">ممکن است پروسه خرید کامل نشده باشد یا اطلاعات سفارش پاک شده باشد</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* دکمه‌های عملیات برای حالت خطا */}
+                <div className="text-center my-4">
+                    <div className="row justify-content-center">
+                        <div className="col-md-6">
+                            <Link href={"/cart"} className='btn d-inline-block main-color-three-bg mx-2 mb-2'>
+                                بازگشت به سبد خرید
+                            </Link>
+                            <Link href={"/"} className='btn d-inline-block btn-outline-primary mx-2 mb-2'>
+                                بازگشت به صفحه اصلی
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* راهنمایی برای کاربر */}
+                <div className="container-fluid">
+                    <div className="alert alert-warning">
+                        <h6>
+                            <i className="bi bi-info-circle me-2"></i>
+                            چه کاری می‌توانید انجام دهید:
+                        </h6>
+                        <ul className="mb-0">
+                            <li>به سبد خرید بازگردید و مجدداً فرآیند خرید را تکمیل کنید</li>
+                            <li>اگر سفارش شما ثبت شده، در بخش "سفارشات من" قابل مشاهده است</li>
+                            <li>در صورت بروز مشکل با پشتیبانی تماس بگیرید</li>
+                        </ul>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    // اگر سفارش معتبر داریم ولی orderData خالیه (احتمال کم)
     if (!orderData) {
         return (
             <>
@@ -134,7 +223,6 @@ const PaymentConfirmation = () => {
                         <p>از خرید شما متشکریم :)</p>
                     </div>
 
-                    {/* پیام عمومی در صورت عدم وجود جزئیات */}
                     <div className={styles.pay_table}>
                         <div className={styles.pay_table_title}>
                             <h5 className="font-18">وضعیت سفارش</h5>
@@ -150,7 +238,6 @@ const PaymentConfirmation = () => {
                     </div>
                 </div>
 
-                {/* دکمه‌های عملیات */}
                 <div className="text-center my-4">
                     <div className="row justify-content-center">
                         <div className="col-md-6">
@@ -164,7 +251,6 @@ const PaymentConfirmation = () => {
                     </div>
                 </div>
 
-                {/* اطلاعات تماس */}
                 <div className="container-fluid">
                     <div className="alert alert-info">
                         <h6>
@@ -183,6 +269,7 @@ const PaymentConfirmation = () => {
         );
     }
 
+    // حالت عادی - سفارش معتبر با اطلاعات کامل
     return (
         <>
             <div className={styles.payment_status}>
