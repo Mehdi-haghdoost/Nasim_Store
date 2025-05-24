@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ProductList.module.css';
 import Link from 'next/link';
 
-function ProductList({ item }) {
+function ProductList({ item, orderId }) {
  
     if (!item || !item.product) {
         return null;
@@ -34,6 +34,25 @@ function ProductList({ item }) {
             return product.image;
         }
         return "/images/product/product-image1.jpg"; // تصویر پیش‌فرض
+    };
+
+    // تابع دریافت orderId از localStorage
+    const getOrderId = () => {
+        if (orderId) {
+            return orderId;
+        }
+        
+        try {
+            const orderHistory = JSON.parse(localStorage.getItem('order_history') || '[]');
+            if (orderHistory.length > 0) {
+                // اگر orderId مشخص نباشه، از آخرین سفارش استفاده می‌کنیم
+                return orderHistory[orderHistory.length - 1].orderNumber;
+            }
+        } catch (error) {
+            console.error('Error reading order history:', error);
+        }
+        
+        return '#'; // fallback
     };
 
     return (
@@ -100,9 +119,9 @@ function ProductList({ item }) {
             </Link>
             
             <div className={styles.order_item_comment}>
-                <Link href={`/product/${product.id || product._id || '#'}#comments`}>
-                    <i className='bi bi-chat-dots ms-2'></i>
-                    ثبت دیدگاه
+                <Link href={`/p-user/orders/${getOrderId()}/invoice`}>
+                    <i className='bi bi-card-list ms-2'></i>
+                    مشاهده فاکتور
                 </Link>
             </div>
         </div>
