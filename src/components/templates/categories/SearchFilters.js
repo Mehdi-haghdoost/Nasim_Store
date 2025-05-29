@@ -23,17 +23,37 @@ const SearchFilters = () => {
     priceRange,
     selectedColor,
     products,
+    searchTerm: globalSearchTerm, // استفاده از searchTerm از Redux
   } = useFilter();
   const { categories, loading, error } = useCategory();
-  const [searchTerm, setSearchTerm] = useState('');
+  
+  // استفاده از searchTerm محلی برای input
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
   const scrollRef = useRef(null);
 
+  // همگام‌سازی localSearchTerm با globalSearchTerm
+  useEffect(() => {
+    setLocalSearchTerm(globalSearchTerm || '');
+  }, [globalSearchTerm]);
+
+  // همگام‌سازی جستجو با URL
+  useEffect(() => {
+    const searchQuery = searchParams.get('search');
+    if (searchQuery && searchQuery !== globalSearchTerm) {
+      setLocalSearchTerm(searchQuery);
+      updateSearchTerm(searchQuery);
+      dispatch(filterProducts());
+    } else if (!searchQuery && globalSearchTerm) {
+      setLocalSearchTerm('');
+      updateSearchTerm('');
+      dispatch(filterProducts());
+    }
+  }, [searchParams, dispatch, updateSearchTerm, globalSearchTerm]);
 
   // همگام‌سازی دسته‌بندی با categoryId از URL
   useEffect(() => {
     const categoryId = searchParams.get('categoryId');
     if (categoryId && !filterCategories.includes(categoryId)) {
-
       updateCategories([categoryId]);
       dispatch(filterProducts());
     } else if (!categoryId && filterCategories.length > 0) {
@@ -90,10 +110,25 @@ const SearchFilters = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    if (e.target.value === '') {
+    const newSearchTerm = e.target.value;
+    setLocalSearchTerm(newSearchTerm);
+    
+    // اگر input خالی شد، فوراً فیلتر رو اعمال کن
+    if (newSearchTerm === '') {
       updateSearchTerm('');
+      // حذف پارامتر search از URL
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('search');
+      router.push(`/categories?${newSearchParams.toString()}`, { scroll: false });
       dispatch(filterProducts());
+    }
+  };
+
+  // مدیریت کلید Enter
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleApplyFilter(e);
     }
   };
 
@@ -109,7 +144,18 @@ const SearchFilters = () => {
 
   const handleApplyFilter = (e) => {
     e.preventDefault();
-    updateSearchTerm(searchTerm);
+    const trimmedSearchTerm = localSearchTerm.trim();
+    updateSearchTerm(trimmedSearchTerm);
+    
+    // آپدیت URL با search query
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (trimmedSearchTerm) {
+      newSearchParams.set('search', trimmedSearchTerm);
+    } else {
+      newSearchParams.delete('search');
+    }
+    router.push(`/categories?${newSearchParams.toString()}`, { scroll: false });
+    
     dispatch(filterProducts());
   };
 
@@ -184,8 +230,9 @@ const SearchFilters = () => {
                     type="text"
                     placeholder="جستجوی محصولات ..."
                     className={`form-control ${styles.search_input}`}
-                    value={searchTerm}
+                    value={localSearchTerm}
                     onChange={handleSearchChange}
+                    onKeyPress={handleKeyPress}
                   />
                   <button
                     className={`btn main-color-one-bg rounded-pill ${styles.search_btn}`}
