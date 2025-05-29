@@ -3,8 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { refreshToken } from '@/Redux/actions/authThunks';
+import { filterProducts } from '@/Redux/actions/filterThunks';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCategory } from '@/Redux/hooks/useCategory';
+import { useFilter } from '@/Redux/hooks/useFilter';
 import styles from './Header.module.css';
 import MegaMenu from './MegaMenu';
 import AuthHeader from './AuthHeader';
@@ -12,14 +15,22 @@ import ShoppingCart from '../CartOffcanvas/ShoppingCart';
 
 function Header() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { categories, loading, error } = useCategory();
+  
+  // استفاده از useFilter برای مدیریت جستجو
+  const { updateSearchTerm, updateCategories } = useFilter();
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const { items: cartItems, totalQuantity } = useSelector((state) => state.cart); // اضافه شده
+  const { items: cartItems, totalQuantity } = useSelector((state) => state.cart);
+  
   const [activeHamburger, setActiveHamburger] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState({});
   const [isShowBascket, setIsShowBascket] = useState(false);
-
+  
+  // state برای مدیریت جستجو در دسکتاپ و موبایل
+  const [desktopSearchTerm, setDesktopSearchTerm] = useState('');
+  const [mobileSearchTerm, setMobileSearchTerm] = useState('');
 
   useEffect(() => {
     // تنها یک بار هنگام لود کامپوننت اجرا شود و اگر کاربر در حافظه نباشد
@@ -40,6 +51,53 @@ function Header() {
     });
   };
 
+  // تابع مدیریت جستجو
+  const handleSearch = (searchTerm, isDesktop = true) => {
+    const trimmedSearchTerm = searchTerm.trim();
+    
+    if (trimmedSearchTerm) {
+      // آپدیت state جستجو در Redux
+      updateSearchTerm(trimmedSearchTerm);
+      // پاک کردن فیلتر دسته‌بندی
+      updateCategories([]);
+      
+      // انتقال به صفحه categories با پارامتر جستجو
+      router.push(`/categories?search=${encodeURIComponent(trimmedSearchTerm)}`);
+      
+      // اعمال فیلتر
+      dispatch(filterProducts());
+      
+      // پاک کردن input بعد از جستجو
+      if (isDesktop) {
+        setDesktopSearchTerm('');
+      } else {
+        setMobileSearchTerm('');
+        // بستن منوی همبرگری در موبایل
+        setActiveHamburger(false);
+      }
+    }
+  };
+
+  // مدیریت فرم جستجو در دسکتاپ
+  const handleDesktopSearch = (e) => {
+    e.preventDefault();
+    handleSearch(desktopSearchTerm, true);
+  };
+
+  // مدیریت فرم جستجو در موبایل
+  const handleMobileSearch = (e) => {
+    e.preventDefault();
+    handleSearch(mobileSearchTerm, false);
+  };
+
+  // مدیریت کلید Enter
+  const handleKeyPress = (e, searchTerm, isDesktop = true) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch(searchTerm, isDesktop);
+    }
+  };
+
   // نقشه‌برداری نام دسته‌بندی‌ها به _id
   const categoryMap = categories.reduce((acc, category) => {
     acc[category.name] = category._id;
@@ -49,8 +107,8 @@ function Header() {
   // دسته‌بندی‌های مورد نظر برای Header
   const headerCategories = [
     { name: 'تلفن همراه', displayName: 'گوشی موبایل' },
-    { name: 'لوازم جانبی', displayName: 'لوازم جانبی' },
-    { name: 'لپتاپ', displayName: 'لپتاپ' },
+    { name: 'لوازم جانبی', displayName: 'لوازم جانبی' }, 
+    { name: 'لپتاپ', displayName: 'لپتاپ' }, 
   ];
 
   return (
@@ -91,12 +149,15 @@ function Header() {
                     </a>
                     <div className="hamburger_body_bottom_form">
                       <div className={styles.search_form}>
-                        <form action="">
+                        <form onSubmit={handleMobileSearch}>
                           <div className={styles.search_field}>
                             <input
                               placeholder="جستجوی محصولات ..."
                               type="text"
                               className={`form-control ${styles.search_input}`}
+                              value={mobileSearchTerm}
+                              onChange={(e) => setMobileSearchTerm(e.target.value)}
+                              onKeyPress={(e) => handleKeyPress(e, mobileSearchTerm, false)}
                             />
                             <button
                               type="submit"
@@ -122,14 +183,17 @@ function Header() {
                             <Link
                               href={categoryId ? `/categories?categoryId=${categoryId}` : '#'}
                               className="nav-link"
-                              onClick={() => console.log(`نویگیشن به دسته‌بندی: ${category.name}, _id: ${categoryId || 'ناموجود'}`)}
+                              onClick={() => {
+                                console.log(`نویگیشن به دسته‌بندی: ${category.name}, _id: ${categoryId || 'ناموجود'}`);
+                                setActiveHamburger(false); // بستن منوی همبرگری
+                              }}
                             >
                               {category.displayName}
                             </Link>
                           </li>
                         );
                       })}
-                    </ul>ُ
+                    </ul>
                   </div>
                 </div>
                 <div
@@ -229,15 +293,18 @@ function Header() {
           {/* form search */}
           <div className="col-lg-7 order-lg-2 d-lg-block d-none">
             <div className="search-form">
-              <form action="">
+              <form onSubmit={handleDesktopSearch}>
                 <div className={styles.search_field}>
                   <input
                     type="text"
                     placeholder="جستجوی محصولات ..."
                     className={`form-control ${styles.search_input}`}
+                    value={desktopSearchTerm}
+                    onChange={(e) => setDesktopSearchTerm(e.target.value)}
+                    onKeyPress={(e) => handleKeyPress(e, desktopSearchTerm, true)}
                   />
                   <button
-                    type="button"
+                    type="submit"
                     className={`btn main-color-one-bg ${styles.search_btn} rounded-pill`}
                   >
                     <i className="bi bi-search"></i>
