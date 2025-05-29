@@ -5,7 +5,7 @@ import Link from 'next/link';
 import styles from './ProductBox.module.css';
 
 const ProductBox = ({ product }) => {
-    // اگر محصول وجود نداشت چیزی نمایش نده
+    // اگر محصول وجود نداشت چیزی نمایش ندهش
     if (!product) return null;
 
     const { _id, image, title, originalName, price, discountedPrice, hasDiscount, rating } = product;
