@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { refreshToken } from '@/Redux/actions/authThunks';
 import Link from 'next/link';
+import { useCategory } from '@/Redux/hooks/useCategory';
 import styles from './Header.module.css';
 import MegaMenu from './MegaMenu';
 import AuthHeader from './AuthHeader';
@@ -11,12 +12,14 @@ import ShoppingCart from '../CartOffcanvas/ShoppingCart';
 
 function Header() {
   const dispatch = useDispatch();
+  const { categories, loading, error } = useCategory();
+
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { items: cartItems, totalQuantity } = useSelector((state) => state.cart); // اضافه شده
   const [activeHamburger, setActiveHamburger] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState({});
   const [isShowBascket, setIsShowBascket] = useState(false);
-  
+
 
   useEffect(() => {
     // تنها یک بار هنگام لود کامپوننت اجرا شود و اگر کاربر در حافظه نباشد
@@ -36,6 +39,19 @@ function Header() {
       [index]: !activeSubMenu[index],
     });
   };
+
+  // نقشه‌برداری نام دسته‌بندی‌ها به _id
+  const categoryMap = categories.reduce((acc, category) => {
+    acc[category.name] = category._id;
+    return acc;
+  }, {});
+
+  // دسته‌بندی‌های مورد نظر برای Header
+  const headerCategories = [
+    { name: 'تلفن همراه', displayName: 'گوشی موبایل' },
+    { name: 'لوازم جانبی', displayName: 'لوازم جانبی' },
+    { name: 'لپتاپ', displayName: 'لپتاپ' },
+  ];
 
   return (
     <header className={styles.header} style={{ minHeight: '100px' }}>
@@ -98,22 +114,22 @@ function Header() {
                           صفحه اصلی
                         </Link>
                       </li>
-                      <li className={`nav-item ${styles.hamburger_navbar_item}`}>
-                        <Link href="/categories?category=mobile" className="nav-link">
-                          گوشی موبایل
-                        </Link>
-                      </li>
-                      <li className={`nav-item ${styles.hamburger_navbar_item}`}>
-                        <Link href="/categories?category=tablet" className="nav-link">
-                          تبلت
-                        </Link>
-                      </li>
-                      <li className={`nav-item ${styles.hamburger_navbar_item}`}>
-                        <Link href="/categories?category=laptop" className="nav-link">
-                          لپتاپ
-                        </Link>
-                      </li>
-                    </ul>
+
+                      {headerCategories.map((category, index) => {
+                        const categoryId = categoryMap[category.name];
+                        return (
+                          <li key={category.name} className={`nav-item ${styles.hamburger_navbar_item}`}>
+                            <Link
+                              href={categoryId ? `/categories?categoryId=${categoryId}` : '#'}
+                              className="nav-link"
+                              onClick={() => console.log(`نویگیشن به دسته‌بندی: ${category.name}, _id: ${categoryId || 'ناموجود'}`)}
+                            >
+                              {category.displayName}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>ُ
                   </div>
                 </div>
                 <div
@@ -163,11 +179,10 @@ function Header() {
                   </Link>
                 )}
                 <ul
-                  className={`navbar-nav ${
-                    activeSubMenu[15]
-                      ? styles.avatar_dropdown_show
-                      : styles.avatar_dropdown_hide
-                  }`}
+                  className={`navbar-nav ${activeSubMenu[15]
+                    ? styles.avatar_dropdown_show
+                    : styles.avatar_dropdown_hide
+                    }`}
                 >
                   <li>
                     <Link href="/p-user" className={styles.avatar_dropdown_item}>
