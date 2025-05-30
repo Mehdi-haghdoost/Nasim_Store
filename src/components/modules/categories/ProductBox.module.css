@@ -12,15 +12,15 @@
     flex-wrap: wrap;
 }
 
-.product_box .product_timer .timer_label {
+.timer_label {
     padding: 5px 10px;
     background-color: #fc6d6d3b;
     border-radius: 10px;
 }
 
-.product_box .product_timer .timer_label span {
+.timer_label span {
     color: #f21919 !important;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: normal;
 }
 
