@@ -8,6 +8,7 @@ import categoryReducer from '../slices/categorySlice';
 import filterReducer from '../slices/filterSlice';
 import ticketReducer from '../slices/ticketSlice';
 import wishlistReducer from '../slices/wishlistSlice'; 
+import compareSlice from '../slices/compareSlice';
 
 /**
  * Root reducer combining all slice reducers
@@ -22,5 +23,6 @@ export const rootReducer = combineReducers({
     category: categoryReducer,
     filter: filterReducer,
     ticket: ticketReducer,
-    wishlist: wishlistReducer
+    wishlist: wishlistReducer,
+    compare: compareSlice,
 });
