@@ -17,11 +17,6 @@ export const useFilter = () => {
   const { categories, priceRange, selectedColor, searchTerm, sortOption, filteredProducts } = useSelector(state => state.filter);
   const { products, productsLoading } = useSelector(state => state.product);
 
-  console.log('useFilter - وضعیت محصولات:', {
-    تعداد: products.length,
-    محصولات: products.map(p => ({ title: p.title, category: p.category?._id })),
-    درحال_بارگذاری: productsLoading
-  });
 
   return {
     categories,
