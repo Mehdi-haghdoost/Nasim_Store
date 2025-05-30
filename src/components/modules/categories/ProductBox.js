@@ -1,22 +1,64 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './ProductBox.module.css';
+import { useWishlist } from '@/Redux/hooks/useWishlist';
 
 const ProductBox = ({ product }) => {
-    // اگر محصول وجود نداشت چیزی نمایش ندهش
+    const [isInWishlist, setIsInWishlist] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const {
+        addProductToWishlist,
+        removeProductFromWishlist,
+        checkProductInWishlist
+    } = useWishlist();
+
     if (!product) return null;
 
     const { _id, image, title, originalName, price, discountedPrice, hasDiscount, rating } = product;
-    
-    // ساخت آدرس URL محصول
     const productUrl = `/product/${_id}`;
+
+    useEffect(() => {
+        const checkWishlistStatus = async () => {
+            try {
+                const result = await checkProductInWishlist(_id);
+                setIsInWishlist(result);
+            } catch (error) {
+                console.error('Error checking wishlist status:', error);
+            }
+        };
+
+        checkWishlistStatus();
+    }, [_id, checkProductInWishlist]);
+
+    const handleWishlistToggle = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isLoading) return;
+
+        setIsLoading(true);
+
+        try {
+            if (isInWishlist) {
+                await removeProductFromWishlist(_id);
+                setIsInWishlist(false);
+            } else {
+                await addProductToWishlist(_id, product);
+                setIsInWishlist(true);
+            }
+        } catch (error) {
+            console.error('Error toggling wishlist:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="col-lg-4">
             <div className={styles.product_box}>
-                {/* نمایش برچسب تخفیف اگر محصول تخفیف داشته باشد */}
                 {hasDiscount && (
                     <div className={styles.product_timer}>
                         <div className={styles.timer_label}>
@@ -30,10 +72,26 @@ const ProductBox = ({ product }) => {
                                 <span className={styles.tooltipText}>مقایسه</span>
                             </div>
                             <div className={styles.tooltip}>
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="افزودن به علاقه‌مندی‌ها">
-                                    <i className="bi bi-heart"></i>
-                                </a>
-                                <span className={styles.tooltipText}>افزودن به علاقه‌مندی‌ها</span>
+                                <button
+                                    onClick={handleWishlistToggle}
+                                    disabled={isLoading}
+                                    className={`btn btn-link p-0 ${isInWishlist ? 'text-danger' : 'text-muted'}`}
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    data-bs-title={isInWishlist ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+                                    style={{ border: 'none', background: 'none' }}
+                                >
+                                    {isLoading ? (
+                                        <i className="bi bi-arrow-clockwise"></i>
+                                    ) : isInWishlist ? (
+                                        <i className="bi bi-heart-fill text-danger"></i>
+                                    ) : (
+                                        <i className="bi bi-heart"></i>
+                                    )}
+                                </button>
+                                <span className={styles.tooltipText}>
+                                    {isInWishlist ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+                                </span>
                             </div>
                             <div className={styles.tooltip}>
                                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="مشاهده سریع">
@@ -44,7 +102,7 @@ const ProductBox = ({ product }) => {
                         </div>
                     </div>
                 )}
-                {/* تصویر محصول - با لینک به صفحه محصول */}
+
                 <Link href={productUrl}>
                     <div className={styles.product_image}>
                         <img
@@ -55,7 +113,7 @@ const ProductBox = ({ product }) => {
                         />
                     </div>
                 </Link>
-                {/* عنوان و مشخصات محصول - با لینک به صفحه محصول */}
+
                 <Link href={productUrl} className="text-decoration-none text-dark">
                     <div className={styles.product_title}>
                         <div className={styles.title}>
@@ -74,6 +132,7 @@ const ProductBox = ({ product }) => {
                         </div>
                     </div>
                 </Link>
+
                 <div className={styles.product_action}>
                     <div className={styles.price}>
                         <p className={styles.new_price}>
