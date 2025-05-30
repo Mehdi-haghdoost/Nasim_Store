@@ -1,3 +1,5 @@
+// src/graphql/entities/products/product.queries.js
+
 import { gql } from '@apollo/client';
 
 export const GET_PRODUCT = gql`
@@ -89,6 +91,10 @@ export const GET_PRODUCTS = gql`
       hasDiscount
       stock
       rating
+      features {
+        key
+        value
+      }
       comments {
         _id
       }
@@ -117,6 +123,10 @@ export const GET_SIMILAR_PRODUCTS = gql`
       hasDiscount
       stock
       rating
+      features {
+        key
+        value
+      }
       category {
         _id
         name
@@ -176,6 +186,10 @@ export const GET_ALL_PRODUCTS = gql`
       discountedPrice
       hasDiscount
       rating
+      features {
+        key
+        value
+      }
       category {
         _id
         name
