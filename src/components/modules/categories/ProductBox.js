@@ -5,11 +5,15 @@ import Link from 'next/link';
 import styles from './ProductBox.module.css';
 import { useWishlist } from '@/Redux/hooks/useWishlist';
 import { useCart } from '@/Redux/hooks/useCart';
+import { toast } from 'react-toastify';
+import { useCompare } from '@/Redux/hooks/useCompare';
 
 const ProductBox = ({ product }) => {
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [showQuickView, setShowQuickView] = useState(false);
+    const [isInCompare, setIsInCompare] = useState(false);
+    const [compareLoading, setCompareLoading] = useState(false);
 
     const {
         addProductToWishlist,
@@ -18,6 +22,15 @@ const ProductBox = ({ product }) => {
     } = useWishlist();
 
     const { addToCart, loading: cartLoading } = useCart();
+    
+    // اضافه شدن hook مقایسه
+    const { 
+        addToCompareLocal, 
+        removeFromCompareLocal, 
+        isInCompare: checkIsInCompare,
+        compareCount,
+        maxProducts 
+    } = useCompare();
 
     if (!product) return null;
 
@@ -34,7 +47,14 @@ const ProductBox = ({ product }) => {
             }
         };
 
+        const checkCompareStatus = () => {
+            const compareProducts = JSON.parse(localStorage.getItem('compareProducts') || '[]');
+            const isInCompareList = compareProducts.some(p => p._id === _id);
+            setIsInCompare(isInCompareList);
+        };
+
         checkWishlistStatus();
+        checkCompareStatus();
     }, [_id, checkProductInWishlist]);
 
     const handleWishlistToggle = async (e) => {
@@ -57,6 +77,60 @@ const ProductBox = ({ product }) => {
             console.error('Error toggling wishlist:', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleCompareToggle = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (compareLoading) return;
+
+        setCompareLoading(true);
+
+        try {
+            // دریافت لیست فعلی از localStorage
+            const compareProducts = JSON.parse(localStorage.getItem('compareProducts') || '[]');
+            
+            if (isInCompare) {
+                // حذف از مقایسه
+                const updatedProducts = compareProducts.filter(p => p._id !== _id);
+                localStorage.setItem('compareProducts', JSON.stringify(updatedProducts));
+                setIsInCompare(false);
+                toast.success('محصول از لیست مقایسه حذف شد');
+            } else {
+                // بررسی حداکثر تعداد (3 محصول)
+                if (compareProducts.length >= 3) {
+                    toast.warning('حداکثر 3 محصول قابل مقایسه است');
+                    setCompareLoading(false);
+                    return;
+                }
+                
+                // بررسی تکراری نبودن
+                const alreadyExists = compareProducts.some(p => p._id === _id);
+                if (alreadyExists) {
+                    toast.warning('این محصول قبلاً به لیست مقایسه اضافه شده است');
+                    setCompareLoading(false);
+                    return;
+                }
+                
+                // لاگ کردن product برای دیدن features
+                console.log('Product being saved:', product);
+                console.log('Product features:', product.features);
+                
+                // افزودن به مقایسه
+                const updatedProducts = [...compareProducts, product];
+                console.log('Updated products to save:', updatedProducts);
+                
+                localStorage.setItem('compareProducts', JSON.stringify(updatedProducts));
+                setIsInCompare(true);
+                toast.success('با موفقیت کالای مورد نظر به لیست مقایسه اضافه شد');
+            }
+        } catch (error) {
+            console.error('Error in compare toggle:', error);
+            toast.error('خطا در عملیات مقایسه');
+        } finally {
+            setCompareLoading(false);
         }
     };
 
@@ -135,12 +209,31 @@ const ProductBox = ({ product }) => {
                                 <span>40% تخفیف</span>
                             </div>
                             <div className={styles.product_header_btn}>
+                                {/* دکمه مقایسه - آپدیت شده */}
                                 <div className={styles.tooltip}>
-                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="مقایسه">
-                                        <i className="bi bi-shuffle"></i>
-                                    </a>
-                                    <span className={styles.tooltipText}>مقایسه</span>
+                                    <button
+                                        onClick={handleCompareToggle}
+                                        disabled={compareLoading}
+                                        className={`btn btn-link p-0 ${isInCompare ? 'text-success' : 'text-muted'} ms-2`}
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        data-bs-title={isInCompare ? "حذف از مقایسه" : "افزودن به مقایسه"}
+                                        style={{ border: 'none', background: 'none' }}
+                                    >
+                                        {compareLoading ? (
+                                            <i className="bi bi-arrow-clockwise"></i>
+                                        ) : isInCompare ? (
+                                            <i className="bi bi-shuffle text-success"></i>
+                                        ) : (
+                                            <i className="bi bi-shuffle"></i>
+                                        )}
+                                    </button>
+                                    <span className={styles.tooltipText}>
+                                        {isInCompare ? "حذف از مقایسه" : "افزودن به مقایسه"}
+                                    </span>
                                 </div>
+
+                                {/* دکمه علاقه‌مندی */}
                                 <div className={styles.tooltip}>
                                     <button
                                         onClick={handleWishlistToggle}
@@ -163,6 +256,8 @@ const ProductBox = ({ product }) => {
                                         {isInWishlist ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
                                     </span>
                                 </div>
+
+                                {/* دکمه مشاهده سریع */}
                                 <div className={styles.tooltip}>
                                     <button
                                         onClick={handleQuickView}
@@ -288,6 +383,17 @@ const ProductBox = ({ product }) => {
                                                     <i className="bi bi-basket text-white font-16 ms-1"></i>
                                                     {cartLoading ? 'در حال افزودن...' : 'افزودن به سبد خرید'}
                                                 </button>
+
+                                                {/* دکمه مقایسه در مودال */}
+                                                <button 
+                                                    onClick={handleCompareToggle}
+                                                    disabled={compareLoading}
+                                                    className={`btn py-2 my-2 border-0 w-100 ${isInCompare ? 'btn-success' : 'btn-outline-secondary'}`}
+                                                >
+                                                    <i className={`bi ${isInCompare ? 'bi-check-circle' : 'bi-shuffle'} me-1`}></i>
+                                                    {compareLoading ? 'در حال پردازش...' : isInCompare ? 'در لیست مقایسه' : 'افزودن به مقایسه'}
+                                                </button>
+
                                                 <Link href={productUrl} className="btn border-0 main-color-three-bg waves-effect waves-light w-100">
                                                     مشاهده جزئیات کامل
                                                 </Link>
