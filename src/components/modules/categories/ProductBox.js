@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './ProductBox.module.css';
 import { useWishlist } from '@/Redux/hooks/useWishlist';
+import { useCart } from '@/Redux/hooks/useCart';
 
 const ProductBox = ({ product }) => {
     const [isInWishlist, setIsInWishlist] = useState(false);
@@ -15,6 +16,8 @@ const ProductBox = ({ product }) => {
         removeProductFromWishlist,
         checkProductInWishlist
     } = useWishlist();
+
+    const { addToCart, loading: cartLoading } = useCart();
 
     if (!product) return null;
 
@@ -65,6 +68,61 @@ const ProductBox = ({ product }) => {
 
     const closeQuickView = () => {
         setShowQuickView(false);
+    };
+
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!product) {
+            console.error('اطلاعات محصول در دسترس نیست');
+            return;
+        }
+
+        // انتخاب اولین رنگ موجود
+        let selectedColor = null;
+        if (product && product.colors && product.colors.length > 0) {
+            const firstAvailableColor = product.colors.find(color => color.available);
+            if (firstAvailableColor) {
+                selectedColor = firstAvailableColor.color;
+            } else {
+                selectedColor = product.colors[0].color;
+            }
+        }
+
+        // انتخاب اولین فروشنده از محصول (از دیتابیس)
+        let selectedSeller = null;
+        if (product && product.sellers && product.sellers.length > 0) {
+            // اگر فروشنده‌ها آبجکت کامل هستند
+            if (typeof product.sellers[0] === 'object' && product.sellers[0]._id) {
+                selectedSeller = {
+                    _id: product.sellers[0]._id,
+                    name: product.sellers[0].name
+                };
+            } else {
+                // اگر فروشنده‌ها فقط ID هستند - از اولین ID استفاده کن
+                selectedSeller = {
+                    _id: product.sellers[0],
+                    name: "فروشگاه نسیم" // fallback name
+                };
+            }
+        } else {
+            // fallback اگر فروشنده‌ای نداشت
+            selectedSeller = {
+                _id: '67d83f6408b0ebc1a29002a7',
+                name: 'فروشگاه نسیم'
+            };
+        }
+
+        console.log('Adding to cart from ProductBox:', {
+            productId: product._id,
+            color: selectedColor,
+            seller: selectedSeller,
+            productSellers: product.sellers
+        });
+
+        // فراخوانی addToCart با فروشنده واقعی محصول
+        addToCart(product, 1, selectedColor, null, selectedSeller);
     };
 
     return (
@@ -222,9 +280,13 @@ const ProductBox = ({ product }) => {
                                             </div>
 
                                             <div className="action-buttons">
-                                                <button class="btn py-2 my-2 border-0 main-color-one-bg waves-effect waves-light w-100">
-                                                    <i class="bi bi-basket text-white font-16 ms-1"></i>
-                                                    افزودن به سبد خرید
+                                                <button 
+                                                    onClick={handleAddToCart}
+                                                    disabled={cartLoading}
+                                                    className="btn py-2 my-2 border-0 main-color-one-bg waves-effect waves-light w-100"
+                                                >
+                                                    <i className="bi bi-basket text-white font-16 ms-1"></i>
+                                                    {cartLoading ? 'در حال افزودن...' : 'افزودن به سبد خرید'}
                                                 </button>
                                                 <Link href={productUrl} className="btn border-0 main-color-three-bg waves-effect waves-light w-100">
                                                     مشاهده جزئیات کامل
