@@ -1,11 +1,10 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import Card from './Card';
-
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-
+import { useProduct } from '@/Redux/hooks/useProduct';
+import Link from 'next/link';
+import Card from './Card';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -13,30 +12,150 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import styles from './CustomerFavories.module.css'
+
 function CustomerFavories() {
+    // دریافت محصولات از Redux
+    const { products, productsLoading, productsError } = useProduct();
+
+    // مرتب کردن محصولات بر اساس rating (بالاترین امتیاز اول)
+    const topRatedProducts = [...products]
+        .filter(product => product.rating && product.rating > 0) // فقط محصولاتی که امتیاز دارند
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0)) // مرتب کردن نزولی
+        .slice(0, 10); // 10 محصول برتر
+
+    console.log("Top Rated Products:", topRatedProducts.map(p => ({
+        title: p.title,
+        rating: p.rating
+    })));
+
+    // نمایش loading state
+    if (productsLoading) {
+        return (
+            <div className={`${styles.site_slider} py-20`}>
+                <div className="container-fluid">
+                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+                        <div className={`${styles.title} d-flex align-items-center`}>
+                            <div className=" rounded-2 p-2 me-3" style={{ background: 'var(--main-color-two)' }}>
+                                <i className="bi bi-eye-fill text-white"></i>
+                            </div>
+                            <h5 className="font-16 ms-3">
+                                <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span> فروشگاه
+                            </h5>
+                        </div>
+                        <div className="link">
+                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
+                                مشاهده همه
+                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className={`${styles.parent}`}>
+                        <div className="container-fluid">
+                            <div className="text-center p-5">
+                                <div className="spinner-border text-primary" role="status">
+                                    <span className="visually-hidden">بارگذاری...</span>
+                                </div>
+                                <p className="mt-3">در حال بارگذاری پربازدیدترین محصولات...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // نمایش error state
+    if (productsError) {
+        return (
+            <div className={`${styles.site_slider} py-20`}>
+                <div className="container-fluid">
+                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+                        <div className={`${styles.title} d-flex align-items-center`}>
+                             <div className=" rounded-2 p-2 me-3" style={{ background: 'var(--main-color-two)' }}>
+                                <i className="bi bi-eye-fill text-white"></i>
+                            </div>
+                            <h5 className="font-16 ms-3">
+                                <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span> فروشگاه
+                            </h5>
+                        </div>
+                        <div className="link">
+                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
+                                مشاهده همه
+                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className={`${styles.parent}`}>
+                        <div className="container-fluid">
+                            <div className="alert alert-warning text-center">
+                                <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                خطا در بارگذاری پربازدیدترین محصولات.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // اگر محصول با امتیاز وجود نداشت
+    if (topRatedProducts.length === 0) {
+        return (
+            <div className={`${styles.site_slider} py-20`}>
+                <div className="container-fluid">
+                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+                        <div className={`${styles.title} d-flex align-items-center`}>
+                             <div className=" rounded-2 p-2 me-3" style={{ background: 'var(--main-color-two)' }}>
+                                <i className="bi bi-eye-fill text-white"></i>
+                            </div>
+                            <h5 className="font-16 ms-3">
+                                <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span> فروشگاه
+                            </h5>
+                        </div>
+                        <div className="link">
+                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
+                                مشاهده همه
+                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className={`${styles.parent}`}>
+                        <div className="container-fluid">
+                            <div className="text-center text-muted p-5">
+                                <i className="bi bi-star me-2"></i>
+                                هنوز محصولی امتیاز دریافت نکرده است.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={`${styles.site_slider} py-20`}>
             <div className="container-fluid">
-                <div
-                    className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+                <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
                     <div className={`${styles.title} d-flex align-items-center`}>
-                        <img src="/images/square.png" alt="" className="img-fluid" />
-                        <h5 className="font-16 ms-3"><span className="main-color-one-color d-inline-block ms-1">پربازدیدترین
-                            محصولات</span> فروشگاه</h5>
+                         <div className=" rounded-2 p-2 me-3" style={{ background: 'var(--main-color-two)' }}>
+                                <i className="bi bi-eye-fill text-white"></i>
+                            </div>
+                        <h5 className="font-16 ms-3">
+                            <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span> فروشگاه
+                        </h5>
                     </div>
                     <div className="link">
-                        <a href="" className="border-animate fromCenter pb-1 fw-bold">
+                        <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
 
             <div className={`${styles.parent}`}>
                 <div className="container-fluid">
-                    <div className={`swiper ${styles.product_slider_swiper}`}
-                    >
+                    <div className={`swiper ${styles.product_slider_swiper}`}>
                         <div className={`${styles.swiper_wrapper}`}>
                             <Swiper
                                 slidesPerView={1}
@@ -70,24 +189,11 @@ function CustomerFavories() {
                                 }}
                                 className="mySwiper"
                             >
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide> <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
+                                {topRatedProducts.map((product, index) => (
+                                    <SwiperSlide key={product._id || index} className={`${styles.mySlide}`}>
+                                        <Card productData={product} />
+                                    </SwiperSlide>
+                                ))}
                             </Swiper>
                         </div>
                         <div className={`swiper-button-next ${styles.swiper_button_next}`}></div>
@@ -95,9 +201,8 @@ function CustomerFavories() {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
 
-export default CustomerFavories
+export default CustomerFavories;
