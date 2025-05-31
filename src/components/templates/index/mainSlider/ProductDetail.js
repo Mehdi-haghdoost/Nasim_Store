@@ -58,7 +58,7 @@ function ProductDetail({ productData }) {
                     <div className="link">
                         <button 
                             disabled
-                            className="btn border-0 rounded-3 main-color-one-bg"
+                            className="btn border-0 rounded-3 main-color-one-bg opacity-50"
                         >
                             <i className="bi bi-basket text-white"></i>
                             <span className="text-white">در حال بارگذاری...</span>
