@@ -140,9 +140,9 @@ function Card({ productData }) {
             </div>
             <div className={`${styles.product_action}`}>
                 <div className={`${styles.price}`}>
-                    <p className={`${styles.new_price}`}>{productData.discountedPrice?.toLocaleString() || productData.price?.toLocaleString() || '0'} تومان</p>
+                    <p className={`${styles.new_price}`}>{productData.discountedPrice?.toLocaleString() || productData.price?.toLocaleString() || '0'} </p>
                     {productData.hasDiscount && (
-                        <p className={`${styles.old_price}`}>{productData.price?.toLocaleString() || '0'} تومان</p>
+                        <p className={`${styles.old_price}`}>{productData.price?.toLocaleString() || '0'} </p>
                     )}
                 </div>
                 <div className={styles.link}>

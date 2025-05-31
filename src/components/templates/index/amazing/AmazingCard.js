@@ -151,9 +151,9 @@ function AmazingCard({ productData }) {
                             <div className="link">
                                 <Link 
                                     href={`/product/${productData._id}`}
-                                    className="btn border-0 rounded-3 main-color-one-bg text-decoration-none"
+                                    className="btn border-0 d-flex align-items-center justify-content-center rounded-3 main-color-one-bg text-decoration-none"
                                 >
-                                    <i className="bi bi-eye text-white"></i>
+                                    <i className="bi bi-eye text-white ms-1"></i>
                                     <span className="text-white">مشاهده محصول</span>
                                 </Link>
                             </div>
