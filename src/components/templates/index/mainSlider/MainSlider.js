@@ -1,8 +1,7 @@
 "use client"
 import React, { useState, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useQuery } from '@apollo/client';
-import { GET_ALL_PRODUCTS } from '@/graphql/entities/products/product.queries';
+import { useProduct } from '@/Redux/hooks/useProduct';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -25,9 +24,8 @@ const leftSlides = [
 function MainSlider() {
     const [activeSlide, setActiveSlide] = useState(0)
     
-    // دریافت محصولات از GraphQL
-    const { data, loading, error } = useQuery(GET_ALL_PRODUCTS);
-    const products = data?.products || [];
+    // دریافت محصولات از Redux
+    const { products, productsLoading, productsError } = useProduct();
 
     // فیلتر محصولاتی که تخفیف دارند برای نمایش در اسلایدر
     const featuredProducts = products.filter(product => product.hasDiscount).slice(0, 4);
@@ -40,7 +38,7 @@ function MainSlider() {
     };
 
     // اگر در حال بارگذاری هستیم
-    if (loading) {
+    if (productsLoading) {
         return (
             <div className={`${styles.main_slider}`}>
                 <div className='container-fluid'>
@@ -103,8 +101,8 @@ function MainSlider() {
     }
 
     // اگر خطایی رخ داده
-    if (error) {
-        console.error('خطا در دریافت محصولات:', error);
+    if (productsError) {
+        console.error('خطا در دریافت محصولات:', productsError);
     }
 
     return (
