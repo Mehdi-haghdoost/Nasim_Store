@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import {
     loginUser,
     registerUser,
@@ -8,13 +9,28 @@ import {
     verifyOtpAndLogin,
     updateUserProfile,
     refreshToken,
-    logoutUser
+    logoutUser,
+    checkAuth
 } from "../actions/authThunks";
 import { clearError } from "../slices/authSlice";
 
 export const useAuth = () => {
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
+
+    // بررسی خودکار auth هنگام بارگذاری اولیه (فقط اگر token وجود داشته باشد)
+    useEffect(() => {
+        // فقط در client side و فقط اگر refresh token وجود داشته باشد
+        if (typeof window !== 'undefined' && !auth.isAuthenticated && !auth.loading) {
+            const hasRefreshToken = document.cookie.includes('refreshToken=') && 
+                                  !document.cookie.includes('refreshToken=;') &&
+                                  !document.cookie.includes('refreshToken=undefined');
+            
+            if (hasRefreshToken) {
+                dispatch(checkAuth());
+            }
+        }
+    }, [dispatch, auth.isAuthenticated, auth.loading]);
 
     // توابع کمکی برای عملیات احراز هویت
     const login = (phoneOrEmail, password) => {
@@ -73,7 +89,7 @@ export const useAuth = () => {
         otpMessage: auth.otpMessage,
         registrationType: auth.registrationType,
 
-        // Action
+        // Actions
         login,
         register,
         logout,
