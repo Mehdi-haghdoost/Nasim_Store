@@ -55,11 +55,9 @@ function BreadCroumb() {
     useEffect(() => {
         const pathSegments = pathname.split('/').filter(segment => segment);
 
-        // اگر مسیر شامل 'product' باشد و یک ID بعد از آن وجود داشته باشد
         if (pathSegments.length >= 2 && pathSegments[0] === 'product') {
             const productId = pathSegments[1];
 
-            // فقط در صورتی درخواست می‌زنیم که قبلاً همان محصول را دریافت نکرده باشیم
             if (!product || product._id !== productId) {
                 getProduct(productId);
             }
@@ -85,55 +83,46 @@ function BreadCroumb() {
         );
     }
 
-    // مسیر را به قطعه‌ها تقسیم می‌کنیم
-    // مثلا '/p-user/orders/123' به ['p-user', 'orders', '123'] تبدیل می‌شود
     const pathSegments = pathname.split('/').filter(segment => segment);
 
-    // ساخت آرایه‌ای از قطعه‌های مسیر برای نمایش
     const breadcrumbItems = [
         { label: 'خانه', path: '/', isLast: pathSegments.length === 0 }
     ];
 
-    // اضافه کردن هر قطعه به آرایه breadcrumbItems
     let currentPath = '';
     pathSegments.forEach((segment, index) => {
         currentPath += `/${segment}`;
 
-        // بررسی اگر بخشی از مسیر یک شناسه دینامیک است
         let label = pathDictionary[segment] || segment;
 
         // اگر در صفحه محصول هستیم و این بخش، ID محصول است
         if (pathSegments[0] === 'product' && index === 1) {
             if (product && !loading) {
-                // نمایش دسته‌بندی محصول به جای ID
                 let categoryName = 'جزئیات محصول';
 
-                // بررسی اگر category یک آبجکت است (با name, _id و غیره)
                 if (product.category && typeof product.category === 'object' && product.category.name) {
                     categoryName = pathDictionary[product.category.name] || product.category.name;
                 }
-                // اگر category یک رشته است
                 else if (product.category && typeof product.category === 'string') {
                     categoryName = pathDictionary[product.category] || product.category;
                 }
-                // اگر هیچ دسته‌بندی موجود نیست، از نام محصول استفاده می‌کنیم
                 else if (product.name) {
                     categoryName = product.name;
                 }
 
                 label = categoryName;
             } else {
-                // اگر اطلاعات محصول هنوز در حال بارگذاری است یا موجود نیست
                 label = 'جزئیات محصول';
             }
         }
+        else if (pathSegments[0] === 'blog-detail' && index === 1) {
+            return;
+        }
         // سایر موارد برای شناسه‌های دینامیک
         else if (/^[0-9a-fA-F]{24}$/.test(segment) || /^\d+$/.test(segment)) {
-            // اگر بخش قبلی 'orders' بود، این یک شناسه سفارش است
             if (index > 0 && pathSegments[index - 1] === 'orders') {
                 label = `سفارش ${segment}`;
             }
-            // دیگر شناسه‌های دینامیک را می‌توانید اینجا اضافه کنید
         }
 
         breadcrumbItems.push({
