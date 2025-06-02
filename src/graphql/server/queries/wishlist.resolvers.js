@@ -22,19 +22,14 @@ const getUserWishlist = {
 
             // اگر wishlist خالی باشد، آرایه خالی برگرداند
             if (!userDoc.wishlist || userDoc.wishlist.length === 0) {
-                console.log('Wishlist is empty for user:', user._id);
                 return [];
             }
 
             // به صورت دستی محصولات را بر اساس آیدی‌های ذخیره شده در wishlist بازیابی می‌کنیم
             const productIds = userDoc.wishlist;
-            console.log('Product IDs in wishlist:', productIds);
-            
             const products = await ProductModel.find({ 
                 _id: { $in: productIds } 
             });
-            
-            console.log('Products fetched:', products.length);
             return products;
         } catch (error) {
             console.error('Error in getUserWishlist resolver:', error);

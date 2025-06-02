@@ -22,9 +22,6 @@ function BestSell() {
         .filter(product => product.salesCount && product.salesCount > 0) // فقط محصولاتی که فروش داشته‌اند
         .sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0)) // مرتب کردن نزولی
         .slice(0, 10); // 10 محصول پرفروش
-
-    console.log("Best Selling Products:", bestSellingProducts.map(p => ({ title: p.title, salesCount: p.salesCount })));
-
     // نمایش loading state
     if (productsLoading) {
         return (

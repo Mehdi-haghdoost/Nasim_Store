@@ -3,20 +3,16 @@ const mongoose = require('mongoose');
 const connectToDB = async () => {
     try {
         if (mongoose.connection.readyState === 1) {
-            console.log('Already Connected to DB');
             return;
         }
 
         if (mongoose.connection.readyState === 2) {
-            console.log('Connection in progress, waiting...');
             return; // جلوگیری از تلاش همزمان
         }
 
         await mongoose.connect(process.env.MONGO_URL, {
             authSource: "admin",
         });
-        console.log('Connect To DB Successfully :))');
-
         // رویداد خطا
         mongoose.connection.on('error', (err) => {
             console.error('MongoDB Connection Error:', err);

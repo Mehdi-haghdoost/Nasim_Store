@@ -34,7 +34,6 @@ function ReplyForm({ parentId }) {
   // نمایش پیام موفقیت بعد از ثبت پاسخ
   useEffect(() => {
     if (replySuccess) {
-      console.log("پاسخ با موفقیت ثبت شد، نمایش پیام موفقیت");
       showSwal('پاسخ شما با موفقیت ثبت شد و نمایش داده خواهد شد', 'success', 'تأیید');
       
       // پاک کردن فرم
@@ -55,7 +54,6 @@ function ReplyForm({ parentId }) {
   // نمایش پیام خطا در صورت بروز مشکل
   useEffect(() => {
     if (replyError) {
-      console.log("خطا در ثبت پاسخ:", replyError);
       showSwal(replyError, 'error', 'تلاش مجدد');
     }
   }, [replyError]);
@@ -83,14 +81,6 @@ function ReplyForm({ parentId }) {
     localStorage.setItem('commentFormName', formData.name);
     localStorage.setItem('commentFormEmail', formData.email);
 
-    console.log("ارسال پاسخ با داده:", {
-      parentId,
-      commentText: formData.commentText,
-      name: formData.name,
-      email: formData.email,
-      rating
-    });
-    
     submitReply({
       parentId,
       commentText: formData.commentText,

@@ -82,7 +82,6 @@ function Sms({ hideOtpForm, type, phone }) {
         }
 
         try {
-            console.log(`درخواست تایید کد برای شماره: ${phone} با کد: ${otpCode}`);
             if (type === 'ثبت نام') {
                 confirmOtp(phone, otpCode);
             } else {

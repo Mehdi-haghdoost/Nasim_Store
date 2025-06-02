@@ -22,12 +22,6 @@ function CustomerFavories() {
         .filter(product => product.rating && product.rating > 0) // فقط محصولاتی که امتیاز دارند
         .sort((a, b) => (b.rating || 0) - (a.rating || 0)) // مرتب کردن نزولی
         .slice(0, 10); // 10 محصول برتر
-
-    console.log("Top Rated Products:", topRatedProducts.map(p => ({
-        title: p.title,
-        rating: p.rating
-    })));
-
     // نمایش loading state
     if (productsLoading) {
         return (

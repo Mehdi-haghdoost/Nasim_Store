@@ -15,9 +15,6 @@ function Card({ productData }) {
         isProductInWishlist, 
         checkProductInWishlist 
     } = useWishlist();
-
-    console.log("[Card] دریافت محصول:", productData?._id);
-
     // بررسی وضعیت محصول در لیست علاقه‌مندی‌ها هنگام بارگذاری
     useEffect(() => {
         if (productData && productData._id) {
@@ -66,7 +63,6 @@ function Card({ productData }) {
         if (isInWishlist) {
             removeProductFromWishlist(productData._id)
                 .then(() => {
-                    console.log(`[Card] حذف از لیست علاقه‌مندی‌ها: ${productData._id}`);
                 })
                 .catch(err => {
                     console.error(`[Card] خطا در حذف از لیست علاقه‌مندی‌ها: ${err}`);
@@ -74,7 +70,6 @@ function Card({ productData }) {
         } else {
             addProductToWishlist(productData._id, productData)
                 .then(() => {
-                    console.log(`[Card] افزوده شده به لیست علاقه‌مندی‌ها: ${productData._id}`);
                 })
                 .catch(err => {
                     console.error(`[Card] خطا در افزودن به لیست علاقه‌مندی‌ها: ${err}`);

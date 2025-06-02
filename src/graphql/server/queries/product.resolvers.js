@@ -78,7 +78,6 @@ const bestSellingProducts = {
         .populate('sellers')
         .populate('category')
         .sort({ salesCount: -1 });
-      console.log("Best selling products found:", products.length);
       return products;
     } catch (error) {
       console.error("Error in bestSellingProducts resolver:", error);
@@ -91,7 +90,6 @@ const products = {
   type: new GraphQLList(ProductType),
   resolve: async () => {
     try {
-      console.log("Products resolver called");
       const allProducts = await ProductModel.find()
         .populate('sellers')
         .populate('category')

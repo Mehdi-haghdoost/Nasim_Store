@@ -61,7 +61,6 @@ function Register({ showLoginForm }) {
     if (isOtpRequestPending && !loading) {
       setIsOtpRequestPending(false);
       if (!error && otpSent) {
-        console.log("OTP با موفقیت ارسال شد، انتقال به صفحه SMS");
         setIsRegisterWithOtp(true);
       } else if (error) {
         console.error("خطای ارسال OTP:", error);
@@ -97,8 +96,6 @@ function Register({ showLoginForm }) {
     if (form.errors.password) {
       return showSwal(form.errors.password, "error", "اوکی");
     }
-
-    console.log("اعتبارسنجی با موفقیت انجام شد، در حال فراخوانی onSubmit فرمیک");
     form.handleSubmit();
   };
 

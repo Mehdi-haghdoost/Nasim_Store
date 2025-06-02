@@ -115,13 +115,8 @@ const ProductBox = ({ product }) => {
                 }
                 
                 // لاگ کردن product برای دیدن features
-                console.log('Product being saved:', product);
-                console.log('Product features:', product.features);
-                
                 // افزودن به مقایسه
                 const updatedProducts = [...compareProducts, product];
-                console.log('Updated products to save:', updatedProducts);
-                
                 localStorage.setItem('compareProducts', JSON.stringify(updatedProducts));
                 setIsInCompare(true);
                 toast.success('با موفقیت کالای مورد نظر به لیست مقایسه اضافه شد');
@@ -187,14 +182,6 @@ const ProductBox = ({ product }) => {
                 name: 'فروشگاه نسیم'
             };
         }
-
-        console.log('Adding to cart from ProductBox:', {
-            productId: product._id,
-            color: selectedColor,
-            seller: selectedSeller,
-            productSellers: product.sellers
-        });
-
         // فراخوانی addToCart با فروشنده واقعی محصول
         addToCart(product, 1, selectedColor, null, selectedSeller);
     };

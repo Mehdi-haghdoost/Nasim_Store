@@ -14,12 +14,7 @@ function NewProduct() {
         .filter(product => product.createdAt) // فقط محصولاتی که تاریخ ایجاد دارند
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // مرتب کردن نزولی
         .slice(0, 12); // 12 محصول جدید
-
-    console.log("New Products (sorted by createdAt):", newProducts.map(p => ({
-        title: p.title,
-        createdAt: p.createdAt
-    })));
-
+        
     // نمایش loading state
     if (productsLoading) {
         return (

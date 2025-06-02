@@ -83,7 +83,6 @@ const {
               });
               return comments;
             } catch (error) {
-              console.log(`خطا در بازیابی کامنت‌ها ${error.message}`);
               throw new Error(
                 `خطا در بازیابی کامنت‌ها. لطفاً دوباره تلاش کنید. ${error.message}`
               );

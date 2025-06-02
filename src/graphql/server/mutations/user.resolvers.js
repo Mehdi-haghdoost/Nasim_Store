@@ -71,13 +71,10 @@ const registerUser = {
 
             // ست کردن کوکی‌ها
             setAuthCookies(res, accessToken, refreshToken);
-            console.log("User registered successfully:", user._id);
             //  تست توکن : 
             try {
                 const decodedAccess = jwt.verify(accessToken, AccessTokenSecretKey);
                 const decodedRefresh = jwt.verify(refreshToken, RefreshTokenSecretKey);
-                console.log("access Token is valid:", decodedAccess);
-                console.log("refresh Token is valid:", decodedRefresh);
             } catch (error) {
                 console.error("Token verification failed:", error);
             }
@@ -102,8 +99,6 @@ const sendOtp = {
     },
     resolve: async (_, { phone }) => {
         const code = Math.floor(Math.random() * 99999);
-        console.log("Your Code is :", code);
-
         const now = new Date();
         const expTime = now.getTime() + 300_000;
         const minTimeBetweenRequests = now.getTime() - 60_000;
@@ -121,8 +116,6 @@ const sendOtp = {
 
         // حذف کدهای قبلی برای این شماره
         await OtpModel.deleteMany({ phone });
-        console.log("کدهای تایید قبلی برای این شماره تلفن حذف شد");
-
         const { response, body } = await sendRequest({
             url: 'http://ippanel.com/api/select',
             body: {
@@ -136,10 +129,6 @@ const sendOtp = {
             },
             json: true
         });
-
-        console.log("IPPANEL Response Status:", response.statusCode);
-        console.log("IPPANEL Response Body:", JSON.stringify(body));
-
         if (response.statusCode === 200) {
             // چک کردن فرمت جدید پاسخ (عدد به جای آرایه)
             if (body && typeof body === 'number') { // فرض می‌کنیم عدد یعنی موفقیت
@@ -174,8 +163,6 @@ const sendOtpForLogin = {
     },
     resolve: async (_, { phone }) => {
         const code = Math.floor(Math.random() * 99999);
-        console.log("Your Login Code is :", code);
-
         const now = new Date();
         const expTime = now.getTime() + 300_000;
         const minTimeBetweenRequests = now.getTime() - 60_000;
@@ -194,8 +181,6 @@ const sendOtpForLogin = {
 
         // حذف کدهای قبلی برای این شماره
         await OtpModel.deleteMany({ phone });
-        console.log("کدهای تایید قبلی برای این شماره تلفن حذف شد");
-
         const { response, body } = await sendRequest({
             url: 'http://ippanel.com/api/select',
             body: {
@@ -209,10 +194,6 @@ const sendOtpForLogin = {
             },
             json: true
         });
-
-        console.log("IPPANEL Response Status:", response.statusCode);
-        console.log("IPPANEL Response Body:", JSON.stringify(body));
-
         if (response.statusCode === 200) {
             // چک کردن فرمت جدید پاسخ (عدد به جای آرایه)
             if (body && typeof body === 'number') { // فرض می‌کنیم عدد یعنی موفقیت
@@ -303,7 +284,6 @@ const confirmOtpAndRegister = {
                 throw new Error("کد نامعتبر است :((");
             }
         } catch (error) {
-            console.log("Error ===>", error);
             throw new Error(error.message || "خطای ناشناخته سرور رخ داد!!");
         }
     },
@@ -359,8 +339,6 @@ const loginUser = {
         try {
             const decodedAccess = jwt.verify(accessToken, AccessTokenSecretKey);
             const decodedRefresh = jwt.verify(refreshToken, RefreshTokenSecretKey);
-            console.log("Access Token is valid:", decodedAccess);
-            console.log("Refresh Token is valid:", decodedRefresh);
         } catch (error) {
             console.error("Token verification failed:", error);
         }
@@ -460,7 +438,6 @@ const verifyOtpAndLogin = {
                 throw new Error("کد نا معتبر است :((")
             }
         } catch (error) {
-            console.log("Error ===>", error);
             throw new Error(`خطای ناشناخته سمت سرور رخ داد =>>>>>> ${error.message}`)
         }
     }

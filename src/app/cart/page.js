@@ -20,7 +20,6 @@ const CartPage = () => {
 
   useEffect(() => {
     setIsClient(true);
-    console.log('Dispatching syncCartFromLocalStorage');
     dispatch(syncCartFromLocalStorage());
   }, [dispatch]);
 

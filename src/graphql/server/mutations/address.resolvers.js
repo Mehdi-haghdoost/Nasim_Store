@@ -153,8 +153,6 @@ const updateAddress = {
     },
     resolve: async (_, { id, input }, { req }) => {
         try {
-            console.log("Update address resolver called with:", { id, input });
-
             const user = await validateToken(req);
             if (!user) throw new Error('کاربر احراز هویت نشده است');
 
@@ -171,9 +169,6 @@ const updateAddress = {
             // بررسی وجود آدرس و دسترسی کاربر
             const address = await AddressModel.findOne({ _id: id, user: user._id });
             if (!address) throw new Error('آدرس مورد نظر یافت نشد یا شما مجاز به تغییر آن نیستید');
-
-            console.log("Found address in DB:", address);
-
             // اگر isDefault تغییر کرده و true شده است
             if (isDefault && !address.isDefault) {
                 await AddressModel.updateMany(
@@ -218,9 +213,6 @@ const updateAddress = {
                 },
                 { new: true }
             );
-
-            console.log("Updated address:", updatedAddress);
-
             return updatedAddress;
         } catch (error) {
             console.error("Error in updateAddress resolver:", error);

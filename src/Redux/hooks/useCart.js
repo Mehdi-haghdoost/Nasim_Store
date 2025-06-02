@@ -36,11 +36,7 @@ export const useCart = () => {
   // ادغام سبد خرید مهمان
   useEffect(() => {
     // برای دیباگ، وجود تابع را چک می‌کنیم
-    console.log('mergeGuestCartWithUserCartThunk exists:', typeof mergeGuestCartWithUserCartThunk === 'function');
-    
     if (isInitialized && isAuthenticated && user?._id && !hasMerged.current) {
-      console.log('Merging guest cart for user:', user._id);
-      
       // اگر تابع وجود دارد، آن را اجرا می‌کنیم
       if (typeof mergeGuestCartWithUserCartThunk === 'function') {
         dispatch(mergeGuestCartWithUserCartThunk(user._id));

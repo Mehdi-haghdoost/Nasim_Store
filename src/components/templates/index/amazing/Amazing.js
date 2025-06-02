@@ -31,9 +31,6 @@ function Amazing() {
         return shuffled.slice(0, count);
     };
     const miniAmazingProducts = getRandomProducts(products, 4);
-
-    console.log("Amazing Products:", amazingProducts.length, "Main:", mainAmazingProducts.length, "Mini Random:", miniAmazingProducts.length);
-
     // نمایش loading state
     if (productsLoading) {
         return (

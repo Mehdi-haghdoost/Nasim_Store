@@ -4,9 +4,6 @@ import { useSelector } from 'react-redux';
 
 const DataTable = () => {
     const { user, loading, cachedAddresses } = useSelector((state) => state.auth);
-    console.log('user ===>', user);
-    console.log('cachedAddresses ===>', cachedAddresses);
-
     // استفاده از آدرس‌های کاربر یا آدرس‌های کش شده
     const addresses = user?.addresses || cachedAddresses;
 

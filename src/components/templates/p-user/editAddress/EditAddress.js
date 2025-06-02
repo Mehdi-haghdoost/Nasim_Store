@@ -15,11 +15,6 @@ const EditAddress = ({ addressId }) => {
     const dispatch = useDispatch();
     // دریافت اطلاعات کاربر و آدرس‌ها از ریداکس
     const { user, cachedAddresses, loading } = useSelector(state => state.auth);
-
-    console.log("🔍 Debug - Component Mounted with addressId:", addressId);
-    console.log("🔍 Debug - user?.addresses:", user?.addresses);
-    console.log("🔍 Debug - cachedAddresses:", cachedAddresses);
-
     // استیت‌های فرم برای ویرایش آدرس
     const [formData, setFormData] = useState({
         id: addressId,
@@ -29,9 +24,6 @@ const EditAddress = ({ addressId }) => {
         fullAddress: '',
         isDefault: false
     });
-
-    console.log("🔍 Debug - Initial formData:", formData);
-
     // لیست شهرهای استان انتخاب شده
     const [availableCities, setAvailableCities] = useState([]);
 
@@ -39,7 +31,6 @@ const EditAddress = ({ addressId }) => {
     useEffect(() => {
         dispatch(getAllAddresses())
             .then(response => {
-                console.log("🔍 Debug - getAllAddresses response:", response);
             })
             .catch(error => {
                 console.error("🔍 Debug - Error in getAllAddresses:", error);
@@ -48,19 +39,10 @@ const EditAddress = ({ addressId }) => {
 
     // دریافت اطلاعات آدرس از ریداکس یا بارگذاری مجدد آدرس‌ها اگر وجود نداشت
     useEffect(() => {
-        console.log("🔍 Debug - useEffect for fetching address triggered");
-
         // ابتدا آدرس‌ها را در حافظه کش جستجو می‌کنیم
         const addresses = user?.addresses || cachedAddresses || [];
-        console.log("🔍 Debug - All addresses to search in:", addresses);
-
         let foundAddress = addresses.find(addr => addr._id === addressId);
-        console.log("🔍 Debug - Found address in Redux:", foundAddress);
-
         if (foundAddress) {
-            console.log("🔍 Debug - Found address street value:", foundAddress.street);
-            console.log("🔍 Debug - All address properties:", Object.keys(foundAddress));
-
             // اگر street وجود نداشت، از fullAddress استخراج می‌کنیم
             const streetValue = foundAddress.street || extractStreetFromFullAddress(foundAddress.fullAddress, foundAddress.province, foundAddress.city);
 
@@ -72,31 +54,13 @@ const EditAddress = ({ addressId }) => {
                 fullAddress: foundAddress.fullAddress || '',
                 isDefault: foundAddress.isDefault || false
             });
-
-            console.log("🔍 Debug - formData after update:", {
-                id: addressId,
-                street: streetValue,
-                province: foundAddress.province || '',
-                city: foundAddress.city || '',
-                fullAddress: foundAddress.fullAddress || '',
-                isDefault: foundAddress.isDefault || false
-            });
         } else {
             // اگر آدرس در کش نبود، آدرس‌ها را از سرور می‌گیریم
-            console.log("🔍 Debug - Address not found in Redux, fetching from server...");
             dispatch(getAllAddresses())
                 .then(response => {
-                    console.log("🔍 Debug - getAllAddresses response:", response);
-
                     if (response.payload) {
-                        console.log("🔍 Debug - Addresses from server:", response.payload);
-
                         const newFoundAddress = response.payload.find(addr => addr._id === addressId);
-                        console.log("🔍 Debug - Found address from server:", newFoundAddress);
-
                         if (newFoundAddress) {
-                            console.log("🔍 Debug - Address street from server:", newFoundAddress.street);
-
                             // اگر street وجود نداشت، از fullAddress استخراج می‌کنیم
                             const streetValue = newFoundAddress.street || extractStreetFromFullAddress(newFoundAddress.fullAddress, newFoundAddress.province, newFoundAddress.city);
 
@@ -108,18 +72,8 @@ const EditAddress = ({ addressId }) => {
                                 fullAddress: newFoundAddress.fullAddress || '',
                                 isDefault: newFoundAddress.isDefault || false
                             });
-
-                            console.log("🔍 Debug - formData after server update:", {
-                                id: addressId,
-                                street: streetValue,
-                                province: newFoundAddress.province || '',
-                                city: newFoundAddress.city || '',
-                                fullAddress: newFoundAddress.fullAddress || '',
-                                isDefault: newFoundAddress.isDefault || false
-                            });
                         } else {
                             // اگر بعد از بارگذاری مجدد هم پیدا نشد، به صفحه آدرس‌ها برمی‌گردیم
-                            console.log("🔍 Debug - Address not found even after server fetch");
                             showSwal('آدرس مورد نظر یافت نشد', 'error', 'باشه');
                             router.push('/p-user/address');
                         }
@@ -154,15 +108,11 @@ const EditAddress = ({ addressId }) => {
 
     // وقتی استان تغییر می‌کند، لیست شهرها را به‌روزرسانی می‌کنیم
     useEffect(() => {
-        console.log("🔍 Debug - useEffect for province change triggered:", formData.province);
-
         if (formData.province) {
             setAvailableCities(cities[formData.province] || []);
 
             // اگر شهر انتخابی جزو شهرهای استان جدید نباشد، اولین شهر را انتخاب می‌کنیم
             if (!cities[formData.province]?.includes(formData.city) && cities[formData.province]?.length > 0) {
-                console.log("🔍 Debug - City not in province, updating to first city");
-
                 setFormData(prev => ({
                     ...prev,
                     city: cities[formData.province][0]
@@ -174,8 +124,6 @@ const EditAddress = ({ addressId }) => {
     // تغییر مقادیر فرم
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        console.log(`🔍 Debug - Form field changed: ${name} = ${type === 'checkbox' ? checked : value}`);
-
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value
@@ -185,27 +133,17 @@ const EditAddress = ({ addressId }) => {
     // ارسال فرم
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("🔍 Debug - Form submitted");
-
         if (!formData.street || !formData.province || !formData.city || !formData.fullAddress) {
-            console.log("🔍 Debug - Form validation failed");
             showSwal('لطفاً همه‌ی فیلدهای ضروری را پر کنید', 'error', 'باشه');
             return;
         }
-
-        console.log("🔍 Debug - Submitting address data:", formData);
-
         // ارسال درخواست به سرور با استفاده از thunk
         try {
             const result = await dispatch(updateAddress(formData));
-            console.log("🔍 Debug - updateAddress result:", result);
-
             if (result.payload) {
-                console.log("🔍 Debug - Address updated successfully");
                 showSwal('آدرس با موفقیت ویرایش شد', 'success', 'باشه');
                 router.push('/p-user/address');
             } else {
-                console.log("🔍 Debug - Address update failed");
                 showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
             }
         } catch (error) {
@@ -213,9 +151,6 @@ const EditAddress = ({ addressId }) => {
             showSwal('خطا در ویرایش آدرس', 'error', 'باشه');
         }
     };
-
-    console.log("🔍 Debug - Current formData before render:", formData);
-
     return (
         <div className="ui-boxs">
             <div className="ui-box">

@@ -5,8 +5,6 @@ import styles from './OrderCart.module.css';
 import Link from 'next/link';
 
 function OrderCart({ order }) {
-    console.log('order ==========>',order);
-    
     // تابع تعیین وضعیت سفارش
     const getOrderStatusDisplay = (status) => {
         switch (status) {
@@ -146,7 +144,6 @@ function OrderCart({ order }) {
                             height="70" 
                             alt={firstProduct.title || firstProduct.name || 'محصول'}
                             onError={(e) => {
-                                console.log('Image failed to load:', e.target.src);
                                 e.target.src = "/images/product/product-image1.jpg";
                             }}
                             style={{ objectFit: 'cover' }} // برای نمایش بهتر تصویر

@@ -74,7 +74,6 @@ function MegaMenu() {
                               <Link
                                 href={categoryId ? `/categories?categoryId=${categoryId}` : '#'}
                                 className="dropdown-item"
-                                onClick={() => console.log(`نویگیشن به دسته‌بندی: ${mainCategory.name}, _id: ${categoryId || 'ناموجود'}`)}
                               >
                                 <i className={mainCategory.icon}></i>
                                 <span>{mainCategory.displayName}</span>

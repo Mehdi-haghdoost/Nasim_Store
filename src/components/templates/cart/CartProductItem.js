@@ -13,25 +13,21 @@ const CartProductItem = ({ item }) => {
 
 
   const increaseQuantity = () => {
-    console.log('increaseQuantity called:', { itemId: item._id, currentQuantity: item.quantity });
     if (item.product.stock > item.quantity) {
       updateCartItem(item._id, item.quantity + 1);
     }
   };
 
   const decreaseQuantity = () => {
-    console.log('decreaseQuantity called:', { itemId: item._id, currentQuantity: item.quantity });
     if (item.quantity > 1) {
       updateCartItem(item._id, item.quantity - 1);
     } else {
-      console.log('Removing item:', item._id);
       removeFromCart(item._id);
     }
   };
 
   const handleRemoveItem = (e) => {
     e.preventDefault();
-    console.log('handleRemoveItem called:', { itemId: item._id });
     removeFromCart(item._id);
   };
 

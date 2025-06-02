@@ -200,27 +200,17 @@ const deleteComment = {
     },
     resolve: async (_, { commentId }, { req }) => {
         try {
-            console.log('deleteComment resolver called with commentId:', commentId);
-
             // احراز هویت کاربر
             const user = await validateToken(req);
-            console.log('User authentication result:', user ? 'Authenticated' : 'Not authenticated');
-
             if (!user) {
                 throw new Error("کاربر احراز هویت نشده است");
             }
 
             // پیدا کردن کامنت
             const comment = await CommentModel.findById(commentId);
-            console.log('Found comment:', comment ? 'Yes' : 'No');
-
             if (!comment) {
                 throw new Error("کامنت یافت نشد");
             }
-
-            console.log('Comment user ID:', comment.user.toString());
-            console.log('Current user ID:', user._id.toString());
-
             // بررسی اینکه آیا کامنت متعلق به کاربر است
             if (comment.user.toString() !== user._id.toString()) {
                 throw new Error("شما اجازه حذف این کامنت را ندارید");
@@ -228,16 +218,10 @@ const deleteComment = {
 
             // قبل از حذف، تعداد کامنت‌های کاربر را بررسی کنیم
             const commentCountBefore = await CommentModel.countDocuments({ user: user._id });
-            console.log(`Before deletion - User has ${commentCountBefore} comments`);
-
             // حذف کامنت
             const deletedComment = await CommentModel.findByIdAndDelete(commentId);
-            console.log('Comment deletion result:', deletedComment ? 'Successful' : 'Failed');
-
             // بعد از حذف، تعداد کامنت‌های کاربر را دوباره بررسی کنیم
             const commentCountAfter = await CommentModel.countDocuments({ user: user._id });
-            console.log(`After deletion - User has ${commentCountAfter} comments`);
-
             // به‌روزرسانی آرایه‌های مرتبط
             if (comment.parent) {
                 // اگر این کامنت یک پاسخ است، آن را از آرایه replies کامنت والد حذف کنیم
@@ -245,7 +229,6 @@ const deleteComment = {
                     { _id: comment.parent },
                     { $pull: { replies: commentId } }
                 );
-                console.log('Updated parent comment by removing this reply');
             }
 
             // حذف این کامنت از آرایه comments کاربر
@@ -253,15 +236,11 @@ const deleteComment = {
                 { _id: user._id },
                 { $pull: { comments: commentId } }
             );
-            console.log('Updated user by removing this comment');
-
             // حذف این کامنت از آرایه comments محصول
             await ProductModel.updateOne(
                 { _id: comment.product },
                 { $pull: { comments: commentId } }
             );
-            console.log('Updated product by removing this comment');
-
             return {
                 success: true,
                 message: "کامنت با موفقیت حذف شد"

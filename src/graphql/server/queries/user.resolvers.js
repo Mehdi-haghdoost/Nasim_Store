@@ -103,9 +103,6 @@ const getUserComments = {
         .skip(skip)
         .limit(limit)
         .populate('product'); // populate محصول
-
-      console.log("getUserComments - comments found:", comments.length);
-
       return {
         comments,
         totalPages: totalPages || 0,

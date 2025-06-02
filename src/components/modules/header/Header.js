@@ -184,7 +184,6 @@ function Header() {
                               href={categoryId ? `/categories?categoryId=${categoryId}` : '#'}
                               className="nav-link"
                               onClick={() => {
-                                console.log(`نویگیشن به دسته‌بندی: ${category.name}, _id: ${categoryId || 'ناموجود'}`);
                                 setActiveHamburger(false); // بستن منوی همبرگری
                               }}
                             >

@@ -54,7 +54,6 @@ const ProductType = new GraphQLObjectType({
                     try {
                         const category = await CategoryModel.findById(parent.category);
                         if (!category) {
-                            console.log(`دسته بندی با شناسه ${parent.category} یافت نشد`);
                             throw new Error(`دسته‌بندی یافت نشد`)
                         }
                         return category;
@@ -90,7 +89,6 @@ const ProductType = new GraphQLObjectType({
                         return comments.filter(comment => comment.user && comment.user.username);
 
                     } catch (error) {
-                        console.log(`خطا در بازیابی کامنت‌ها: ${error.message}`);
                         throw new Error(`خطا در بازیابی کامنت‌ها: ${error.message}`);
                     }
                 }

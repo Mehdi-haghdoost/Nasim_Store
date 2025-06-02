@@ -21,9 +21,6 @@ export const addAddress = createAsyncThunk(
                 mutation: ADD_ADDRESS,
                 variables: { input: addressData }
             });
-
-            console.log("Add address response:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
@@ -56,9 +53,6 @@ export const setDefaultAddress = createAsyncThunk(
                     }
                 }
             });
-
-            console.log("Set default address response:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
@@ -86,9 +80,6 @@ export const deleteAddress = createAsyncThunk(
                 mutation: DELETE_ADDRESS,
                 variables: { addressId }
             });
-
-            console.log("Delete address response:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
@@ -116,9 +107,6 @@ export const getAllAddresses = createAsyncThunk(
                 query: GET_ALL_ADDRESSES,
                 fetchPolicy: 'network-only' // اجبار به دریافت داده‌های تازه از سرور
             });
-
-            console.log("Get all addresses response:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }
@@ -143,9 +131,6 @@ export const updateAddress = createAsyncThunk(
     async (addressData, { rejectWithValue }) => {
         try {
             const { id, ...input } = addressData;
-            
-            console.log("Updating address with data:", { id, input });
-            
             const { data, errors } = await client.mutate({
                 mutation: UPDATE_ADDRESS,
                 variables: { 
@@ -153,9 +138,6 @@ export const updateAddress = createAsyncThunk(
                     input: input
                 }
             });
-
-            console.log("Update address response:", { data, errors });
-
             if (errors && Array.isArray(errors) && errors.length > 0) {
                 return rejectWithValue(errors[0].message || 'خطای ناشناخته از سرور');
             }

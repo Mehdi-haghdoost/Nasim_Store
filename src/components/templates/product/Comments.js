@@ -276,8 +276,6 @@ function Comments({ product }) {
 
       // اینجا باید addComment فراخوانی شود - این خط را اضافه میکنیم
       await addComment(commentData);
-      
-      console.log("Comment submitted successfully:", commentData);
     } catch (error) {
       console.error("Error submitting comment:", error);
       showSwal('خطا در ارسال کامنت: ' + (error.message || 'خطای ناشناخته'), 'error', 'تلاش مجدد');

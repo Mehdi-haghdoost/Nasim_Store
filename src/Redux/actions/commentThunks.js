@@ -45,10 +45,6 @@ export const replyToComment = createAsyncThunk(
   'comment/replyToComment',
   async ({ parentId, commentText, name, email, rating }, { rejectWithValue, dispatch, getState }) => {
     try {
-      console.log("ارسال درخواست پاسخ به کامنت با پارامترها:", {
-        parentId, commentText, name, email, rating
-      });
-
       const { data, errors } = await client.mutate({
         mutation: REPLY_TO_COMMENT,
         variables: {
@@ -88,25 +84,17 @@ export const getUserComments = createAsyncThunk(
   'comment/getUserComments',
   async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      console.log('GET_USER_COMMENTS query:', GET_USER_COMMENTS);
-      console.log('Fetching user comments with params:', { page, limit });
-
       const { data, errors } = await client.query({
         query: GET_USER_COMMENTS,
         variables: { page, limit },
         fetchPolicy: 'network-only',
       });
-
-      console.log('Response data:', data);
-      console.log('Errors:', errors);
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         console.error("GraphQL errors:", errors);
         return rejectWithValue(errors[0].message || 'مشکلی در دریافت کامنت‌ها رخ داد.');
       }
 
       if (data?.getUserComments) {
-        console.log('User comments retrieved successfully:', data.getUserComments);
         return data.getUserComments;
       }
 
@@ -127,9 +115,6 @@ export const deleteComment = createAsyncThunk(
       const { comment } = getState();
       const currentPage = comment.currentPage || 1;
       const limit = 10;
-
-      console.log('Deleting comment with ID:', commentId, 'and refetching page:', currentPage);
-
       const { data, errors } = await client.mutate({
         mutation: DELETE_COMMENT,
         variables: { commentId },
@@ -139,16 +124,12 @@ export const deleteComment = createAsyncThunk(
           fetchPolicy: 'network-only',
         }],
       });
-
-      console.log('Delete comment response:', { data, errors });
-
       if (errors && Array.isArray(errors) && errors.length > 0) {
         console.error('GraphQL errors in deleteComment:', errors);
         return rejectWithValue(errors[0].message || 'مشکلی در حذف دیدگاه رخ داد.');
       }
 
       if (data?.deleteComment && data.deleteComment.success) {
-        console.log('Comment deleted successfully:', data.deleteComment);
         return data.deleteComment;
       }
 

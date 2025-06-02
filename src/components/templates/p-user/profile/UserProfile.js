@@ -23,7 +23,6 @@ const UserProfile = () => {
 
     useEffect(() => {
         if (user) {
-            console.log("User data from Redux:", user);
             const savedBio = localStorage.getItem('userBio') || '';
 
             setFormData({
@@ -49,11 +48,7 @@ const UserProfile = () => {
 
     const onSubmit = async () => {
         try {
-            console.log("Submitting form data:", formData);
-
             const response = await dispatch(updateUserProfile({ input: formData }));
-            console.log("Update profile response:", response);
-
             // بررسی درست response
             if (response.type.endsWith('/fulfilled')) {
                 // ذخیره بیو در localStorage

@@ -50,13 +50,10 @@ function ProductDetail({ product }) {
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (isAdding || !product || !selectedSeller) {
-      console.log('Add to cart blocked:', { isAdding, product: !!product, selectedSeller: !!selectedSeller });
       return;
     }
 
     setIsAdding(true);
-    console.log('handleAddToCart called:', { productId: product._id, quantity, color: selectedColor, sellerId: selectedSeller._id });
-
     const productData = {
       ...product,
       image: product.image

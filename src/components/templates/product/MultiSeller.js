@@ -42,13 +42,6 @@ function MultiSeller({ product, sellers }) {
             _id: seller._id,
             name: seller.name // استفاده از نام واقعی فروشنده
         };
-
-        console.log('Adding to cart from MultiSeller:', {
-            productId: product._id,
-            color: defaultColor,
-            seller: sellerObject
-        });
-
         // ارسال آبجکت فروشنده کامل به addToCart
         addToCart(product, 1, defaultColor, null, sellerObject);
     };

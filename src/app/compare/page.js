@@ -18,7 +18,6 @@ const ComparePage = () => {
                 const stored = localStorage.getItem('compareProducts');
                 if (stored) {
                     const products = JSON.parse(stored);
-                    console.log('Loaded', products.length, 'products for comparison');
                     setCompareProducts(products);
                 }
             } catch (error) {

@@ -52,9 +52,6 @@ function AmazingCard({ productData }) {
         : null;
 
     // لاگ برای دیباگ
-    console.log('AmazingCard productData.features:', productData.features);
-    console.log('AmazingCard productFeatures:', productFeatures);
-
     return (
         <div className={`swiper_slide`}>
             <div className={`${styles.slider_item} rounded-3 shadow-box bg-white`}>

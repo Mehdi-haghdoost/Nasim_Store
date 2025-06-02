@@ -7,15 +7,10 @@ export const getUserWishlist = createAsyncThunk(
   'wishlist/getUserWishlist',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('Fetching wishlist with query:', GET_USER_WISHLIST);
-      
       const { data, errors } = await client.query({
         query: GET_USER_WISHLIST,
         fetchPolicy: 'network-only'
       });
-      
-      console.log('Wishlist response:', { data, errors });
-      
       if (errors && errors.length > 0) {
         console.error('GraphQL errors:', errors);
         // هنگام خطا آرایه خالی برمی‌گردانیم به جای rejectWithValue
@@ -24,13 +19,10 @@ export const getUserWishlist = createAsyncThunk(
       }
       
       if (!data || !data.getUserWishlist) {
-        console.log('No wishlist data found or empty array returned');
         return [];
       }
       
       // اضافه کردن لاگ اطلاعات محصولات
-      console.log('Wishlist products received:', data.getUserWishlist.length, 'items');
-      
       return data.getUserWishlist;
     } catch (error) {
       console.error('Error fetching wishlist:', error);

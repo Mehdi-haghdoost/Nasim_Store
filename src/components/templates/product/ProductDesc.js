@@ -66,13 +66,6 @@ function ProductDesc({ product }) {
         }
 
         const sellerId = product?.sellers && product.sellers.length > 0 ? product.sellers[0]._id : null;
-
-        console.log('🟡 handleAddToCart called');
-        console.log('product ID:', product._id);
-        console.log('count:', productCount);
-        console.log('selectedColor:', selectedColor);
-        console.log('sellerId:', sellerId);
-
         addToCart(product, productCount, selectedColor, null, sellerId);
     };
 
@@ -104,9 +97,6 @@ function ProductDesc({ product }) {
         rating: 4.5,
         stock: 14
     };
-    console.log('productData ===>', productData);
-
-
     return (
         <div className={`${styles.product_desc} py-20`}>
             <div className='container-fluid'>

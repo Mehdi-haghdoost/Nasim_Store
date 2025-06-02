@@ -70,7 +70,6 @@ const SearchFilters = () => {
   // اعمال فیلتر بعد از دریافت محصولات
   useEffect(() => {
     if (products.length > 0) {
-      console.log('محصولات دریافت شدند، اعمال فیلتر');
       dispatch(filterProducts());
     }
   }, [products, dispatch]);
@@ -90,8 +89,6 @@ const SearchFilters = () => {
       ? filterCategories.filter((id) => id !== categoryId)
       : [categoryId]; // فقط یه دسته‌بندی می‌تونه انتخاب بشه
     updateCategories(updatedCategories);
-    console.log('دسته‌بندی‌های به‌روز شده:', updatedCategories);
-
     // آپدیت URL بدون پرش اسکرول
     const newSearchParams = new URLSearchParams(searchParams);
     if (updatedCategories.length > 0) {
@@ -133,7 +130,6 @@ const SearchFilters = () => {
   };
 
   const handleColorChange = (color) => {
-    console.log('رنگ انتخاب‌شده:', color);
     if (selectedColor === color) {
       updateSelectedColor('');
     } else {

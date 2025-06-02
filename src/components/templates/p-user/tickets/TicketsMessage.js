@@ -47,7 +47,6 @@ const TicketsMessage = () => {
     // همگام‌سازی وضعیت محلی با وضعیت سرور
     useEffect(() => {
         if (data?.getTicketById?.status) {
-            console.log("Current server status:", data.getTicketById.status);
             // بررسی بدون توجه به بزرگی و کوچکی حروف
             const serverStatus = data.getTicketById.status.toLowerCase();
             if (serverStatus === 'closed') {
@@ -96,10 +95,6 @@ const TicketsMessage = () => {
     const ticket = data.getTicketById;
     // تبدیل وضعیت به حروف کوچک برای مقایسه یکنواخت
     const isTicketClosed = ticket.status.toLowerCase() === 'closed';
-
-    console.log("Is ticket closed (case insensitive):", isTicketClosed);
-    console.log("Local ticket closed:", localTicketClosed);
-
     // Render messages
     const renderMessages = () => {
         if (!ticket) return null;

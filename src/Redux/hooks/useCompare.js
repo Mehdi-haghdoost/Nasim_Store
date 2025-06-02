@@ -73,32 +73,20 @@ export const useCompare = () => {
     }, [dispatch, compareProducts, maxProducts, showToast]);
 
     const addToCompareLocalAction = useCallback((product) => {
-        console.log('Adding product to compare:', product);
-        console.log('Current compare products:', compareProducts);
-        
         if (compareProducts.length >= maxProducts) {
-            console.log('Max products reached');
             showToast(`حداکثر ${maxProducts} محصول قابل مقایسه است`, 'warning');
             return false;
         }
 
         const existingProduct = compareProducts.find(p => p._id === product._id);
         if (existingProduct) {
-            console.log('Product already exists');
             showToast('این محصول قبلاً به لیست مقایسه اضافه شده است', 'warning');
             return false;
         }
 
         const updatedCompare = [...compareProducts, product];
-        console.log('Updated compare list:', updatedCompare);
-        
         localStorage.setItem('compareProducts', JSON.stringify(updatedCompare));
-        console.log('Saved to localStorage');
-        
         dispatch(addToCompareLocal(product));
-        console.log('Dispatched to Redux');
-        
-        console.log('Showing toast...');
         showToast('محصول به لیست مقایسه اضافه شد', 'success');
         
         return true;

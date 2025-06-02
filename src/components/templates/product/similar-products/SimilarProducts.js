@@ -16,9 +16,6 @@ function SimilarProducts() {
   // دریافت محصولات از دیتابیس
   const { data, loading, error } = useQuery(GET_ALL_PRODUCTS);
   const products = data?.products || [];
-
-  console.log("SimilarProducts - محصولات دریافتی:", products);
-
   // اگر در حال بارگذاری هستیم، نمایش لودینگ
   if (loading) {
     return (
