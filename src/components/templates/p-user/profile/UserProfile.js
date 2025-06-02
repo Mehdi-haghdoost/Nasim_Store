@@ -10,7 +10,7 @@ import { showSwal } from '@/utils/helpers';
 const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth);
+    const { user, loading } = useSelector((state) => state.auth);
 
     const [formData, setFormData] = useState({
         username: '',
@@ -48,29 +48,32 @@ const UserProfile = () => {
     };
 
     const onSubmit = async () => {
-    try {
-        console.log("Submitting form data:", formData);
+        try {
+            console.log("Submitting form data:", formData);
 
-        const response = await dispatch(updateUserProfile({ input: formData }));
-        console.log("Update profile response:", response);
+            const response = await dispatch(updateUserProfile({ input: formData }));
+            console.log("Update profile response:", response);
 
-        if (response?.payload) {
-            // ذخیره بیو در localStorage
-            localStorage.setItem('userBio', formData.bio || '');
-            
-            showSwal("اطلاعات شما با موفقیت ویرایش شد", "success", "باشه");
-            setShowModal(false);
-            
-            // بعد از موفقیت، اطلاعات کاربر را دوباره بارگذاری کنید
-            await dispatch(checkAuth());
-        } else {
+            // بررسی درست response
+            if (response.type.endsWith('/fulfilled')) {
+                // ذخیره بیو در localStorage
+                localStorage.setItem('userBio', formData.bio || '');
+                
+                showSwal("اطلاعات شما با موفقیت ویرایش شد", "success", "باشه");
+                setShowModal(false);
+                
+                // حذف کردیم checkAuth را چون دیگر نیازی نیست
+                // Redux state خودش به‌روزرسانی می‌شود
+            } else if (response.type.endsWith('/rejected')) {
+                // نمایش خطای دقیق از سرور
+                const errorMessage = response.payload || "مشکلی در ویرایش اطلاعات پیش آمد";
+                showSwal(errorMessage, "error", "باشه");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
             showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
         }
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        showSwal("مشکلی در ویرایش اطلاعات پیش آمد", "error", "باشه");
-    }
-};
+    };
 
     return (
         <>
@@ -84,9 +87,11 @@ const UserProfile = () => {
                                     <button
                                         onClick={() => { setShowModal(true) }}
                                         style={{ padding: "4px 12px", fontWeight: '500', fontSize: "13px" }}
-                                        className="btn btn-sm main-color-one-bg waves-effect waves-light">
-                                        ویرایش
-                                        <i className="bi bi-pencil-fill text-white"></i>
+                                        className="btn btn-sm main-color-one-bg waves-effect waves-light"
+                                        disabled={loading}
+                                    >
+                                        {loading ? "در حال پردازش..." : "ویرایش"}
+                                        <i className="bi bi-pencil-fill text-white ms-1"></i>
                                     </button>
                                 </div>
                             </div>
@@ -105,6 +110,7 @@ const UserProfile = () => {
                 formData={formData}
                 onInputChange={onInputChange}
                 onSubmit={onSubmit}
+                loading={loading}
             />
         </>
     );
