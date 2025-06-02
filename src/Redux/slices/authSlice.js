@@ -21,16 +21,16 @@ import {
 
 const initialState = {
   isAuthenticated: false,
-  token: null, // دیگر ذخیره نمی‌کنیم چون از کوکی‌ها استفاده می‌شه
-  refreshToken: null, // دیگر ذخیره نمی‌کنیم چون از کوکی‌ها استفاده می‌شه
+  token: null,
+  refreshToken: null,
   user: null,
   loading: false,
   error: null,
   otpSent: false,
   otpVerified: false,
   otpMessage: null,
-  registrationType: "standard", // 'standard', 'otp'
-  cachedAddresses: [], // آرایه‌ای برای ذخیره موقت آدرس‌ها
+  registrationType: "standard",
+  cachedAddresses: [],
 };
 
 const authSlice = createSlice({
@@ -44,6 +44,10 @@ const authSlice = createSlice({
       state.otpVerified = true;
       state.loading = false;
       state.error = null;
+    },
+    // اضافه کردن action برای reset کردن auth state
+    resetAuthState: (state) => {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -65,7 +69,10 @@ const authSlice = createSlice({
         state.user = null;
         state.cachedAddresses = [];
         state.loading = false;
-        state.error = action.payload;
+        // فقط خطاهای مهم را ذخیره می‌کنیم، نه خطای refresh token
+        if (action.payload && !action.payload.includes("Refresh Token")) {
+          state.error = action.payload;
+        }
       })
 
       // Login User
@@ -194,9 +201,9 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Refresh Token
+      // Refresh Token - بهبود یافته
       .addCase(refreshToken.pending, (state) => {
-        state.loading = true;
+        // loading را true نمی‌کنیم تا UI مختل نشود
         state.error = null;
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
@@ -214,7 +221,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.loading = false;
-        state.error = action.payload || "خطا در تجدید توکن";
+        // خطای refresh token را نادیده می‌گیریم
+        if (action.payload && !action.payload.includes("Refresh Token")) {
+          state.error = action.payload;
+        }
       })
 
       // Logout User
@@ -238,7 +248,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Add Address
+      // Address actions...
       .addCase(addAddress.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -383,5 +393,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, otpVerifySuccess } = authSlice.actions;
+export const { clearError, otpVerifySuccess, resetAuthState } = authSlice.actions;
 export default authSlice.reducer;
