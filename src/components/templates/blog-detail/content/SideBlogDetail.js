@@ -2,8 +2,20 @@ import React from 'react'
 import styles from './SideBlogDetail.module.css';
 import BlogDetailItem from '@/components/modules/blog-detail/BlogDetailItem';
 import BlogNewsItem from './BlogNewsItem';
+import { getAllPosts } from '@/lib/mdx';
 
-const SideBlogDetail = () => {
+const SideBlogDetail = ({ currentPostId }) => {
+    // دریافت تمام پست‌ها
+    const allPosts = getAllPosts();
+    
+    // فیلتر و محدود کردن آخرین پست‌ها (بدون پست فعلی)
+    const latestPosts = allPosts
+        .filter(post => post.id !== currentPostId)
+        .slice(0, 6);
+
+    // انتخاب اولین پست به عنوان داغ‌ترین
+    const hottestPost = allPosts.find(post => post.id !== currentPostId);
+
     return (
         <div className={`${styles.side_blog_detail} position-sticky top-0`}>
             <div className={styles.latest_post}>
@@ -16,13 +28,12 @@ const SideBlogDetail = () => {
                         </div>
                         <nav className="navbar">
                             <ul className="navbar nav flex-column flex-nowrap">
-                                <BlogDetailItem />
-                                <BlogDetailItem />
-                                <BlogDetailItem />
-                                <BlogDetailItem />
-                                <BlogDetailItem />
-                                <BlogDetailItem />
-                                <BlogDetailItem />
+                                {latestPosts.map((post) => (
+                                    <BlogDetailItem 
+                                        key={post.id}
+                                        post={post}
+                                    />
+                                ))}
                             </ul>
                         </nav>
                     </div>
@@ -34,7 +45,9 @@ const SideBlogDetail = () => {
                         <div className="title-panel mb-2">
                             <h6>داغ ترین مطلب امروز</h6>
                         </div>
-                        <BlogNewsItem />
+                        {hottestPost && (
+                            <BlogNewsItem post={hottestPost} />
+                        )}
                     </div>
                 </div>
             </div>
