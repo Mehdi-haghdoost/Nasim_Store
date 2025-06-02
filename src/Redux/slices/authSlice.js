@@ -45,7 +45,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    // اضافه کردن action برای reset کردن auth state
     resetAuthState: (state) => {
       return initialState;
     },
@@ -69,7 +68,6 @@ const authSlice = createSlice({
         state.user = null;
         state.cachedAddresses = [];
         state.loading = false;
-        // فقط خطاهای مهم را ذخیره می‌کنیم، نه خطای refresh token
         if (action.payload && !action.payload.includes("Refresh Token")) {
           state.error = action.payload;
         }
@@ -182,17 +180,28 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Update User Profile
+      // Update User Profile - حل شده!
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
-        state.user = {
-          ...state.user,
-          ...action.payload,
-          addresses: state.user.addresses || state.cachedAddresses,
-        };
+        // بجای جایگزین کردن کل user، فقط فیلدهای جدید را merge می‌کنیم
+        if (state.user && action.payload) {
+          state.user = {
+            ...state.user,
+            ...action.payload,
+            // حفظ آدرس‌ها و سایر فیلدهای مهم
+            addresses: state.user.addresses || state.cachedAddresses || [],
+            _id: state.user._id, // حفظ ID
+            role: state.user.role, // حفظ نقش
+            wishlist: state.user.wishlist || [], // حفظ wishlist
+            cart: state.user.cart || [], // حفظ سبد خرید
+            orders: state.user.orders || [], // حفظ سفارشات
+            orderHistory: state.user.orderHistory || [], // حفظ تاریخچه سفارشات
+            discountCoupons: state.user.discountCoupons || [], // حفظ کد تخفیف‌ها
+          };
+        }
         state.loading = false;
         state.error = null;
       })
@@ -201,9 +210,8 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Refresh Token - بهبود یافته
+      // Refresh Token
       .addCase(refreshToken.pending, (state) => {
-        // loading را true نمی‌کنیم تا UI مختل نشود
         state.error = null;
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
@@ -221,7 +229,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.loading = false;
-        // خطای refresh token را نادیده می‌گیریم
         if (action.payload && !action.payload.includes("Refresh Token")) {
           state.error = action.payload;
         }
