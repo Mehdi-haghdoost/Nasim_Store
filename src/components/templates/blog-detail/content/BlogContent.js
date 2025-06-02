@@ -12,7 +12,8 @@ const BlogContent = ({ postData }) => {
             <BlogDetail postData={postData} />
           </div>
           <div className="col-lg-3">
-            <SideBlogDetail />
+            {/* ارسال ID پست فعلی برای حذف از sidebar */}
+            <SideBlogDetail currentPostId={postData.id} />
           </div>
         </div>
       </div>
