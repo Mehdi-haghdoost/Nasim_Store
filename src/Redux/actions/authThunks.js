@@ -14,39 +14,18 @@ import { ME_QUERY } from "@/graphql/entities/users/user.queries";
 import client from "@/graphql/client";
 
 /**
- * بررسی وجود refresh token در کوکی‌ها
- */
-const hasRefreshTokenInCookies = () => {
-  if (typeof document === "undefined") return false;
-  
-  const cookies = document.cookie.split(';');
-  const refreshCookie = cookies.find(cookie => 
-    cookie.trim().startsWith('refreshToken=')
-  );
-  
-  if (!refreshCookie) return false;
-  
-  const tokenValue = refreshCookie.split('=')[1];
-  return tokenValue && tokenValue !== 'undefined' && tokenValue !== '';
-};
-
-/**
  * Check auth async thunk
- * فقط اگر refresh token وجود داشته باشد اجرا می‌شود
+ * Checks if the user is authenticated by querying the 'me' endpoint
  */
 export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
-      // ابتدا بررسی می‌کنیم که آیا refresh token وجود دارد
-      if (!hasRefreshTokenInCookies()) {
-        return rejectWithValue("کاربر احراز هویت نشده است");
-      }
-
       const { data, errors } = await client.query({
         query: ME_QUERY,
         fetchPolicy: "network-only",
       });
+
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
@@ -74,6 +53,7 @@ export const loginUser = createAsyncThunk(
         mutation: LOGIN_USER,
         variables: { phoneOrEmail, password },
       });
+
 
       if (errors && Array.isArray(errors) && errors.length > 0) {
         return rejectWithValue(errors[0].message || "خطای ناشناخته از سرور");
@@ -175,17 +155,12 @@ export const verifyOtpAndLogin = createAsyncThunk(
 );
 
 /**
- * Refresh token async thunk - بهبود یافته
+ * Refresh token async thunk
  */
 export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
   async (_, { rejectWithValue }) => {
     try {
-      // بررسی وجود refresh token
-      if (!hasRefreshTokenInCookies()) {
-        return rejectWithValue("Refresh Token ارائه نشده است");
-      }
-
       const { data, errors } = await client.mutate({
         mutation: REFRESH_TOKEN,
       });
@@ -200,14 +175,6 @@ export const refreshToken = createAsyncThunk(
 
       return rejectWithValue("خطا در تجدید توکن");
     } catch (error) {
-      // خطاهای مربوط به refresh token را بدون نمایش به کاربر رد می‌کنیم
-      if (error.message && (
-        error.message.includes("Refresh Token") || 
-        error.message.includes("نامعتبر") ||
-        error.message.includes("منقضی")
-      )) {
-        return rejectWithValue("Refresh Token ارائه نشده است");
-      }
       return rejectWithValue(error.message || "خطا در تجدید توکن");
     }
   }
@@ -300,10 +267,13 @@ export const sendOtpForLogin = createAsyncThunk(
   }
 );
 
+
+
 export const updateUserProfile = createAsyncThunk(
   "auth/updateUserProfile",
   async (params, { rejectWithValue }) => {
     try {
+      // params حاوی یک آبجکت با کلید input است
       const { input } = params;
 
       const { data, errors } = await client.mutate({
