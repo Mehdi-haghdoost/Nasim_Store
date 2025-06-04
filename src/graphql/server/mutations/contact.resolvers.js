@@ -1,8 +1,7 @@
-
 const { GraphQLString } = require("graphql");
 const ContactModel = require('../../../../models/Contact');
 const { ContactResponseType } = require("../types/contact.types");
-
+const { validateToken } = require('../../../utils/authBackend');
 
 // Create new contact
 const submitContact = {
@@ -13,11 +12,61 @@ const submitContact = {
         message: { type: GraphQLString },
         saveInfo: { type: GraphQLString },
     },
-    resolve: async (_, args) => {
+    resolve: async (_, args, { req }) => {
         try {
+            // احراز هویت کاربر
+            const user = await validateToken(req);
+            if (!user) {
+                return {
+                    success: false,
+                    message: "برای ارسال پیام لطفا ابتدا وارد حساب کاربری خود شوید",
+                    contact: null,
+                };
+            }
+
+            if (!["USER", "ADMIN"].includes(user.role)) {
+                return {
+                    success: false,
+                    message: "برای ارسال پیام لطفا لاگین کنید",
+                    contact: null,
+                };
+            }
+
             // Validate required fields
             if (!args.name || !args.email || !args.message) {
-                throw new Error("لطفا تمام فیلدهای الزامی را پر کنید");
+                return {
+                    success: false,
+                    message: "لطفا تمام فیلدهای الزامی را پر کنید",
+                    contact: null,
+                };
+            }
+
+            // اعتبارسنجی ایمیل
+            const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/g;
+            if (!emailRegex.test(args.email)) {
+                return {
+                    success: false,
+                    message: "لطفا ایمیل معتبر وارد کنید",
+                    contact: null,
+                };
+            }
+
+            // اعتبارسنجی نام (حداقل 2 کاراکتر)
+            if (args.name.trim().length < 2) {
+                return {
+                    success: false,
+                    message: "نام باید حداقل 2 کاراکتر باشد",
+                    contact: null,
+                };
+            }
+
+            // اعتبارسنجی پیام (حداقل 10 کاراکتر)
+            if (args.message.trim().length < 10) {
+                return {
+                    success: false,
+                    message: "پیام باید حداقل 10 کاراکتر باشد",
+                    contact: null,
+                };
             }
 
             // Convert saveInfo to boolean
@@ -25,9 +74,9 @@ const submitContact = {
 
             // Create new contact
             const contact = new ContactModel({
-                name: args.name,
-                email: args.email,
-                message: args.message,
+                name: args.name.trim(),
+                email: args.email.trim().toLowerCase(),
+                message: args.message.trim(),
                 saveInfo,
             });
 
@@ -46,11 +95,12 @@ const submitContact = {
           
             return {
                 success: true,
-                message: "پیام شما با موفقیت ارسال شد",
+                message: "پیام شما با موفقیت ارسال شد. به زودی با شما تماس خواهیم گرفت.",
                 contact: contactToReturn,
             };
 
         } catch (error) {
+            console.error('خطا در ارسال پیام تماس:', error);
             return {
                 success: false,
                 message: `خطا در ارسال پیام: ${error.message}`,
