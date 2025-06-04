@@ -22,8 +22,6 @@ function MegaMenu() {
     return () => window.removeEventListener('scroll', fixedNavbarToTop);
   }, []);
 
-
-
   // نقشه‌برداری نام دسته‌بندی‌ها به _id
   const categoryMap = categories.reduce((acc, category) => {
     acc[category.name] = category._id;
@@ -93,12 +91,12 @@ function MegaMenu() {
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a
+                      <Link
+                        href="/contact-us"
                         className={`nav-link ${styles.border_animate} fromCenter`}
-                        href="#"
                       >
                         سوالی دارید
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav-item">
                       <a
