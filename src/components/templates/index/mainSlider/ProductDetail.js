@@ -2,16 +2,12 @@
 
 import React from 'react';
 import styles from './ProductDetail.module.css';
-import { useCart } from '@/Redux/hooks/useCart';
-import { useWishlist } from '@/Redux/hooks/useWishlist';
 import { toast } from 'react-toastify';
 
 function ProductDetail({ productData }) {
-    // هوک‌ها برای سبد خرید و لیست علاقه‌مندی‌ها
-    const { addToCart, loading } = useCart();
     
-    // مدیریت کلیک بر روی دکمه افزودن به سبد خرید
-    const handleAddToCart = (e) => {
+
+    const handleViewProduct = (e) => {
         e.preventDefault();
         
         if (!productData || !productData._id) {
@@ -19,18 +15,7 @@ function ProductDetail({ productData }) {
             return;
         }
         
-        addToCart(productData, 1, null, null)
-            .unwrap()
-            .then(() => {
-                toast.success(`${productData.title} به سبد خرید اضافه شد`, {
-                    position: "bottom-right",
-                    autoClose: 3000
-                });
-            })
-            .catch((error) => {
-                console.error('[ProductDetail] خطا در افزودن به سبد خرید:', error);
-                toast.error('خطا در افزودن به سبد خرید');
-            });
+        window.location.href = `/product/${productData._id}`;
     };
 
     // اگر محصول وجود ندارد، اطلاعات پیش‌فرض نمایش بده
@@ -60,7 +45,7 @@ function ProductDetail({ productData }) {
                             disabled
                             className="btn border-0 rounded-3 main-color-one-bg opacity-50"
                         >
-                            <i className="bi bi-basket text-white"></i>
+                            <i className="bi bi-eye text-white"></i>
                             <span className="text-white">در حال بارگذاری...</span>
                         </button>
                     </div>
@@ -107,14 +92,11 @@ function ProductDetail({ productData }) {
                 </div>
                 <div className="link">
                     <button 
-                        onClick={handleAddToCart}
-                        disabled={loading}
+                        onClick={handleViewProduct}
                         className="btn border-0 rounded-3 main-color-one-bg"
                     >
-                        <i className="bi bi-basket text-white"></i>
-                        <span className="text-white">
-                            {loading ? 'در حال افزودن...' : 'خرید محصول'}
-                        </span>
+                        <i className="bi bi-eye text-white"></i>
+                        <span className="text-white">مشاهده محصول</span>
                     </button>
                 </div>
             </div>
