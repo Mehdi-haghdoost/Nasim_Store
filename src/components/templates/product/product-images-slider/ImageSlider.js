@@ -10,17 +10,11 @@ import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
 import styles from '../ImageSlider.module.css'
 import { useState } from "react";
 
-const Gallery = () => {
+const Gallery = ({ images = [] }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const images = [
-        "/images/product/laptop-1.jpg",
-        "/images/product/laptop-2.jpg",
-        "/images/product/laptop-3.jpg",
-        "/images/product/laptop-4.jpg",
-        "/images/product/laptop-5.jpg",
-        "/images/product/laptop2.jpg",
-
-    ];
+    
+    // اگر تصاویر ارسال نشده، از تصاویر پیش‌فرض استفاده کن
+    const displayImages = images.length > 0 ? images : ['/images/product/product-placeholder.jpg'];
 
     return (
         <section style={{ width: "100%" }}>
@@ -31,7 +25,6 @@ const Gallery = () => {
                 }}
                 spaceBetween={0}
                 rewind={true}
-               
                 slidesPerView={1}
                 breakpoints={{
                     1200: {
@@ -39,7 +32,7 @@ const Gallery = () => {
                         spaceBetween: 0,
                     },
                 }}
-                loop={true}
+                loop={displayImages.length > 1}
                 navigation={{
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev'
@@ -53,17 +46,30 @@ const Gallery = () => {
                 modules={[FreeMode, Navigation, Thumbs, Pagination]}
                 className="mySwiper2 gallery-slider"
             >
-                {images.map((img, index) => (
+                {displayImages.map((img, index) => (
                     <SwiperSlide key={index} className={styles.swiper_slide}>
                         <div className={styles.swiper_zoom_container}>
-                            <img alt="" className="img-fluid" src={img} />
+                            <img 
+                                alt={`تصویر محصول ${index + 1}`} 
+                                className="img-fluid" 
+                                src={img}
+                                onError={(e) => {
+                                    e.target.src = '/images/product/product-placeholder.jpg';
+                                }}
+                            />
                         </div>
                     </SwiperSlide>
                 ))}
-                <div className={`${styles.swiper_button_next} swiper-button-next`}></div>
-                <div className={`${styles.swiper_button_prev} swiper-button-prev`}></div>
+                {/* نمایش navigation فقط اگر بیش از یک تصویر داشته باشیم */}
+                {displayImages.length > 1 && (
+                    <>
+                        <div className={`${styles.swiper_button_next} swiper-button-next`}></div>
+                        <div className={`${styles.swiper_button_prev} swiper-button-prev`}></div>
+                    </>
+                )}
             </Swiper>
 
+            {/* همیشه thumbnail swiper نمایش داده شود */}
             <Swiper
                 onSwiper={setThumbsSwiper}
                 spaceBetween={10}
@@ -73,9 +79,16 @@ const Gallery = () => {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="gallery-slider-2"
             >
-                {images.map((img, index) => (
+                {displayImages.map((img, index) => (
                     <SwiperSlide key={index} className={styles.product_gallery_thumb}>
-                        <img alt="" className="img-fluid" src={img} />
+                        <img 
+                            alt={`تصویر کوچک ${index + 1}`} 
+                            className="img-fluid" 
+                            src={img}
+                            onError={(e) => {
+                                e.target.src = '/images/product/product-placeholder.jpg';
+                            }}
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>
