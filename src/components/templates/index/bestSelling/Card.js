@@ -2,13 +2,11 @@
 
 import React, { useEffect } from 'react';
 import styles from './Card.module.css';
-import { useCart } from '@/Redux/hooks/useCart';
 import { useWishlist } from '@/Redux/hooks/useWishlist';
 import { toast } from 'react-toastify';
 
 function Card({ productData }) {
-    // هوک‌ها برای سبد خرید و لیست علاقه‌مندی‌ها
-    const { addToCart, loading } = useCart();
+
     const { 
         addProductToWishlist, 
         removeProductFromWishlist, 
@@ -16,15 +14,14 @@ function Card({ productData }) {
         checkProductInWishlist 
     } = useWishlist();
 
-    // بررسی وضعیت محصول در لیست علاقه‌مندی‌ها هنگام بارگذاری
     useEffect(() => {
         if (productData && productData._id) {
             checkProductInWishlist(productData._id);
         }
     }, [productData, checkProductInWishlist]);
 
-    // مدیریت کلیک بر روی دکمه افزودن به سبد خرید
-    const handleAddToCart = (e) => {
+    // هدایت به صفحه محصول
+    const handleViewProduct = (e) => {
         e.preventDefault();
         
         if (!productData || !productData._id) {
@@ -32,25 +29,13 @@ function Card({ productData }) {
             return;
         }
         
-        addToCart(productData, 1, null, null)
-            .unwrap()
-            .then(() => {
-                toast.success(`${productData.title} به سبد خرید اضافه شد`, {
-                    position: "bottom-right",
-                    autoClose: 3000
-                });
-            })
-            .catch((error) => {
-                console.error('[BestSell Card] خطا در افزودن به سبد خرید:', error);
-                toast.error('خطا در افزودن به سبد خرید');
-            });
+        window.location.href = `/product/${productData._id}`;
     };
 
-    // مدیریت افزودن/حذف از علاقه‌مندی‌ها
+
     const handleWishlistToggle = (e) => {
         e.preventDefault();
         
-        // بررسی اینکه آیا محصول آیدی معتبر دارد
         if (!productData || !productData._id) {
             toast.info('این محصول امکان افزودن به لیست علاقه‌مندی‌ها را ندارد', {
                 position: "bottom-right",
@@ -78,22 +63,18 @@ function Card({ productData }) {
         }
     };
 
-    // اگر محصول وجود ندارد، هیچی نشان نده
     if (!productData) {
         return null;
     }
 
-    // محاسبه درصد تخفیف
     let discountPercentage = 0;
     if (productData.hasDiscount && productData.price && productData.discountedPrice) {
         discountPercentage = Math.round(((productData.price - productData.discountedPrice) / productData.price) * 100);
     }
 
-    // تعیین وضعیت فعلی علاقه‌مندی
     const isInWishlist = productData._id ? isProductInWishlist(productData._id) : false;
     const heartIcon = isInWishlist ? "bi-heart-fill text-danger" : "bi-heart";
 
-    // تنظیم مسیر تصویر - فقط از سرور یا placeholder
     const imagePath = productData.image 
         ? `/images/product/${productData.image}` 
         : `https://via.placeholder.com/300x200/f0f0f0/666666?text=${encodeURIComponent(productData.title || 'محصول')}`;
@@ -111,7 +92,6 @@ function Card({ productData }) {
                         <a href="" className="" data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-title="مقایسه"><i className="bi bi-shuffle"></i></a>
                         
-                        {/* دکمه علاقه‌مندی با نمایش وضعیت بصری */}
                         <a href="" 
                             onClick={handleWishlistToggle}
                             className="" 
@@ -121,11 +101,17 @@ function Card({ productData }) {
                             <i className={`bi ${heartIcon}`}></i>
                         </a>
                         
-                        <a href="" className="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="مشاهده سریع"><i className="bi bi-eye"></i></a>
+                        <a href="" 
+                            onClick={handleViewProduct}
+                            className="" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top"
+                            data-bs-title="مشاهده سریع">
+                            <i className="bi bi-eye"></i>
+                        </a>
                     </div>
                 </div>
-                <div className={`${styles.product_image}`}>
+                <div className={`${styles.product_image}`} onClick={handleViewProduct} style={{ cursor: 'pointer' }}>
                     <img 
                         src={imagePath} 
                         loading="lazy" 
@@ -145,7 +131,7 @@ function Card({ productData }) {
                         }}
                     />
                 </div>
-                <div className={`${styles.product_title}`}>
+                <div className={`${styles.product_title}`} onClick={handleViewProduct} style={{ cursor: 'pointer' }}>
                     <div className={`${styles.title}`}>
                         <p className="text-overflow-1">{productData.title || 'ساعت هوشمند شیائومی'}</p>
                         <span className="text-muted text-overflow-1">
@@ -165,23 +151,22 @@ function Card({ productData }) {
                     <div className={`${styles.price}`}>
                         <p className={`${styles.new_price}`}>
                             {productData.discountedPrice?.toLocaleString() || productData.price?.toLocaleString() || '3,175,000'} 
+                            تومان
                         </p>
                         {productData.hasDiscount && (
                             <p className={`${styles.old_price}`}>
                                 {productData.price?.toLocaleString() || '6,500,000'} 
+                                تومان
                             </p>
                         )}
                     </div>
-                    <div className="link">
+                    <div className="link d-flex gap-1">
                         <button
-                            onClick={handleAddToCart}
-                            disabled={loading}
-                            className="btn border-0 rounded-3 main-color-one-bg"
+                            onClick={handleViewProduct}
+                            className="btn border-0 rounded-3 main-color-one-bg flex-fill"
                         >
-                            <i className="bi bi-basket text-white"></i>
-                            <span className="text-white">
-                                {loading ? 'در حال افزودن...' : 'مشاهده محصول'}
-                            </span>
+                            <i className="bi bi-eye text-white"></i>
+                            <span className="text-white">مشاهده</span>
                         </button>
                     </div>
                 </div>
