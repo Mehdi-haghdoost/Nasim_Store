@@ -1,7 +1,6 @@
-// src/components/layouts/UserPanelLayout.js
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '@/components/layouts/UserPanelLayout.module.css';
 import Header from '../modules/header/Header';
 import Footer from '../modules/footer/Footer';
@@ -21,6 +20,26 @@ function Layout({ children }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     
+    useEffect(() => {
+        const handleRouteChange = () => {
+            // بستن همه offcanvas ها
+            const offcanvasElements = document.querySelectorAll('.offcanvas.show');
+            offcanvasElements.forEach(element => {
+                element.classList.remove('show');
+            });
+            
+            const backdrops = document.querySelectorAll('.offcanvas-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.body.classList.remove('modal-open');
+        };
+
+
+        handleRouteChange();
+    }, [path]);
+
     const logoutHandler = () => {
         swal({
             title: "آیا از خروج اطمینان دارید ؟",
@@ -35,7 +54,28 @@ function Layout({ children }) {
         });
     };
 
-    // ساده‌ترین لایوت ممکن - بدون منطق احراز هویت
+    const handleLinkClick = () => {
+ 
+        setTimeout(() => {
+            const offcanvasElement = document.getElementById('offcanvasRight');
+            if (offcanvasElement && offcanvasElement.classList.contains('show')) {
+
+                if (window.bootstrap?.Offcanvas) {
+                    const offcanvasInstance = window.bootstrap.Offcanvas.getInstance(offcanvasElement) || 
+                     new window.bootstrap.Offcanvas(offcanvasElement);
+                    offcanvasInstance.hide();
+                } else {
+                    offcanvasElement.classList.remove('show');
+                    const backdrop = document.querySelector('.offcanvas-backdrop');
+                    if (backdrop) backdrop.remove();
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                    document.body.classList.remove('modal-open');
+                }
+            }
+        }, 50);
+    };
+
     return (
         <>
             <Header />
@@ -84,76 +124,80 @@ function Layout({ children }) {
                                                     <ul className='navbar-nav flex-column'>
                                                         {path.includes("/p-user") ? (
                                                             <>
-                                                                <ActiveLink href="/p-user/profile"  >
+                                                                <ActiveLink href="/p-user" onClick={handleLinkClick}>
                                                                     <i className='bi bi-house-door'></i>
+                                                                    داشبورد
+                                                                </ActiveLink>
+                                                                <ActiveLink href="/p-user/profile" onClick={handleLinkClick}>
+                                                                    <i className='bi bi-person'></i>
                                                                     پروفایل
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/orders">
+                                                                <ActiveLink href="/p-user/orders" onClick={handleLinkClick}>
                                                                     <i className='bi bi-cart-check'></i>
                                                                     سفارش های من
                                                                     <span className={`badge rounded-pill ${styles.badge_spn}`}>
                                                                         {user?.orders?.length || 0}
                                                                     </span>
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/address">
+                                                                <ActiveLink href="/p-user/address" onClick={handleLinkClick}>
                                                                     <i className='bi bi-pin-map'></i>
                                                                     آدرس های من
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/notifications">
+                                                                <ActiveLink href="/p-user/notifications" onClick={handleLinkClick}>
                                                                     <i className='bi bi-bell'></i>
                                                                     پیام ها و اطلاعیه ها
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/comments">
+                                                                <ActiveLink href="/p-user/comments" onClick={handleLinkClick}>
                                                                     <i className='bi bi-chat-dots'></i>
                                                                     نظرات من
                                                                     <span className={`badge rounded-pill ${styles.badge_spn}`}>
                                                                         {user?.comments?.length || 0}
                                                                     </span>
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/tickets">
+                                                                <ActiveLink href="/p-user/tickets" onClick={handleLinkClick}>
                                                                     <i className='bi bi-question-circle'></i>
                                                                     درخواست پشتیبانی
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/wishlists">
+                                                                <ActiveLink href="/p-user/wishlists" onClick={handleLinkClick}>
                                                                     <i className='bi bi-heart'></i>
                                                                     محصولات مورد علاقه
                                                                     <span className={`badge rounded-pill ${styles.badge_spn}`}>
                                                                         {user?.wishlist?.length || 0}
                                                                     </span>
                                                                 </ActiveLink>
-                                                                <ActiveLink href="/p-user/discountcodes">
+                                                                <ActiveLink href="/p-user/discountcodes" onClick={handleLinkClick}>
                                                                     <i className='bi bi-gift'></i>
                                                                     کدهای تخفیف من
                                                                 </ActiveLink>
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <Link href={"/p-admin"} className={`nav-item ${styles.sidbar_link_active}`} >
+                                                                <Link href={"/p-admin"} className={`nav-item ${styles.sidbar_link_active}`} onClick={handleLinkClick}>
                                                                     <i className='bi bi-house ms-2'></i>
                                                                     پروفایل
                                                                     <small className='badge rounded-pill bg-danger'>5</small>
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className='bi bi-lightbulb ms-2'></i>
                                                                     آموزش
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className='bi bi-cart-check ms-2'></i>
                                                                     سفارشات
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className='bi bi-tags ms-2'></i>
                                                                     تخفیفات
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className="bi bi-people ms-2"></i>
                                                                     کاربران
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className='bi bi-chat-dots ms-2'></i>
                                                                     کامنت ها
                                                                 </Link>
-                                                                <Link href={"/p-admin"} className='nav-item' >
+                                                                <Link href={"/p-admin"} className='nav-item' onClick={handleLinkClick}>
                                                                     <i className="bi bi bi-ticket ms-2"></i>
                                                                     تیکت ها
                                                                 </Link>
