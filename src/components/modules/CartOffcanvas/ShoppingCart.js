@@ -8,16 +8,37 @@ import Link from 'next/link';
 
 const ShoppingCart = ({ isShowBascket, showBascket }) => {
     const dispatch = useDispatch();
-    const { items: cartItems, totalPrice, totalQuantity } = useSelector((state) => state.cart);
+    const { items: cartItems, totalQuantity } = useSelector((state) => state.cart);
     const { updateCartItem, removeFromCart, loading } = useCart();
 
-    // تابع محاسبه قیمت نهایی محصول
+    // محاسبه قیمت نهایی با در نظر گیری تخفیف
     const getFinalPrice = (product) => {
         if (product.hasDiscount && product.discountedPrice) {
             return product.discountedPrice;
         }
         return product.price;
     };
+
+    // محاسبه کل قیمت با تخفیف
+    const calculateTotalPrice = () => {
+        return cartItems.reduce((total, item) => {
+            return total + (getFinalPrice(item.product) * item.quantity);
+        }, 0);
+    };
+
+    // محاسبه کل تخفیف
+    const calculateTotalDiscount = () => {
+        return cartItems.reduce((total, item) => {
+            if (item.product.hasDiscount && item.product.discountedPrice) {
+                const discount = (item.product.price - item.product.discountedPrice) * item.quantity;
+                return total + discount;
+            }
+            return total;
+        }, 0);
+    };
+
+    const totalPrice = calculateTotalPrice();
+    const totalDiscount = calculateTotalDiscount();
 
     // تابع فرمت قیمت
     const formatPrice = (price) => {
@@ -74,7 +95,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
             <div className="offcanvas-body">
                 <div className={styles.cart_canvases}>
                     {cartItems.length === 0 ? (
-                        // حالت خالی بودن سبد خرید
                         <div className="text-center py-5">
                             <i className="bi bi-cart-x font-48 text-muted d-block mb-3"></i>
                             <h6>سبد خرید شما خالی است</h6>
@@ -89,7 +109,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                         </div>
                     ) : (
                         <>
-                            {/* نمایش محصولات */}
                             {cartItems.map((item) => (
                                 <div key={item._id || item.id} className={styles.item}>
                                     <div className="row gy-2">
@@ -210,7 +229,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         <p className="fw-bold mb-0">قیمت</p>
                                     </div>
 
-                                    {/* لیست محصولات در فاکتور */}
                                     {cartItems.map((item) => (
                                         <div
                                             key={`factor-${item._id || item.id}`}
@@ -226,8 +244,16 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         </div>
                                     ))}
 
+                                    {/* نمایش تخفیف در صورت وجود */}
+                                    {totalDiscount > 0 && (
+                                        <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-between mb-2`}>
+                                            <p className="mb-0 fw-bold">تخفیف:</p>
+                                            <p className="mb-0 text-success">{formatPrice(totalDiscount)} تومان</p>
+                                        </div>
+                                    )}
+
                                     {/* مجموع کل */}
-                                    <div className={`${styles.factor_item} p-3 rounded-3 shadow-sm bg-primary text-white d-flex align-items-center justify-content-between`}>
+                                    <div className={`${styles.factor_item} p-3 rounded-3 shadow-sm  text-white d-flex align-items-center justify-content-between`}>
                                         <p className="mb-0 fw-bold">جمع کل</p>
                                         <p className="mb-0 fw-bold">
                                             {formatPrice(totalPrice)} تومان
