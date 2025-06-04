@@ -18,7 +18,6 @@ function Header() {
   const router = useRouter();
   const { categories, loading, error } = useCategory();
   
-  // استفاده از useFilter برای مدیریت جستجو
   const { updateSearchTerm, updateCategories } = useFilter();
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -28,19 +27,16 @@ function Header() {
   const [activeSubMenu, setActiveSubMenu] = useState({});
   const [isShowBascket, setIsShowBascket] = useState(false);
   
-  // state برای مدیریت جستجو در دسکتاپ و موبایل
   const [desktopSearchTerm, setDesktopSearchTerm] = useState('');
   const [mobileSearchTerm, setMobileSearchTerm] = useState('');
 
   useEffect(() => {
-    // تنها یک بار هنگام لود کامپوننت اجرا شود و اگر کاربر در حافظه نباشد
     if (!user) {
       dispatch(refreshToken());
     }
   }, [dispatch, user]);
 
-  const showBascket = (e) => {
-    e.preventDefault();
+  const showBascket = () => {
     setIsShowBascket((prev) => !prev);
   };
 
@@ -51,46 +47,36 @@ function Header() {
     });
   };
 
-  // تابع مدیریت جستجو
   const handleSearch = (searchTerm, isDesktop = true) => {
     const trimmedSearchTerm = searchTerm.trim();
     
     if (trimmedSearchTerm) {
-      // آپدیت state جستجو در Redux
       updateSearchTerm(trimmedSearchTerm);
-      // پاک کردن فیلتر دسته‌بندی
       updateCategories([]);
       
-      // انتقال به صفحه categories با پارامتر جستجو
       router.push(`/categories?search=${encodeURIComponent(trimmedSearchTerm)}`);
       
-      // اعمال فیلتر
       dispatch(filterProducts());
       
-      // پاک کردن input بعد از جستجو
       if (isDesktop) {
         setDesktopSearchTerm('');
       } else {
         setMobileSearchTerm('');
-        // بستن منوی همبرگری در موبایل
         setActiveHamburger(false);
       }
     }
   };
 
-  // مدیریت فرم جستجو در دسکتاپ
   const handleDesktopSearch = (e) => {
     e.preventDefault();
     handleSearch(desktopSearchTerm, true);
   };
 
-  // مدیریت فرم جستجو در موبایل
   const handleMobileSearch = (e) => {
     e.preventDefault();
     handleSearch(mobileSearchTerm, false);
   };
 
-  // مدیریت کلید Enter
   const handleKeyPress = (e, searchTerm, isDesktop = true) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -98,13 +84,11 @@ function Header() {
     }
   };
 
-  // نقشه‌برداری نام دسته‌بندی‌ها به _id
   const categoryMap = categories.reduce((acc, category) => {
     acc[category.name] = category._id;
     return acc;
   }, {});
 
-  // دسته‌بندی‌های مورد نظر برای Header
   const headerCategories = [
     { name: 'تلفن همراه', displayName: 'گوشی موبایل' },
     { name: 'لوازم جانبی', displayName: 'لوازم جانبی' }, 
@@ -115,7 +99,6 @@ function Header() {
     <header className={styles.header} style={{ minHeight: '100px' }}>
       <nav className="container-fluid">
         <div className="row align-items-center">
-          {/* logo */}
           <div className="col-lg-1 col-6 order-lg-1 order-1">
             <div className="d-flex align-items-center">
               <div className="d-block d-lg-none">
@@ -184,7 +167,7 @@ function Header() {
                               href={categoryId ? `/categories?categoryId=${categoryId}` : '#'}
                               className="nav-link"
                               onClick={() => {
-                                setActiveHamburger(false); // بستن منوی همبرگری
+                                setActiveHamburger(false);
                               }}
                             >
                               {category.displayName}
@@ -216,9 +199,7 @@ function Header() {
               </div>
             </div>
           </div>
-          {/* end logo */}
 
-          {/* action */}
           <div className="d-lg-none d-block col-6 order-lg-5 order-2">
             <div className="d-flex align-items-center justify-content-end">
               <div
@@ -264,8 +245,7 @@ function Header() {
                   </li>
                   <li>
                     <button onClick={() => {
-                      // اینجا logout function رو صدا کنید
-                      handleItemCheck(15); // بستن منو
+                      handleItemCheck(15);
                     }} className={styles.avatar_dropdown_item}>
                       <i className="bi bi-arrow-right-square"></i>خروج از حساب کاربری
                     </button>
@@ -273,12 +253,11 @@ function Header() {
                 </ul>
               </div>
               <button
-                onClick={(e) => showBascket(e)}
+                onClick={showBascket}
                 className={`btn btn-light shadow-sm ${styles.action_link}`}
                 style={{ position: 'relative' }}
               >
                 <i className="bi bi-basket font-30"></i>
-                {/* نمایش تعداد واقعی محصولات */}
                 {totalQuantity > 0 && (
                   <span className={`${styles.header_cart_counter} main-color-one-bg rounded-pill`}>
                     {totalQuantity}
@@ -287,9 +266,7 @@ function Header() {
               </button>
             </div>
           </div>
-          {/* end action */}
 
-          {/* form search */}
           <div className="col-lg-7 order-lg-2 d-lg-block d-none">
             <div className="search-form">
               <form onSubmit={handleDesktopSearch}>
@@ -312,16 +289,11 @@ function Header() {
               </form>
             </div>
           </div>
-          {/* end form search */}
 
-          {/* auth */}
           <AuthHeader showBascket={showBascket} />
-          {/* end auth */}
         </div>
 
-        {/* mega-menu-start */}
         <MegaMenu />
-        {/* mega-menu-end */}
       </nav>
       {isShowBascket && (
         <ShoppingCart

@@ -37,6 +37,26 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
         }, 0);
     };
 
+    const handleGoToCart = (e) => {
+        e.preventDefault();
+        showBascket();
+        window.location.href = '/cart';
+    };
+
+
+    const handleGoToCheckout = (e) => {
+        e.preventDefault();
+        showBascket();
+        window.location.href = '/checkout';
+    };
+
+
+    const handleGoToHome = (e) => {
+        e.preventDefault();
+        showBascket();
+        window.location.href = '/';
+    };
+
     const totalPrice = calculateTotalPrice();
     const totalDiscount = calculateTotalDiscount();
 
@@ -99,13 +119,12 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                             <i className="bi bi-cart-x font-48 text-muted d-block mb-3"></i>
                             <h6>سبد خرید شما خالی است</h6>
                             <p className="text-muted mb-4">برای شروع خرید به صفحه اصلی بروید</p>
-                            <Link
-                                href="/"
-                                onClick={showBascket}
+                            <button
+                                onClick={handleGoToHome}
                                 className="btn main-color-one-bg text-white"
                             >
                                 شروع خرید
-                            </Link>
+                            </button>
                         </div>
                     ) : (
                         <>
@@ -211,7 +230,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                 </div>
                             ))}
 
-                            {/* خلاصه سفارش */}
                             <div className={styles.item}>
                                 <div className={styles.factor}>
                                     <div className={styles.title}>
@@ -244,7 +262,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         </div>
                                     ))}
 
-                                    {/* نمایش تخفیف در صورت وجود */}
                                     {totalDiscount > 0 && (
                                         <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-between mb-2`}>
                                             <p className="mb-0 fw-bold">تخفیف:</p>
@@ -252,7 +269,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         </div>
                                     )}
 
-                                    {/* مجموع کل */}
                                     <div className={`${styles.factor_item} p-3 rounded-3 shadow-sm  text-white d-flex align-items-center justify-content-between`}>
                                         <p className="mb-0 fw-bold">جمع کل</p>
                                         <p className="mb-0 fw-bold">
@@ -260,22 +276,21 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         </p>
                                     </div>
 
-                                    {/* دکمه‌های عملیات */}
                                     <div className={`${styles.action} mt-3 d-flex align-items-center justify-content-center`}>
-                                        <Link
-                                            href="/cart"
-                                            onClick={showBascket}
+                                        <button
+                                            onClick={handleGoToCart}
                                             className='btn border-0 main-color-two-bg rounded-3'
+                                            disabled={loading}
                                         >
                                             مشاهده سبد خرید
-                                        </Link>
-                                        <Link
-                                            href="/checkout"
-                                            onClick={showBascket}
+                                        </button>
+                                        <button
+                                            onClick={handleGoToCheckout}
                                             className='btn border-0 main-color-one-bg rounded-3 me-2'
+                                            disabled={loading}
                                         >
                                             تسویه حساب
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
