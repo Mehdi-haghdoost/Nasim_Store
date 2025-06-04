@@ -9,6 +9,7 @@ import filterReducer from '../slices/filterSlice';
 import ticketReducer from '../slices/ticketSlice';
 import wishlistReducer from '../slices/wishlistSlice'; 
 import compareSlice from '../slices/compareSlice';
+import contactSlice from '../slices/contactSlice';
 
 /**
  * Root reducer combining all slice reducers
@@ -25,4 +26,5 @@ export const rootReducer = combineReducers({
     ticket: ticketReducer,
     wishlist: wishlistReducer,
     compare: compareSlice,
+    contact: contactSlice,
 });
