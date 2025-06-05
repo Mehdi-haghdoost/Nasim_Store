@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@/components/layouts/UserPanelLayout'
 import styles from "@/styles/p-user/notifications.module.css";
 import Pagination from '@/components/modules/p-user/pagination/Pagination';
-import NotifCard from '@/components/modules/p-user/notification/notifCard';
+import NotifCard from '@/components/modules/p-user/notification/NotifCard';
 
 const page = () => {
     return (

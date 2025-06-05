@@ -17,4 +17,4 @@ const NotifCard = () => {
     )
 }
 
-export default NotifCard
+export default NotifCard;
