@@ -1,6 +1,5 @@
-"use client";
 
-export const dynamic = 'force-dynamic';
+"use client";
 
 import React, { useEffect } from 'react';
 import Layout from '@/components/layouts/UserPanelLayout';
@@ -16,12 +15,14 @@ const Page = () => {
     const searchParams = useSearchParams();
     const ticketId = searchParams.get('id');
     
+    // با fetchPolicy: 'network-only' همیشه داده‌ها از سرور دریافت می‌شوند
     const { data, loading, error, refetch } = useQuery(GET_TICKET_BY_ID, {
         variables: { ticketId },
         skip: !ticketId,
         fetchPolicy: 'network-only'
     });
 
+    // هر 5 ثانیه یکبار داده‌ها به‌روز می‌شوند
     useEffect(() => {
         const interval = setInterval(() => {
             refetch();
@@ -30,6 +31,7 @@ const Page = () => {
         return () => clearInterval(interval);
     }, [refetch]);
 
+    // وقتی صفحه دوباره فعال می‌شود، داده‌ها به‌روز می‌شوند
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
@@ -41,6 +43,7 @@ const Page = () => {
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, [refetch]);
 
+    // تبدیل وضعیت تیکت به فارسی و تعیین کلاس رنگ
     const getStatusInfo = (status) => {
         switch (status) {
             case 'pending':
