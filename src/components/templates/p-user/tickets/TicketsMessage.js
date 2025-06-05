@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import styles from './TicketsMessage.module.css';
 import { useSearchParams } from 'next/navigation';
 import { useQuery, useMutation } from '@apollo/client';
@@ -10,15 +10,12 @@ import { formatDate, showSwal } from '@/utils/helpers';
 import swal from 'sweetalert';
 import Link from 'next/link';
 
-const TicketsMessage = () => {
+const TicketsMessageContent = () => {
     const searchParams = useSearchParams();
     const ticketId = searchParams.get('id');
     const messagesEndRef = useRef(null);
-    
-    // State برای کنترل محلی وضعیت تیکت
     const [localTicketClosed, setLocalTicketClosed] = useState(false);
     
-    // GraphQL Queries & Mutations
     const { data, loading, error, refetch } = useQuery(GET_TICKET_BY_ID, {
         variables: { ticketId },
         skip: !ticketId,
@@ -27,7 +24,6 @@ const TicketsMessage = () => {
 
     const [closeTicket, { loading: closingTicket }] = useMutation(CLOSE_TICKET, {
         onCompleted: () => {
-            // تنظیم وضعیت محلی به "بسته شده"
             setLocalTicketClosed(true);
             showSwal('تیکت با موفقیت بسته شد', 'success', 'تایید');
             refetch();
@@ -37,17 +33,14 @@ const TicketsMessage = () => {
         }
     });
 
-    // Scroll to bottom of messages when new messages are loaded
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [data]);
     
-    // همگام‌سازی وضعیت محلی با وضعیت سرور
     useEffect(() => {
         if (data?.getTicketById?.status) {
-            // بررسی بدون توجه به بزرگی و کوچکی حروف
             const serverStatus = data.getTicketById.status.toLowerCase();
             if (serverStatus === 'closed') {
                 setLocalTicketClosed(true);
@@ -55,7 +48,6 @@ const TicketsMessage = () => {
         }
     }, [data]);
 
-    // Close Ticket Handler
     const handleCloseTicket = async () => {
         swal({
             title: "آیا از بستن این تیکت اطمینان دارید؟",
@@ -70,7 +62,6 @@ const TicketsMessage = () => {
         });
     };
 
-    // Loading and error handling
     if (loading) {
         return (
             <div className="d-flex justify-content-center align-items-center p-5">
@@ -93,14 +84,12 @@ const TicketsMessage = () => {
     }
 
     const ticket = data.getTicketById;
-    // تبدیل وضعیت به حروف کوچک برای مقایسه یکنواخت
     const isTicketClosed = ticket.status.toLowerCase() === 'closed';
-    // Render messages
+    
     const renderMessages = () => {
         if (!ticket) return null;
 
         const allMessages = [
-            // Initial message
             {
                 _id: 'initial',
                 sender: 'user',
@@ -108,7 +97,6 @@ const TicketsMessage = () => {
                 createdAt: ticket.createdAt,
                 username: ticket.username
             },
-            // Other messages
             ...(ticket.messages || [])
         ];
 
@@ -160,7 +148,6 @@ const TicketsMessage = () => {
             {renderMessages()}
             <div ref={messagesEndRef} />
             
-            {/* وضعیت براساس ترکیب state محلی و داده‌های سرور - با در نظر گرفتن بزرگی/کوچکی حروف */}
             {localTicketClosed || isTicketClosed ? (
                 <div className="alert alert-warning text-center mt-4">
                     <p className="mb-0">این تیکت بسته شده است و امکان ارسال پیام وجود ندارد.</p>
@@ -186,5 +173,17 @@ const TicketsMessage = () => {
         </div>
     );
 };
+
+const TicketsMessage = () => (
+    <Suspense fallback={
+        <div className="d-flex justify-content-center align-items-center p-5">
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">در حال بارگذاری...</span>
+            </div>
+        </div>
+    }>
+        <TicketsMessageContent />
+    </Suspense>
+);
 
 export default TicketsMessage;
