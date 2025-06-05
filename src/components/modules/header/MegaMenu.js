@@ -113,18 +113,18 @@ function MegaMenu() {
             <div className="col-lg-3">
               <div className="d-flex align-items-center justify-content-end">
                 <a
-                  href="#"
-                  className={`${styles.mega_menu_contact} main-color-three-bg btn border-0 d-flex align-items-center rounded-pill ms-3`}
+                  href="https://wa.me/09211367465" target="_blank" rel="noopener noreferrer"
+                  className={`${styles.mega_menu_contact} main-color-two-bg btn border-0 d-flex align-items-center rounded-pill ms-3`}
                 >
                   09211367465
-                  <i className="bi bi-whatsapp text-white"></i>
+                  <i className="bi bi-whatsapp me-2 text-white"></i>
                 </a>
                 <a
                   href="#"
-                  className={`${styles.mega_menu_contact} main-color-two-bg btn border-0 d-flex align-items-center rounded-pill`}
+                  className={`${styles.mega_menu_contact} main-color-three-bg btn border-0 d-flex align-items-center rounded-pill`}
                 >
                   09211367465
-                  <i className="bi bi-telephone-fill ms-2 text-white"></i>
+                  <i className="bi bi-telephone-fill me-2 text-white"></i>
                 </a>
               </div>
             </div>
