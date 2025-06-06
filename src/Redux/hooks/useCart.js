@@ -6,7 +6,7 @@ import {
   removeFromCartThunk, 
   clearCartThunk,
   syncCartFromLocalStorage,
-  mergeGuestCartWithUserCartThunk // اطمینان از import صحیح
+  // mergeGuestCartWithUserCartThunk 
 } from "../actions/cartThunks";
 import { clearCartError, clearCartState } from "../slices/cartSlice";
 import { useAuth } from "./useAuth";

@@ -14,7 +14,13 @@ import 'swiper/css/navigation';
 import styles from './RelatedArticles.module.css';
 import Link from 'next/link';
 
-const RelatedArticles = () => {
+// اضافه کردن posts prop
+const RelatedArticles = ({ posts = [] }) => {
+  // اگر پست‌های مرتبط نداشتیم، کامپوننت را نمایش نده
+  if (!posts || posts.length === 0) {
+    return null;
+  }
+
   return (
     <div className={`${styles.blog_slider}`}>
             <div className="container-fluid">
@@ -75,30 +81,17 @@ const RelatedArticles = () => {
                                 }}
                                 className="mySwiper"
                             >
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
-                                <SwiperSlide className={`${styles.mySlide}`}>
-                                    <Card />
-                                </SwiperSlide>
+                                {posts.map((post, index) => (
+                                    <SwiperSlide key={post.id || index} className={`${styles.mySlide}`}>
+                                        <Card post={post} />
+                                    </SwiperSlide>
+                                ))}
+                                
+                                {posts.length < 3 && Array.from({ length: 3 - posts.length }).map((_, index) => (
+                                    <SwiperSlide key={`empty-${index}`} className={`${styles.mySlide}`}>
+                                        <Card />
+                                    </SwiperSlide>
+                                ))}
                             </Swiper>
                         </div>
                         <div className={`swiper-button-next ${styles.swiper_button_next}`}></div>

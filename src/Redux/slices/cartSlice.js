@@ -1,5 +1,3 @@
-// # اسلایس مربوط به سبد خرید با ذخیره‌سازی در localStorage
-
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addToCartThunk,

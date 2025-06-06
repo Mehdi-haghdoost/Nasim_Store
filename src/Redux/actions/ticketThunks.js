@@ -7,8 +7,8 @@ import {
 } from '../../graphql/entities/ticket/ticket.mutations';
 import { 
   GET_USER_TICKETS, 
-  GET_TICKET_DETAILS, 
-  GET_DEPARTMENTS_INFO 
+  // GET_TICKET_DETAILS, 
+  // GET_DEPARTMENTS_INFO 
 } from '../../graphql/entities/ticket/ticket.queries';
 
 // ایجاد تیکت جدید

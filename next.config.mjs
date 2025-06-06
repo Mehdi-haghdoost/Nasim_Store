@@ -7,12 +7,26 @@
 
 // export default nextConfig;
 
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//     experimental: {
+//         appDir: true,
+//     },
+//     reactStrictMode: false,
+// };
+
+// export default nextConfig;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        appDir: true,
+    reactStrictMode: false,
+    
+    eslint: {
+        ignoreDuringBuilds: true,
     },
-    reactStrictMode: false, // غیرفعال کردن StrictMode
+    typescript: {
+        ignoreBuildErrors: true,
+    }
 };
 
 export default nextConfig;

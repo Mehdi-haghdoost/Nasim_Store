@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React from 'react';
 import styles from '@/styles/blog-detail.module.css';
 import Header from '@/components/modules/header/Header';
@@ -9,41 +11,93 @@ import CommentForm from '@/components/templates/blog-detail/FeedbackForm/Comment
 import RelatedArticles from '@/components/templates/blog-detail/RelatedArticles/RelatedArticles';
 import { getAllPostIds, getPostData, getAllPosts } from '@/lib/mdx';
 
-// تولید مسیرهای استاتیک برای تمام پست‌های بلاگ
-export async function generateStaticParams() {
-  const paths = getAllPostIds();
-  return paths.map(path => path.params);
-}
-
 export async function generateMetadata({ params }) {
-  const { id } = params;
-  const postData = getPostData(id);
-  
-  return {
-    title: postData.title || 'جزئیات بلاگ',
-    description: postData.description || '',
-  };
+  try {
+    const { id } = params;
+    const postData = getPostData(id);
+    
+    return {
+      title: postData?.title || 'جزئیات بلاگ',
+      description: postData?.description || '',
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'جزئیات بلاگ',
+      description: '',
+    };
+  }
 }
 
 export default async function BlogDetailPage({ params }) {
-  const { id } = params;
-  const postData = getPostData(id);
-  
-  // دریافت پست‌های مرتبط (با دسته‌بندی یکسان)
-  const allPosts = getAllPosts();
-  const relatedPosts = allPosts
-    .filter(post => post.category === postData.category && post.id !== id)
-    .slice(0, 8);
-  
-  return (
-    <>
-      <Header />
-      <BreadCroumb />
-      <BlogContent postData={postData} />
-      <BlogComments />
-      <CommentForm />
-      <RelatedArticles posts={relatedPosts} />
-      <Footer />
-    </>
-  );
+  try {
+    const { id } = params;
+    
+    if (!id) {
+      return (
+        <>
+          <Header />
+          <BreadCroumb />
+          <div className="container my-5">
+            <div className="alert alert-danger">
+              پست مورد نظر یافت نشد.
+            </div>
+          </div>
+          <Footer />
+        </>
+      );
+    }
+
+    const postData = getPostData(id);
+    
+
+    if (!postData) {
+      return (
+        <>
+          <Header />
+          <BreadCroumb />
+          <div className="container my-5">
+            <div className="alert alert-warning">
+              محتوای پست در دسترس نیست.
+            </div>
+          </div>
+          <Footer />
+        </>
+      );
+    }
+    
+    const allPosts = getAllPosts();
+    const relatedPosts = allPosts
+      .filter(post => post?.category === postData?.category && post?.id !== id)
+      .slice(0, 8);
+    
+    return (
+      <>
+        <Header />
+        <BreadCroumb />
+        {postData && <BlogContent postData={postData} />}
+        <BlogComments />
+        <CommentForm />
+        {relatedPosts && relatedPosts.length > 0 && (
+          <RelatedArticles posts={relatedPosts} />
+        )}
+        <Footer />
+      </>
+    );
+  } catch (error) {
+    console.error('Error rendering blog detail page:', error);
+    
+    return (
+      <>
+        <Header />
+        <BreadCroumb />
+        <div className="container my-5">
+          <div className="alert alert-danger">
+            خطا در بارگذاری صفحه. لطفاً دوباره تلاش کنید.
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 }

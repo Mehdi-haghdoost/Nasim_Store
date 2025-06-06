@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from '@/Redux/actions/productThunks';
 
@@ -14,20 +14,18 @@ import CategoryItems from '@/components/templates/categories/CategoryItems'
 import CategorySort from '@/components/templates/categories/CategorySort'
 import SearchFilters from '@/components/templates/categories/SearchFilters'
 
-const page = () => {
+const CategoriesContent = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchProducts());
-    
     }, [dispatch]);
 
     return (
         <>
-            <Header />
             <BreadCroumb />
             <CategoryBrand />
-            <div className="content" >
+            <div className="content">
                 <div className="container-fluid">
                     {/* filter mobile */}
                     <div className="custom-filter d-lg-none d-block">
@@ -69,9 +67,28 @@ const page = () => {
                     </div>
                 </div>
             </div>
+        </>
+    );
+};
+
+const LoadingCategories = () => (
+    <div className="d-flex justify-content-center align-items-center p-5">
+        <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">در حال بارگذاری...</span>
+        </div>
+    </div>
+);
+
+const Page = () => {
+    return (
+        <>
+            <Header />
+            <Suspense fallback={<LoadingCategories />}>
+                <CategoriesContent />
+            </Suspense>
             <Footer />
         </>
-    )
-}
+    );
+};
 
-export default page
+export default Page;

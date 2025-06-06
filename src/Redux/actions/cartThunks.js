@@ -228,7 +228,7 @@ export const syncCartFromLocalStorage = createAsyncThunk(
   }
 );
 
-mergeGuestCartWithUserCart: (state, action) => {
+export const mergeGuestCartWithUserCart= (state, action) => {
   const { guestCartItems } = action.payload;
   
   if (!guestCartItems || guestCartItems.length === 0) return;

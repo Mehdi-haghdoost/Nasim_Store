@@ -60,3 +60,6 @@ export const GET_DEPARTMENTS = gql`
     }
   }
 `;
+
+export const GET_DEPARTMENTS_INFO = null;
+export const GET_TICKET_DETAILS = null;

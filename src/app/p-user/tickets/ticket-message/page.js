@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import Layout from '@/components/layouts/UserPanelLayout';
 import TicketsMessage from '@/components/templates/p-user/tickets/TicketsMessage';
 import styles from '@/styles/p-user/ticketMessage.module.css';
@@ -11,11 +10,11 @@ import { GET_TICKET_BY_ID } from '@/graphql/entities/ticket/ticket.queries';
 import { formatDate } from '@/utils/helpers';
 import Link from 'next/link';
 
-const Page = () => {
+
+const TicketMessageContent = () => {
     const searchParams = useSearchParams();
     const ticketId = searchParams.get('id');
     
-    // با fetchPolicy: 'network-only' همیشه داده‌ها از سرور دریافت می‌شوند
     const { data, loading, error, refetch } = useQuery(GET_TICKET_BY_ID, {
         variables: { ticketId },
         skip: !ticketId,
@@ -59,26 +58,22 @@ const Page = () => {
 
     if (loading) {
         return (
-            <Layout>
-                <div className="d-flex justify-content-center align-items-center p-5">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">در حال بارگذاری...</span>
-                    </div>
+            <div className="d-flex justify-content-center align-items-center p-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">در حال بارگذاری...</span>
                 </div>
-            </Layout>
+            </div>
         );
     }
 
     if (error || !data || !data.getTicketById) {
         return (
-            <Layout>
-                <div className="alert alert-danger m-3">
-                    <p className="mb-0">خطا در بارگذاری تیکت. لطفاً مجدداً تلاش کنید.</p>
-                    <Link href="/p-user/tickets" className="btn btn-outline-danger mt-3">
-                        بازگشت به لیست تیکت‌ها
-                    </Link>
-                </div>
-            </Layout>
+            <div className="alert alert-danger m-3">
+                <p className="mb-0">خطا در بارگذاری تیکت. لطفاً مجدداً تلاش کنید.</p>
+                <Link href="/p-user/tickets" className="btn btn-outline-danger mt-3">
+                    بازگشت به لیست تیکت‌ها
+                </Link>
+            </div>
         );
     }
 
@@ -86,7 +81,7 @@ const Page = () => {
     const statusInfo = getStatusInfo(ticket.status);
 
     return (
-        <Layout>
+        <>
             <div className="content-box">
                 <div className="container-fluid">
                     <div className="title-panel">
@@ -112,6 +107,24 @@ const Page = () => {
                 </div>
             </div>
             <TicketsMessage />
+        </>
+    );
+};
+
+// Loading component برای Suspense
+const LoadingTicketMessage = () => (
+    <div className="d-flex justify-content-center align-items-center p-5">
+        <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">در حال بارگذاری...</span>
+        </div>
+    </div>
+);
+const Page = () => {
+    return (
+        <Layout>
+            <Suspense fallback={<LoadingTicketMessage />}>
+                <TicketMessageContent />
+            </Suspense>
         </Layout>
     );
 };
