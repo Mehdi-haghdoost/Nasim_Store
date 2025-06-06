@@ -79,10 +79,10 @@ app.use(cors({
     origin: [
         'http://localhost:3000',
         'https://nasimstore-production.up.railway.app'
-    ], 
-    credentials: true, 
+    ],
+    credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization','Cookie'] 
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
 
 // استفاده از میدلور
@@ -116,7 +116,7 @@ async function startServer() {
         });
 
         // راه اندازی سرور
-        const PORT = process.env.PORT || 4005;
+        const PORT = process.env.GRAPHQL_PORT || 4000; 
         app.listen(PORT, () => {
             console.log(`🚀 GraphQL Server running on port ${PORT}`);
         });
