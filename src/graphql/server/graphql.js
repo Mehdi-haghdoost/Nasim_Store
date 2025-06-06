@@ -74,7 +74,7 @@ const fileUpload = require('express-fileupload');
 
 const app = express();
 
-// فعال‌سازی CORS - تصحیح شده
+// فعال‌سازی CORS
 app.use(cors({
     origin: [
         'http://localhost:3000',
@@ -85,7 +85,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
 
-// استفاده از میدلور
 app.use(fileUpload({
     limits: { fileSize: 10 * 1024 * 1024 },
     createParentPath: true
@@ -115,8 +114,8 @@ async function startServer() {
             res.json({ message: "✅ GraphQL Server is running" })
         });
 
-        // راه اندازی سرور
-        const PORT = process.env.GRAPHQL_PORT || 4000; 
+        // استفاده از همان PORT که Next.js استفاده می‌کند
+        const PORT = process.env.PORT || 4005;
         app.listen(PORT, () => {
             console.log(`🚀 GraphQL Server running on port ${PORT}`);
         });

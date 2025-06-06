@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "concurrently \"node src/graphql/server/graphql.js\" \"next start -p $PORT\"",
+    "start": "node src/graphql/server/graphql.js",
     "lint": "next lint",
     "start-backend": "node src/graphql/server/graphql.js"
   },
