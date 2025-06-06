@@ -7,9 +7,18 @@ import Link from 'next/link';
 
 function MegaMenu() {
   const [fixedTop, setFixedTop] = useState(false);
+  const [mounted, setMounted] = useState(false); // حل مشکل hydration
   const { categories, loading, error } = useCategory();
 
+  // تنظیم mounted state
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // scroll listener فقط بعد از mount
+  useEffect(() => {
+    if (!mounted) return;
+
     const fixedNavbarToTop = () => {
       const currentScroll = window.pageYOffset;
       if (currentScroll > 150) {
@@ -18,9 +27,10 @@ function MegaMenu() {
         setFixedTop(false);
       }
     };
+
     window.addEventListener('scroll', fixedNavbarToTop);
     return () => window.removeEventListener('scroll', fixedNavbarToTop);
-  }, []);
+  }, [mounted]);
 
   // نقشه‌برداری نام دسته‌بندی‌ها به _id
   const categoryMap = categories.reduce((acc, category) => {
@@ -36,6 +46,44 @@ function MegaMenu() {
     { name: 'کنسول بازی', icon: 'bi-laptop', displayName: 'کنسول‌های بازی' },
     { name: 'لوازم جانبی', icon: 'bi-tag', displayName: 'لوازم جانبی' },
   ];
+
+  // loading state قبل از mount
+  if (!mounted) {
+    return (
+      <div className={`${styles.mega_menu} d-lg-block d-none`}>
+        <div className="container-fluid">
+          <div className={styles.header_mega_menu}>
+            <div className="col-lg-9">
+              <nav className="navbar navbar-expand-lg navbar-light">
+                <div className="container-fluid">
+                  <ul className={`navbar-nav ${styles.mega_menu_navbar}`}>
+                    <li className="nav-item">
+                      <span className={`nav-link ${styles.mega_menu_category_button}`}>
+                        <i className="bi bi-list"></i>
+                        در حال بارگذاری...
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+            <div className="col-lg-3">
+              <div className="d-flex align-items-center justify-content-end">
+                <span className={`${styles.mega_menu_contact} main-color-two-bg btn border-0 d-flex align-items-center rounded-pill ms-3`}>
+                  09211367465
+                  <i className="bi bi-whatsapp me-2 text-white"></i>
+                </span>
+                <span className={`${styles.mega_menu_contact} main-color-three-bg btn border-0 d-flex align-items-center rounded-pill`}>
+                  09211367465
+                  <i className="bi bi-telephone-fill me-2 text-white"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`${styles.mega_menu} d-lg-block d-none`}>
@@ -113,7 +161,9 @@ function MegaMenu() {
             <div className="col-lg-3">
               <div className="d-flex align-items-center justify-content-end">
                 <a
-                  href="https://wa.me/09211367465" target="_blank" rel="noopener noreferrer"
+                  href="https://wa.me/09211367465" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
                   className={`${styles.mega_menu_contact} main-color-two-bg btn border-0 d-flex align-items-center rounded-pill ms-3`}
                 >
                   09211367465
