@@ -74,27 +74,27 @@ const fileUpload = require('express-fileupload');
 
 const app = express();
 
-// فعال‌سازی CORS
-// app.use(cors({
-//     origin: [
-//         'http://localhost:3000',
-//         'https://nasimstore-production.up.railway.app'
-//     ],
-//     credentials: true,
-//     methods: ['GET', 'POST', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
-// }));
-// در graphql.js 
+فعال‌سازی CORS
 app.use(cors({
     origin: [
         'http://localhost:3000',
-        'http://172.20.10.4:3000',
-        'http://172.20.10.4:4005',
+        'https://nasimstore-production.up.railway.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
+
+// app.use(cors({
+//     origin: [
+//         'http://localhost:3000',
+//         'http://172.20.10.4:3000',
+//         'http://172.20.10.4:4005',
+//     ],
+//     credentials: true,
+//     methods: ['GET', 'POST', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+// }));
 
 app.use(fileUpload({
     limits: { fileSize: 10 * 1024 * 1024 },
