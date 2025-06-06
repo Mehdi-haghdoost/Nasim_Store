@@ -127,12 +127,12 @@ async function startServer() {
 
         // استفاده از همان PORT که Next.js استفاده می‌کند
         const PORT = process.env.PORT || 4005;
-        // app.listen(PORT, () => {
-        //     console.log(`🚀 GraphQL Server running on port ${PORT}`);
-        // });
-        app.listen(PORT, '0.0.0.0', () => {  
+        app.listen(PORT, () => {
             console.log(`🚀 GraphQL Server running on port ${PORT}`);
         });
+        // app.listen(PORT, '0.0.0.0', () => {  
+        //     console.log(`🚀 GraphQL Server running on port ${PORT}`);
+        // });
     } catch (error) {
         console.error("Failed to start server", error)
     }
