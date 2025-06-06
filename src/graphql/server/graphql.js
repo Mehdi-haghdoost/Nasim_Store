@@ -74,7 +74,6 @@ const fileUpload = require('express-fileupload');
 
 const app = express();
 
-فعال‌سازی CORS
 app.use(cors({
     origin: [
         'http://localhost:3000',
