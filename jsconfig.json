@@ -1,19 +1,52 @@
+// {
+//   "compilerOptions": {
+//     "baseUrl": ".",
+//     "paths": {
+//       "@/*": [
+//         "./src/*"
+//       ],
+//       "@/configs/*": [
+//         "./configs/*"
+//       ],
+//       "@/models/*": [
+//         "./models/*"
+//       ],
+//       "@/data/*": [
+//         "./data/*"
+//       ]
+//     }
+//   }
+// }
+
 {
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@/configs/*": [
-        "./configs/*"
-      ],
-      "@/models/*": [
-        "./models/*"
-      ],
-      "@/data/*": [
-        "./data/*"
-      ]
-    }
-  }
+      "@/*": ["./src/*"],
+      "@/configs/*": ["./configs/*"],
+      "@/models/*": ["./models/*"],
+      "@/data/*": ["./data/*"]
+    },
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
