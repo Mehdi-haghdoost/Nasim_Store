@@ -44,6 +44,7 @@
 
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Login from "@/components/templates/login-register/Login";
 import Register from "@/components/templates/login-register/Register";
 import { authTypes } from "../../utils/constans";
@@ -51,11 +52,40 @@ import { authTypes } from "../../utils/constans";
 export default function ClientPage() {
   const [authType, setAuthType] = useState(authTypes.LOGIN);
   const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
   // اطمینان از اینکه در client side هستیم
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // چک کردن authentication فقط یکبار
+  useEffect(() => {
+    if (!isClient) return;
+
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('https://nasim-backend.up.railway.app/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `query Me { me { _id } }`
+          }),
+          credentials: 'include'
+        });
+
+        const result = await response.json();
+        
+        if (result.data && result.data.me) {
+          router.replace('/');
+        }
+      } catch (error) {
+        // اگر خطا داشت، کاری نکن
+      }
+    };
+
+    checkAuth();
+  }, [isClient, router]);
 
   const showRegisterForm = () => setAuthType(authTypes.REGISTER);
   const showLoginForm = () => setAuthType(authTypes.LOGIN);
