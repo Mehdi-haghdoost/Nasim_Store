@@ -19,18 +19,16 @@ function Sidebar() {
     useEffect(() => {
         setIsMounted(true);
         
-        // بارگذاری تعداد سفارشات از localStorage
+        // بارگذاری تعداد آیتم‌ها از localStorage
         const loadOrderCount = () => {
             try {
                 const orderDetails = localStorage.getItem('order_details');
                 if (orderDetails) {
                     const parsedOrder = JSON.parse(orderDetails);
-                    // محاسبه تعداد کل آیتم‌ها در سفارش
-                    const totalItems = parsedOrder.items?.reduce((total, item) => {
-                        return total + (item.quantity || 1);
-                    }, 0) || 0;
+                    // تعداد آیتم‌ها (تعداد عناصر آرایه items)
+                    const itemsCount = parsedOrder.items?.length || 0;
                     
-                    setOrderCount(totalItems);
+                    setOrderCount(itemsCount);
                 } else {
                     setOrderCount(0);
                 }
