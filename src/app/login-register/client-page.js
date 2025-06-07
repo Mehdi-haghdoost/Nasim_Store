@@ -59,58 +59,51 @@ export default function ClientPage() {
   const dispatch = useDispatch();
   const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
 
-  // اطمینان از اینکه در client side هستیم
   useEffect(() => {
     setIsClient(true);
   }, []);
-
 
   useEffect(() => {
     if (!isClient || hasCheckedAuth) return;
 
     const performAuthCheck = async () => {
-
+      // چک Redux state
       if (isAuthenticated && user) {
-        console.log('کاربر در Redux لاگین است، هدایت به صفحه اصلی');
         router.replace('/');
         return;
       }
 
-
+      // چک refresh token در cookies
       const hasRefreshToken = document.cookie.includes('refreshToken=') && 
                             !document.cookie.includes('refreshToken=;') &&
                             !document.cookie.includes('refreshToken=undefined');
 
       if (hasRefreshToken) {
-        console.log('Refresh token موجود است، چک کردن authentication...');
         try {
           const result = await dispatch(checkAuth());
           if (result.payload && result.payload.user) {
-            console.log('Authentication موفق، هدایت به صفحه اصلی');
             router.replace('/');
             return;
           }
         } catch (error) {
-          console.log('Authentication ناموفق:', error);
+          console.log('Authentication failed:', error);
         }
       }
+      
       setHasCheckedAuth(true);
     };
 
     performAuthCheck();
   }, [isClient, isAuthenticated, user, dispatch, router, hasCheckedAuth]);
 
-
   useEffect(() => {
     if (hasCheckedAuth && isAuthenticated && user) {
-      console.log('کاربر authenticate شد، هدایت به صفحه اصلی');
       router.replace('/');
     }
   }, [isAuthenticated, user, hasCheckedAuth, router]);
 
   const showRegisterForm = () => setAuthType(authTypes.REGISTER);
   const showLoginForm = () => setAuthType(authTypes.LOGIN);
-
 
   if (!isClient || !hasCheckedAuth || loading) {
     return (
@@ -124,7 +117,6 @@ export default function ClientPage() {
       </div>
     );
   }
-
 
   if (isAuthenticated && user) {
     return null;
