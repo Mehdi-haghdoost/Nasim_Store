@@ -32,7 +32,6 @@
 // };
 
 
-// src/middleware.js
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
@@ -56,10 +55,9 @@ export async function middleware(request) {
     return NextResponse.next();
   }
   
-  // در production از GraphQL API استفاده کن
+  // در production فقط برای login-register چک کن
   if (isLoginRoute) {
     try {
-      // چک کردن authentication با GraphQL
       const response = await fetch('https://nasim-backend.up.railway.app/graphql', {
         method: 'POST',
         headers: {
@@ -67,23 +65,20 @@ export async function middleware(request) {
           'Cookie': request.headers.get('cookie') || ''
         },
         body: JSON.stringify({
-          query: `query Me { me { _id username } }`
+          query: `query Me { me { _id } }`
         })
       });
       
       const result = await response.json();
       
       if (result.data && result.data.me) {
-        // کاربر لاگین است، هدایت به صفحه اصلی
         return NextResponse.redirect(new URL('/', request.url));
       }
     } catch (error) {
-      // اگر خطا داشت، اجازه ادامه بده (کاربر لاگین نیست)
-      console.log('Auth check failed, allowing access to login page');
+      // اگر خطا داشت، اجازه ادامه بده
     }
   }
   
-  // برای protected routes در production، بررسی نکن (client-side handle شود)
   return NextResponse.next();
 }
 
