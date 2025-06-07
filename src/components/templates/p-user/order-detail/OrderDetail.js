@@ -287,7 +287,7 @@ function OrderDetail() {
         
         const loadOrderDetail = () => {
             try {
-                // اول از order_details بخون (single order)
+                // فقط از order_details بخون
                 const orderDetails = localStorage.getItem('order_details');
                 if (orderDetails) {
                     const parsedOrder = JSON.parse(orderDetails);
@@ -299,21 +299,6 @@ function OrderDetail() {
                         status: parsedOrder.status || 'completed'
                     };
                     setOrderData(orderWithId);
-                    setIsLoading(false);
-                    return;
-                }
-
-                // اگر order_details نبود، از order_history بخون
-                const orderHistory = localStorage.getItem('order_history');
-                if (orderHistory) {
-                    const parsedOrders = JSON.parse(orderHistory);
-                    const foundOrder = parsedOrders.find(order => 
-                        order.orderNumber === orderId
-                    );
-                    
-                    if (foundOrder) {
-                        setOrderData(foundOrder);
-                    }
                 }
                 setIsLoading(false);
             } catch (error) {
@@ -450,7 +435,7 @@ function OrderDetail() {
                                         <li className="nav-item">
                                             <span className="text-mute">آدرس :</span>
                                             <strong>
-                                                {orderData.customerInfo?.province}, {orderData.customerInfo?.city}, {orderData.customerInfo?.street}
+                                                {orderData.customerInfo?.province}, {orderData.customerInfo?.city}, {orderData.customerInfo?.fullAddress}
                                             </strong>
                                         </li>
                                     </ul>
