@@ -1,17 +1,60 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 import ActiveLink from '@/utils/ActiveLink';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '@/Redux/actions/authThunks';
 import { useRouter } from 'next/navigation';
-import swal from 'sweetalert'; // اگر از sweetalert استفاده می‌کنید، مطمئن شوید import شده باشد
+import swal from 'sweetalert';
 
 function Sidebar() {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const router = useRouter();
+    
+    const [orderCount, setOrderCount] = useState(0);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        
+        // بارگذاری تعداد سفارشات از localStorage
+        const loadOrderCount = () => {
+            try {
+                const orderDetails = localStorage.getItem('order_details');
+                if (orderDetails) {
+                    const parsedOrder = JSON.parse(orderDetails);
+                    // محاسبه تعداد کل آیتم‌ها در سفارش
+                    const totalItems = parsedOrder.items?.reduce((total, item) => {
+                        return total + (item.quantity || 1);
+                    }, 0) || 0;
+                    
+                    setOrderCount(totalItems);
+                } else {
+                    setOrderCount(0);
+                }
+            } catch (error) {
+                console.error('Error loading order count:', error);
+                setOrderCount(0);
+            }
+        };
+
+        loadOrderCount();
+
+        // Listen برای تغییرات localStorage
+        const handleStorageChange = (e) => {
+            if (e.key === 'order_details') {
+                loadOrderCount();
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
 
     const logoutHandler = () => {
         swal({
@@ -26,6 +69,10 @@ function Sidebar() {
             }
         });
     };
+
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <div className={styles.panel_side}>
@@ -60,7 +107,11 @@ function Sidebar() {
                                 <ActiveLink href="/p-user/orders">
                                     <i className='bi bi-cart-check'></i>
                                     سفارش های من
-                                    <span className={`badge rounded-pill ${styles.badge_spn}`}>5</span>
+                                    {orderCount > 0 && (
+                                        <span className={`badge rounded-pill ${styles.badge_spn}`}>
+                                            {orderCount}
+                                        </span>
+                                    )}
                                 </ActiveLink>
                                 <ActiveLink href="/p-user/address">
                                     <i className='bi bi-pin-map'></i>
