@@ -44,82 +44,66 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
 import Login from "@/components/templates/login-register/Login";
 import Register from "@/components/templates/login-register/Register";
 import { authTypes } from "../../utils/constans";
-import { checkAuth } from "@/Redux/actions/authThunks";
 
 export default function ClientPage() {
   const [authType, setAuthType] = useState(authTypes.LOGIN);
-  const [isClient, setIsClient] = useState(false);
-  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
-  
+  const [canRender, setCanRender] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const quickCheck = async () => {
+      try {
+        const response = await fetch('https://nasim-backend.up.railway.app/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `{ me { _id } }` }),
+          credentials: 'include'
+        });
 
-  useEffect(() => {
-    if (!isClient || hasCheckedAuth) return;
-
-    const performAuthCheck = async () => {
-      // چک Redux state
-      if (isAuthenticated && user) {
-        router.replace('/');
-        return;
-      }
-
-      // چک refresh token در cookies
-      const hasRefreshToken = document.cookie.includes('refreshToken=') && 
-                            !document.cookie.includes('refreshToken=;') &&
-                            !document.cookie.includes('refreshToken=undefined');
-
-      if (hasRefreshToken) {
-        try {
-          const result = await dispatch(checkAuth());
-          if (result.payload && result.payload.user) {
-            router.replace('/');
-            return;
-          }
-        } catch (error) {
-          console.log('Authentication failed:', error);
+        const result = await response.json();
+        
+        if (result.data?.me) {
+          // لاگین است - فوراً redirect (صفحه render نمی‌شه)
+          router.replace('/');
+          return;
         }
+      } catch (error) {
+        // خطا = لاگین نیست
       }
       
-      setHasCheckedAuth(true);
+      // اگر اینجا رسید، یعنی لاگین نیست - اجازه render
+      setCanRender(true);
+      setIsChecking(false);
     };
 
-    performAuthCheck();
-  }, [isClient, isAuthenticated, user, dispatch, router, hasCheckedAuth]);
-
-  useEffect(() => {
-    if (hasCheckedAuth && isAuthenticated && user) {
-      router.replace('/');
-    }
-  }, [isAuthenticated, user, hasCheckedAuth, router]);
+    quickCheck();
+  }, [router]);
 
   const showRegisterForm = () => setAuthType(authTypes.REGISTER);
   const showLoginForm = () => setAuthType(authTypes.LOGIN);
 
-  if (!isClient || !hasCheckedAuth || loading) {
+  // تا چک نشده، فقط یه صفحه خالی نشون بده
+  if (isChecking || !canRender) {
     return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100">
-        <div className="text-center">
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <div style={{ textAlign: 'center' }}>
           <div className="spinner-border text-primary mb-3" role="status">
-            <span className="visually-hidden">در حال بارگذاری...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="text-muted">در حال آماده‌سازی صفحه...</p>
+          <p style={{ color: '#6c757d' }}>Loading...</p>
         </div>
       </div>
     );
-  }
-
-  if (isAuthenticated && user) {
-    return null;
   }
 
   return (
