@@ -20,7 +20,7 @@ const { createTicket, addMessageToTicket, closeTicket } = require("./mutations/t
 const { getUserTickets, getTicketById, getDepartments } = require("./queries/ticket.resolvers");
 const { addToWishlist, removeFromWishlist } = require("./mutations/wishlist.resolvers");
 const { getUserWishlist, isInWishlist } = require("./queries/wishlist.resolvers");
-const { addToCart, updateCartItem, removeFromCart, clearCart } = require("./mutations/cart.resolvers");
+const { addToCart, updateCartItem, removeFromCart, clearCart, syncGuestCart } = require("./mutations/cart.resolvers");
 const { getUserCart } = require("./queries/cart.resolvers");
 const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
@@ -86,6 +86,7 @@ const RootMutation = new GraphQLObjectType({
         submitContact,
         sendOtpForLogin,
         verifyOtpAndLogin,
+        syncGuestCart,
     },
 });
 

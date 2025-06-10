@@ -48,6 +48,37 @@ mutation ConfirmOtpAndRegister($phone : String!, $code : String!) {
 }
 `;
 
+// export const LOGIN_USER = gql`
+// mutation LoginUser($phoneOrEmail : String! , $password : String!) {
+//   loginUser(phoneOrEmail : $phoneOrEmail , password : $password) {
+//     token
+//     refreshToken
+//     user {
+//       _id
+//       username
+//       email
+//       phone
+//       role
+//       addresses {
+//         _id
+//         fullAddress
+//         city
+//         province
+//         isDefault
+//       }
+//       wishlist
+//       cart
+//       orderHistory
+//       orders
+//       discountCoupons
+//       dateOfBirth
+//       createdAt
+//       updatedAt
+//     }
+//   }
+// }
+// `;
+
 export const LOGIN_USER = gql`
 mutation LoginUser($phoneOrEmail : String! , $password : String!) {
   loginUser(phoneOrEmail : $phoneOrEmail , password : $password) {
@@ -67,7 +98,46 @@ mutation LoginUser($phoneOrEmail : String! , $password : String!) {
         isDefault
       }
       wishlist
-      cart
+      cart {
+        totalPrice
+        totalDiscount
+        finalPrice
+        items {
+          _id
+          quantity
+          color
+          size
+          addedAt
+          product {
+            _id
+            title
+            price
+            discountedPrice
+            hasDiscount
+            image
+            brandIcon
+            rating
+            stock
+             category {
+    _id
+    name
+    icon
+  }
+            customerSatisfaction
+          }
+          selectedSeller {
+            _id
+            name
+            address
+            contactNumber
+            logo
+            rating
+            performance
+            satisfaction
+            performanceStatus
+          }
+        }
+      }
       orderHistory
       orders
       discountCoupons
@@ -79,8 +149,42 @@ mutation LoginUser($phoneOrEmail : String! , $password : String!) {
 }
 `;
 
+
+
+
+// export const VERIFY_OTP_AND_LOGIN = gql`
+// mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
+//   verifyOtpAndLogin(phone : $phone , code : $code) {
+//     token
+//     refreshToken
+//     user {
+//       _id
+//       username
+//       email
+//       phone
+//       role
+//       addresses {
+//         _id
+//         fullAddress
+//         city
+//         province
+//         isDefault
+//       }
+//       wishlist
+//       cart
+//       orderHistory
+//       orders
+//       discountCoupons
+//       dateOfBirth
+//       createdAt
+//       updatedAt
+//     }
+//   }
+// }
+// `;
+
 export const VERIFY_OTP_AND_LOGIN = gql`
-mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
+mutation VerifyOtpAndLogin($phone : String!, $code : String!) {
   verifyOtpAndLogin(phone : $phone , code : $code) {
     token
     refreshToken
@@ -98,7 +202,46 @@ mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
         isDefault
       }
       wishlist
-      cart
+      cart {
+        totalPrice
+        totalDiscount
+        finalPrice
+        items {
+          _id
+          quantity
+          color
+          size
+          addedAt
+          product {
+            _id
+            title
+            price
+            discountedPrice
+            hasDiscount
+            image
+            brandIcon
+            rating
+            stock
+             category {
+    _id
+    name
+    icon
+  }
+            customerSatisfaction
+          }
+          selectedSeller {
+            _id
+            name
+            address
+            contactNumber
+            logo
+            rating
+            performance
+            satisfaction
+            performanceStatus
+          }
+        }
+      }
       orderHistory
       orders
       discountCoupons
@@ -109,6 +252,9 @@ mutation VerifyOtpAndLogin($phone : String!, $code : String !) {
   }
 }
 `;
+
+
+
 
 export const REFRESH_TOKEN = gql`
 mutation RefreshToken {
