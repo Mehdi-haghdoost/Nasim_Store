@@ -4,89 +4,36 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import styles from './AuthHeader.module.css';
+import { useCart } from '@/Redux/hooks/useCart';
 
 function AuthHeader({ showBascket }) {
     const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
-    const { totalQuantity: reduxTotalQuantity } = useSelector((state) => state.cart);
     
-    const [cartCount, setCartCount] = useState(0);
+    // استفاده از useCart hook برای دریافت تعداد محصولات
+    const { totalQuantity, isReady, isHydrated } = useCart();
+    
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
-        
-        const updateCartCount = () => {
-            try {
-                // اول از Redux بخون
-                if (reduxTotalQuantity && reduxTotalQuantity > 0) {
-                    setCartCount(reduxTotalQuantity);
-                    return;
-                }
+    }, []);
 
-                // اگه Redux خالی بود، از localStorage بخون
-                const cartData = localStorage.getItem('nassim_store_cart');
-                if (cartData) {
-                    const cart = JSON.parse(cartData);
-                    if (cart && cart.items && Array.isArray(cart.items)) {
-                        const total = cart.items.reduce((sum, item) => {
-                            return sum + (item.quantity || 0);
-                        }, 0);
-                        setCartCount(total);
-                    }
-                } else {
-                    setCartCount(0);
-                }
-            } catch (error) {
-                console.error('Error reading cart:', error);
-                setCartCount(0);
-            }
-        };
+    // Debug log برای AuthHeader
+    useEffect(() => {
+        if (isMounted) {
+            console.log('🏠 AuthHeader Debug:', {
+                isAuthenticated,
+                cartItems: totalQuantity,
+                totalQuantity: totalQuantity,
+                cartReady: isReady,
+                isHydrated: isHydrated,
+                user: user?.username || 'No user'
+            });
+        }
+    }, [isMounted, isAuthenticated, totalQuantity, isReady, isHydrated, user?.username]);
 
-        updateCartCount();
-
-        // Listen for localStorage changes (بین تب‌ها)
-        const handleStorageChange = (e) => {
-            if (e.key === 'nassim_store_cart') {
-                updateCartCount();
-            }
-        };
-
-        const handleCartUpdate = () => {
-            setTimeout(updateCartCount, 100); 
-        };
-
-
-        const handleReduxChange = () => {
-            updateCartCount();
-        };
-
-        // Event listeners
-        window.addEventListener('storage', handleStorageChange);
-        window.addEventListener('cartUpdated', handleCartUpdate);
-        window.addEventListener('cartChanged', handleCartUpdate);
-        window.addEventListener('cartItemAdded', handleCartUpdate);
-        window.addEventListener('cartItemRemoved', handleCartUpdate);
-        window.addEventListener('cartItemUpdated', handleCartUpdate);
-        
-        // Periodic check (fallback)
-        const interval = setInterval(updateCartCount, 2000);
-        
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-            window.removeEventListener('cartUpdated', handleCartUpdate);
-            window.removeEventListener('cartChanged', handleCartUpdate);
-            window.removeEventListener('cartItemAdded', handleCartUpdate);
-            window.removeEventListener('cartItemRemoved', handleCartUpdate);
-            window.removeEventListener('cartItemUpdated', handleCartUpdate);
-            clearInterval(interval);
-        };
-    }, [reduxTotalQuantity]);
-
-    // Use Redux value if available, otherwise use localStorage value
-    const displayCount = reduxTotalQuantity > 0 ? reduxTotalQuantity : cartCount;
-
-    if (!isMounted) {
-        // در حالت SSR badge رو نشون نده
+    // اگر هنوز mount نشده، نمایش ساده بدون badge
+    if (!isMounted || !isHydrated) {
         return (
             <div className="col-lg-4 order-lg-3 d-lg-block d-none" style={{ minHeight: '50px' }}>
                 <div className="d-flex align-items-center justify-content-end">
@@ -121,6 +68,10 @@ function AuthHeader({ showBascket }) {
                     >
                         <div className="d-flex align-items-center p-2">
                             <i className="bi bi-shop font-20 text-muted me-1"></i>
+                            {/* نمایش spinner کوچک در حالت loading */}
+                            <div className="spinner-border spinner-border-sm text-muted ms-1" role="status" style={{ width: '12px', height: '12px' }}>
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,11 +116,22 @@ function AuthHeader({ showBascket }) {
                     <div className="d-flex align-items-center p-2">
                         <i className="bi bi-shop font-20 text-muted me-1"></i>
                         {/* نمایش badge تنها زمانی که محصول در سبد باشد */}
-                        {displayCount > 0 && (
+                        {totalQuantity > 0 && (
                             <span 
                                 className={`main-color-one-bg me-1 ${styles.header_counter} rounded-pill`}
+                                style={{
+                                    minWidth: '20px',
+                                    height: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    color: 'white',
+                                    padding: '2px 6px'
+                                }}
                             >
-                                {displayCount}
+                                {totalQuantity}
                             </span>
                         )}
                     </div>

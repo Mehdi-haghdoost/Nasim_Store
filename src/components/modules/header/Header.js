@@ -1143,6 +1143,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCategory } from '@/Redux/hooks/useCategory';
 import { useFilter } from '@/Redux/hooks/useFilter';
+import { useCart } from '@/Redux/hooks/useCart'; // اضافه کردن useCart
 import styles from './Header.module.css';
 import MegaMenu from './MegaMenu';
 import AuthHeader from './AuthHeader';
@@ -1152,24 +1153,43 @@ function Header() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { categories, loading, error } = useCategory();
-
   const { updateSearchTerm, updateCategories } = useFilter();
-
+  
+  // استفاده از useCart برای دریافت اطلاعات سبد خرید
+  const { items: cartItems, totalQuantity, isReady: cartReady } = useCart();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const { items: cartItems, totalQuantity } = useSelector((state) => state.cart);
 
   const [activeHamburger, setActiveHamburger] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState({});
   const [isShowBascket, setIsShowBascket] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const [desktopSearchTerm, setDesktopSearchTerm] = useState('');
   const [mobileSearchTerm, setMobileSearchTerm] = useState('');
 
+  // اضافه کردن client-side check
   useEffect(() => {
-    if (!user) {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient && !user) {
       dispatch(refreshToken());
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, isClient]);
+
+  // Debug log برای Header
+  useEffect(() => {
+    if (isClient) {
+      console.log('🏠 Header Debug:', {
+        isAuthenticated,
+        cartItems: cartItems?.length || 0,
+        totalQuantity,
+        cartReady,
+        user: user?.username
+      });
+    }
+  }, [isClient, isAuthenticated, cartItems, totalQuantity, cartReady, user]);
 
   const showBascket = () => {
     setIsShowBascket((prev) => !prev);
@@ -1240,6 +1260,64 @@ function Header() {
     { name: 'لوازم جانبی', displayName: 'لوازم جانبی' }, 
     { name: 'لپتاپ', displayName: 'لپتاپ' }, 
   ];
+
+  // اگر client-side نیست، نمایش ساده
+  if (!isClient) {
+    return (
+      <header className={styles.header} style={{ minHeight: '100px' }}>
+        <nav className="container-fluid">
+          <div className="row align-items-center">
+            <div className="col-lg-1 col-6 order-lg-1 order-1">
+              <div className="d-flex align-items-center">
+                <div>
+                  <Link href="/">
+                    <div className="logo">
+                      <img
+                        className="img-fluid"
+                        src="/images/logo.png"
+                        alt="logo"
+                      />
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            <div className="d-lg-none d-block col-6 order-lg-5 order-2">
+              <div className="d-flex align-items-center justify-content-end">
+                <div className={`btn btn-white ${styles.header_register_icon} border-0 rounded-pill ms-4`}>
+                  <i className="bi bi-person-circle font-20 text-muted ms-1"></i>
+                  <span>...</span>
+                </div>
+                <button className={`btn btn-light shadow-sm ${styles.action_link}`}>
+                  <i className="bi bi-basket font-30"></i>
+                </button>
+              </div>
+            </div>
+
+            <div className="col-lg-7 order-lg-2 d-lg-block d-none">
+              <div className="search-form">
+                <div className={styles.search_field}>
+                  <input
+                    type="text"
+                    placeholder="جستجوی محصولات ..."
+                    className={`form-control ${styles.search_input}`}
+                    disabled
+                  />
+                  <button
+                    className={`btn main-color-one-bg ${styles.search_btn} rounded-pill`}
+                    disabled
+                  >
+                    <i className="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+    );
+  }
 
   return (
     <header className={styles.header} style={{ minHeight: '100px' }}>
@@ -1442,7 +1520,8 @@ function Header() {
                 style={{ position: 'relative' }}
               >
                 <i className="bi bi-basket font-30"></i>
-                {totalQuantity > 0 && (
+                {/* نمایش تعداد فقط اگر cartReady باشد */}
+                {cartReady && totalQuantity > 0 && (
                   <span className={`${styles.header_cart_counter} main-color-one-bg rounded-pill`}>
                     {totalQuantity}
                   </span>

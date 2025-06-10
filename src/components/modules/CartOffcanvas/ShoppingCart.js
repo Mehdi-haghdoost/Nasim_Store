@@ -303,30 +303,48 @@
 // };
 
 // export default ShoppingCart;
+
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useCart } from '@/Redux/hooks/useCart';
 import styles from './ShoppingCart.module.css';
 import Link from 'next/link';
 
 const ShoppingCart = ({ isShowBascket, showBascket }) => {
-    const dispatch = useDispatch();
-    const { items: cartItems, totalQuantity } = useSelector((state) => state.cart);
-    const { updateCartItem, removeFromCart, loading } = useCart();
+    // استفاده از useCart hook
+    const { 
+        items: cartItems, 
+        totalQuantity, 
+        updateCartItem, 
+        removeFromCart, 
+        loading,
+        isHydrated 
+        // حذف isReady از شرط‌ها
+    } = useCart();
     
-
-    const [isHydrated, setIsHydrated] = useState(false);
+    const [isClient, setIsClient] = useState(false);
     const counterRefs = useRef({});
 
-
     useEffect(() => {
-        setIsHydrated(true);
+        setIsClient(true);
     }, []);
 
+    // Debug log برای ShoppingCart
     useEffect(() => {
-        if (isHydrated && cartItems.length > 0) {
+        console.log('🛍️ ShoppingCart Debug (Simplified):', {
+            cartItems: cartItems,
+            totalQuantity: totalQuantity,
+            itemsLength: cartItems?.length || 0,
+            isHydrated: isHydrated,
+            loading: loading,
+            isClient: isClient
+        });
+    }, [cartItems, totalQuantity, isHydrated, loading, isClient]);
+
+    useEffect(() => {
+        if (isClient && isHydrated && cartItems.length > 0) {
             // Force update همه counter inputs
             const updateCounterInputs = () => {
                 cartItems.forEach((item) => {
@@ -348,7 +366,7 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
             updateCounterInputs();
             setTimeout(updateCounterInputs, 100);
         }
-    }, [cartItems, isHydrated]);
+    }, [cartItems, isClient, isHydrated]);
 
     // محاسبه قیمت نهایی با در نظر گیری تخفیف
     const getFinalPrice = (product) => {
@@ -360,6 +378,7 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
 
     // محاسبه کل قیمت با تخفیف
     const calculateTotalPrice = () => {
+        if (!Array.isArray(cartItems)) return 0;
         return cartItems.reduce((total, item) => {
             return total + (getFinalPrice(item.product) * item.quantity);
         }, 0);
@@ -367,6 +386,7 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
 
     // محاسبه کل تخفیف
     const calculateTotalDiscount = () => {
+        if (!Array.isArray(cartItems)) return 0;
         return cartItems.reduce((total, item) => {
             if (item.product.hasDiscount && item.product.discountedPrice) {
                 const discount = (item.product.price - item.product.discountedPrice) * item.quantity;
@@ -403,24 +423,36 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
     };
 
     // تابع افزایش تعداد محصول
-    const increaseQuantity = (item) => {
+    const increaseQuantity = async (item) => {
         if (item.product.stock > item.quantity) {
-            updateCartItem(item._id, item.quantity + 1);
+            try {
+                await updateCartItem(item._id, item.quantity + 1);
+            } catch (error) {
+                console.error('خطا در افزایش تعداد:', error);
+            }
         }
     };
 
     // تابع کاهش تعداد محصول
-    const decreaseQuantity = (item) => {
-        if (item.quantity > 1) {
-            updateCartItem(item._id, item.quantity - 1);
-        } else {
-            removeFromCart(item._id);
+    const decreaseQuantity = async (item) => {
+        try {
+            if (item.quantity > 1) {
+                await updateCartItem(item._id, item.quantity - 1);
+            } else {
+                await removeFromCart(item._id);
+            }
+        } catch (error) {
+            console.error('خطا در کاهش تعداد:', error);
         }
     };
 
     // تابع حذف محصول
-    const handleRemoveItem = (productId) => {
-        removeFromCart(productId);
+    const handleRemoveItem = async (productId) => {
+        try {
+            await removeFromCart(productId);
+        } catch (error) {
+            console.error('خطا در حذف محصول:', error);
+        }
     };
 
     // تابع دریافت تصویر محصول
@@ -430,15 +462,30 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
         return "/images/product/product-image1.jpg";
     };
 
+    // اطمینان از array بودن cartItems
+    const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
+
+    // شرط نمایش ساده‌تر - فقط بررسی isClient و isHydrated
+    const shouldShowContent = isClient && isHydrated;
+    const hasItems = shouldShowContent && safeCartItems.length > 0;
+
+    console.log('🎯 ShoppingCart Render Decision:', {
+        isClient,
+        isHydrated,
+        shouldShowContent,
+        hasItems,
+        itemsLength: safeCartItems.length
+    });
+
     return (
         <div
             className={`offcanvas cart-canvas offcanvas-start ${isShowBascket ? "show" : ""}`}
         >
             <div className={`${styles.header} offcanvas-header`}>
                 <h5 className="offcanvas-title">
-                    سبد خرید
-                    {isHydrated && totalQuantity > 0 && (
-                        <span className="badge bg-primary ms-2 font-12">
+                   سبد خرید :
+                    {shouldShowContent && totalQuantity > 0 && (
+                        <span className="badge bg-success text-white me-2 font-12">
                             {totalQuantity} محصول
                         </span>
                     )}
@@ -451,13 +498,14 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
             </div>
             <div className="offcanvas-body">
                 <div className={styles.cart_canvases}>
-                    {!isHydrated ? (
+                    {!shouldShowContent ? (
                         <div className="text-center py-5">
                             <div className="spinner-border text-primary" role="status">
                                 <span className="visually-hidden">در حال بارگذاری...</span>
                             </div>
+                            <p className="mt-2 text-muted">در حال بارگذاری سبد خرید...</p>
                         </div>
-                    ) : cartItems.length === 0 ? (
+                    ) : !hasItems ? (
                         <div className="text-center py-5">
                             <i className="bi bi-cart-x font-48 text-muted d-block mb-3"></i>
                             <h6>سبد خرید شما خالی است</h6>
@@ -471,7 +519,7 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                         </div>
                     ) : (
                         <>
-                            {cartItems.map((item) => (
+                            {safeCartItems.map((item) => (
                                 <div key={item._id || item.id} className={styles.item}>
                                     <div className="row gy-2">
                                         <div className="col-4">
@@ -548,7 +596,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                                                 -
                                                             </button>
                                                         </span>
-                                                        {/* راه حل اول: استفاده از input با ref */}
                                                         <input
                                                             ref={(el) => counterRefs.current[item._id || item.id] = el}
                                                             name="count"
@@ -563,27 +610,6 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                                                 backgroundColor: '#fff'
                                                             }}
                                                         />
-                                                        {/* راه حل دوم: اگر input کار نکرد، از div استفاده کن */}
-                                                        {/* 
-                                                        <div 
-                                                            className="counter form-counter"
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                height: '32px',
-                                                                border: '1px solid #ced4da',
-                                                                borderRadius: '0.375rem',
-                                                                backgroundColor: '#fff',
-                                                                fontSize: '14px',
-                                                                fontWeight: 'bold',
-                                                                color: '#000',
-                                                                minWidth: '50px'
-                                                            }}
-                                                        >
-                                                            {isHydrated ? item.quantity : ''}
-                                                        </div>
-                                                        */}
                                                         <span className="input-group-btn input-group-append">
                                                             <button
                                                                 className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
@@ -620,22 +646,22 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                         <p className="fw-bold mb-0">قیمت</p>
                                     </div>
 
-                                    {cartItems.map((item) => (
+                                    {safeCartItems.map((item) => (
                                         <div
                                             key={`factor-${item._id || item.id}`}
                                             className={`${styles.factor_item} p-2 mb-2 rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-between`}
                                         >
                                             <p className="mb-0 text-truncate" style={{ maxWidth: '150px' }}>
                                                 {item.product.title || item.product.name}
-                                                <small className="text-muted"> (×{isHydrated ? item.quantity : ''})</small>
+                                                <small className="text-muted"> (×{item.quantity})</small>
                                             </p>
                                             <p className="mb-0 font-12">
-                                                {isHydrated ? formatPrice(getFinalPrice(item.product) * item.quantity) : ''} تومان
+                                                {formatPrice(getFinalPrice(item.product) * item.quantity)} تومان
                                             </p>
                                         </div>
                                     ))}
 
-                                    {isHydrated && totalDiscount > 0 && (
+                                    {totalDiscount > 0 && (
                                         <div className={`${styles.factor_item} p-2 rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-between mb-2`}>
                                             <p className="mb-0 fw-bold">تخفیف:</p>
                                             <p className="mb-0 text-success">{formatPrice(totalDiscount)} تومان</p>
@@ -645,7 +671,7 @@ const ShoppingCart = ({ isShowBascket, showBascket }) => {
                                     <div className={`${styles.factor_item} p-3 rounded-3 shadow-sm  text-white d-flex align-items-center justify-content-between`}>
                                         <p className="mb-0 fw-bold">جمع کل</p>
                                         <p className="mb-0 fw-bold">
-                                            {isHydrated ? formatPrice(totalPrice) : ''} تومان
+                                            {formatPrice(totalPrice)} تومان
                                         </p>
                                     </div>
 
