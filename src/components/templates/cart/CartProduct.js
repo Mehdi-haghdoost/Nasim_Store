@@ -21,19 +21,46 @@
 
 // export default CartProduct
 
+
+
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './CartProduct.module.css';
 import CartProductItem from './CartProductItem';
 import CartFactor from './CartFactor';
 import { useCart } from '@/Redux/hooks/useCart';
 
 const CartProduct = () => {
-    // استفاده از هوک useCart برای دریافت اطلاعات سبد خرید
-    const { items, loading, error } = useCart();
+
+    const { items, loading, error, isReady } = useCart();
+
+    // مموری کردن محاسبات برای جلوگیری از re-render های غیرضروری
+    const cartState = useMemo(() => {
+        const safeItems = Array.isArray(items) ? items : [];
+        return {
+            items: safeItems,
+            itemsCount: safeItems.length,
+            isEmpty: safeItems.length === 0
+        };
+    }, [items]);
+
+    // Debug log فقط برای تغییرات مهم
+    const prevItemsCount = React.useRef(cartState.itemsCount);
+    React.useEffect(() => {
+        if (prevItemsCount.current !== cartState.itemsCount) {
+            console.log('🛍️ CartProduct State Change:', {
+                itemsCount: cartState.itemsCount,
+                loading,
+                error: !!error,
+                isReady
+            });
+            prevItemsCount.current = cartState.itemsCount;
+        }
+    }, [cartState.itemsCount, loading, error, isReady]);
     
-    if (loading) {
+    // Loading state
+    if (loading && !isReady) {
         return (
             <div className="container-fluid text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -44,28 +71,60 @@ const CartProduct = () => {
         );
     }
     
+    // Error state
     if (error) {
         return (
             <div className="container-fluid py-5">
                 <div className="alert alert-danger">
-                    <p>خطا در بارگذاری سبد خرید: {error}</p>
+                    <h5>خطا در بارگذاری سبد خرید</h5>
+                    <p>{error}</p>
+                    <button 
+                        className="btn btn-outline-danger"
+                        onClick={() => window.location.reload()}
+                    >
+                        تلاش مجدد
+                    </button>
                 </div>
             </div>
         );
     }
     
     // اگر سبد خرید خالی باشد
-    if (!items || items.length === 0) {
-        return null; // EmptyCart در صفحه اصلی نشان داده می‌شود
+    if (cartState.isEmpty) {
+        console.log('❌ CartProduct: No items found');
+        return (
+            <div className="container-fluid py-5">
+                <div className="alert alert-info text-center">
+                    <h5>سبد خرید خالی است</h5>
+                    <p>محصولی در سبد خرید شما یافت نشد</p>
+                    <a href="/categories" className="btn btn-primary">
+                        شروع خرید
+                    </a>
+                </div>
+            </div>
+        );
     }
+
+    console.log('✅ CartProduct: Rendering', cartState.itemsCount, 'items');
 
     return (
         <div className={styles.cart_product}>
             <div className="row gy-4">
                 <div className="col-lg-9">
-                    {items.map(item => (
-                        <CartProductItem key={item._id} item={item} />
-                    ))}
+                    {/* نمایش تعداد آیتم‌ها */}
+                    <div className="mb-3">
+                        <h5>سبد خرید شما ({cartState.itemsCount} محصول)</h5>
+                    </div>
+                    
+                    {/* نمایش آیتم‌های سبد خرید */}
+                    {cartState.items.map((item, index) => {
+                        return (
+                            <CartProductItem 
+                                key={item._id || `item-${index}`} 
+                                item={item} 
+                            />
+                        );
+                    })}
                 </div>
                 <div className="col-lg-3">
                     <CartFactor />
