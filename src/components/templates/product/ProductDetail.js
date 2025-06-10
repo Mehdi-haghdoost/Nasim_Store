@@ -257,7 +257,7 @@ import { useCart } from '@/Redux/hooks/useCart';
 import { toast } from 'react-toastify';
 
 function ProductDetail({ product }) {
-  const { addToCart, loading, error } = useCart();
+  const { addToCart, loading, error, clearError } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedSeller, setSelectedSeller] = useState(null);
   const [selectedColor, setSelectedColor] = useState(() => {
@@ -282,7 +282,6 @@ function ProductDetail({ product }) {
       inputRef.current.value = quantity.toString();
     }
     
-    // Manual DOM update برای همه input های counter
     const updateAllCounterInputs = () => {
       const inputs = document.querySelectorAll('input[name="count"]');
       inputs.forEach(input => {
@@ -294,27 +293,30 @@ function ProductDetail({ product }) {
 
     if (isHydrated && quantity) {
       updateAllCounterInputs();
-      // Retry برای اطمینان در Safari
       setTimeout(updateAllCounterInputs, 100);
     }
   }, [quantity, isHydrated]);
 
   useEffect(() => {
     if (product && product.sellers && product.sellers.length > 0) {
-      fetchSellerInfo(product.sellers[0]);
+      // انتخاب اولین فروشنده یا فروشنده پیش‌فرض
+      const defaultSeller = product.sellers.find(seller => 
+        seller.isSelected || seller.name === "فروشگاه نسیم"
+      ) || product.sellers[0];
+      
+      setSelectedSeller({
+        _id: defaultSeller._id || defaultSeller,
+        name: defaultSeller.name || "فروشگاه نسیم",
+      });
     }
   }, [product]);
 
-  const fetchSellerInfo = async (sellerId) => {
-    try {
-      setSelectedSeller({
-        _id: sellerId,
-        name: "فروشگاه نسیم",
-      });
-    } catch (error) {
-      console.error('خطا در دریافت اطلاعات فروشنده:', error);
+  // پاک کردن خطا هنگام تغییر محصول
+  useEffect(() => {
+    if (error) {
+      clearError();
     }
-  };
+  }, [product, clearError]);
 
   const increaseQuantity = () => {
     if (product && product.stock > quantity) {
@@ -328,33 +330,84 @@ function ProductDetail({ product }) {
     }
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
-    if (isAdding || !product || !selectedSeller) {
+    
+    // بررسی‌های اولیه
+    if (isAdding) {
+      return;
+    }
+
+    if (!product) {
+      toast.error('اطلاعات محصول موجود نیست');
+      return;
+    }
+
+    if (!selectedSeller || !selectedSeller._id) {
+      toast.error('لطفاً فروشنده را انتخاب کنید');
+      return;
+    }
+
+    if (product.stock < quantity) {
+      toast.error('موجودی محصول کافی نیست');
       return;
     }
 
     setIsAdding(true);
-    const productData = {
-      ...product,
-      image: product.image
-        ? (product.image.startsWith('/') ? product.image : `/images/product/${product.image}`)
-        : '/images/product/product-placeholder.jpg',
-    };
+    
+    try {
+      // پاک کردن خطای قبلی
+      clearError();
 
-    addToCart(productData, quantity, selectedColor, null, selectedSeller._id)
-      .unwrap()
-      .then(() => {
-        // toast.success(`${product.title} به سبد خرید اضافه شد`, {
-        //   position: "bottom-right",
-        //   autoClose: 3000,
-        // }); // حذف toast
-      })
-      .catch((error) => {
-        console.error('Error adding to cart:', error);
-        toast.error('خطا در افزودن به سبد خرید: ' + (error.message || 'خطای ناشناخته'));
-      })
-      .finally(() => setIsAdding(false));
+      const productData = {
+        ...product,
+        image: product.image
+          ? (product.image.startsWith('/') ? product.image : `/images/product/${product.image}`)
+          : '/images/product/product-placeholder.jpg',
+      };
+
+      // ارسال فقط ID فروشنده (نه کل object)
+      const sellerIdToSend = typeof selectedSeller._id === 'string' 
+        ? selectedSeller._id 
+        : String(selectedSeller._id);
+
+      await addToCart(
+        productData, 
+        quantity, 
+        selectedColor, 
+        null, // size
+        sellerIdToSend // فقط ID فروشنده
+      );
+
+      // هیچ toast اینجا نمایش نمی‌دهیم - فقط در cartThunks
+
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      
+      // فقط در صورت خطاهای خاص، toast نمایش می‌دهیم
+      if (error.message && !error.message.includes('toast')) {
+        let errorMessage = 'خطا در افزودن به سبد خرید';
+        
+        if (error.message.includes('موجودی')) {
+          errorMessage = 'موجودی محصول کافی نیست';
+        } else if (error.message.includes('لاگین') || error.message.includes('وارد')) {
+          errorMessage = 'برای افزودن به سبد خرید باید وارد شوید';
+        } else if (error.message.includes('محصول یافت نشد')) {
+          errorMessage = 'محصول موردنظر یافت نشد';
+        } else if (error.message.includes('فروشنده')) {
+          errorMessage = 'فروشنده انتخابی معتبر نیست';
+        } else {
+          errorMessage = 'خطا در ارتباط با سرور. لطفاً مجدد تلاش کنید';
+        }
+        
+        toast.error(errorMessage, {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
+      }
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   if (!product) {
@@ -376,6 +429,7 @@ function ProductDetail({ product }) {
           </div>
         </div>
       </div>
+      
       <div className={styles.product_meta_feature}>
         <div className="row gy-3">
           <div className="col-lg-8">
@@ -413,6 +467,7 @@ function ProductDetail({ product }) {
           </div>
         </div>
       </div>
+      
       <div className="product-meta-color">
         <h5 className="font-16">انتخاب رنگ کالا</h5>
         <div className="product-meta-color-items">
@@ -440,6 +495,7 @@ function ProductDetail({ product }) {
           )}
         </div>
       </div>
+      
       {selectedSeller && (
         <div className="product-meta-seller mt-3">
           <h5 className="font-16">فروشنده</h5>
@@ -449,9 +505,11 @@ function ProductDetail({ product }) {
           </div>
         </div>
       )}
+      
       <div className={`${styles.productmeta_count} text-muted`}>
         <span>{product.stock || '0'} عدد در انبار</span>
       </div>
+      
       <div className={styles.product_meta_action}>
         <div className="row align-items-center gy-3">
           {product.hasDiscount && (
@@ -472,14 +530,20 @@ function ProductDetail({ product }) {
             <div className="d-flex justify-content-center">
               <button
                 onClick={handleAddToCart}
-                disabled={loading || isAdding || product.stock <= 0}
+                disabled={loading || isAdding || product.stock <= 0 || !selectedSeller}
                 className="btn w-100 border-0 main-color-three-bg"
               >
                 <i className="bi bi-basket text-white font-20 ms-1"></i>
                 {loading || isAdding ? 'در حال افزودن...' : (product.stock <= 0 ? 'ناموجود' : 'خرید کالا')}
               </button>
             </div>
-            {error && <div className="text-danger mt-2 text-center">{error}</div>}
+            
+            {/* نمایش خطا فقط در حالت توسعه */}
+            {error && process.env.NODE_ENV === 'development' && (
+              <div className="text-danger mt-2 text-center small">
+                DEBUG: {error}
+              </div>
+            )}
           </div>
           <div className="col-lg-3 col-6 w-100-in-400">
             <div className="counter">
@@ -489,10 +553,9 @@ function ProductDetail({ product }) {
                     className="btn-counter waves-effect waves-light bootstrap-touchspin-down"
                     type="button"
                     onClick={decreaseQuantity}
-                    disabled={quantity <= 1 || loading}
+                    disabled={quantity <= 1 || loading || isAdding}
                   >-</button>
                 </span>
-                {/* راه حل اول: استفاده از input با ref */}
                 <input
                   ref={inputRef}
                   type="text"
@@ -508,33 +571,12 @@ function ProductDetail({ product }) {
                     backgroundColor: '#fff'
                   }}
                 />
-                {/* راه حل دوم: اگر input کار نکرد، از div استفاده کن */}
-                {/* 
-                <div 
-                  className="counter form-counter"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '38px',
-                    border: '1px solid #ced4da',
-                    borderRadius: '0.375rem',
-                    backgroundColor: '#fff',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    color: '#000',
-                    minWidth: '60px'
-                  }}
-                >
-                  {isHydrated ? quantity : 1}
-                </div>
-                */}
                 <span className="input-group-btn input-group-append">
                   <button
                     className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
                     type="button"
                     onClick={increaseQuantity}
-                    disabled={product.stock <= quantity || loading}
+                    disabled={product.stock <= quantity || loading || isAdding}
                   >+</button>
                 </span>
               </div>
