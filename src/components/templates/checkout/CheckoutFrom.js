@@ -18,6 +18,16 @@ const CheckoutFrom = () => {
     const { user, isAuthenticated } = useAuth();
     const { addresses, loading: addressLoading } = useAddress();
     
+    // Debug logging
+    console.log('🔍 CheckoutFrom Debug:', {
+        items: items,
+        itemsType: typeof items,
+        itemsIsArray: Array.isArray(items),
+        itemsLength: items?.length,
+        cartLoading: cartLoading,
+        hasItems: items && Array.isArray(items) && items.length > 0
+    });
+    
     // State برای هیدریشن
     const [isMounted, setIsMounted] = useState(false);
     
@@ -106,13 +116,56 @@ const CheckoutFrom = () => {
         }
     };
 
-    // بررسی سبد خرید خالی
+    // بررسی سبد خرید خالی - اصلاح شده با swal معمولی
     useEffect(() => {
-        if (isMounted && !cartLoading && (!items || items.length === 0)) {
-            showSwal("سبد خرید شما خالی است!", "warning", "بازگشت به فروشگاه");
-            router.push('/');
+        // فقط بررسی کن وقتی که mount شده و loading نیست
+        if (isMounted && !cartLoading) {
+            // اضافه کردن تاخیر بیشتر برای اطمینان از hydration کامل
+            const checkCartTimeout = setTimeout(() => {
+                console.log('🛒 Checking cart state after timeout:', {
+                    items: items,
+                    itemsLength: items?.length,
+                    itemsIsArray: Array.isArray(items),
+                    cartLoading,
+                    isMounted,
+                    condition: Array.isArray(items) && items.length === 0
+                });
+                
+                // بررسی دقیق‌تر - آرایه باشد و خالی باشد
+                if (Array.isArray(items) && items.length === 0) {
+                    console.log('🚨 Cart is confirmed empty, showing dialog');
+                    
+                    import('sweetalert').then(({ default: swal }) => {
+                        swal({
+                            title: "سبد خرید شما خالی است!",
+                            text: "برای خرید ابتدا محصولاتی به سبد خرید اضافه کنید.",
+                            icon: "warning",
+                            buttons: {
+                                cancel: "ماندن در صفحه",
+                                confirm: "بازگشت به فروشگاه"
+                            },
+                            dangerMode: false,
+                        }).then((willRedirect) => {
+                            if (willRedirect) {
+                                router.push('/');
+                            }
+                        });
+                    });
+                } else if (items && items.length > 0) {
+                    console.log('✅ Cart has items, continuing:', {
+                        itemsLength: items.length
+                    });
+                } else {
+                    console.log('⏳ Items not ready yet, waiting...', {
+                        items: items,
+                        itemsType: typeof items
+                    });
+                }
+            }, 1000); // افزایش تاخیر به 1 ثانیه
+
+            return () => clearTimeout(checkCartTimeout);
         }
-    }, [isMounted, items, cartLoading, router]);
+    }, [isMounted, cartLoading, items, router]);
 
     // مدیریت تغییر ورودی‌ها
     const handleInputChange = (e) => {
@@ -215,11 +268,12 @@ const CheckoutFrom = () => {
         return null;
     }
 
-    if (cartLoading) {
+    // نمایش loading فقط وقتی که واقعاً loading هست
+    if (!isMounted || cartLoading) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
                 <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">در حال بارگذاری...</span>
+                    <span className="visually-hidden">در حال بارگذاری سبد خرید...</span>
                 </div>
             </div>
         );
