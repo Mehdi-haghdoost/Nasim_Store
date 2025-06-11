@@ -12,6 +12,16 @@ const CheckoutSide = ({ formData }) => {
     const router = useRouter();
     const { items, totalPrice, totalDiscount, finalPrice, loading } = useCart();
     
+    // Debug logging
+    console.log('🔍 CheckoutSide Debug:', {
+        items: items,
+        itemsType: typeof items,
+        itemsIsArray: Array.isArray(items),
+        itemsLength: items?.length,
+        loading: loading,
+        hasItems: items && Array.isArray(items) && items.length > 0
+    });
+    
     // State برای hydration
     const [isMounted, setIsMounted] = useState(false);
     
@@ -182,7 +192,19 @@ const CheckoutSide = ({ formData }) => {
         return null;
     }
 
+    // نمایش loading فقط وقتی که واقعاً loading هست
     if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{minHeight: '300px'}}>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">در حال بارگذاری سبد خرید...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // صبر کردن تا items به درستی لود شود
+    if (!items) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{minHeight: '300px'}}>
                 <div className="spinner-border text-primary" role="status">
@@ -192,11 +214,25 @@ const CheckoutSide = ({ formData }) => {
         );
     }
 
-    if (!items || items.length === 0) {
+    // بررسی سبد خرید خالی - فقط وقتی مطمئن هستیم آرایه خالی است
+    if (Array.isArray(items) && items.length === 0) {
+        console.log('🛒 CheckoutSide: Cart is confirmed empty', {
+            items: items,
+            itemsLength: items?.length,
+            itemsIsArray: Array.isArray(items),
+            loading
+        });
+        
         return (
             <div className="alert alert-warning">
                 <h6>سبد خرید خالی است</h6>
                 <p>لطفا ابتدا محصولی به سبد خرید اضافه کنید.</p>
+                <button 
+                    className="btn btn-primary btn-sm"
+                    onClick={() => router.push('/')}
+                >
+                    بازگشت به فروشگاه
+                </button>
             </div>
         );
     }
