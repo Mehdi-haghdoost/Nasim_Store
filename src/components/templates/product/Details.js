@@ -6,6 +6,7 @@ import styles from './details.module.css';
 import ProductDetail from './ProductDetail';
 import Gallery from '../product/product-images-slider/ImageSlider';
 import PriceChartModal from './PriceChartModal';
+import ShareModal from './ShareModal';
 import { useWishlist } from '@/Redux/hooks/useWishlist';
 
 function Details({ product }) {
@@ -82,19 +83,6 @@ function Details({ product }) {
     const handleShare = (e) => {
         e.preventDefault();
         setShowShareModal(true);
-    };
-
-    // کپی کردن لینک
-    const handleCopyLink = async () => {
-        try {
-            const url = window.location.href;
-            await navigator.clipboard.writeText(url);
-            toast.success('لینک کپی شد');
-            setShowShareModal(false);
-        } catch (error) {
-            console.error('Error copying link:', error);
-            toast.error('خطا در کپی کردن لینک');
-        }
     };
 
     // نمودار قیمت
@@ -216,84 +204,14 @@ function Details({ product }) {
             </div>
 
             {/* Modal اشتراک‌گذاری */}
-            {showShareModal && (
-                <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">اشتراک‌گذاری محصول</h5>
-                                <button 
-                                    type="button" 
-                                    className="btn-close" 
-                                    onClick={() => setShowShareModal(false)}
-                                ></button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="d-flex align-items-center mb-3">
-                                    <img 
-                                        src={`/images/product/${product.image}`} 
-                                        alt={product.title}
-                                        className="rounded me-3"
-                                        style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-                                    />
-                                    <div>
-                                        <h6 className="mb-1">{product.title}</h6>
-                                        <p className="text-muted mb-0 small">{product.originalName}</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="row g-2">
-                                    <div className="col-6">
-                                        <button 
-                                            className="btn btn-outline-primary w-100"
-                                            onClick={handleCopyLink}
-                                        >
-                                            <i className="bi bi-clipboard me-2"></i>
-                                            کپی لینک
-                                        </button>
-                                    </div>
-                                    <div className="col-6">
-                                        <a 
-                                            href={`https://telegram.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(product.title)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline-info w-100"
-                                        >
-                                            <i className="bi bi-telegram me-2"></i>
-                                            تلگرام
-                                        </a>
-                                    </div>
-                                    <div className="col-6">
-                                        <a 
-                                            href={`https://wa.me/?text=${encodeURIComponent(product.title + ' - ' + window.location.href)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline-success w-100"
-                                        >
-                                            <i className="bi bi-whatsapp me-2"></i>
-                                            واتساپ
-                                        </a>
-                                    </div>
-                                    <div className="col-6">
-                                        <a 
-                                            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(product.title)}&url=${encodeURIComponent(window.location.href)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline-dark w-100"
-                                        >
-                                            <i className="bi bi-twitter me-2"></i>
-                                            توییتر
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ShareModal 
+                product={product}
+                show={showShareModal}
+                onClose={() => setShowShareModal(false)}
+            />
 
             {/* Modal نمودار قیمت */}
-            <PriceChartModal
+            <PriceChartModal 
                 product={product}
                 show={showChartModal}
                 onClose={() => setShowChartModal(false)}
