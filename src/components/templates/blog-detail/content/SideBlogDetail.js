@@ -27,7 +27,7 @@ const SideBlogDetail = ({ currentPostId }) => {
                             </h6>
                         </div>
                         <nav className="navbar">
-                            <ul className="navbar nav flex-column flex-nowrap">
+                            <ul className="navbar nav flex-column flex-nowrap align-items-start">
                                 {latestPosts.map((post) => (
                                     <BlogDetailItem 
                                         key={post.id}
