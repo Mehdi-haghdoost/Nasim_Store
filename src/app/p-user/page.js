@@ -1,14 +1,16 @@
+// C:\Users\LENOVO\Desktop\Nassim_Store\src\app\p-user\page.js
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layouts/UserPanelLayout';
 import styles from '@/styles/p-user/index.module.css';
 import Box from '@/components/templates/p-user/index/Box';
+import LatestOrder from '@/components/modules/p-user/LatestOrder/LatestOrder';
 import { useAuth } from '@/Redux/hooks/useAuth';
 import { useOrder } from '@/Redux/hooks/useOrder';
 import { useRouter } from 'next/navigation';
 import swal from 'sweetalert';
-import Link from 'next/link';
 
 function Page() {
   const { user, logout } = useAuth();
@@ -188,6 +190,7 @@ function Page() {
   return (
     <Layout>
       <main>
+        {/* Header Section */}
         <div className="content-box">
           <div className="container-fluid">
             <div className="row gy-3">
@@ -211,7 +214,7 @@ function Page() {
           </div>
         </div>
 
-        {/* آمار کاربر */}
+        {/* User Stats */}
         <div className={styles.status_panel_user}>
           <div className="row g-3">
             <Box
@@ -239,147 +242,16 @@ function Page() {
           </div>
         </div>
 
-        {/* آخرین سفارش */}
-        <div className={`${styles.latest_order} mt-3`}>
-          <div className="content-box">
-            <div className="container-fluid">
-              <div className={styles.site_table}>
-                <div className='title title-panel d-flex align-items-baseline'>
-                  <i className='bi bi-cart-check font-25'></i>
-                  <h6 className="font-16 ms-2">
-                    آخرین سفارش
-                    {hasOrder && (
-                      <span className="badge ms-2 font-12">
-                        {userOrders?.length || 1} سفارش
-                      </span>
-                    )}
-                  </h6>
-                </div>
-
-                {/* لودینگ */}
-                {loading && (
-                  <div className="text-center py-4">
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="visually-hidden">در حال بارگذاری...</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* نمایش سفارش */}
-                {!loading && hasOrder && latestOrder ? (
-                  <div className="row g-3 mt-3">
-                    <div className="col-12">
-                      <div className="card border-0 shadow-sm">
-                        <div className="card-body p-3">
-                          <div className="row align-items-center">
-                            {/* تصویر و نام محصول */}
-                            <div className="col-md-3">
-                              <div className="d-flex align-items-center">
-                                <img
-                                  src={`/images/product/${latestOrder.productImage}`}
-                                  alt={latestOrder.productName}
-                                  className="rounded ms-2"
-                                  style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                  onError={(e) => {
-                                    e.target.src = '/images/default-product.jpg';
-                                  }}
-                                />
-                                <div>
-                                  <Link href={`/p-user/order-detail/${latestOrder._id}`}>
-                                    <h6 className="mb-1 font-14 text-truncate" style={{ maxWidth: '200px' }}>
-                                      {latestOrder.productName}
-                                      {latestOrder.hasMultipleProducts && (
-                                        <small className="text-muted d-block">
-                                          و {latestOrder.additionalProductsCount} محصول دیگر
-                                        </small>
-                                      )}
-                                    </h6>
-                                  </Link>
-                                  <small className="text-muted">
-                                    کد پیگیری: {latestOrder.trackingId}
-                                  </small>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* قیمت */}
-                            <div className="col-md-2">
-                              <span className="fw-bold text-success">
-                                {latestOrder.totalAmount?.toLocaleString()} تومان
-                              </span>
-                              {latestOrder.shippingCost > 0 && (
-                                <small className="text-muted d-block">
-                                  + {latestOrder.shippingCost?.toLocaleString()} ارسال
-                                </small>
-                              )}
-                            </div>
-
-                            {/* تعداد و روش پرداخت */}
-                            <div className="col-md-2">
-                              <div className="text-center">
-                                <span className="badge bg-light text-dark">
-                                  {latestOrder.itemCount} عدد
-                                </span>
-                                <small className="text-muted d-block mt-1">
-                                  {getPaymentMethodText(latestOrder.paymentMethod)}
-                                </small>
-                              </div>
-                            </div>
-
-                            {/* وضعیت و تاریخ */}
-                            <div className="col-md-3">
-                              <span className={`badge ${getOrderStatusText(latestOrder.status).class}`}>
-                                {getOrderStatusText(latestOrder.status).text}
-                              </span>
-                              <small className="text-muted d-block mt-1">
-                                {formatDate(latestOrder.orderDate)}
-                              </small>
-                            </div>
-
-                            {/* دکمه مشاهده */}
-                            <div className="col-md-2 text-end">
-                              <Link
-                                href={`/p-user/order-detail/${latestOrder._id}`}
-                                className='btn main-color-one-bg shadow-md border-muted ms-2 '
-                              >
-                                مشاهده
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : !loading && (
-                  // سفارشی وجود ندارد
-                  <div className="text-center py-5">
-                    <div className="alert alert-info">
-                      <i className="bi bi-cart-x font-24 text-muted d-block mb-2"></i>
-                      <h6>هنوز سفارشی ثبت نکرده‌اید</h6>
-                      <p className="mb-3">برای شروع خرید به صفحه اصلی بروید</p>
-                      <a href="/" className="btn btn-primary btn-sm">
-                        شروع خرید
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {/* لینک مشاهده همه سفارشات */}
-                {!loading && hasOrder && (
-                  <div className="text-center mt-4">
-                    <Link
-                      href="/p-user/orders"
-                      className="btn main-color-one-bg shadow-md border-muted d-inline-flex justify-content-center"
-                    >
-                      <span className="ms-2 text-white">مشاهده همه سفارشات</span>
-                      <i className="bi bi-arrow-left text-white"></i>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Latest Order Component */}
+        <LatestOrder
+          loading={loading}
+          hasOrder={hasOrder}
+          latestOrder={latestOrder}
+          userOrders={userOrders}
+          formatDate={formatDate}
+          getOrderStatusText={getOrderStatusText}
+          getPaymentMethodText={getPaymentMethodText}
+        />
       </main>
     </Layout>
   );

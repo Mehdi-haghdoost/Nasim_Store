@@ -1,0 +1,261 @@
+.latest_order {
+  margin-top: 1rem;
+}
+
+.site_table {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order_card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Desktop Layout */
+.desktop_layout {
+  display: flex;
+}
+
+.mobile_layout {
+  display: none;
+}
+
+.product_image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 2px solid #f8f9fa;
+}
+
+.product_name {
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.product_name:hover {
+  color: var(--main-color-one, #007bff);
+}
+
+/* Responsive Design */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .product_name {
+    max-width: 150px;
+  }
+  
+  .product_image {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Mobile Large */
+@media (max-width: 768px) {
+  .desktop_layout {
+    display: none;
+  }
+  
+  .mobile_layout {
+    display: block;
+  }
+  
+  .site_table {
+    padding: 15px;
+  }
+  
+  .mobile_product_info {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+  
+  .mobile_product_image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid #f8f9fa;
+    flex-shrink: 0;
+  }
+  
+  .mobile_product_name {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+  
+  .mobile_details {
+    margin-top: 15px;
+  }
+  
+  .mobile_details .col-6 > div {
+    border: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+  }
+  
+  .mobile_details .col-6 > div:hover {
+    background-color: #f8f9fa !important;
+  }
+  
+  .order_card {
+    margin-bottom: 15px;
+  }
+}
+
+/* Mobile Medium */
+@media (max-width: 576px) {
+  .site_table {
+    padding: 10px;
+    margin: 0 -5px;
+  }
+  
+  .mobile_product_image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .mobile_product_name {
+    font-size: 13px;
+  }
+  
+  .mobile_details .col-6 > div {
+    padding: 8px !important;
+    font-size: 12px;
+  }
+  
+  .mobile_details small {
+    font-size: 10px;
+  }
+  
+  .latest_order {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .site_table {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .mobile_product_info {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .mobile_product_image {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto 10px auto;
+  }
+  
+  .mobile_product_name {
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  .mobile_details {
+    margin-top: 10px;
+  }
+  
+  .mobile_details .col-6 {
+    margin-bottom: 8px;
+  }
+  
+  .mobile_details .col-6 > div {
+    padding: 6px !important;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .mobile_details .col-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .mobile_details .row {
+    margin: 0;
+  }
+  
+  .mobile_product_name {
+    font-size: 12px;
+  }
+  
+  .site_table {
+    padding: 6px;
+  }
+}
+
+/* Badge Improvements for Mobile */
+@media (max-width: 768px) {
+  .badge {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+  
+  .title .badge {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+  }
+}
+
+/* Button Improvements */
+@media (max-width: 768px) {
+  .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  
+  .btn.w-100 {
+    padding: 10px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
+
+/* Loading and Alert Improvements */
+@media (max-width: 768px) {
+  .alert {
+    margin: 10px 0;
+    padding: 15px;
+  }
+  
+  .alert h6 {
+    font-size: 16px;
+  }
+  
+  .alert p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .alert {
+    padding: 12px;
+  }
+  
+  .alert h6 {
+    font-size: 14px;
+  }
+  
+  .alert p {
+    font-size: 12px;
+  }
+}
