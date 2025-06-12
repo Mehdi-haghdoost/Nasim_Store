@@ -164,9 +164,9 @@ const NewAddress = () => {
                                     </div>
                                 </div>
                                 <div className="col-12">
-                                    <div className="form-check">
+                                    <div className="form-check d-inline-flex align-items-end">
                                         <input
-                                            className="form-check-input"
+                                            className="form-check-input ms-3"
                                             type="checkbox"
                                             id="defaultAddressCheck"
                                             name="isDefault"
