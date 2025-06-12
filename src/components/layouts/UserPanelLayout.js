@@ -137,6 +137,7 @@ function Layout({ children }) {
                                                                     سفارش های من
                                                                     <span className={`badge rounded-pill ${styles.badge_spn}`}>
                                                                         {user?.orders?.length || 0}
+                                                                        {console.log('user.orders =>', user?.orders?.length)}
                                                                     </span>
                                                                 </ActiveLink>
                                                                 <ActiveLink href="/p-user/address" onClick={handleLinkClick}>

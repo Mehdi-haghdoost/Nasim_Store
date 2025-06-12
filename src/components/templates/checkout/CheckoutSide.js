@@ -6,25 +6,18 @@ import DayItem from '@/components/modules/checkout/DayItem';
 import { showSwal } from '@/utils/helpers';
 import getNext6DaysWithJalali from '@/utils/WeekDaysInPersian';
 import { useCart } from '@/Redux/hooks/useCart';
+import { useOrder } from '@/Redux/hooks/useOrder';
+import { useAuth } from '@/Redux/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
 const CheckoutSide = ({ formData }) => {
     const router = useRouter();
     const { items, totalPrice, totalDiscount, finalPrice, loading } = useCart();
+    const { createOrderFromLocalStorage, creating } = useOrder();
+    const { user, isAuthenticated } = useAuth();
     
-    // Debug logging
-    console.log('🔍 CheckoutSide Debug:', {
-        items: items,
-        itemsType: typeof items,
-        itemsIsArray: Array.isArray(items),
-        itemsLength: items?.length,
-        loading: loading,
-        hasItems: items && Array.isArray(items) && items.length > 0
-    });
-    
-    // State برای hydration
+    // State های کامپوننت
     const [isMounted, setIsMounted] = useState(false);
-    
     const [selectDay, setSelectDay] = useState(null);
     const [persianDays, setPersianDays] = useState(null);
     const [shippingMethod, setShippingMethod] = useState('Express');
@@ -38,12 +31,11 @@ const CheckoutSide = ({ formData }) => {
         'Express': { name: 'پست پیشتاز', cost: 16000 }
     };
 
-    // مدیریت hydration
+    // مدیریت mount و بارگذاری تخفیف
     useEffect(() => {
         setIsMounted(true);
         setPersianDays(getNext6DaysWithJalali);
         
-        // تابع بررسی تخفیف
         const checkDiscount = () => {
             const savedDiscount = localStorage.getItem('applied_discount');
             if (savedDiscount) {
@@ -59,7 +51,7 @@ const CheckoutSide = ({ formData }) => {
         
         checkDiscount();
         
-        // گوش دادن به تغییرات localStorage
+        // گوش دادن به تغییرات localStorage و interval
         const handleStorageChange = (e) => {
             if (e.key === 'applied_discount') {
                 checkDiscount();
@@ -68,7 +60,7 @@ const CheckoutSide = ({ formData }) => {
         
         window.addEventListener('storage', handleStorageChange);
         
-        // interval برای چک کردن تغییرات در همان tab (کاهش زمان به 500ms)
+        // بررسی دوره‌ای تغییرات در همان tab
         const interval = setInterval(checkDiscount, 500);
         
         return () => {
@@ -100,7 +92,7 @@ const CheckoutSide = ({ formData }) => {
     const finalPriceAfterDiscount = finalPrice - discountAmount;
     const finalPriceWithShipping = finalPriceAfterDiscount + shippingCost;
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         // بررسی انتخاب روز تحویل
         if (!selectDay) {
             return showSwal("لطفا یک روز را برای تحویل مرسوله انتخاب کنید", "warning", "تلاش مجدد");
@@ -116,7 +108,12 @@ const CheckoutSide = ({ formData }) => {
             return showSwal("سبد خرید شما خالی است!", "warning", "بازگشت به فروشگاه");
         }
 
-        // ذخیره اطلاعات کامل سفارش
+        // بررسی ورود کاربر
+        if (!isAuthenticated || !user) {
+            return showSwal("برای ثبت سفارش باید وارد حساب کاربری شوید", "warning", "ورود");
+        }
+
+        // ذخیره اطلاعات کامل سفارش در localStorage
         const orderDetails = {
             customerInfo: formData,
             items: items,
@@ -150,15 +147,23 @@ const CheckoutSide = ({ formData }) => {
                 showSwal("به درگاه پرداخت منتقل می‌شوید", "info", "ادامه");
                 
                 // شبیه‌سازی پردازش پرداخت (2 ثانیه انتظار)
-                setTimeout(() => {
+                setTimeout(async () => {
                     // شبیه‌سازی موفقیت پرداخت (در پروژه واقعی از API برمی‌گردد)
                     const paymentSuccess = Math.random() > 0.1; // 90% احتمال موفقیت
                     
                     if (paymentSuccess) {
-                        showSwal("پرداخت با موفقیت انجام شد", "success", "عالی");
-                        setTimeout(() => {
-                            router.push('/success-payment');
-                        }, 1500);
+                        try {
+                            // ذخیره سفارش در دیتابیس
+                            await createOrderFromLocalStorage(user._id);
+                            
+                            showSwal("پرداخت با موفقیت انجام شد", "success", "عالی");
+                            setTimeout(() => {
+                                router.push('/success-payment');
+                            }, 1500);
+                        } catch (error) {
+                            console.error('خطا در ذخیره سفارش:', error);
+                            showSwal("پرداخت موفق بود اما خطا در ثبت سفارش رخ داد", "error", "تماس با پشتیبانی");
+                        }
                     } else {
                         showSwal("پرداخت ناموفق بود", "error", "تلاش مجدد");
                         setTimeout(() => {
@@ -168,11 +173,18 @@ const CheckoutSide = ({ formData }) => {
                 }, 2000);
                 
             } else {
-                // برای پرداخت در محل - مستقیم موفق
-                showSwal("سفارش شما با موفقیت ثبت شد", "success", "تایید");
-                setTimeout(() => {
-                    router.push('/success-payment');
-                }, 1500);
+                // برای پرداخت در محل - مستقیم ثبت سفارش
+                try {
+                    await createOrderFromLocalStorage(user._id);
+                    
+                    showSwal("سفارش شما با موفقیت ثبت شد", "success", "تایید");
+                    setTimeout(() => {
+                        router.push('/success-payment');
+                    }, 1500);
+                } catch (error) {
+                    console.error('خطا در ذخیره سفارش:', error);
+                    showSwal("خطا در ثبت سفارش", "error", "تلاش مجدد");
+                }
             }
         } catch (error) {
             console.error('Error saving order details:', error);
@@ -407,9 +419,16 @@ const CheckoutSide = ({ formData }) => {
                             <button 
                                 className='btn border-0 main-color-two-bg rounded-3 py-2 d-block w-100'
                                 onClick={handlePayment}
-                                disabled={loading}
+                                disabled={loading || creating}
                             >
-                                {paymentMethod === 'DirectBankPayment' ? 'پرداخت آنلاین' : 'ثبت سفارش'}
+                                {creating ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        در حال ثبت سفارش...
+                                    </>
+                                ) : (
+                                    paymentMethod === 'DirectBankPayment' ? 'پرداخت آنلاین' : 'ثبت سفارش'
+                                )}
                             </button>
                         </div>
                     </div>
