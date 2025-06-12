@@ -1,12 +1,12 @@
 const { GraphQLObjectType, GraphQLSchema, GraphQLString } = require("graphql");
-const { registerUser, 
-    sendOtp, 
-    confirmOtpAndRegister, 
-    refreshTokenMutation, 
-    loginUser, 
-    updateUserProfile, 
-    logout, 
-    sendOtpForLogin, 
+const { registerUser,
+    sendOtp,
+    confirmOtpAndRegister,
+    refreshTokenMutation,
+    loginUser,
+    updateUserProfile,
+    logout,
+    sendOtpForLogin,
     verifyOtpAndLogin,
 } = require("./mutations/user.resolvers");
 const { addProduct } = require("./mutations/product.resolvers");
@@ -26,7 +26,9 @@ const { getContacts, getContactById } = require("./queries/contact.resolvers");
 const { submitContact } = require("./mutations/contact.resolvers");
 const { product, similarProducts, bestSellingProducts, products } = require("./queries/product.resolvers");
 const { getCategories, CategoryResolvers } = require("./queries/category.resolvers");
- 
+const { createOrder, cancelOrder, updateOrder } = require("./mutations/order.resolvers");
+const { getUserOrders, getOrderById, getOrderByTrackingId, getAllOrders } = require("./queries/order.resolvers");
+
 // تعریف RootQuery فقط با queryهای واقعی (بدون resolvers)
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
@@ -50,6 +52,10 @@ const RootQuery = new GraphQLObjectType({
         products,
         me,
         getUserComments,
+        getUserOrders,
+        getOrderById,
+        getOrderByTrackingId,
+        getAllOrders,
     }
 })
 
@@ -87,6 +93,9 @@ const RootMutation = new GraphQLObjectType({
         sendOtpForLogin,
         verifyOtpAndLogin,
         syncGuestCart,
+        createOrder,
+        updateOrder,
+        cancelOrder,
     },
 });
 
