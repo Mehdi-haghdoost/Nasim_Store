@@ -1,4 +1,4 @@
-// C:\Users\LENOVO\Desktop\Nassim_Store\src\app\p-user\page.js
+// C:\Users\LENOVO\Desktop\Nassim_Store\src\app\p-user\page.js - نسخه بروزرسانی شده
 
 "use client";
 
@@ -69,9 +69,12 @@ function Page() {
     const totalItems = order.items?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
     const firstItem = order.items?.[0];
 
+    // تولید ID مناسب برای لینک
+    const orderId = order._id || order.orderNumber || `order-${Date.now()}`;
+
     return {
-      _id: order._id,
-      trackingId: order.trackingId,
+      _id: orderId,
+      trackingId: order.trackingId || order.orderNumber,
       orderDate: order.orderDate || order.createdAt,
       status: order.status,
       totalAmount: order.totalAmount,
@@ -97,9 +100,23 @@ function Page() {
         const totalItems = parsedOrder.items?.reduce((total, item) =>
           total + (item.quantity || 1), 0) || 0;
 
+        // تولید یا استفاده از ID موجود
+        let orderId = parsedOrder._id || parsedOrder.orderNumber;
+        if (!orderId) {
+          orderId = `local-${Date.now()}`;
+          
+          // ذخیره ID در localStorage برای بار بعد
+          const updatedOrder = {
+            ...parsedOrder,
+            _id: orderId,
+            orderNumber: orderId
+          };
+          localStorage.setItem('order_details', JSON.stringify(updatedOrder));
+        }
+
         const orderForDisplay = {
-          _id: 'local-' + Date.now(),
-          trackingId: 'در انتظار ثبت',
+          _id: orderId,
+          trackingId: parsedOrder.orderNumber || orderId,
           orderDate: parsedOrder.timestamp || new Date().toISOString(),
           status: 'PENDING',
           totalAmount: parsedOrder.pricing?.finalPrice || 0,
@@ -190,7 +207,6 @@ function Page() {
   return (
     <Layout>
       <main>
-        {/* Header Section */}
         <div className="content-box">
           <div className="container-fluid">
             <div className="row gy-3">
@@ -214,7 +230,7 @@ function Page() {
           </div>
         </div>
 
-        {/* User Stats */}
+        {/* آمار کاربر */}
         <div className={styles.status_panel_user}>
           <div className="row g-3">
             <Box
@@ -242,8 +258,8 @@ function Page() {
           </div>
         </div>
 
-        {/* Latest Order Component */}
-        <LatestOrder
+        {/* کامپوننت آخرین سفارش */}
+        <LatestOrder 
           loading={loading}
           hasOrder={hasOrder}
           latestOrder={latestOrder}
