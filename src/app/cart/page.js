@@ -202,21 +202,6 @@ const CartPage = () => {
     <>
       <Header />
       <BreadCroumb />
-      
-      {/* نمایش اطلاعات دیباگ در حالت توسعه */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="container-fluid">
-          <div className="alert alert-info small">
-            <strong>دیباگ:</strong> کاربر: {isAuthenticated ? 'لاگین' : 'مهمان'} | 
-            آیتم‌ها: {items?.length || 0} | 
-            آماده: {isReady ? '✓' : '✗'} | 
-            Hydrated: {isHydrated ? '✓' : '✗'} |
-            TotalQuantity: {totalQuantity || 0} |
-            HasItems: {hasItems ? '✓' : '✗'}
-          </div>
-        </div>
-      )}
-
       {hasItems ? (
         <div className="content">
           <div className="container-fluid">
