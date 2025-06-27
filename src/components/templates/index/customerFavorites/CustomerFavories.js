@@ -129,17 +129,17 @@ function CustomerFavories() {
     return (
         <div className={`${styles.site_slider} py-20`}>
             <div className="container-fluid">
-                <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+               <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
                     <div className={`${styles.title} d-flex align-items-center`}>
                          <div className=" rounded-2 p-2 me-3" style={{ background: 'var(--main-color-two)' }}>
                                 <i className="bi bi-eye-fill text-white"></i>
                             </div>
                         <h5 className="font-16 ms-3">
-                            <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span> فروشگاه
+                            <span className="main-color-one-color d-inline-block ms-1">پربازدیدترین محصولات</span>
                         </h5>
                     </div>
                     <div className="link">
-                        <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
+                        <Link href="/categories" className={`border-animate fromCenter pb-1 fw-bold ${styles.veiwAll}`}>
                             مشاهده همه
                             <i className="bi bi-chevron-double-left main-color-one-color"></i>
                         </Link>
