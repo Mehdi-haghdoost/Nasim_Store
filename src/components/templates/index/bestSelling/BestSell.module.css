@@ -1,3 +1,5 @@
+/* C:\Users\LENOVO\Desktop\Nassim_Store\src\components\templates\index\bestSelling\BestSell.module.css */
+
 .title h5 {
     margin-right: 1rem;
 }
@@ -57,7 +59,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 .swiper_button_prev {
@@ -77,9 +78,112 @@
     line-height: 1;
 }
 
+/* Responsive Styles for header-content */
+@media only screen and (max-width: 768px) {
+    .header-content .title h5 {
+        font-size: 14px;
+        margin-right: 0.5rem;
+    }
+    
+    .header-content .title h5>span {
+        font-size: 14px;
+        margin-right: 0.25rem;
+    }
+    
+    .header-content .title .bg-warning {
+        padding: 1.5px 6px !important;
+    }
+    
+    .header-content .title .bg-warning i {
+        font-size: 14px;
+    }
+    
+    .header-content .link a {
+        font-size: 13px;
+    }
+    
+    .header-content .link i {
+        font-size: 12px;
+    }
+}
 
-@media only screen and (max-width : 992px) {
+@media only screen and (max-width: 576px) {
+    .header-content {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+    
+    .header-content .title {
+        width: 100%;
+    }
+    
+    .header-content .title h5 {
+        font-size: 13px;
+        margin-right: 0.25rem;
+    }
+    
+    .header-content .title h5>span {
+        font-size: 13px;
+        margin-right: 0.125rem;
+    }
+    
+    .header-content .title .bg-warning {
+        padding: 1px 4px !important;
+    }
+    
+    .header-content .title .bg-warning i {
+        font-size: 12px;
+    }
+    
+    .header-content .link {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .header-content .link a {
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .header-content .link i {
+        font-size: 11px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .header-content .title h5 {
+        font-size: 12px;
+    }
+    
+    .header-content .title h5>span {
+        font-size: 12px;
+    }
+    
+    .header-content .title .bg-warning i {
+        font-size: 11px;
+    }
+    
+    .header-content .link a {
+        font-size: 11px;
+    }
+    
+    .header-content .link i {
+        font-size: 10px;
+    }
+}
+
+/* Existing responsive styles */
+@media only screen and (max-width: 992px) {
     .site_slider {
-        margin-top: 28rem;
+        margin-top: 33rem;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .site_slider {
+        margin-top: 37rem;
     }
 }

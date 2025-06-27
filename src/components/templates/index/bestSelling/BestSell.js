@@ -1,3 +1,5 @@
+// C:\Users\LENOVO\Desktop\Nassim_Store\src\components\templates\index\bestSelling\BestSell.js
+
 "use client";
 import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,27 +24,33 @@ function BestSell() {
         .filter(product => product.salesCount && product.salesCount > 0) // فقط محصولاتی که فروش داشته‌اند
         .sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0)) // مرتب کردن نزولی
         .slice(0, 10); // 10 محصول پرفروش
+
+    // کامپوننت Header مشترک
+    const HeaderContent = () => (
+       <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+            <div className={`${styles.title} d-flex align-items-center`}>
+                <div className="bg-warning rounded-2 p-2 me-3">
+                    <i className="bi bi-trophy-fill text-white"></i>
+                </div>
+                <h5 className="font-16 ms-3">
+                    <span className="main-color-one-color d-inline-block ms-1">پرفروشترین محصولات</span>
+                </h5>
+            </div>
+           <div className="link">
+                <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
+                    مشاهده همه
+                    <i className="bi bi-chevron-double-left main-color-one-color"></i>
+                </Link>
+            </div>
+        </div>
+    );
+
     // نمایش loading state
     if (productsLoading) {
         return (
             <div className={`${styles.site_slider} py-20`}>
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-warning rounded-2 p-2 me-3">
-                                <i className="bi bi-trophy-fill text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">پرفروشترین محصولات</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className={`${styles.parent}`}>
                         <div className="container-fluid">
                             <div className="text-center p-5">
@@ -63,22 +71,7 @@ function BestSell() {
         return (
             <div className={`${styles.site_slider} py-20`}>
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-warning rounded-2 p-2 me-3">
-                                <i className="bi bi-trophy-fill text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">پرفروشترین محصولات</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className={`${styles.parent}`}>
                         <div className="container-fluid">
                             <div className="alert alert-warning text-center">
@@ -97,22 +90,7 @@ function BestSell() {
         return (
             <div className={`${styles.site_slider} py-20`}>
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-warning rounded-2 p-2 me-3">
-                                <i className="bi bi-trophy-fill text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">پرفروشترین محصولات</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className={`${styles.parent}`}>
                         <div className="container-fluid">
                             <div className="text-center text-muted p-5">
@@ -129,22 +107,7 @@ function BestSell() {
     return (
         <div className={`${styles.site_slider} py-20`}>
             <div className="container-fluid">
-                <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                    <div className={`${styles.title} d-flex align-items-center`}>
-                        <div className="bg-warning rounded-2 p-2 me-3">
-                            <i className="bi bi-trophy-fill text-white"></i>
-                        </div>
-                        <h5 className="font-16 ms-3">
-                            <span className="main-color-one-color d-inline-block ms-1">پرفروشترین محصولات</span> فروشگاه
-                        </h5>
-                    </div>
-                    <div className="link">
-                        <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                            مشاهده همه
-                            <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </Link>
-                    </div>
-                </div>
+                <HeaderContent />
             </div>
 
             <div className={`${styles.parent}`}>
@@ -199,4 +162,4 @@ function BestSell() {
     )
 }
 
-export default BestSell
+export default BestSell;
