@@ -33,13 +33,13 @@ const MobileFooter = () => {
                             <i className="bi bi-house font-20"></i>
                         </Link>
                     </div>
-                    <div
+                    {/* <div
                         onClick={showBascket}
                         className={`item ${styles.item_float}`}>
                         <a role="button">
                             <i className="bi bi-bag font-20"></i>
                         </a>
-                    </div>
+                    </div> */}
                     <div className={styles.item}>
                         <Link href="/categories">
                             <i className="bi bi-grid-3x3-gap"></i>
