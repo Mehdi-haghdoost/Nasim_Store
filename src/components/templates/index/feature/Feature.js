@@ -10,7 +10,7 @@ function Feature() {
                     <div className={`${styles.image}`}>
                         <img src="images/history.png" alt="" className="img-fluid" />
                     </div>
-                    <div className="desc ms-3">
+                    <div className="desc me-3">
                         <h6 className=" mb-2">ضمانت بازگشت وجه</h6>
                         <p className="text-muted font-13  mb-0">در صورت عدم رضایت</p>
                     </div>
@@ -21,7 +21,7 @@ function Feature() {
                     <div className={`${styles.image}`}>
                         <img src="images/credit-card.png" alt="" className="img-fluid" />
                     </div>
-                    <div className="desc ms-3">
+                    <div className="desc me-3">
                         <h6 className="  mb-2">تضمین قیمت</h6>
                         <p className="text-muted font-13  mb-0">کمترین قیمت بازار</p>
                     </div>
@@ -32,7 +32,7 @@ function Feature() {
                     <div className={`${styles.image}`}>
                         <img src="images/fast.png" alt="" className="img-fluid" />
                     </div>
-                    <div className="desc ms-3">
+                    <div className="desc me-3">
                         <h6 className="  mb-2">ارسال سریع</h6>
                         <p className="text-muted font-13  mb-0">امن و مطمئن</p>
                     </div>
@@ -43,7 +43,7 @@ function Feature() {
                     <div className={`${styles.image}`}>
                         <img src="images/headphone.png" alt="" className="img-fluid" />
                     </div>
-                    <div className="desc ms-3">
+                    <div className="desc me-3">
                         <h6 className="  mb-2">پشتیبانی عالی</h6>
                         <p className="text-muted font-13  mb-0">24 ساعته شبانه روز</p>
                     </div>
@@ -54,7 +54,7 @@ function Feature() {
                     <div className={`${styles.image}`}>
                         <img src="images/badge.png" alt="" className="img-fluid" />
                     </div>
-                    <div className="desc ms-3">
+                    <div className="desc me-3">
                         <h6 className="  mb-2">اصالت کالا</h6>
                         <p className="text-muted font-13  mb-0">تضمین اصالت کالا</p>
                     </div>

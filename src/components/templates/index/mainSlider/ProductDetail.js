@@ -93,9 +93,9 @@ function ProductDetail({ productData }) {
                 <div className="link">
                     <button 
                         onClick={handleViewProduct}
-                        className="btn border-0 rounded-3 main-color-one-bg"
+                        className="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg"
                     >
-                        <i className="bi bi-eye text-white"></i>
+                        <i className="bi bi-eye text-white ms-1"></i>
                         <span className="text-white">مشاهده محصول</span>
                     </button>
                 </div>
