@@ -1,3 +1,5 @@
+// C:\Users\LENOVO\Desktop\Nassim_Store\src\components\templates\index\newProduct\NewProduct.js
+
 "use client";
 import React from 'react'
 import { useProduct } from '@/Redux/hooks/useProduct';
@@ -14,28 +16,33 @@ function NewProduct() {
         .filter(product => product.createdAt) // فقط محصولاتی که تاریخ ایجاد دارند
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // مرتب کردن نزولی
         .slice(0, 12); // 12 محصول جدید
+
+    // کامپوننت Header مشترک
+    const HeaderContent = () => (
+       <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
+            <div className={`${styles.title} d-flex align-items-center`}>
+                <div className="bg-danger rounded-2 p-2 me-3">
+                    <i className="bi bi-fire text-white"></i>
+                </div>
+                <h5 className="font-16 ms-3">
+                    <span className="main-color-one-color d-inline-block ms-1">محصولات جدید</span>
+                </h5>
+            </div>
+            <div className="link">
+                <Link href="/categories" className={`border-animate fromCenter pb-1 fw-bold ${styles.veiwAll}`}>
+                    مشاهده همه
+                    <i className="bi bi-chevron-double-left main-color-one-color"></i>
+                </Link>
+            </div>
+        </div>
+    );
         
     // نمایش loading state
     if (productsLoading) {
         return (
             <div className="products-row py-20">
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-danger rounded-2 p-2 me-3">
-                                <i className="bi bi-fire text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">محصولات جدید</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className="parent">
                         <div className="text-center p-5">
                             <div className="spinner-border text-primary" role="status">
@@ -54,22 +61,7 @@ function NewProduct() {
         return (
             <div className="products-row py-20">
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-danger rounded-2 p-2 me-3">
-                                <i className="bi bi-fire text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">محصولات جدید</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className="parent">
                         <div className="alert alert-warning text-center">
                             <i className="bi bi-exclamation-triangle-fill me-2"></i>
@@ -86,22 +78,7 @@ function NewProduct() {
         return (
             <div className="products-row py-20">
                 <div className="container-fluid">
-                    <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                        <div className={`${styles.title} d-flex align-items-center`}>
-                            <div className="bg-danger rounded-2 p-2 me-3">
-                                <i className="bi bi-fire text-white"></i>
-                            </div>
-                            <h5 className="font-16 ms-3">
-                                <span className="main-color-one-color d-inline-block ms-1">محصولات جدید</span> فروشگاه
-                            </h5>
-                        </div>
-                        <div className="link">
-                            <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                                مشاهده همه
-                                <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                            </Link>
-                        </div>
-                    </div>
+                    <HeaderContent />
                     <div className="parent">
                         <div className="text-center text-muted p-5">
                             <i className="bi bi-box me-2"></i>
@@ -116,22 +93,7 @@ function NewProduct() {
     return (
         <div className="products-row py-20">
             <div className="container-fluid">
-                <div className="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-between flex-wrap">
-                    <div className={`${styles.title} d-flex align-items-center`}>
-                        <div className="bg-danger rounded-2 p-2 me-3">
-                            <i className="bi bi-fire text-white"></i>
-                        </div>
-                        <h5 className="font-16 ms-3">
-                            <span className="main-color-one-color d-inline-block ms-1">محصولات جدید</span> فروشگاه
-                        </h5>
-                    </div>
-                    <div className="link">
-                        <Link href="/categories" className="border-animate fromCenter pb-1 fw-bold">
-                            مشاهده همه
-                            <i className="bi bi-chevron-double-left main-color-one-color"></i>
-                        </Link>
-                    </div>
-                </div>
+                <HeaderContent />
                 <div className="parent">
                     <div className="row g-3">
                         {newProducts.map((product, index) => (
