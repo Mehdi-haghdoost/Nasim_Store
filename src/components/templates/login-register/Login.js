@@ -10,7 +10,7 @@ import { useAuth } from "@/Redux/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 function Login({ showRegisterForm }) {
-  const { login, loading, error, requestLoginOtp, otpSent, otpMessage } = useAuth();
+  const { login, loading, error, requestLoginOtp, otpSent, otpMessage, clearError } = useAuth();
   const router = useRouter();
 
   const form = useFormik({
@@ -37,10 +37,19 @@ function Login({ showRegisterForm }) {
 
   const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
   const [isOtpRequestPending, setIsOtpRequestPending] = useState(false);
+  const [errorShown, setErrorShown] = useState(false);
 
   useEffect(() => {
-    if (error) {
+    if (error && !errorShown) {
       showSwal(error, "error", "تلاش مجدد");
+      setErrorShown(true);
+    }
+  }, [error, errorShown]);
+
+  // Reset error shown flag when error changes
+  useEffect(() => {
+    if (!error) {
+      setErrorShown(false);
     }
   }, [error]);
 
@@ -59,6 +68,16 @@ function Login({ showRegisterForm }) {
   }, [loading, error, otpSent, otpMessage, isOtpRequestPending]);
 
   const hideOtpForm = () => setIsLoginWithOtp(false);
+
+  // Modified function to clear error before switching forms
+  const handleShowRegisterForm = () => {
+    // Clear any existing errors
+    if (clearError) {
+      clearError();
+    }
+    setErrorShown(false);
+    showRegisterForm();
+  };
 
   const loginWithPassword = async () => {
     if (!form.values.phoneOrEmail || !form.values.password) {
@@ -201,7 +220,7 @@ function Login({ showRegisterForm }) {
                             </span>
                             <div className="form-group step-two">
                               <button
-                                onClick={showRegisterForm}
+                                onClick={handleShowRegisterForm}
                                 type="button"
                                 className={`${styles.register_btn_light} py-3 btn w-100 btnForm rounded-3`}
                               >
