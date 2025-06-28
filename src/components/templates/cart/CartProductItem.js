@@ -334,7 +334,6 @@
 // export default CartProductItem;
 
 
-
 'use client';
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
@@ -343,24 +342,40 @@ import { useCart } from '@/Redux/hooks/useCart';
 import { toast } from 'react-toastify';
 
 const CartProductItem = memo(({ item }) => {
-  const { updateCartItem, removeFromCart, loading, isHydrated } = useCart();
+  const { updateCartItem, removeFromCart, loading } = useCart();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [localQuantity, setLocalQuantity] = useState(item.quantity);
   const [isMounted, setIsMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Set mounted state after component mounts
+  // مدیریت hydration مشابه AuthHeader
   useEffect(() => {
     setIsMounted(true);
+    // تاخیر کوتاه برای اطمینان از hydration کامل
+    const timer = setTimeout(() => {
+      setIsHydrated(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   if (!item || !item.product) {
     return null;
   }
 
+  // همگام‌سازی localQuantity با item.quantity وقتی از بیرون تغییر کند
+  useEffect(() => {
+    if (isHydrated && !isUpdating && item.quantity !== localQuantity) {
+      setLocalQuantity(item.quantity);
+    }
+  }, [item.quantity, isUpdating, localQuantity, isHydrated]);
+
   // استفاده از useCallback برای جلوگیری از re-render
   const increaseQuantity = useCallback(async () => {
-    if (item.product.stock > localQuantity && !isUpdating && isMounted && isHydrated) {
+    if (!isHydrated || !isMounted) return;
+    
+    if (item.product.stock > localQuantity && !isUpdating) {
       const newQuantity = localQuantity + 1;
       setIsUpdating(true);
       setLocalQuantity(newQuantity); // بروزرسانی فوری UI
@@ -375,10 +390,12 @@ const CartProductItem = memo(({ item }) => {
         setIsUpdating(false);
       }
     }
-  }, [item._id, item.product.stock, localQuantity, isUpdating, updateCartItem, item.quantity, isMounted, isHydrated]);
+  }, [item._id, item.product.stock, localQuantity, isUpdating, updateCartItem, item.quantity, isHydrated, isMounted]);
 
   const decreaseQuantity = useCallback(async () => {
-    if (!isUpdating && isMounted && isHydrated) {
+    if (!isHydrated || !isMounted) return;
+    
+    if (!isUpdating) {
       setIsUpdating(true);
       
       try {
@@ -399,11 +416,13 @@ const CartProductItem = memo(({ item }) => {
         setIsRemoving(false);
       }
     }
-  }, [localQuantity, isUpdating, updateCartItem, removeFromCart, item._id, item.quantity, isMounted, isHydrated]);
+  }, [localQuantity, isUpdating, updateCartItem, removeFromCart, item._id, item.quantity, isHydrated, isMounted]);
 
   const handleRemoveItem = useCallback(async (e) => {
     e.preventDefault();
-    if (!isRemoving && isMounted && isHydrated) {
+    if (!isHydrated || !isMounted) return;
+    
+    if (!isRemoving) {
       setIsRemoving(true);
       try {
         await removeFromCart(item._id);
@@ -414,14 +433,7 @@ const CartProductItem = memo(({ item }) => {
         setIsRemoving(false);
       }
     }
-  }, [isRemoving, removeFromCart, item._id, isMounted, isHydrated]);
-
-  // همگام‌سازی localQuantity با item.quantity وقتی از بیرون تغییر کند
-  React.useEffect(() => {
-    if (!isUpdating && item.quantity !== localQuantity && isMounted && isHydrated) {
-      setLocalQuantity(item.quantity);
-    }
-  }, [item.quantity, isUpdating, localQuantity, isMounted, isHydrated]);
+  }, [isRemoving, removeFromCart, item._id, isHydrated, isMounted]);
 
   // محاسبات قیمت - فقط وقتی quantity تغییر کند
   const finalPrice = React.useMemo(() => {
@@ -468,157 +480,17 @@ const CartProductItem = memo(({ item }) => {
     return colorMap[colorName] || '#ccc';
   }, []);
 
-  // اگر هنوز mount نشده یا hydrate نشده، نمایش ساده
+  // اگر هنوز mount یا hydrate نشده، نمایش loading
   if (!isMounted || !isHydrated) {
     return (
       <div className={styles.cart_product_item}>
         <div className="content-box">
           <div className="container-fluid">
-            <div className={styles.cart_items}>
-              <div className={styles.item}>
-                <div className="row gy-2">
-                  <div className="col-2 w-100-in-400">
-                    <div className={styles.image}>
-                      <img
-                        src={getProductImage()}
-                        alt={item.product.title || "محصول"}
-                        className='img-fluid'
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "/images/product/product-placeholder.jpg";
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-10 w-100-in-400">
-                    <div className="d-flex justify-content-between align-items-start">
-                      <div className='d-flex align-items-start flex-column ms-2'>
-                        <div className={`d-flex align-items-center flex-wrap ${styles.title}`}>
-                          <h6 className='font-16'>
-                            {item.product.title}
-                            {item.product.hasDiscount && (
-                              <span className='badge me-2 danger-label rounded-pill'>
-                                {discountPercentage}%
-                              </span>
-                            )}
-                          </h6>
-                        </div>
-                        
-                        {/* نمایش اطلاعات اضافی محصول */}
-                        <div className={`d-flex align-items-center flex-wrap mt-3 ${styles.cart_item_feature}`}>
-                          {item.selectedSeller && (
-                            <div className={`d-flex align-items-center ${styles.item}`}>
-                              <div className="icon">
-                                <i className="bi bi-shop"></i>
-                              </div>
-                              <div className="saller-name mx-2">فروشنده:</div>
-                              <div className="saller-name text-muted">{item.selectedSeller.name}</div>
-                            </div>
-                          )}
-                          
-                          {item.color && (
-                            <div className={`d-flex align-items-center ${styles.item}`}>
-                              <div className="icon">
-                                <i className="bi bi-palette2"></i>
-                              </div>
-                              <div className="saller-name mx-2">رنگ:</div>
-                              <div className="saller-name text-muted">
-                                <div className={`mt-0 ${styles.product_meta_color_items}`}>
-                                  <label className='btn-light mb-0 px-2 py-1'>
-                                    <span style={{ backgroundColor: getColorCode(item.color) }}></span>
-                                    {item.color}
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {item.size && (
-                            <div className={`d-flex align-items-center ${styles.item}`}>
-                              <div className="icon">
-                                <i className="bi bi-rulers"></i>
-                              </div>
-                              <div className="saller-name mx-2">سایز:</div>
-                              <div className="saller-name text-muted">{item.size}</div>
-                            </div>
-                          )}
-
-                          {/* نمایش موجودی */}
-                          <div className={`d-flex align-items-center ${styles.item}`}>
-                            <div className="icon">
-                              <i className="bi bi-box"></i>
-                            </div>
-                            <div className="saller-name mx-2">موجودی:</div>
-                            <div className={`saller-name ${item.product.stock > 5 ? 'text-success' : 'text-warning'}`}>
-                              {item.product.stock} عدد
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className={`${styles.remove} danger-label`}>
-                        <div className="spinner-border spinner-border-sm text-muted" role="status">
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className={`${styles.action} d-flex flex-wrap justify-content-sm-end justify-content-center align-items-center mt-3`}>
-                      <div className={`d-flex align-items-center flex-wrap ${styles.cart_item_feature}`}>
-                        {item.product.hasDiscount && (
-                          <div className={`d-flex align-items-center ${styles.item} ms-2`}>
-                            <p className={`mb-0 ${styles.old_price} font-16`}>
-                              {originalPrice.toLocaleString()}
-                            </p>
-                          </div>
-                        )}
-                        <div className={`d-flex align-items-center ${styles.item}`}>
-                          <p className={`${styles.new_price} mb-0 font-16`}>
-                            {finalPrice.toLocaleString()} تومان
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className={styles.counter}>
-                        <div className="input-group">
-                          <span className="input-group-btn input-group-prepend">
-                            <button
-                              className="btn-counter waves-effect waves-light bootstrap-touchspin-down"
-                              type="button"
-                              disabled
-                            >
-                              <div className="spinner-border spinner-border-sm" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                              </div>
-                            </button>
-                          </span>
-                          <input
-                            name="count"
-                            className="counter form-counter"
-                            value={item.quantity}
-                            readOnly
-                            style={{
-                              textAlign: 'center',
-                              fontWeight: 'bold'
-                            }}
-                          />
-                          <span className="input-group-btn input-group-append">
-                            <button
-                              className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
-                              type="button"
-                              disabled
-                            >
-                              <div className="spinner-border spinner-border-sm" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                              </div>
-                            </button>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="text-center py-4">
+              <div className="spinner-border spinner-border-sm text-primary" role="status">
+                <span className="visually-hidden">در حال بارگذاری...</span>
               </div>
+              <p className="mt-2 text-muted">در حال بارگذاری محصول...</p>
             </div>
           </div>
         </div>
@@ -771,7 +643,7 @@ const CartProductItem = memo(({ item }) => {
                             className="btn-counter waves-effect waves-light bootstrap-touchspin-down"
                             type="button"
                             onClick={decreaseQuantity}
-                            disabled={loading || isUpdating}
+                            disabled={loading || isUpdating || !isHydrated}
                             title={localQuantity === 1 ? 'حذف از سبد خرید' : 'کاهش تعداد'}
                           >
                             {isUpdating ? (
@@ -790,7 +662,15 @@ const CartProductItem = memo(({ item }) => {
                           readOnly
                           style={{
                             textAlign: 'center',
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            backgroundColor: 'white',
+                            border: '1px solid #ddd',
+                            color: '#333',
+                            fontSize: '14px',
+                            minHeight: '38px',
+                            width: '60px',
+                            WebkitAppearance: 'none',
+                            MozAppearance: 'textfield'
                           }}
                         />
                         <span className="input-group-btn input-group-append">
@@ -798,7 +678,7 @@ const CartProductItem = memo(({ item }) => {
                             className="btn-counter waves-effect waves-light bootstrap-touchspin-up"
                             type="button"
                             onClick={increaseQuantity}
-                            disabled={loading || isUpdating || item.product.stock <= localQuantity}
+                            disabled={loading || isUpdating || item.product.stock <= localQuantity || !isHydrated}
                             title={item.product.stock <= localQuantity ? 'موجودی کافی نیست' : 'افزایش تعداد'}
                           >
                             {isUpdating ? (
