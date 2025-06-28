@@ -228,7 +228,7 @@ const CartFactor = memo(() => {
                     {/* اطلاعات اضافی */}
                     {!isAuthenticated && (
                         <div className="alert alert-info small mt-3 mb-0">
-                            <i className="bi bi-info-circle me-1"></i>
+                            <i className="bi bi-info-circle ms-1"></i>
                             برای ذخیره سبد خرید وارد حساب کاربری خود شوید
                         </div>
                     )}

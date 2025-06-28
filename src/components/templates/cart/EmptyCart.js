@@ -66,17 +66,17 @@ const EmptyCart = () => {
                                             onClick={handleStartShopping}
                                             className="btn btn-primary btn-lg rounded-3"
                                         >
-                                            <i className="bi bi-shop me-2"></i>
+                                            <i className="bi bi-shop text-white ms-2"></i>
                                             شروع خرید
                                         </button>
 
                                         {!isAuthenticated && (
                                             <button 
                                                 onClick={handleLogin}
-                                                className="btn btn-outline-secondary rounded-3"
+                                                className="btnbtn-outline-secondary rounded-3"
                                             >
-                                                <i className="bi bi-person me-2"></i>
-                                                ورود به حساب کاربری
+                                                <i className="bi bi-person ms-2"></i>
+                                                <span>ورود به حساب کاربری</span>
                                             </button>
                                         )}
 
@@ -84,7 +84,7 @@ const EmptyCart = () => {
                                             href="/" 
                                             className="btn btn-link text-decoration-none"
                                         >
-                                            <i className="bi bi-house me-1"></i>
+                                            <i className="bi bi-house ms-1"></i>
                                             بازگشت به صفحه اصلی
                                         </a>
                                     </div>
@@ -133,7 +133,7 @@ const EmptyCart = () => {
                                     {!isAuthenticated && (
                                         <div className="alert alert-light border mt-4">
                                             <div className="d-flex align-items-center">
-                                                <i className="bi bi-info-circle text-primary me-2"></i>
+                                                <i className="bi bi-info-circle text-primary ms-2"></i>
                                                 <small className="mb-0">
                                                     با ورود به حساب کاربری، سبد خرید شما ذخیره می‌شود و در دفعات بعدی در دسترس خواهد بود.
                                                 </small>
