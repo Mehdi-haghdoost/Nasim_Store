@@ -131,24 +131,33 @@ const SendTicket = () => {
 
     return (
         <main className={styles.container}>
+            {/* Header section - responsive */}
             <div className={styles.ticket_panel}>
                 <h5>ارسال تیکت جدید</h5>
                 <Link
-                    className='main-color-two-bg btn border-0 d-flex align-items-center rounded-pill ms-3'
+                    className={`${styles.back_btn} main-color-two-bg btn border-0 d-flex align-items-center rounded-pill`}
                     href={"/p-user/tickets"}>
+                    <i className="bi bi-arrow-right me-2 d-none d-md-inline"></i>
                     لیست تیکت ها
                 </Link>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            {/* Form section */}
+            <form onSubmit={handleSubmit} className={styles.form_container}>
+                {/* Form fields - responsive grid */}
                 <div className={styles.content}>
+                    {/* Department selection */}
                     <div className={styles.group}>
-                        <label>دپارتمان را انتخاب کنید:</label>
+                        <label className={styles.form_label}>
+                            <i className="bi bi-building ms-2"></i>
+                            دپارتمان را انتخاب کنید:
+                        </label>
                         <select
                             name="department"
                             value={formData.department}
                             onChange={handleChange}
                             disabled={loadingDepartments}
+                            className={styles.form_select}
                         >
                             <option value="">لطفا یک دپارتمان را انتخاب نمایید.</option>
                             {data && data.getDepartments && data.getDepartments.map((dep) => (
@@ -159,13 +168,18 @@ const SendTicket = () => {
                         </select>
                     </div>
                     
+                    {/* Sub-department selection */}
                     <div className={styles.group}>
-                        <label>نوع تیکت را انتخاب کنید:</label>
+                        <label className={styles.form_label}>
+                            <i className="bi bi-tags ms-2"></i>
+                            نوع تیکت را انتخاب کنید:
+                        </label>
                         <select
                             name="subDepartment"
                             value={formData.subDepartment}
                             onChange={handleChange}
                             disabled={!formData.department || subDepartments.length === 0}
+                            className={styles.form_select}
                         >
                             <option value="">لطفا یک مورد را انتخاب نمایید.</option>
                             {subDepartments.map((subDep, index) => (
@@ -176,23 +190,33 @@ const SendTicket = () => {
                         </select>
                     </div>
                     
+                    {/* Title input */}
                     <div className={styles.group}>
-                        <label>عنوان تیکت را وارد کنید:</label>
+                        <label className={styles.form_label}>
+                            <i className="bi bi-pencil ms-2"></i>
+                            عنوان تیکت را وارد کنید:
+                        </label>
                         <input
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
                             placeholder="عنوان..."
                             type="text"
+                            className={styles.form_input}
                         />
                     </div>
                     
+                    {/* Priority selection */}
                     <div className={styles.group}>
-                        <label>سطح اولویت تیکت را انتخاب کنید:</label>
+                        <label className={styles.form_label}>
+                            <i className="bi bi-exclamation-triangle ms-2"></i>
+                            سطح اولویت تیکت را انتخاب کنید:
+                        </label>
                         <select
                             name="priority"
                             value={formData.priority}
                             onChange={handleChange}
+                            className={styles.form_select}
                         >
                             <option value="">لطفا یک مورد را انتخاب نمایید.</option>
                             <option value="low">کم</option>
@@ -202,41 +226,68 @@ const SendTicket = () => {
                     </div>
                 </div>
                 
+                {/* Content textarea - full width */}
                 <div className={styles.group}>
-                    <label>محتوای تیکت را وارد نمایید:</label>
+                    <label className={styles.form_label}>
+                        <i className="bi bi-chat-text ms-2"></i>
+                        محتوای تیکت را وارد نمایید:
+                    </label>
                     <textarea
                         name="initialRequest"
                         value={formData.initialRequest}
                         onChange={handleChange}
                         rows={10}
+                        className={styles.form_textarea}
+                        placeholder="توضیحات کامل مشکل یا درخواست خود را بنویسید..."
                     ></textarea>
                 </div>
                 
+                {/* File uploader */}
                 <div className={styles.uploader}>
-                    <span>حداکثر اندازه: 6 مگابایت</span>
-                    <span>فرمت‌های مجاز: jpg, png.jpeg, rar, zip</span>
+                    <div className={styles.uploader_info}>
+                        <i className="bi bi-cloud-upload ms-2"></i>
+                        <div className={styles.uploader_text}>
+                            <span className={styles.uploader_title}>آپلود فایل (اختیاری)</span>
+                            <div className={styles.uploader_details}>
+                                <span>حداکثر اندازه: 6 مگابایت</span>
+                                <span>فرمت‌های مجاز: jpg, png, jpeg, rar, zip</span>
+                            </div>
+                        </div>
+                    </div>
                     <input 
                         type="file" 
                         onChange={handleFileChange}
                         accept=".jpg,.jpeg,.png,.rar,.zip"
+                        className={styles.file_input}
+                        id="file-upload"
                     />
+                    <label htmlFor="file-upload" className={styles.file_label}>
+                        <i className="bi bi-paperclip text-white ms-2"></i>
+                        {file ? file.name : 'انتخاب فایل'}
+                    </label>
                     {fileError && <p className={styles.error}>{fileError}</p>}
                 </div>
 
-                <button 
-                    type="submit" 
-                    className={styles.btn} 
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <span>در حال ارسال...</span>
-                    ) : (
-                        <>
-                            <IoIosSend />
-                            ارسال تیکت
-                        </>
-                    )}
-                </button>
+                {/* Submit button */}
+                <div className={styles.submit_section}>
+                    <button 
+                        type="submit" 
+                        className={styles.submit_btn} 
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <div className={styles.loading_spinner}></div>
+                                در حال ارسال...
+                            </>
+                        ) : (
+                            <>
+                                <IoIosSend className={styles.send_icon} />
+                                ارسال تیکت
+                            </>
+                        )}
+                    </button>
+                </div>
             </form>
         </main>
     );
