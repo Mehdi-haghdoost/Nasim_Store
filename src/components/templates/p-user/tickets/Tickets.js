@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -50,16 +49,36 @@ const Tickets = () => {
         );
     }
 
+    if (!tickets || tickets.length === 0) {
+        return (
+            <div className="alert alert-info text-center">
+                <p className="mb-0">هیچ تیکتی یافت نشد!</p>
+                <Link href="/p-user/tickets/sendTicket" className="btn main-color-two-bg btn-sm mt-3">
+                    ارسال تیکت جدید
+                </Link>
+            </div>
+        );
+    }
+
     return (
-        <div className={styles.table_custom}>
-            {tickets && tickets.length > 0 ? (
+        <>
+            {/* نمایش جدولی برای desktop */}
+            <div className={`${styles.table_custom} d-none d-md-block`}>
                 <table className="table shadow-none table-bordered">
                     <thead>
                         <tr>
-                            <th className='align-middle text-center'> <h6 className="font-18 text-muteLink">شناسه</h6></th>
-                            <th className='align-middle text-center'> <h6 className="font-18 text-muted">عنوان</h6></th>
-                            <th className='align-middle text-center'> <h6 className="font-18 text-muted">تاریخ بروز رسانی</h6></th>
-                            <th className='align-middle text-center'> <h6 className="font-18 text-muted">نمایش</h6></th>
+                            <th className='align-middle text-center'>
+                                <h6 className="font-18 text-muted">شناسه</h6>
+                            </th>
+                            <th className='align-middle text-center'>
+                                <h6 className="font-18 text-muted">عنوان</h6>
+                            </th>
+                            <th className='align-middle text-center'>
+                                <h6 className="font-18 text-muted">تاریخ بروز رسانی</h6>
+                            </th>
+                            <th className='align-middle text-center'>
+                                <h6 className="font-18 text-muted">نمایش</h6>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,15 +116,50 @@ const Tickets = () => {
                         })}
                     </tbody>
                 </table>
-            ) : (
-                <div className="alert alert-info text-center">
-                    <p className="mb-0">هیچ تیکتی یافت نشد!</p>
-                    <Link href="/p-user/tickets/sendTicket" className="btn main-color-two-bg btn-sm mt-3">
-                        ارسال تیکت جدید
-                    </Link>
-                </div>
-            )}
-        </div>
+            </div>
+
+            {/* نمایش کارتی برای موبایل */}
+            <div className={`${styles.mobile_tickets} d-md-none`}>
+                {tickets.map((ticket) => {
+                    const statusInfo = getStatusInfo(ticket.status);
+                    return (
+                        <div key={ticket._id} className={`${styles.ticket_card} mb-3`}>
+                            <div className={styles.ticket_header}>
+                                <div className="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 className={styles.ticket_title}>{ticket.title}</h6>
+                                        <small className={styles.ticket_id}>
+                                            شناسه: {ticket._id.substring(ticket._id.length - 6)}
+                                        </small>
+                                    </div>
+                                    <span className={`badge ${statusInfo.className} ${styles.status_badge} text-white`}>
+                                        {statusInfo.text}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div className={styles.ticket_info}>
+                                <div className="row">
+                                    <div className="col-6">
+                                        <small className="text-muted">تاریخ بروزرسانی:</small>
+                                        <p className={styles.ticket_date}>{formatDate(ticket.updatedAt)}</p>
+                                    </div>
+                                    <div className="col-6 text-start">
+                                        <Link 
+                                            href={`/p-user/tickets/ticket-message?id=${ticket._id}`} 
+                                            className={`btn main-color-three-bg ${styles.view_btn}`}
+                                        >
+                                            <i className="bi bi-eye text-white ms-1"></i>
+                                            نمایش
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </>
     );
 };
 

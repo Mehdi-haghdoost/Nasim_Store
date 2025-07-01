@@ -1,6 +1,8 @@
+/* استایل‌های پایه */
 .table_custom table {
     position: relative;
 }
+
 .table_custom table::before {
     content: '';
     background-color: var(--main-color-two);
@@ -9,15 +11,301 @@
     position: absolute;
     bottom: 0;
 }
+
 .table_custom table td {
     min-width: 200px;
 }
+
 .table_custom tbody tr td a {
     display: inline-flex;
     padding-top: 8px;
-   
 } 
 
 .table_custom tbody tr td a i {
     margin-left: 7px !important;
+}
+
+/* استایل‌های موبایل */
+.mobile_tickets {
+    padding: 0 10px;
+}
+
+.ticket_card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    position: relative;
+    overflow: hidden;
+}
+
+.ticket_card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--main-color-two);
+}
+
+.ticket_header {
+    margin-bottom: 12px;
+}
+
+.ticket_title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #333;
+    line-height: 1.3;
+}
+
+.ticket_id {
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status_badge {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.ticket_info {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+}
+
+.ticket_date {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.view_btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+}
+
+.view_btn i {
+    font-size: 11px;
+}
+
+/* Responsive breakpoints */
+
+/* Medium tablets (768px-991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .table_custom table td {
+        min-width: 150px;
+        font-size: 13px;
+        padding: 8px 6px;
+    }
+    
+    .table_custom thead th h6 {
+        font-size: 14px;
+    }
+    
+    .table_custom tbody tr td p {
+        font-size: 13px;
+    }
+    
+    .table_custom tbody tr td a {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+/* Small tablets and large phones (576px-767px) */
+@media (max-width: 767px) {
+    .mobile_tickets {
+        padding: 0 5px;
+    }
+    
+    .ticket_card {
+        padding: 14px;
+        margin-bottom: 12px;
+    }
+    
+    .ticket_title {
+        font-size: 14px;
+    }
+    
+    .ticket_id {
+        font-size: 11px;
+    }
+    
+    .status_badge {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+    
+    .ticket_date {
+        font-size: 12px;
+    }
+    
+    .view_btn {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+    
+    .view_btn i {
+        font-size: 14px;
+    }
+}
+
+/* Mobile phones (480px-575px) */
+@media (max-width: 575px) {
+    .mobile_tickets {
+        padding: 0;
+    }
+    
+    .ticket_card {
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+    
+    .ticket_title {
+        font-size: 13px;
+        line-height: 1.2;
+    }
+    
+    .ticket_id {
+        font-size: 10px;
+    }
+    
+    .status_badge {
+        font-size: 8px;
+        padding: 2px 5px;
+        border-radius: 8px;
+    }
+    
+    .ticket_info {
+        padding-top: 10px;
+    }
+    
+    .ticket_date {
+        font-size: 11px;
+    }
+    
+    .view_btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    
+    .view_btn i {
+        font-size: 12px;
+    }
+}
+
+/* Small phones (360px-479px) */
+@media (max-width: 479px) {
+    .ticket_card {
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .ticket_title {
+        font-size: 12px;
+    }
+    
+    .ticket_id {
+        font-size: 9px;
+    }
+    
+    .status_badge {
+        font-size: 7px;
+        padding: 2px 4px;
+        border-radius: 6px;
+    }
+    
+    .ticket_info {
+        padding-top: 8px;
+    }
+    
+    .ticket_date {
+        font-size: 10px;
+    }
+    
+    .view_btn {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+    
+    .view_btn i {
+        font-size: 10px;
+        margin-left: 3px !important;
+    }
+}
+
+/* Very small phones (below 360px) */
+@media (max-width: 359px) {
+    .ticket_card {
+        padding: 8px;
+        margin-bottom: 6px;
+        border-radius: 6px;
+    }
+    
+    .ticket_title {
+        font-size: 11px;
+        line-height: 1.1;
+    }
+    
+    .ticket_id {
+        font-size: 8px;
+    }
+    
+    .status_badge {
+        font-size: 6px;
+        padding: 1px 3px;
+        border-radius: 4px;
+    }
+    
+    .ticket_info {
+        padding-top: 6px;
+    }
+    
+    .ticket_date {
+        font-size: 9px;
+    }
+    
+    .view_btn {
+        font-size: 8px;
+        padding: 2px 5px;
+    }
+    
+    .view_btn i {
+        font-size: 9px;
+        margin-left: 2px !important;
+    }
+}
+
+/* بهبود accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .ticket_card {
+        transition: none;
+    }
+}
+
+/* Hover effects برای desktop */
+@media (min-width: 768px) {
+    .ticket_card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    
+    .view_btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
 }

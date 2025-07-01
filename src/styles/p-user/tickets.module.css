@@ -1,3 +1,4 @@
+/* استایل‌های پایه */
 .ticket_panel {
     margin-bottom: 50px;
     padding-bottom: 5px;
@@ -5,6 +6,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .ticket_panel::before {
@@ -14,11 +17,9 @@
     right: 0;
     height: 3px;
     background-color: var(--main-color-two);
-    width: 70px;
-    z-index: 2;
     width: 100%;
+    z-index: 2;
 }
-
 
 .ticket_panel h5,
 .ticket_panel a {
@@ -27,4 +28,162 @@
     font-family: var(--title-font);
     color: var(--color-site);
     line-height: 1.5;
+}
+
+.ticket_panel h5 {
+    font-size: 18px;
+}
+
+.ticket_panel a {
+    padding: 8px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* Responsive breakpoints */
+
+/* Medium tablets (768px-991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .ticket_panel {
+        margin-bottom: 40px;
+        gap: 12px;
+    }
+    
+    .ticket_panel h5 {
+        font-size: 17px;
+    }
+    
+    .ticket_panel a {
+        padding: 7px 14px;
+        font-size: 13px;
+    }
+}
+
+/* Small tablets and large phones (576px-767px) */
+@media (max-width: 767px) {
+    .ticket_panel {
+        margin-bottom: 30px;
+        gap: 10px;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .ticket_panel h5 {
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .ticket_panel a {
+        padding: 8px 16px;
+        font-size: 13px;
+        border-radius: 25px;
+        min-width: 150px;
+    }
+    
+    .ticket_panel::before {
+        bottom: -5px;
+        height: 2px;
+    }
+}
+
+/* Mobile phones (480px-575px) */
+@media (max-width: 575px) {
+    .ticket_panel {
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        gap: 8px;
+    }
+    
+    .ticket_panel h5 {
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+    
+    .ticket_panel a {
+        padding: 7px 14px;
+        font-size: 12px;
+        min-width: 140px;
+    }
+}
+
+/* Small phones (360px-479px) */
+@media (max-width: 479px) {
+    .ticket_panel {
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        gap: 6px;
+    }
+    
+    .ticket_panel h5 {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    .ticket_panel a {
+        padding: 6px 12px;
+        font-size: 11px;
+        min-width: 120px;
+        border-radius: 20px;
+    }
+    
+    .ticket_panel::before {
+        bottom: -3px;
+        height: 2px;
+    }
+}
+
+/* Very small phones (below 360px) */
+@media (max-width: 359px) {
+    .ticket_panel {
+        margin-bottom: 15px;
+        padding-bottom: 6px;
+        gap: 4px;
+    }
+    
+    .ticket_panel h5 {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .ticket_panel a {
+        padding: 5px 10px;
+        font-size: 10px;
+        min-width: 100px;
+        border-radius: 15px;
+    }
+}
+
+/* Landscape orientation optimizations */
+@media (max-width: 767px) and (orientation: landscape) {
+    .ticket_panel {
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .ticket_panel h5 {
+        width: auto;
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+    
+    .ticket_panel a {
+        min-width: auto;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}
+
+/* Focus states for accessibility */
+.ticket_panel a:focus {
+    outline: 2px solid var(--main-color-two);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .ticket_panel::before {
+        background-color: currentColor;
+    }
 }
