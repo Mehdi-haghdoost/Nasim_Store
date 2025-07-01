@@ -1,4 +1,123 @@
-/* استایل‌های پایه */
+/* Very small phones (below 360px) */
+@media (max-width: 359px) {
+    .compare table {
+        min-width: 340px;
+        width: 340px !important;
+    }
+    
+    .compare table tr th,
+    .compare table tr td {
+        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
+        font-size: 7px;
+        padding: 1px;
+    }
+    
+    .compare table tr td:nth-child(1),
+    .compare table tr th:nth-child(1) {
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        font-size: 6px;
+        padding-right: 2px !important;
+    }
+    
+    .compare .td_head {
+        padding-right: 2px !important;
+        font-size: 7px;
+    }
+    
+    /* حذف کامل دکمه افزودن از thead در موبایل */
+    .compare_add {
+        display: none;
+    }
+    
+    .compare_add_product {
+        display: none;
+    }
+    
+    .product_box {
+        padding: 1px;
+    }
+    
+    .product_box .product_image {
+        height: 30px;
+    }
+    
+    .product_box .product_title {
+        height: 15px;
+        margin-bottom: 1px;
+    }
+    
+    .product_box .product_title .title p {
+        font-size: 6px;
+        margin-bottom: 0;
+    }
+    
+    .product_box .product_title .title span {
+        display: none; /* حذف زیرنویس در سایز خیلی کوچک */
+    }
+    
+    .product_box .product_title .rating {
+        display: none; /* حذف rating */
+    }
+    
+    .product_box .product_timer {
+        margin-bottom: 1px;
+    }
+    
+    .product_box .product_timer .timer_label {
+        padding: 0px 1px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 4px !important;
+    }
+    
+    .price_section {
+        margin-top: 1px;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 4px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        display: none; /* حذف قیمت قبلی */
+    }
+    
+    .product_header_btn {
+        gap: 0px;
+        margin-bottom: 1px;
+    }
+    
+    .product_header_btn a {
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
+    }
+    
+    .product_header_btn a i {
+        font-size: 5px;
+    }
+    
+    .compare_delete i {
+        font-size: 6px;
+    }
+    
+    .btn-sm {
+        font-size: 4px !important;
+        padding: 0px 1px !important;
+    }
+    
+    .title h5 {
+        font-size: 11px !important;
+    }
+}
+    /* استایل‌های پایه */
 .title h5 {
     margin-right: 1rem;
 }
@@ -100,6 +219,20 @@
     color: #f21919 !important;
     font-size: 13px;
     font-weight: normal;
+}
+
+.price_section {
+    margin-top: 10px;
+}
+
+.price_section .h6,
+.price_section .text-primary {
+    font-size: 14px;
+}
+
+.price_section .small,
+.price_section .text-muted {
+    font-size: 12px;
 }
 
 .product_header_btn {
@@ -242,6 +375,24 @@
         font-size: 11px;
     }
     
+    .product_box .product_timer .timer_label {
+        padding: 4px 8px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 11px !important;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 12px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        font-size: 10px !important;
+    }
+    
     .product_header_btn a {
         width: 30px;
         height: 30px;
@@ -301,6 +452,24 @@
     
     .product_box .product_title .title span {
         font-size: 10px;
+    }
+    
+    .product_box .product_timer .timer_label {
+        padding: 3px 6px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 10px !important;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 11px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        font-size: 9px !important;
     }
     
     .product_header_btn a {
@@ -376,9 +545,13 @@
         font-size: 10px;
     }
     
+    /* حذف کامل دکمه افزودن از thead در موبایل */
+    .compare_add {
+        display: none;
+    }
+    
     .compare_add_product {
-        max-width: 120px;
-        padding: 10px 2px;
+        display: none;
     }
     
     .product_box {
@@ -386,7 +559,7 @@
     }
     
     .product_box .product_image {
-        height: 80px;
+        height: 70px;
     }
     
     .product_box .product_title {
@@ -394,7 +567,7 @@
     }
     
     .product_box .product_title .title p {
-        font-size: 10px;
+        font-size: 9px;
         line-height: 1.1;
     }
     
@@ -402,36 +575,51 @@
         font-size: 8px;
     }
     
+    .product_box .product_timer .timer_label {
+        padding: 2px 4px;
+        margin-bottom: 4px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 8px !important;
+    }
+    
+    .price_section {
+        margin-top: 4px;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 8px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        font-size: 6px !important;
+    }
+    
+    .product_header_btn {
+        gap: 2px;
+        margin-bottom: 4px;
+    }
+    
     .product_header_btn a {
-        width: 22px;
-        height: 22px;
-        line-height: 22px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
     }
     
     .product_header_btn a i {
-        font-size: 10px;
-    }
-    
-    .cap_icon i {
-        font-size: 16px;
-    }
-    
-    .cap_title p {
         font-size: 9px;
     }
     
-    .cap_btn .btn {
-        font-size: 8px;
-        padding: 3px 4px;
-    }
-    
     .compare_delete i {
-        font-size: 14px;
+        font-size: 12px;
     }
     
     .btn-sm {
-        font-size: 8px !important;
-        padding: 2px 4px !important;
+        font-size: 7px !important;
+        padding: 2px 3px !important;
     }
     
     .title h5 {
@@ -470,60 +658,84 @@
         font-size: 9px;
     }
     
+    /* حذف کامل دکمه افزودن از thead در موبایل */
+    .compare_add {
+        display: none;
+    }
+    
     .compare_add_product {
-        max-width: 100px;
-        padding: 8px 1px;
+        display: none;
     }
     
     .product_box {
-        padding: 3px;
+        padding: 2px;
     }
     
     .product_box .product_image {
-        height: 60px;
+        height: 50px;
     }
     
     .product_box .product_title {
-        height: 30px;
+        height: 25px;
+        margin-bottom: 2px;
     }
     
     .product_box .product_title .title p {
-        font-size: 9px;
+        font-size: 8px;
+        margin-bottom: 2px;
     }
     
     .product_box .product_title .title span {
-        font-size: 7px;
+        font-size: 6px;
+    }
+    
+    .product_box .product_timer {
+        margin-bottom: 2px;
+    }
+    
+    .product_box .product_timer .timer_label {
+        padding: 1px 2px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 6px !important;
+    }
+    
+    .price_section {
+        margin-top: 2px;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 6px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        font-size: 4px !important;
+    }
+    
+    .product_header_btn {
+        gap: 1px;
+        margin-bottom: 2px;
     }
     
     .product_header_btn a {
-        width: 18px;
-        height: 18px;
-        line-height: 18px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
     }
     
     .product_header_btn a i {
-        font-size: 8px;
-    }
-    
-    .cap_icon i {
-        font-size: 14px;
-    }
-    
-    .cap_title p {
-        font-size: 8px;
-    }
-    
-    .cap_btn .btn {
         font-size: 7px;
-        padding: 2px 3px;
     }
     
     .compare_delete i {
-        font-size: 12px;
+        font-size: 10px;
     }
     
     .btn-sm {
-        font-size: 7px !important;
+        font-size: 6px !important;
         padding: 1px 2px !important;
     }
     
@@ -562,61 +774,85 @@
         font-size: 8px;
     }
     
+    /* حذف کامل دکمه افزودن از thead در موبایل */
+    .compare_add {
+        display: none;
+    }
+    
     .compare_add_product {
-        max-width: 85px;
-        padding: 6px 1px;
+        display: none;
     }
     
     .product_box {
-        padding: 2px;
+        padding: 1px;
     }
     
     .product_box .product_image {
-        height: 50px;
+        height: 40px;
     }
     
     .product_box .product_title {
-        height: 25px;
+        height: 20px;
+        margin-bottom: 1px;
     }
     
     .product_box .product_title .title p {
-        font-size: 8px;
+        font-size: 7px;
+        margin-bottom: 1px;
     }
     
     .product_box .product_title .title span {
-        font-size: 6px;
+        font-size: 5px;
+    }
+    
+    .product_box .product_timer {
+        margin-bottom: 1px;
+    }
+    
+    .product_box .product_timer .timer_label {
+        padding: 0px 1px;
+    }
+    
+    .product_box .product_timer .timer_label span {
+        font-size: 5px !important;
+    }
+    
+    .price_section {
+        margin-top: 1px;
+    }
+    
+    .price_section .h6,
+    .price_section .text-primary {
+        font-size: 5px !important;
+    }
+    
+    .price_section .small,
+    .price_section .text-muted {
+        font-size: 3px !important;
+    }
+    
+    .product_header_btn {
+        gap: 1px;
+        margin-bottom: 1px;
     }
     
     .product_header_btn a {
-        width: 16px;
-        height: 16px;
-        line-height: 16px;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
     }
     
     .product_header_btn a i {
-        font-size: 7px;
-    }
-    
-    .cap_icon i {
-        font-size: 12px;
-    }
-    
-    .cap_title p {
-        font-size: 7px;
-    }
-    
-    .cap_btn .btn {
         font-size: 6px;
-        padding: 1px 2px;
     }
     
     .compare_delete i {
-        font-size: 10px;
+        font-size: 8px;
     }
     
     .btn-sm {
-        font-size: 6px !important;
-        padding: 1px 2px !important;
+        font-size: 5px !important;
+        padding: 1px !important;
     }
     
     .title h5 {
@@ -720,7 +956,311 @@
     }
 }
 
-/* بهبود scrollbar */
+/* استایل‌های موبایل - محصولات زیر هم */
+.mobile_compare {
+    padding: 15px;
+}
+
+.mobile_product_card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.mobile_card_header h6 {
+    color: #333;
+    font-weight: 600;
+}
+
+.mobile_product_main img {
+    border-radius: 8px;
+    max-height: 120px;
+    object-fit: cover;
+}
+
+.mobile_product_title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 5px;
+}
+
+.mobile_product_subtitle {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.mobile_price_section {
+    margin-bottom: 10px;
+}
+
+.mobile_price {
+    font-size: 13px;
+}
+
+.mobile_old_price {
+    font-size: 11px;
+}
+
+.mobile_discount {
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+.mobile_rating {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.mobile_specs h6 {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.mobile_spec_value {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.mobile_specs .row {
+    margin-bottom: 5px;
+}
+
+.mobile_specs small {
+    font-size: 10px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* بهبود فونت‌ها برای سایزهای مختلف موبایل */
+@media (max-width: 575px) {
+    .mobile_product_title {
+        font-size: 13px;
+    }
+    
+    .mobile_product_subtitle {
+        font-size: 11px;
+    }
+    
+    .mobile_price {
+        font-size: 12px;
+    }
+    
+    .mobile_old_price {
+        font-size: 10px;
+    }
+    
+    .mobile_discount {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+    
+    .mobile_rating {
+        font-size: 11px;
+    }
+    
+    .mobile_specs h6 {
+        font-size: 12px;
+    }
+    
+    .mobile_spec_value {
+        font-size: 11px;
+    }
+    
+    .mobile_specs small {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 479px) {
+    .mobile_product_title {
+        font-size: 12px;
+    }
+    
+    .mobile_product_subtitle {
+        font-size: 10px;
+    }
+    
+    .mobile_price {
+        font-size: 11px;
+    }
+    
+    .mobile_old_price {
+        font-size: 9px;
+    }
+    
+    .mobile_discount {
+        font-size: 8px;
+        padding: 1px 3px;
+    }
+    
+    .mobile_rating {
+        font-size: 10px;
+    }
+    
+    .mobile_specs h6 {
+        font-size: 11px;
+    }
+    
+    .mobile_spec_value {
+        font-size: 10px;
+    }
+    
+    .mobile_specs small {
+        font-size: 8px;
+    }
+    
+    .mobile_product_card {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 359px) {
+    .mobile_product_title {
+        font-size: 11px;
+    }
+    
+    .mobile_product_subtitle {
+        font-size: 9px;
+    }
+    
+    .mobile_price {
+        font-size: 10px;
+    }
+    
+    .mobile_old_price {
+        font-size: 8px;
+    }
+    
+    .mobile_discount {
+        font-size: 7px;
+        padding: 1px 2px;
+    }
+    
+    .mobile_rating {
+        font-size: 9px;
+    }
+    
+    .mobile_specs h6 {
+        font-size: 10px;
+    }
+    
+    .mobile_spec_value {
+        font-size: 9px;
+    }
+    
+    .mobile_specs small {
+        font-size: 7px;
+    }
+    
+    .mobile_product_card {
+        padding: 10px;
+    }
+    
+    .mobile_product_main img {
+        max-height: 100px;
+    }
+}
+.cap_btn_mobile {
+    display: none;
+}
+
+/* نمایش دکمه موبایل از 767px به پایین */
+@media (max-width: 767px) {
+    .cap_btn_mobile {
+        display: block;
+        text-align: center;
+        padding: 4px 2px;
+    }
+    
+    .cap_btn_mobile .btn {
+        font-size: 8px;
+        padding: 3px 5px;
+        line-height: 1;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 575px) {
+    .cap_btn_mobile .btn {
+        font-size: 7px;
+        padding: 2px 4px;
+        max-width: 70px;
+    }
+}
+
+@media (max-width: 479px) {
+    .cap_btn_mobile .btn {
+        font-size: 6px;
+        padding: 2px 3px;
+        max-width: 60px;
+    }
+}
+
+@media (max-width: 359px) {
+    .cap_btn_mobile .btn {
+        font-size: 5px;
+        padding: 1px 2px;
+        max-width: 50px;
+    }
+}
+.cap_btn_mobile {
+    display: none;
+}
+
+/* بهبود مقادیر responsive برای سایزهای مختلف موبایل */
+@media (max-width: 575px) {
+    .cap_btn_mobile .btn {
+        font-size: 6px;
+        padding: 1px 2px;
+    }
+}
+
+@media (max-width: 479px) {
+    .cap_btn_mobile .btn {
+        font-size: 5px;
+        padding: 1px;
+    }
+}
+
+@media (max-width: 359px) {
+    .cap_btn_mobile .btn {
+        font-size: 4px;
+        padding: 0px 1px;
+    }
+}
+
+/* نمایش دکمه موبایل از 767px به پایین */
+@media (max-width: 767px) {
+    .cap_btn {
+        display: none;
+    }
+    
+    .cap_btn_mobile {
+        display: block;
+        text-align: center;
+    }
+    
+    .cap_btn_mobile .btn {
+        font-size: 7px;
+        padding: 2px 3px;
+        line-height: 1;
+    }
+    
+    .cap_title {
+        display: none; /* حذف متن توضیحی در موبایل */
+    }
+    
+    .cap_icon {
+        margin-bottom: 4px;
+    }
+}
 .table-responsive {
     scrollbar-width: thin;
     scrollbar-color: #ccc transparent;

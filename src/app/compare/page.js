@@ -114,7 +114,7 @@ const ComparePage = () => {
             <div className={styles.compare_add}>
                 <div className={styles.compare_add_product}>
                     <div className={styles.cap_icon}>
-                        <i className="bi bi-box-arrow-down"></i>
+                        <i className="bi bi-plus-circle"></i>
                     </div>
                     <div className={styles.cap_title}>
                         <p className="text-muted">برای افزودن محصول کلیک کنید</p>
@@ -240,7 +240,7 @@ const ComparePage = () => {
                                 </span>
                             </h5>
                         </div>
-                        {compareProducts.length > 0 && (
+                       
                             <div>
                                 <button 
                                     onClick={handleClearAll}
@@ -250,7 +250,7 @@ const ComparePage = () => {
                                     پاک کردن همه
                                 </button>
                             </div>
-                        )}
+                        
                     </div>
 
                     {compareProducts.length === 0 ? (
@@ -281,7 +281,8 @@ const ComparePage = () => {
                         // نمایش جدول مقایسه
                         <div className="content-box">
                             <div className="container-fluid">
-                                <div className={styles.compare}>
+                                {/* نمایش desktop */}
+                                <div className={`${styles.compare} d-none d-md-block`}>
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="table-responsive">
@@ -336,9 +337,9 @@ const ComparePage = () => {
                                                             {compareProducts.map(product => (
                                                                 <td key={product._id} className='text-end pe-5'>
                                                                     <div className="d-flex align-items-center justify-content-end">
-                                                                        <span className="me-1">{product.rating || 0}</span>
+                                                                        <span className="ms-1">{product.rating || 0}</span>
                                                                         <i className="bi bi-star-fill text-warning"></i>
-                                                                        <span className="text-muted small ms-2">
+                                                                        <span className="text-muted small me-2">
                                                                             ({product.reviewCount || 0} نظر)
                                                                         </span>
                                                                     </div>
@@ -440,6 +441,132 @@ const ComparePage = () => {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                {/* نمایش موبایل - محصولات زیر هم */}
+                                <div className={`${styles.mobile_compare} d-md-none`}>
+                                    {/* دکمه افزودن محصول در بالا */}
+                                    {compareProducts.length < 3 && (
+                                        <div className="text-center mb-3">
+                                            <Link href="/categories" className="btn main-color-one-bg border-0">
+                                                <i className="bi bi-plus-circle-fill text-white ms-2"></i>
+                                                <span className='text-white'>
+                                                افزودن محصول جدید
+                                                </span>
+                                            </Link>
+                                        </div>
+                                    )}
+
+                                    {/* نمایش محصولات */}
+                                    {compareProducts.map((product, index) => (
+                                        <div key={product._id} className={`${styles.mobile_product_card} mb-4`}>
+                                            {/* هدر کارت */}
+                                            <div className={`${styles.mobile_card_header} d-flex justify-content-between align-items-center mb-2`}>
+                                                <h6 className="mb-0">محصول {index + 1}</h6>
+                                                <button 
+                                                    type='button'
+                                                    onClick={() => handleRemoveProduct(product._id)}
+                                                    className="btn btn-link p-0 text-danger"
+                                                >
+                                                    <i className='bi bi-x-circle-fill'></i>
+                                                </button>
+                                            </div>
+
+                                            {/* تصویر و اطلاعات اصلی */}
+                                            <div className={styles.mobile_product_main}>
+                                                <div className="row">
+                                                    <div className="col-4">
+                                                        <Link href={`/product/${product._id}`}>
+                                                            <img 
+                                                                src={`/images/product/${product.image}`} 
+                                                                alt={product.title} 
+                                                                className="img-fluid rounded" 
+                                                            />
+                                                        </Link>
+                                                    </div>
+                                                    <div className="col-8">
+                                                        <h6 className={styles.mobile_product_title}>{product.title}</h6>
+                                                        <p className={`${styles.mobile_product_subtitle} text-muted`}>
+                                                            {product.originalName}
+                                                        </p>
+                                                        
+                                                        {/* قیمت */}
+                                                        <div className={styles.mobile_price_section}>
+                                                            <div className="d-flex align-items-center gap-2 mb-2">
+                                                                <span className={`${styles.mobile_price} text-primary fw-bold`}>
+                                                                    {(product.hasDiscount ? product.discountedPrice : product.price).toLocaleString('fa-IR')} تومان
+                                                                </span>
+                                                                {product.hasDiscount && (
+                                                                    <>
+                                                                        <span className={`${styles.mobile_old_price} text-decoration-line-through text-muted`}>
+                                                                            {product.price.toLocaleString('fa-IR')} تومان
+                                                                        </span>
+                                                                        <span className={`${styles.mobile_discount} badge bg-light`}>
+                                                                            {Math.round((1 - product.discountedPrice / product.price) * 100)}%
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* امتیاز */}
+                                                        <div className={styles.mobile_rating}>
+                                                            <i className="bi bi-star-fill text-warning ms-1"></i>
+                                                            <span>{product.rating || 0}</span>
+                                                            <span className="text-muted me-1">({product.reviewCount || 0} نظر)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* مشخصات */}
+                                            <div className={styles.mobile_specs}>
+                                                <h6 className="mt-3 mb-2">مشخصات:</h6>
+                                                <div className="row">
+                                                    <div className="col-6">
+                                                        <small className="text-muted">مدل:</small>
+                                                        <p className={styles.mobile_spec_value}>{product.originalName || 'نامشخص'}</p>
+                                                    </div>
+                                                    <div className="col-6">
+                                                        <small className="text-muted">رنگ‌ها:</small>
+                                                        <p className={styles.mobile_spec_value}>
+                                                            {product.colors && product.colors.length > 0 
+                                                                ? product.colors.map(c => c.color).join('، ')
+                                                                : 'نامشخص'
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* مشخصات اضافی */}
+                                                {product.features && product.features.length > 0 && (
+                                                    <div className="mt-2">
+                                                        {product.features.slice(0, 4).map(feature => (
+                                                            <div key={feature.key} className="row">
+                                                                <div className="col-6">
+                                                                    <small className="text-muted">{feature.key}:</small>
+                                                                </div>
+                                                                <div className="col-6">
+                                                                    <p className={styles.mobile_spec_value}>{feature.value}</p>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* دکمه خرید */}
+                                            <div className="mt-3 text-center">
+                                                <Link 
+                                                    href={`/product/${product._id}`}
+                                                    className="btn main-color-one-bg border-0 w-100"
+                                                >
+                                                    <i className="bi bi-cart text-white ms-2"></i>
+                                                    مشاهده و خرید
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
