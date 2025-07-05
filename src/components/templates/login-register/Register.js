@@ -11,7 +11,7 @@ import { useAuth } from "@/Redux/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 function Register({ showLoginForm }) {
-  const { register, loading, error, requestOtp, otpSent, otpMessage, isAuthenticated } = useAuth();
+  const { register, loading, error, requestOtp, otpSent, otpMessage, isAuthenticated, clearError } = useAuth();
   const router = useRouter();
 
   // بررسی احراز هویت کاربر
@@ -55,27 +55,56 @@ function Register({ showLoginForm }) {
   const [phone, setPhone] = useState("");
   const [isRegisterWithPass, setIsRegisterWithPass] = useState(false);
   const [isRegisterWithOtp, setIsRegisterWithOtp] = useState(false);
-  const [isOtpRequestPending, setIsOtpRequestPending] = useState(false);
+  const [sentPhoneNumber, setSentPhoneNumber] = useState("");
+  const [otpRequestSent, setOtpRequestSent] = useState(false); // اضافه کردن state جدید
 
+  // useEffect برای مدیریت انتقال به صفحه SMS
   useEffect(() => {
-    if (isOtpRequestPending && !loading) {
-      setIsOtpRequestPending(false);
-      if (!error && otpSent) {
-        setIsRegisterWithOtp(true);
-      } else if (error) {
-        console.error("خطای ارسال OTP:", error);
-        showSwal(error, "error", "تلاش مجدد");
+    console.log('Register OTP Status Check:', { 
+      otpSent, 
+      loading, 
+      sentPhoneNumber, 
+      otpRequestSent,
+      error 
+    });
+    
+    // شرایط انتقال به SMS:
+    // 1. درخواست OTP ارسال شده باشد
+    // 2. سرور تایید کرده باشد که OTP ارسال شده
+    // 3. در حال لودینگ نباشد
+    // 4. خطایی وجود نداشته باشد
+    if (otpRequestSent && otpSent && !loading && !error && sentPhoneNumber) {
+      console.log('Register: All conditions met - navigating to SMS');
+      setIsRegisterWithOtp(true);
+      
+      if (otpMessage) {
+        showSwal(otpMessage, "success", "تایید");
       }
+      
+      // ریست کردن state
+      setOtpRequestSent(false);
     }
-  }, [loading, error, otpSent, isOtpRequestPending]);
+  }, [otpSent, loading, sentPhoneNumber, otpRequestSent, error, otpMessage]);
 
+  // useEffect برای نمایش خطاها
   useEffect(() => {
-    if (error) {
+    if (error && otpRequestSent) {
+      console.log('Register: Error detected:', error);
       showSwal(error, "error", "تلاش مجدد");
+      // ریست کردن state ها در صورت خطا
+      setOtpRequestSent(false);
+      setSentPhoneNumber("");
     }
-  }, [error]);
+  }, [error, otpRequestSent]);
 
-  const hideOtpForm = () => setIsRegisterWithOtp(false);
+  const hideOtpForm = () => {
+    setIsRegisterWithOtp(false);
+    setSentPhoneNumber("");
+    setOtpRequestSent(false);
+    if (clearError) {
+      clearError();
+    }
+  };
 
   const signUp = async () => {
     if (!form.values.username.trim()) {
@@ -100,8 +129,10 @@ function Register({ showLoginForm }) {
   };
 
   const sentOtp = async () => {
-    const isValidPhone = validatePhone(phone);
-    if (!phone.trim()) {
+    const phoneNumber = phone.trim();
+    const isValidPhone = validatePhone(phoneNumber);
+    
+    if (!phoneNumber) {
       return showSwal(
         "لطفا شماره موبایل خود را وارد کنید",
         "warning",
@@ -115,17 +146,51 @@ function Register({ showLoginForm }) {
       );
     }
 
+    // پاک کردن خطاهای قبلی
+    if (clearError) {
+      clearError();
+    }
+
+    console.log('Register: Sending OTP to:', phoneNumber);
+    
     showSwal("در حال ارسال کد تایید...", "info", "منتظر بمانید");
-    setIsOtpRequestPending(true);
 
     try {
-      await requestOtp(phone);
+      // تنظیم state ها قبل از ارسال درخواست
+      setSentPhoneNumber(phoneNumber);
+      setOtpRequestSent(true);
+      
+      const result = await requestOtp(phoneNumber);
+      console.log('Register: OTP Request Result:', result);
+      
+      // اگر درخواست موفق بود
+      if (result.meta && result.meta.requestStatus === "fulfilled") {
+        console.log('Register: OTP sent successfully, keeping phone number:', phoneNumber);
+        // phoneNumber رو نگه می‌داریم - فقط otpRequestSent رو ریست می‌کنیم
+        // setSentPhoneNumber(phoneNumber); // قبلاً تنظیم شده
+        // setOtpRequestSent(false); // useEffect خودش این کار رو میکنه
+      } else if (result.meta && result.meta.requestStatus === "rejected") {
+        // فقط در صورت خطا ریست کن
+        setOtpRequestSent(false);
+        setSentPhoneNumber("");
+        showSwal(result.payload || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
+      }
+      
     } catch (error) {
-      setIsOtpRequestPending(false);
-      console.error("خطای ارسال OTP (catch):", error);
+      console.error('Register: Error sending OTP:', error);
+      setOtpRequestSent(false);
+      setSentPhoneNumber("");
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
     }
   };
+
+  console.log('Register: Current state:', { 
+    isRegisterWithOtp, 
+    sentPhoneNumber, 
+    otpSent, 
+    loading, 
+    otpRequestSent 
+  });
 
   return (
     <>
@@ -243,9 +308,13 @@ function Register({ showLoginForm }) {
                                 }}
                                 type="button"
                                 className="main-color-one-bg py-3 btn w-100 mb-3 rounded-3"
-                                disabled={loading}
+                                disabled={loading || otpRequestSent}
+                                style={{
+                                  cursor: (loading || otpRequestSent) ? 'not-allowed' : 'pointer',
+                                  opacity: (loading || otpRequestSent) ? 0.6 : 1
+                                }}
                               >
-                                {loading
+                                {(loading || otpRequestSent)
                                   ? "در حال پردازش..."
                                   : "ثبت نام با کد تایید"}
                               </button>
@@ -262,6 +331,10 @@ function Register({ showLoginForm }) {
                                 type="button"
                                 className="main-color-one-bg py-3 btn w-100 rounded-3"
                                 disabled={loading}
+                                style={{
+                                  cursor: loading ? 'not-allowed' : 'pointer',
+                                  opacity: loading ? 0.6 : 1
+                                }}
                               >
                                 {loading
                                   ? "در حال پردازش..."
@@ -273,6 +346,7 @@ function Register({ showLoginForm }) {
                             <p
                               onClick={showLoginForm}
                               className={`${styles.back_to_login}`}
+                              style={{ cursor: 'pointer' }}
                             >
                               برگشت به ورود
                             </p>
@@ -310,7 +384,10 @@ function Register({ showLoginForm }) {
           </div>
         </div>
       ) : (
-        <Sms hideOtpForm={hideOtpForm} type={"ثبت نام"} phone={phone} />
+        <>
+          {console.log('Register: Rendering SMS with phone:', sentPhoneNumber)}
+          <Sms hideOtpForm={hideOtpForm} type={"ثبت نام"} phone={sentPhoneNumber} />
+        </>
       )}
     </>
   );

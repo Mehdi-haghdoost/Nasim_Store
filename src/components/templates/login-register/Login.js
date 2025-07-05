@@ -36,9 +36,9 @@ function Login({ showRegisterForm }) {
   });
 
   const [isLoginWithOtp, setIsLoginWithOtp] = useState(false);
-  const [isOtpRequestPending, setIsOtpRequestPending] = useState(false);
   const [errorShown, setErrorShown] = useState(false);
 
+  // فقط useEffect برای نمایش خطاها
   useEffect(() => {
     if (error && !errorShown) {
       showSwal(error, "error", "تلاش مجدد");
@@ -53,21 +53,12 @@ function Login({ showRegisterForm }) {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (isOtpRequestPending && !loading) {
-      setIsOtpRequestPending(false);
-      if (!error && otpSent) {
-        setIsLoginWithOtp(true);
-        if (otpMessage) {
-          showSwal(otpMessage, "success", "تایید");
-        }
-      } else if (error) {
-        console.error("خطای ارسال OTP برای ورود:", error);
-      }
+  const hideOtpForm = () => {
+    setIsLoginWithOtp(false);
+    if (clearError) {
+      clearError();
     }
-  }, [loading, error, otpSent, otpMessage, isOtpRequestPending]);
-
-  const hideOtpForm = () => setIsLoginWithOtp(false);
+  };
 
   // Modified function to clear error before switching forms
   const handleShowRegisterForm = () => {
@@ -113,16 +104,42 @@ function Login({ showRegisterForm }) {
       );
     }
 
+    // پاک کردن خطاهای قبلی
+    if (clearError) {
+      clearError();
+    }
+
+    console.log('Login: Sending OTP to:', form.values.phoneOrEmail);
+
     showSwal("در حال ارسال کد تایید...", "info", "منتظر بمانید");
-    setIsOtpRequestPending(true);
 
     try {
-      await requestLoginOtp(form.values.phoneOrEmail);
+      const result = await requestLoginOtp(form.values.phoneOrEmail);
+      console.log('Login: OTP Request Result:', result);
+      
+      // اگر درخواست موفق بود، مستقیم انتقال بده
+      if (result.meta && result.meta.requestStatus === "fulfilled") {
+        console.log('Login: OTP sent successfully, navigating to SMS');
+        setIsLoginWithOtp(true);
+        
+        if (result.payload && result.payload.message) {
+          showSwal(result.payload.message, "success", "تایید");
+        }
+      } else if (result.meta && result.meta.requestStatus === "rejected") {
+        showSwal(result.payload || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
+      }
+      
     } catch (error) {
-      setIsOtpRequestPending(false);
+      console.error('Login: Error sending OTP:', error);
       showSwal(error.message || "خطا در ارسال کد تایید", "error", "تلاش مجدد");
     }
   };
+
+  console.log('Login: Current state:', { 
+    isLoginWithOtp, 
+    loading,
+    phoneOrEmail: form.values.phoneOrEmail
+  });
 
   return (
     <>
@@ -197,8 +214,12 @@ function Login({ showRegisterForm }) {
                                 <a
                                   onClick={() => loginWithOtp()}
                                   className="btn border-0 main-color-one-bg"
+                                  style={{
+                                    cursor: loading ? 'not-allowed' : 'pointer',
+                                    opacity: loading ? 0.6 : 1
+                                  }}
                                 >
-                                  ورود با پیامک
+                                  {loading ? "در حال ارسال..." : "ورود با پیامک"}
                                 </a>
                               </div>
                             </div>
